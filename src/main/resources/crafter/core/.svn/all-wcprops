@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/main/resources/crafter/core
+END
+merger-context.xml
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/main/resources/crafter/core/merger-context.xml
+END
+core.properties
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/main/resources/crafter/core/core.properties
+END
+processors-context.xml
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/main/resources/crafter/core/processors-context.xml
+END
+cache-context.xml
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/main/resources/crafter/core/cache-context.xml
+END
+core-context.xml
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/main/resources/crafter/core/core-context.xml
+END
+store-context.xml
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/main/resources/crafter/core/store-context.xml
+END
+rest-context.xml
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/main/resources/crafter/core/rest-context.xml
+END

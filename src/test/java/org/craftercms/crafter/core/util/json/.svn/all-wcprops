@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/util/json
+END
+Dom4JDocumentJsonSerializerTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/util/json/Dom4JDocumentJsonSerializerTest.java
+END
+ThrowableJsonSerializerTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/util/json/ThrowableJsonSerializerTest.java
+END

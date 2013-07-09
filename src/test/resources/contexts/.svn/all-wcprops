@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/resources/contexts
+END
+SpElStringTemplateCompilerTest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/resources/contexts/SpElStringTemplateCompilerTest.xml
+END
+UrlTransformationEngineImplTest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/resources/contexts/UrlTransformationEngineImplTest.xml
+END
+ContentStoreServiceImplTest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/resources/contexts/ContentStoreServiceImplTest.xml
+END

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<folder-metadata>
+    <!-- Bundle Folder Metadata File -->
+    <merge-strategy>inherit-levels</merge-strategy>
+    <bundle-extensions>
+        <extension>fr</extension>
+        <extension>fr_es</extension>
+    </bundle-extensions>
+</folder-metadata>

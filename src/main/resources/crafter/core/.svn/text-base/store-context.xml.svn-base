@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+    <!-- Content Store Adapter Registry -->
+    <!-- Pick ups any content store adapter defined in the Spring context -->
+
+    <bean id="crafter.contentStoreAdapterRegistry" class="org.craftercms.crafter.core.store.ContentStoreAdapterRegistry" />
+
+    <!-- Content Store Adapter -->
+
+    <bean id="crafter.contentStoreAdapter.filesystem"
+          class="org.craftercms.crafter.core.store.impl.filesystem.FileSystemContentStoreAdapter">
+        <property name="cacheTemplate" ref="crafter.cacheTemplate"/>
+        <property name="metadataFileExtension" value="${crafter.core.store.metadataFile.extension}"/>
+        <property name="descriptorFileExtension" value="${crafter.core.store.descriptorFile.extension}"/>
+    </bean>
+
+    <!-- Content Store Service -->
+
+    <bean id="crafter.contentStoreService" class="org.craftercms.crafter.core.service.impl.ContentStoreServiceImpl">
+        <property name="cacheTemplate" ref="crafter.cacheTemplate"/>
+        <property name="merger" ref="crafter.merger"/>
+        <property name="processorResolver" ref="crafter.procesorResolverChain"/>
+        <property name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
+        <property name="storeAdapterRegistry" ref="crafter.contentStoreAdapterRegistry"/>
+    </bean>
+
+</beans>

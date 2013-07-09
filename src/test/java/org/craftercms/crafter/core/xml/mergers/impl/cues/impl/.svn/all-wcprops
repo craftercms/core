@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/xml/mergers/impl/cues/impl
+END
+MergeCueResolverImplTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 165
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/xml/mergers/impl/cues/impl/MergeCueResolverImplTest.java
+END
+MergeParentAndChildMergeCueTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 172
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/xml/mergers/impl/cues/impl/MergeParentAndChildMergeCueTest.java
+END

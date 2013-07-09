@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+    <mvc:annotation-driven />
+
+    <bean id="crafter.cacheRestController" class="org.craftercms.crafter.core.controller.rest.CacheRestController">
+        <property name="cacheTemplate" ref="crafter.cacheTemplate"/>
+        <property name="storeService" ref="crafter.contentStoreService"/>
+    </bean>
+
+    <bean id="crafter.contentStoreRestController" class="org.craftercms.crafter.core.controller.rest.ContentStoreRestController">
+        <property name="storeService" ref="crafter.contentStoreService"/>
+    </bean>
+
+    <!-- JSON REST View -->
+
+    <bean id="crafter.jsonView" class="org.craftercms.crafter.core.util.spring.mvc.GsonView">
+        <property name="disableCaching" value="${crafter.core.rest.views.json.disableCaching}"/>
+        <property name="prefixJson" value="${crafter.core.rest.views.json.prefixJson}"/>
+        <property name="renderSingleAttributeAsRootObject"
+                  value="${crafter.core.rest.views.json.renderSingleAttributeAsRootObject}"/>
+    </bean>
+
+    <!-- XML REST View -->
+
+    <bean id="crafter.xmlView" class="org.springframework.web.servlet.view.xml.MarshallingView">
+        <constructor-arg>
+            <bean class="org.craftercms.crafter.core.util.xml.marshalling.xstream.CrafterXStreamMarshaller">
+                <property name="unsupportedClasses">
+                    <array>
+                        <value>org.springframework.validation.BindingResult</value>
+                    </array>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <!--
+        NOTE: For the RESTful API to completely work, you need to provide your own view resolver that delegates to the
+        appropiate view. If you're going to use Crafter standalone for REST, just create a BeanNameViewResolver and a
+        crafter.core.restView alias that points to either crafter.core.jsonView or crafter.core.xmlView.
+    -->
+
+</beans>

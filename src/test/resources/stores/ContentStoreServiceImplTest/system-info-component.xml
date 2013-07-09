@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component>
+    <system-info>
+        <java-version>#{systemProperties['java.version']}</java-version>
+        <os-name>#{systemProperties['os.name']}</os-name>
+        <os-version>#{systemProperties['os.version']}</os-version>
+    </system-info>
+</component>

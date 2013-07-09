@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/processors/impl/resolvers
+END
+MetaDataProcessorResolverTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 169
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/processors/impl/resolvers/MetaDataProcessorResolverTest.java
+END
+UrlPatternProcessorResolverTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 171
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/processors/impl/resolvers/UrlPatternProcessorResolverTest.java
+END
+ItemProcessorResolverChainTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 170
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/processors/impl/resolvers/ItemProcessorResolverChainTest.java
+END
+SingleProcessorResolverTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 167
+/repos/crafter-community/!svn/ver/1062/core/branches/crafter-2.1.x/src/test/java/org/craftercms/crafter/core/processors/impl/resolvers/SingleProcessorResolverTest.java
+END

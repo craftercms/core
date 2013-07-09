@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <context:annotation-config/>
+
+    <!-- ////////////////////////////////////////////////// -->
+    <!-- //////////////////// CACHE /////////////////////// -->
+    <!-- ////////////////////////////////////////////////// -->
+
+    <bean id="cacheService" class="org.craftercms.crafter.core.service.impl.CacheServiceImpl">
+        <property name="cache">
+            <bean class="org.craftercms.crafter.core.cache.impl.CacheImpl">
+                <property name="cacheStoreAdapter">
+                    <bean class="org.craftercms.crafter.core.cache.impl.store.EhCacheStoreAdapter" />
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="cacheTemplate" class="org.craftercms.crafter.core.util.cache.impl.DefaultCacheTemplate">
+        <property name="cacheService" ref="cacheService" />
+    </bean>
+
+    <!-- ////////////////////////////////////////////////// -->
+    <!-- /////////////// URL TRANSFORMERS ///////////////// -->
+    <!-- ////////////////////////////////////////////////// -->
+
+    <bean id="addDebugParamUrlTransformer" class="org.craftercms.crafter.core.url.impl.AddDebugParamUrlTransformer" />
+
+    <bean id="replaceFirstUrlTransformer" class="org.craftercms.crafter.core.url.impl.ReplacePatternFirstUrlTransformer">
+        <property name="patternToReplace" value="html" />
+        <property name="replacement" value="xml" />
+    </bean>
+
+    <bean id="urlTransformationPipeline" class="org.craftercms.crafter.core.url.impl.UrlTransformerPipeline">
+        <constructor-arg>
+            <list>
+                <ref local="addDebugParamUrlTransformer" />
+                <ref local="replaceFirstUrlTransformer" />
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="urlTransformationEngine" class="org.craftercms.crafter.core.url.impl.UrlTransformationEngineImpl">
+        <property name="cacheTemplate" ref="cacheTemplate"/>
+        <property name="transformers">
+            <map>
+                <entry key="mainPipeline" value-ref="urlTransformationPipeline" />
+            </map>
+        </property>
+    </bean>
+
+</beans>
