@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<descriptor>
-    <!-- Bundle Base Descriptor - EN -->
-    <merge-strategy>inherit-levels</merge-strategy>
-    <first-quote>I haven't failed. I've just found 10,000 ways that won't work. -- Thomas Edison</first-quote>
-    <second-quote>Don't hate, it's too big a burden to bear. -- Martin Luther King, Jr.</second-quote>
-    <third-quote>If I have seen a little further it is by standing on the shoulders of giants. -- Issac Newton</third-quote>
-</descriptor>

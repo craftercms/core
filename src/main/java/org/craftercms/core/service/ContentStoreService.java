@@ -33,7 +33,7 @@ import java.util.List;
  *     <li>
  *         <b>Processing:</b>The service passes an item through one or multiple "processors" that can manipulate
  *         and change the item as they need. For example, there is a processor implementation that includes other
- *         descriptor documents into the item's descriptor document (see {@link org.craftercms.crafter.core.processors
+ *         descriptor documents into the item's descriptor document (see {@link org.craftercms.core.processors
  *         .impl.IncludeDescriptorsProcessor}, an another one that processes element text of descriptor documents as
  *         templates (see {@link org.craftercms.core.processors.impl.template.TemplateProcessor}).
  *     </li>

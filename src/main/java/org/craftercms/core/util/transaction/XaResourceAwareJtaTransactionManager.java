@@ -14,7 +14,7 @@
 // * You should have received a copy of the GNU General Public License
 // * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // */
-//package org.craftercms.crafter.core.util.transaction;
+//package org.craftercms.core.util.transaction;
 //
 //import org.apache.commons.logging.Log;
 //import org.apache.commons.logging.LogFactory;

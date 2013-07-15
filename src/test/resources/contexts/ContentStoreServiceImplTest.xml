@@ -64,7 +64,7 @@
             </bean>
         </property>
         <property name="baseDelimiter">
-            <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.strategies.ContentBundleMergeStrategyTest.BASE_DELIMITER"/>
+            <util:constant static-field="org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategyTest.BASE_DELIMITER"/>
         </property>
         <property name="baseMergeStrategyResolver" ref="metaDataMergeStrategyResolver"/>
         <property name="regularMergeStrategy" ref="inheritLevelsMergeStrategy"/>
@@ -75,7 +75,7 @@
     <bean id="metaDataMergeStrategyResolver"
           class="org.craftercms.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolver">
         <property name="mergeStrategyElementXPathQuery">
-            <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolverTest.MERGE_STRATEGY_ELEMENT_XPATH_QUERY"/>
+            <util:constant static-field="org.craftercms.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolverTest.MERGE_STRATEGY_ELEMENT_XPATH_QUERY"/>
         </property>
         <property name="elementValueToStrategyMappings">
             <map>
@@ -104,49 +104,49 @@
         <property name="elementMergeMatcher">
             <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.ElementMergeMatcherImpl">
                 <property name="idAttributeName">
-                    <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.ID_ATTR_NAME"/>
+                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.ID_ATTR_NAME"/>
                 </property>
             </bean>
         </property>
         <property name="mergeCueResolver" ref="mergeCueResolver"/>
         <property name="mergeOrderParamName">
-            <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME"/>
+            <util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME"/>
         </property>
         <property name="defaultMergeOrder">
-            <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER"/>
+            <util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER"/>
         </property>
     </bean>
 
     <bean id="overrideParentMergeCue"
           class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
         <property name="priority">
-            <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.OVERRIDE_PARENT_MERGE_CUE_PRIORITY"/>
+            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.OVERRIDE_PARENT_MERGE_CUE_PRIORITY"/>
         </property>
     </bean>
 
     <bean id="disallowOverrideMergeCue"
           class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
         <property name="priority">
-            <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY"/>
+            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY"/>
         </property>
     </bean>
 
     <bean id="useParentIfAvailableMergeCue"
           class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
         <property name="priority">
-            <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_IF_AVAILABLE_MERGE_CUE_PRIORITY"/>
+            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_IF_AVAILABLE_MERGE_CUE_PRIORITY"/>
         </property>
     </bean>
 
     <bean id="mergeWithParentMergeCue" parent="abstractMergeParentAndChildMergeCue">
         <property name="priority">
-            <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_PARENT_MERGE_CUE_PRIORITY"/>
+            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_PARENT_MERGE_CUE_PRIORITY"/>
         </property>
     </bean>
 
     <bean id="mergeWithChildMergeCue" parent="abstractMergeParentAndChildMergeCue">
         <property name="priority">
-            <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_CHILD_MERGE_CUE_PRIORITY"/>
+            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_CHILD_MERGE_CUE_PRIORITY"/>
         </property>
     </bean>
 
@@ -156,13 +156,13 @@
             <map>
                 <entry>
                     <key>
-                        <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME"/>
+                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME"/>
                     </key>
                     <ref local="disallowOverrideMergeCue"/>
                 </entry>
                 <entry>
                     <key>
-                        <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME"/>
+                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME"/>
                     </key>
                     <ref local="mergeWithChildMergeCue"/>
                 </entry>
@@ -172,19 +172,19 @@
             <map>
                 <entry>
                     <key>
-                        <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME"/>
+                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME"/>
                     </key>
                     <ref local="overrideParentMergeCue"/>
                 </entry>
                 <entry>
                     <key>
-                        <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_IF_AVAILABLE_MERGE_CUE_ATTR_NAME"/>
+                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_IF_AVAILABLE_MERGE_CUE_ATTR_NAME"/>
                     </key>
                     <ref local="useParentIfAvailableMergeCue"/>
                 </entry>
                 <entry>
                     <key>
-                        <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME"/>
+                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME"/>
                     </key>
                     <ref local="mergeWithParentMergeCue"/>
                 </entry>
@@ -193,14 +193,14 @@
         <property name="defaultParentMergeCue">
             <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
                 <property name="priority">
-                    <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_CHILD_MERGE_CUE_PRIORITY"/>
+                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_CHILD_MERGE_CUE_PRIORITY"/>
                 </property>
             </bean>
         </property>
         <property name="defaultChildMergeCue">
             <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
                 <property name="priority">
-                    <util:constant static-field="org.craftercms.crafter.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_PARENT_MERGE_CUE_PRIORITY"/>
+                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_PARENT_MERGE_CUE_PRIORITY"/>
                 </property>
             </bean>
         </property>
@@ -216,7 +216,7 @@
 
     <bean id="includeDescriptorsProcessor" class="org.craftercms.core.processors.impl.IncludeDescriptorsProcessor">
         <property name="includeElementXPathQuery">
-            <util:constant static-field="org.craftercms.crafter.core.processors.impl.IncludeDescriptorsProcessorTest.INCLUDE_ELEM_XPATH_QUERY"/>
+            <util:constant static-field="org.craftercms.core.processors.impl.IncludeDescriptorsProcessorTest.INCLUDE_ELEM_XPATH_QUERY"/>
         </property>
         <property name="contentStoreService" ref="contentStoreService"/>
     </bean>
@@ -282,7 +282,7 @@
 
     <bean id="procesorResolver" class="org.craftercms.core.processors.impl.resolvers.MetaDataProcessorResolver">
         <property name="processorElementXPathQuery">
-            <util:constant static-field="org.craftercms.crafter.core.processors.impl.resolvers.MetaDataProcessorResolverTest.PROCESSOR_ELEMENT_XPATH_QUERY"/>
+            <util:constant static-field="org.craftercms.core.processors.impl.resolvers.MetaDataProcessorResolverTest.PROCESSOR_ELEMENT_XPATH_QUERY"/>
         </property>
         <property name="elementValueToProcessorMappings">
             <map>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<folder-metadata>
-    <permissions>
-        <permission>
-            <user>admin</user>
-            <allowed-actions>read-only</allowed-actions>
-        </permission>
-    </permissions>
-</folder-metadata>

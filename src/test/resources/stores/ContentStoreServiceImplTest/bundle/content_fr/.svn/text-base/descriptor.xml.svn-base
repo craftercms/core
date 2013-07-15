@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<descriptor>
-    <!-- Bundle Extension Descriptor - FR -->
-    <merge-strategy>content-bundle</merge-strategy>
-    <second-quote>Ne haïssez pas, c'est un fardeau trop lourd à supporter. -- Martin Luther King, Jr.</second-quote>
-    <third-quote>Si j'ai vu un peu plus loin c'est en me tenant sur ​​les épaules de géants. -- Issac Newton</third-quote>
-</descriptor>
