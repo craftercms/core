@@ -43,7 +43,7 @@
     <!--
         NOTE: For the RESTful API to completely work, you need to provide your own view resolver that delegates to the
         appropiate view. If you're going to use Crafter standalone for REST, just create a BeanNameViewResolver and a
-        crafter.core.restView alias that points to either crafter.core.jsonView or crafter.core.xmlView.
+        crafter.restView alias that points to either crafter.jsonView or crafter.xmlView.
     -->
 
 </beans>

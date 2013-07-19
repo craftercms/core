@@ -34,7 +34,7 @@ public class RestControllerBase {
 
     public static final String REST_BASE_URI = "/api/1";
     public static final String EXCEPTION_MODEL_ATTRIBUTE_NAME = "exception";
-    public static final String REST_VIEW_NAME = "crafter.core.restView";
+    public static final String REST_VIEW_NAME = "crafter.restView";
 
     @ExceptionHandler(InvalidContextException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

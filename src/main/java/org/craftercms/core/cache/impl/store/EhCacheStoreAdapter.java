@@ -20,6 +20,8 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.ConfigurationFactory;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
@@ -38,6 +40,8 @@ import java.util.List;
  */
 public class EhCacheStoreAdapter implements CacheStoreAdapter {
 
+    public static final String SCOPE_MANAGER_NAME = "crafter.scopeManager";
+
     /**
      * Holds all the cache scopes.
      */
@@ -45,12 +49,16 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
 
     /**
      * Default no-args constructor. Creates the {@code scopeManager} by calling the factory method
-     * {@link net.sf.ehcache.CacheManager#newInstance()}, because we want a separate {@code CacheManager},
-     * not the singleton one, since we don't want to the tick() method of a cache implementation to be
+     * {@link net.sf.ehcache.CacheManager#newInstance(net.sf.ehcache.config.Configuration)}, because we want a
+     * separate {@code CacheManager}, not the singleton one, since we don't want to the tick() method of a cache
+     * implementation to be called on a CacheManager that doesn't have {@link CacheItem}s.
      * called on a CacheManager that doesn't have {@link org.craftercms.core.cache.CacheItem}s.
      */
     public EhCacheStoreAdapter() {
-        scopeManager = CacheManager.newInstance();
+        Configuration scopeManagerConfig = ConfigurationFactory.parseConfiguration();
+        scopeManagerConfig.setName(SCOPE_MANAGER_NAME);
+
+        scopeManager = CacheManager.newInstance(scopeManagerConfig);
     }
 
     /**
