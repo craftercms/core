@@ -24,8 +24,6 @@ import org.craftercms.core.service.Tree;
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.service.Tree;
 import org.springframework.oxm.XmlMappingException;
 import org.springframework.oxm.xstream.XStreamMarshaller;
 
@@ -43,15 +41,26 @@ import java.io.Writer;
  * @author Alfonso Vásquez
  */
 public class CrafterXStreamMarshaller extends XStreamMarshaller {
+
+    public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     
     public static final String ITEM_CLASS_ALIAS = "item";
     public static final String TREE_CLASS_ALIAS = "tree";
     public static final String DOCUMENT_CLASS_ALIAS = "document";
     
     protected Class[] unsupportedClasses;
+    protected boolean suppressXmlDeclaration;
+
+    public CrafterXStreamMarshaller() {
+        suppressXmlDeclaration = false;
+    }
 
     public void setUnsupportedClasses(Class[] unsupportedClasses) {
         this.unsupportedClasses = unsupportedClasses;
+    }
+
+    public void setSuppressXmlDeclaration(boolean suppressXmlDeclaration) {
+        this.suppressXmlDeclaration = suppressXmlDeclaration;
     }
 
     @Override
@@ -94,7 +103,10 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
     @Override
     protected void marshalWriter(Object graph, Writer writer) throws XmlMappingException, IOException {
         if (graph instanceof Document) {
-            XMLWriter xmlWriter = new XMLWriter(writer, OutputFormat.createCompactFormat());
+            OutputFormat outputFormat = OutputFormat.createCompactFormat();
+            outputFormat.setSuppressDeclaration(suppressXmlDeclaration);
+
+            XMLWriter xmlWriter = new XMLWriter(writer, outputFormat);
             try {
                 xmlWriter.write((Document) graph);
             } finally {
@@ -106,8 +118,11 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
                 }
             }
         } else {
-            HierarchicalStreamWriter streamWriter = new EscapingCompactWriter(writer);
+            if (!suppressXmlDeclaration) {
+                writer.write(XML_DECLARATION);
+            }
 
+            HierarchicalStreamWriter streamWriter = new EscapingCompactWriter(writer);
             try {
                 getXStream().marshal(graph, streamWriter);
             }

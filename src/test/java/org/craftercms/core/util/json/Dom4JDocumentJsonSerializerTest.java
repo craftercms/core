@@ -51,12 +51,12 @@ public class Dom4JDocumentJsonSerializerTest {
             "{\"root\":{" +
                     "\"e1\":null," +
                     "\"e2\":\"text\"," +
-                    "\"e3\":{\"@name\":\"value\"}," +
-                    "\"e4\":{\"@name\":\"value\",\"#text\":\"text\"}," +
+                    "\"e3\":{\"name\":\"value\"}," +
+                    "\"e4\":{\"name\":\"value\",\"text\":\"text\"}," +
                     "\"e5\":{\"a\":\"text\",\"b\":\"text\"}," +
                     "\"e6\":{\"a\":[\"text\",\"text\"]}," +
-                    "\"e7\":{\"#text\":\"text\",\"a\":\"text\"}," +
-                    "\"e8\":{\"#text\":[\"text\",\"text\"],\"a\":\"text\"}" +
+                    "\"e7\":{\"text\":\"text\",\"a\":\"text\"}," +
+                    "\"e8\":{\"text\":[\"text\",\"text\"],\"a\":\"text\"}" +
                     "}" +
             "}";
 
