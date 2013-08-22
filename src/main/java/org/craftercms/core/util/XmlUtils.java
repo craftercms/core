@@ -24,10 +24,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dom4j.Attribute;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.Node;
+import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
@@ -36,6 +33,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -59,11 +57,47 @@ public class XmlUtils {
     }
 
     /**
+     * Executes the specified namespace aware XPath query as a single node query, returning the text value of the resulting single node.
+     */
+    public static String selectSingleNodeValue(Node node, String xPathQuery, Map<String, String> namespaceUris) {
+        XPath xPath = DocumentHelper.createXPath(xPathQuery);
+        xPath.setNamespaceURIs(namespaceUris);
+
+        Node resultNode = xPath.selectSingleNode(node);
+        if (resultNode != null) {
+            return resultNode.getText();
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Executes the specified XPath query as a multiple node query, returning the text values of the resulting list of
      * nodes.
      */
     public static List<String> selectNodeValues(Node node, String xPathQuery) {
         List<Node> resultNodes = node.selectNodes(xPathQuery);
+        if (CollectionUtils.isNotEmpty(resultNodes)) {
+            List<String> resultNodeValues = new ArrayList<String>(resultNodes.size());
+            for (Node resultNode : resultNodes) {
+                resultNodeValues.add(resultNode.getText());
+            }
+
+            return resultNodeValues;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * Executes the specified namespace aware XPath query as a multiple node query, returning the text values of the resulting list of
+     * nodes.
+     */
+    public static List<String> selectNodeValues(Node node, String xPathQuery, Map<String, String> namespaceUris) {
+        XPath xPath = DocumentHelper.createXPath(xPathQuery);
+        xPath.setNamespaceURIs(namespaceUris);
+
+        List<Node> resultNodes = xPath.selectNodes(node);
         if (CollectionUtils.isNotEmpty(resultNodes)) {
             List<String> resultNodeValues = new ArrayList<String>(resultNodes.size());
             for (Node resultNode : resultNodes) {
