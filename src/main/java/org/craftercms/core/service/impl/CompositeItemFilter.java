@@ -16,14 +16,14 @@
  */
 package org.craftercms.core.service.impl;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.service.ItemFilter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.craftercms.core.service.Item;
+import org.craftercms.core.service.ItemFilter;
 
 /**
  * Composite {@link ItemFilter} implementation. Calls {@link ItemFilter}s before processing and after processing,
