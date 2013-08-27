@@ -36,7 +36,7 @@ import org.craftercms.core.service.ItemFilter;
 public class CompositeItemFilter implements ItemFilter {
 
     /**
-     * List of {@link ItemFilter}s that are executed sequentially
+     * List of {@link ItemFilter}s that are executed sequentially.
      */
     private List<ItemFilter> filters;
 
@@ -61,7 +61,7 @@ public class CompositeItemFilter implements ItemFilter {
     }
 
     /**
-     * Adds the specified {@link ItemFilter} to the filter list, creating the list if necessary
+     * Adds the specified {@link ItemFilter} to the filter list, creating the list if necessary.
      */
     public void addFilter(ItemFilter filter) {
         if (filters == null) {
