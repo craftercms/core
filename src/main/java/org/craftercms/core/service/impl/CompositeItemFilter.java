@@ -108,7 +108,7 @@ public class CompositeItemFilter implements ItemFilter {
         boolean accepted = true;
 
         if (CollectionUtils.isNotEmpty(filters)) {
-            for (Iterator<ItemFilter> filterIter = filters.iterator(); accepted && filterIter.hasNext();) {
+            for (Iterator<ItemFilter> filterIter = filters.iterator(); accepted && filterIter.hasNext(); ) {
                 ItemFilter filter = filterIter.next();
                 if (runningBeforeProcessing && filter.runBeforeProcessing()) {
                     accepted = filter.accepts(item, runningBeforeProcessing);
