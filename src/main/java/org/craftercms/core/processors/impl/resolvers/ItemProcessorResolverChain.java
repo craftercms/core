@@ -25,7 +25,8 @@ import org.craftercms.core.service.Item;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * Composite {@link org.craftercms.core.processors.ItemProcessorResolver}, that iterates through a list of resolvers until one of them provides a
+ * Composite {@link org.craftercms.core.processors.ItemProcessorResolver}, that iterates through a list of resolvers
+ * until one of them provides a
  * non-null {@link org.craftercms.core.processors.ItemProcessor}.
  *
  * @author Sumer Jabri

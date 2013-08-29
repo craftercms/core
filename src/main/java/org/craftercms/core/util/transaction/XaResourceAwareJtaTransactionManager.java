@@ -77,7 +77,8 @@
 //
 //    @Override
 //    protected Object doSuspend(Object transaction) {
-//        XAResource[] xaResources = (XAResource[]) TransactionSynchronizationManager.getResource("enlistedXaResources");
+//        XAResource[] xaResources = (XAResource[]) TransactionSynchronizationManager.getResource
+// ("enlistedXaResources");
 //        if (xaResources == null) {
 //            throw new IllegalStateException("No XA resources have being enlisted for current transaction");
 //        }

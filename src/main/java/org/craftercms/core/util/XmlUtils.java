@@ -55,7 +55,8 @@ public class XmlUtils {
     }
 
     /**
-     * Executes the specified namespace aware XPath query as a single node query, returning the text value of the resulting single node.
+     * Executes the specified namespace aware XPath query as a single node query,
+     * returning the text value of the resulting single node.
      */
     public static String selectSingleNodeValue(Node node, String xPathQuery, Map<String, String> namespaceUris) {
         XPath xPath = DocumentHelper.createXPath(xPathQuery);
@@ -88,7 +89,8 @@ public class XmlUtils {
     }
 
     /**
-     * Executes the specified namespace aware XPath query as a multiple node query, returning the text values of the resulting list of
+     * Executes the specified namespace aware XPath query as a multiple node query,
+     * returning the text values of the resulting list of
      * nodes.
      */
     public static List<String> selectNodeValues(Node node, String xPathQuery, Map<String, String> namespaceUris) {
@@ -142,7 +144,8 @@ public class XmlUtils {
      * <e><a>text</a><b>text</b></e>    "e": { "a": "text", "b": "text" }               o.e.a o.e.b
      * <e><a>text</a><a>text</a></e>	"e": { "a": ["text", "text"] }                  o.e.a[0] o.e.a[1]
      * <e>text<a>text</a></e>           "e": { "text": "text", "a": "text" }            o.e["text"] o.e.a
-     * <e>text<a>text</a>text</e>       "e": { "text": ["text", "text"], "a": "text" }  o.e["text"][0] o.e["text"][1] o.e.a
+     * <e>text<a>text</a>text</e>       "e": { "text": ["text", "text"], "a": "text" }  o.e["text"][0] o.e["text"][1]
+     * o.e.a
      * <p/>
      * <b>IMPORTANT:</b> XML Namespaces are ALWAYS ignored.
      *
@@ -198,7 +201,8 @@ public class XmlUtils {
         }
     }
 
-    private static void addElementTextToJson(JsonObject parentJson, JsonObject elementJson, String elementName, String text) {
+    private static void addElementTextToJson(JsonObject parentJson, JsonObject elementJson, String elementName,
+                                             String text) {
         JsonElement value;
         if ( text != null ) {
             value = new JsonPrimitive(text);

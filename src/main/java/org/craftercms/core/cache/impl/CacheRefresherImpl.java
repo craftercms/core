@@ -58,7 +58,8 @@ public class CacheRefresherImpl implements CacheRefresher {
     }
 
     /**
-     * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s. Before the items are refreshed one by one, the
+     * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s. Before the items are refreshed
+     * one by one, the
      * {@link TopologicalCacheItemSorter} is called to sort the items by their relationships, so that items with
      * dependencies will always be refreshed after their dependencies have been refreshed.
      */

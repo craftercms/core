@@ -27,7 +27,8 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 
 /**
- * {@link org.craftercms.core.processors.ItemProcessor} that extracts a list of text values from descriptor XPath-selected nodes and sets them as the
+ * {@link org.craftercms.core.processors.ItemProcessor} that extracts a list of text values from descriptor
+ * XPath-selected nodes and sets them as the
  * properties of the item. For extracting single values from a node use {@link TextMetaDataExtractingProcessor}.
  *
  * @author Sumer Jabri

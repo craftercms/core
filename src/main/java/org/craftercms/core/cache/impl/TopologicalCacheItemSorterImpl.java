@@ -34,7 +34,8 @@ public class TopologicalCacheItemSorterImpl implements TopologicalCacheItemSorte
     private static final Log logger = LogFactory.getLog(TopologicalCacheItemSorterImpl.class);
 
     /**
-     * Sorts the given {@link org.craftercms.core.cache.CacheItem}s through the following depth-first search based topological sorting
+     * Sorts the given {@link org.craftercms.core.cache.CacheItem}s through the following depth-first search based
+     * topological sorting
      * algorithm:
      * <p/>
      * L ← Empty list that will contain the sorted nodes

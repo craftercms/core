@@ -55,7 +55,8 @@ public class DefaultCacheTemplate implements CacheTemplate {
     }
 
     @Override
-    public <T> T execute(Context context, CachingOptions cachingOptions, CacheCallback<T> callback, Object... keyElements) {
+    public <T> T execute(Context context, CachingOptions cachingOptions, CacheCallback<T> callback,
+                         Object... keyElements) {
         Object key = getKey(keyElements);
 
         T obj = doGet(context, callback, key);
@@ -80,7 +81,8 @@ public class DefaultCacheTemplate implements CacheTemplate {
         return obj;
     }
 
-    protected <T> T doPut(Context context, CachingOptions cachingOptions, CacheCallback<T> callback, Object key, T obj) {
+    protected <T> T doPut(Context context, CachingOptions cachingOptions, CacheCallback<T> callback, Object key,
+                          T obj) {
         try {
             CacheLoader loader = getCacheLoader(callback, cachingOptions.getRefreshFrequency());
             cacheService.put(context, key, obj, cachingOptions, loader);
@@ -107,7 +109,8 @@ public class DefaultCacheTemplate implements CacheTemplate {
     }
 
     protected void logGetFailure(Context context, CacheCallback<?> callback, Object key, Exception e) {
-        logger.error("Unable to retrieve cached object: key='" + key + "', context=" + context + ", callback=" + callback, e);
+        logger.error("Unable to retrieve cached object: key='" + key + "', context=" + context + ", " +
+                "callback=" + callback, e);
     }
 
     protected void logPutFailure(Context context, CacheCallback<?> callback, Object key, Object obj, Exception e) {

@@ -44,7 +44,8 @@ public class ExtractRequestAttributesUrlTransformer implements UrlTransformer {
     }
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
         if ( uriTemplate.matches(url) ) {
             Map<String, String> variables = uriTemplate.match(url);
             for (Map.Entry<String, String> entry : variables.entrySet()) {

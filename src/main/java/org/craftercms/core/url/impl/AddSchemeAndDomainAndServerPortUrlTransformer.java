@@ -25,7 +25,8 @@ import org.craftercms.core.url.UrlTransformer;
 import org.craftercms.core.util.HttpServletUtils;
 
 /**
- * Prepends to a context relative url the schema, domain and port (if different than 80 and 443 in case of https) to URL, normally to get a
+ * Prepends to a context relative url the schema, domain and port (if different than 80 and 443 in case of https) to
+ * URL, normally to get a
  * full url, e.g., /webapp/servlet/a => http://domain.com:8080/webapp/servlet/a
  *
  * @author Alfonso Vásquez
@@ -33,7 +34,8 @@ import org.craftercms.core.util.HttpServletUtils;
 public class AddSchemeAndDomainAndServerPortUrlTransformer implements UrlTransformer {
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
         HttpServletRequest currentRequest = HttpServletUtils.getCurrentRequest();
         String scheme = currentRequest.getScheme();
         String domain = currentRequest.getServerName();

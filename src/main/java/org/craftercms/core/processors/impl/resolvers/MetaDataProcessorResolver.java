@@ -73,7 +73,8 @@ public class MetaDataProcessorResolver implements ItemProcessorResolver {
             if ( processor != null ) {
                 return processor;
             } else {
-                throw new XmlException("Element value \"" + processorElementValue + "\" doesn't refer to a registered processor");
+                throw new XmlException("Element value \"" + processorElementValue + "\" doesn't refer to a registered" +
+                        " processor");
             }
         } else {
             return null;

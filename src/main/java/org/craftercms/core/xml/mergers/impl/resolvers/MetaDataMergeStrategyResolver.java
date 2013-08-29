@@ -65,7 +65,8 @@ public class MetaDataMergeStrategyResolver implements DescriptorMergeStrategyRes
                 if ( strategy != null ) {
                     return strategy;
                 } else {
-                    throw new XmlException("Element value \"" + element.getText() + "\" doesn't refer to an registered strategy");
+                    throw new XmlException("Element value \"" + element.getText() + "\" doesn't refer to an " +
+                            "registered strategy");
                 }
             } else {
                 return null;

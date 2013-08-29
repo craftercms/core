@@ -42,7 +42,8 @@ import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * File-based content store adapter. Takes away common stuff from actual implementations, like handling metadata files and
+ * File-based content store adapter. Takes away common stuff from actual implementations,
+ * like handling metadata files and
  * loading descriptor DOMs.
  *
  * @author Alfonso Vásquez
@@ -65,7 +66,8 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    protected Content doGetContent(Context context, CachingOptions cachingOptions, String path) throws InvalidContextException,
+    protected Content doGetContent(Context context, CachingOptions cachingOptions,
+                                   String path) throws InvalidContextException,
             PathNotFoundException, StoreException {
         path = normalizePath(path);
 
@@ -220,7 +222,8 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     /**
      * Returns the {@link File} at the given path.
      */
-    protected abstract File getFile(Context context, String path) throws InvalidContextException, PathNotFoundException, StoreException;
+    protected abstract File getFile(Context context, String path) throws InvalidContextException,
+            PathNotFoundException, StoreException;
 
     /**
      * Returns the list of children of the given directory.

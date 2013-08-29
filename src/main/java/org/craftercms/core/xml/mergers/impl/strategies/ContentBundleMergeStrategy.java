@@ -72,12 +72,14 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
         this.regularMergeStrategy = regularMergeStrategy;
     }
 
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl)
+    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                                    String primaryDescriptorUrl)
             throws XmlMergeException {
         return getDescriptors(context, cachingOptions, primaryDescriptorUrl, false);
     }
 
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl,
+    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                                    String primaryDescriptorUrl,
                                                     boolean primaryDescriptorOptional)
             throws XmlMergeException {
         List<MergeableDescriptor> descriptors = new ArrayList<MergeableDescriptor>();
@@ -85,7 +87,8 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
 
         ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(primaryDescriptorUrl);
         String prefix = parsedUrl.getPrefix(); // prefix = folder1/
-        String baseNameAndExtensionToken = parsedUrl.getBaseNameAndExtensionToken(); // baseNameAndExtensionToken = folder2_es
+        String baseNameAndExtensionToken = parsedUrl.getBaseNameAndExtensionToken(); // baseNameAndExtensionToken =
+        // folder2_es
         String suffix = parsedUrl.getSuffix(); // suffix = /file.xml
 
         // If the prefix is the same length as the initial URI, ignore, otherwise process
@@ -113,7 +116,8 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
                 if ( baseFound ) {
                     // This can recurse if the selected strategy is also an ContentBundleMergeStrategy and the base
                     // descriptor path has more families.
-                    DescriptorMergeStrategy baseMergeStrategy = baseMergeStrategyResolver.getStrategy(baseDescriptor, baseDescriptorDom);
+                    DescriptorMergeStrategy baseMergeStrategy = baseMergeStrategyResolver.getStrategy(baseDescriptor,
+                            baseDescriptorDom);
                     if ( baseMergeStrategy == null ) {
                         throw new XmlMergeException("No merge strategy for descriptor " + baseDescriptor);
                     }

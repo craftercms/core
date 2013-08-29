@@ -39,7 +39,8 @@ public interface DescriptorMergeStrategy {
      * @return a list of {@link MergeableDescriptor}s representing the descriptors to merge
      * @throws XmlMergeException
      */
-    List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl)
+    List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                             String primaryDescriptorUrl)
             throws XmlMergeException;
 
     /**
@@ -52,7 +53,8 @@ public interface DescriptorMergeStrategy {
      * @return a list of {@link MergeableDescriptor}s representing the descriptors to merge
      * @throws XmlMergeException
      */
-    List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl,
+    List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                             String primaryDescriptorUrl,
                                              boolean primaryDescriptorOptional) throws XmlMergeException;
 
 }

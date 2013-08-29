@@ -47,7 +47,8 @@ public class ReplaceSubstringUrlTransformer implements UrlTransformer {
     }
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
         String result = url.replace(substringToReplace, replacement);
 
         if ( logger.isDebugEnabled() ) {

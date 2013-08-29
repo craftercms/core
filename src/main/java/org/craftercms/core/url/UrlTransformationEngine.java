@@ -27,6 +27,7 @@ public interface UrlTransformationEngine {
 
     String transformUrl(Context context, String transformerName, String url) throws UrlTransformationException;
 
-    String transformUrl(Context context, CachingOptions cachingOptions, String transformerName, String url) throws UrlTransformationException;
+    String transformUrl(Context context, CachingOptions cachingOptions, String transformerName,
+                        String url) throws UrlTransformationException;
 
 }

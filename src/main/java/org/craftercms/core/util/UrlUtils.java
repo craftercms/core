@@ -36,9 +36,12 @@ public class UrlUtils {
      * Returns the short name representation of a long name.
      *
      * @param longName
-     * @param containsShortNameRegex the regex that identifies whether the long name contains a short name. This regex should also contain
-     *                               a group expression that can be use to capture for the short name (see the Pattern class javadoc).
-     * @param shortNameRegexGroup    the index of the captured group that represents the short name (see the Pattern class javadoc)
+     * @param containsShortNameRegex the regex that identifies whether the long name contains a short name. This
+     *                               regex should also contain
+     *                               a group expression that can be use to capture for the short name (see the
+     *                               Pattern class javadoc).
+     * @param shortNameRegexGroup    the index of the captured group that represents the short name (see the Pattern
+     *                               class javadoc)
      * @return the short name, or the long name if there was no short name match
      * @see {@link Pattern}
      */

@@ -25,7 +25,8 @@ import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 
 /**
- * {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} that returns the same specified descriptor URL. This means there's no need for
+ * {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} that returns the same specified descriptor URL.
+ * This means there's no need for
  * merging.
  *
  * @author Sumer Jabri
@@ -33,11 +34,13 @@ import org.craftercms.core.xml.mergers.MergeableDescriptor;
  */
 public class SingleFileMergeStrategy implements DescriptorMergeStrategy {
 
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl) {
+    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                                    String primaryDescriptorUrl) {
         return getDescriptors(context, cachingOptions, primaryDescriptorUrl, false);
     }
 
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl,
+    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                                    String primaryDescriptorUrl,
                                                     boolean primaryDescriptorOptional) {
         return Arrays.asList(new MergeableDescriptor(primaryDescriptorUrl, primaryDescriptorOptional));
     }

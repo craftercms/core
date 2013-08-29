@@ -35,7 +35,8 @@ import org.springframework.oxm.xstream.XStreamMarshaller;
  * <p/>
  * <ol>
  * <li>Provides correct marshalling/unmarshalling support for Crafter objects.</li>
- * <li>Adds a {@code unsupportedClasses} property to exclude any unwanted classes from being marshalled/unmarshalled</li>
+ * <li>Adds a {@code unsupportedClasses} property to exclude any unwanted classes from being
+ * marshalled/unmarshalled</li>
  * </ol>
  *
  * @author Alfonso Vásquez
@@ -97,7 +98,8 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
     }
 
     /**
-     * Just as super(), but instead of a {@link com.thoughtworks.xstream.io.xml.CompactWriter} creates a {@link EscapingCompactWriter}.
+     * Just as super(), but instead of a {@link com.thoughtworks.xstream.io.xml.CompactWriter} creates a {@link
+     * EscapingCompactWriter}.
      * Also if the object graph is a Dom4j document, the document is written directly instead of using XStream.
      */
     @Override

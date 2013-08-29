@@ -95,13 +95,15 @@ public interface CacheService {
     /**
      * Puts and item in the scope of the given context.
      */
-    void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader, Object... loaderParams)
+    void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
+             Object... loaderParams)
             throws InvalidContextException, InternalCacheEngineException;
 
     /**
      * Puts and item in the scope of the given context.
      */
-    void put(Context context, Object key, Object value, List<Object> dependencyKeys, CachingOptions cachingOptions, CacheLoader loader,
+    void put(Context context, Object key, Object value, List<Object> dependencyKeys, CachingOptions cachingOptions,
+             CacheLoader loader,
              Object... loaderParams) throws InvalidContextException, InternalCacheEngineException;
 
     /**

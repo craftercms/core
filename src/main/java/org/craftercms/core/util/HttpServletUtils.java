@@ -43,7 +43,8 @@ public class HttpServletUtils {
         if ( requestAttributes instanceof ServletRequestAttributes ) {
             return ((ServletRequestAttributes) requestAttributes).getRequest();
         } else {
-            throw new IllegalStateException("Current RequestAttributes isn't of type ServletRequestAttributes. Are you sure you're" +
+            throw new IllegalStateException("Current RequestAttributes isn't of type ServletRequestAttributes. Are " +
+                    "you sure you're" +
                     "running in a Servlet environment?");
         }
     }
@@ -99,7 +100,8 @@ public class HttpServletUtils {
         return queryParams;
     }
 
-    public static String getQueryStringFromParams(Map<String, Object> queryParams, String charset) throws UnsupportedEncodingException {
+    public static String getQueryStringFromParams(Map<String, Object> queryParams,
+                                                  String charset) throws UnsupportedEncodingException {
         StringBuilder queryString = new StringBuilder();
 
         if ( MapUtils.isNotEmpty(queryParams) ) {

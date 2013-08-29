@@ -25,7 +25,8 @@ import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 
 /**
- * Abstract {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} that defines the base code for strategies that decide which descriptors
+ * Abstract {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} that defines the base code for strategies
+ * that decide which descriptors
  * to "inherit" from upper levels in the folder hierarchy.
  *
  * @author Sumer Jabri
@@ -33,11 +34,13 @@ import org.craftercms.core.xml.mergers.MergeableDescriptor;
  */
 public abstract class AbstractInheritFromHierarchyMergeStrategy implements DescriptorMergeStrategy {
 
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl) {
+    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                                    String primaryDescriptorUrl) {
         return getDescriptors(context, cachingOptions, primaryDescriptorUrl, false);
     }
 
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl,
+    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                                    String primaryDescriptorUrl,
                                                     boolean primaryDescriptorOptional) {
         List<MergeableDescriptor> descriptors = new ArrayList<MergeableDescriptor>();
 

@@ -23,7 +23,8 @@ import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
 
 /**
- * Implementation of a {@link org.craftercms.core.cache.impl.CacheStoreAdapter} that uses no data structure and whose operations do nothing. Useful
+ * Implementation of a {@link org.craftercms.core.cache.impl.CacheStoreAdapter} that uses no data structure and whose
+ * operations do nothing. Useful
  * in scenarios where you need a cache reference but don't need to cache anything or it's not appropriate, and when
  * testing or troubleshooting.
  *

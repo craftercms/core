@@ -34,7 +34,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
- * Implementation of {@link org.craftercms.core.store.ContentStoreAdapter} that enables access to a store in the filesystem.
+ * Implementation of {@link org.craftercms.core.store.ContentStoreAdapter} that enables access to a store in the
+ * filesystem.
  *
  * @author Alfonso Vásquez
  */
@@ -50,27 +51,32 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     }
 
     @Override
-    public Context createContext(String id, String storeServerUrl, String username, String password, String rootFolderPath, boolean cacheOn,
-                                 int maxAllowedItemsInCache, boolean ignoreHiddenFiles) throws StoreException, AuthenticationException {
+    public Context createContext(String id, String storeServerUrl, String username, String password,
+                                 String rootFolderPath, boolean cacheOn,
+                                 int maxAllowedItemsInCache, boolean ignoreHiddenFiles) throws StoreException,
+            AuthenticationException {
         try {
             Resource rootFolderResource = resourceLoader.getResource(rootFolderPath);
             FileSystemFile rootFolder = new FileSystemFile(rootFolderResource.getFile());
 
-            return new FileSystemContext(id, this, null, rootFolderPath, rootFolder, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
+            return new FileSystemContext(id, this, null, rootFolderPath, rootFolder, cacheOn, maxAllowedItemsInCache,
+                    ignoreHiddenFiles);
         } catch (IOException e) {
             throw new StoreException("Unable to get a File object from the specified rootFolderPath", e);
         }
     }
 
     @Override
-    public void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
+    public void destroyContext(Context context) throws InvalidContextException, StoreException,
+            AuthenticationException {
     }
 
     /**
      * Returns the file for the specified relative path.
      */
     @Override
-    protected File getFile(Context context, String path) throws InvalidContextException, PathNotFoundException, StoreException {
+    protected File getFile(Context context, String path) throws InvalidContextException, PathNotFoundException,
+            StoreException {
         FileSystemFile rootFolder = ((FileSystemContext) context).getRootFolder();
 
         if ( StringUtils.isNotEmpty(path) ) {
@@ -86,7 +92,8 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     }
 
     @Override
-    protected List<File> getChildren(Context context, File dir) throws InvalidContextException, PathNotFoundException, StoreException {
+    protected List<File> getChildren(Context context, File dir) throws InvalidContextException,
+            PathNotFoundException, StoreException {
         java.io.File[] listing;
         if ( context.ignoreHiddenFiles() ) {
             listing = ((FileSystemFile) dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);

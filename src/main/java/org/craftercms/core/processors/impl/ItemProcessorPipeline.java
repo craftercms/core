@@ -28,7 +28,9 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 
 /**
- * Pipeline of {@link org.craftercms.core.processors.ItemProcessor}s. The output of each processor's {@link org.craftercms.core.processors.ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions, Item)}
+ * Pipeline of {@link org.craftercms.core.processors.ItemProcessor}s. The output of each processor's {@link org
+ * .craftercms.core.processors.ItemProcessor#process(org.craftercms.core.service.Context,
+ * org.craftercms.core.service.CachingOptions, Item)}
  * call is passed as input to the next processor.
  *
  * @author Sumer Jabri
@@ -87,7 +89,8 @@ public class ItemProcessorPipeline implements ItemProcessor {
 
     /**
      * Processes the given {@link Item}, by calling a pipeline of processors. The output of each processor's
-     * {@link ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions, Item)} call is passed as input to the next processor.
+     * {@link ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions,
+     * Item)} call is passed as input to the next processor.
      *
      * @return the result of the final processor in the pipeline.
      * @throws ItemProcessingException if one of the processors in the pipeline couldn't process the item

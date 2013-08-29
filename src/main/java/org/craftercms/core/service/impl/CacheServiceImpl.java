@@ -161,7 +161,8 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void put(Context context, Object key, Object value) throws InvalidContextException, InternalCacheEngineException {
+    public void put(Context context, Object key, Object value) throws InvalidContextException,
+            InternalCacheEngineException {
         if ( context.isCacheOn() ) {
             try {
                 cache.put(context.getId(), key, value);
@@ -172,7 +173,8 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void put(Context context, Object key, Object value, List<Object> dependencyKeys) throws InvalidScopeException,
+    public void put(Context context, Object key, Object value, List<Object> dependencyKeys) throws
+            InvalidScopeException,
             InternalCacheEngineException {
         if ( context.isCacheOn() ) {
             try {
@@ -184,11 +186,13 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader, Object... loaderParams)
+    public void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
+                    Object... loaderParams)
             throws InvalidContextException, InternalCacheEngineException {
         if ( context.isCacheOn() && cachingOptions.doCaching() ) {
             try {
-                cache.put(context.getId(), key, value, cachingOptions.getExpireAfter(), cachingOptions.getRefreshFrequency(),
+                cache.put(context.getId(), key, value, cachingOptions.getExpireAfter(),
+                        cachingOptions.getRefreshFrequency(),
                         loader, loaderParams);
             } catch (InvalidScopeException e) {
                 throw new InvalidContextException("No scope associated to context " + context);
@@ -197,8 +201,10 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void put(Context context, Object key, Object value, List<Object> dependencyKeys, CachingOptions cachingOptions,
-                    CacheLoader loader, Object... loaderParams) throws InvalidContextException, InternalCacheEngineException {
+    public void put(Context context, Object key, Object value, List<Object> dependencyKeys,
+                    CachingOptions cachingOptions,
+                    CacheLoader loader, Object... loaderParams) throws InvalidContextException,
+            InternalCacheEngineException {
         if ( context.isCacheOn() && cachingOptions.doCaching() ) {
             try {
                 cache.put(context.getId(), key, value, dependencyKeys, cachingOptions.getExpireAfter(), cachingOptions

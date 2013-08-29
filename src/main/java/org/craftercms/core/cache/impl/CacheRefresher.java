@@ -23,7 +23,8 @@ import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
 
 /**
- * Refreshes a list of {@link org.craftercms.core.cache.CacheItem}s in a {@link org.craftercms.core.cache.Cache}. New values for the items will usually be obtained through
+ * Refreshes a list of {@link org.craftercms.core.cache.CacheItem}s in a {@link org.craftercms.core.cache.Cache}. New
+ * values for the items will usually be obtained through
  * {@link CacheLoader}s.
  *
  * @author Sumer Jabri

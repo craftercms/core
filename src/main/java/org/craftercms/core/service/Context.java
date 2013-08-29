@@ -38,7 +38,8 @@ public class Context {
     protected int maxAllowedItemsInCache;
     protected boolean ignoreHiddenFiles;
 
-    public Context(String id, ContentStoreAdapter storeAdapter, String storeServerUrl, String rootFolderPath, boolean cacheOn,
+    public Context(String id, ContentStoreAdapter storeAdapter, String storeServerUrl, String rootFolderPath,
+                   boolean cacheOn,
                    int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
         this.id = id;
         this.storeAdapter = storeAdapter;

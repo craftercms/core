@@ -23,8 +23,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
- * Picks up any bean of a specific type defined in the Spring application context, and puts it in a registry, with the key or
- * ID as the name of the context bean except the a prefix, e.g. if a bean is named "crafter.contentStoreAdapter.filesystem", and the
+ * Picks up any bean of a specific type defined in the Spring application context, and puts it in a registry,
+ * with the key or
+ * ID as the name of the context bean except the a prefix, e.g. if a bean is named "crafter.contentStoreAdapter
+ * .filesystem", and the
  * prefix is "crafter.contentStoreAdapter", the ID of the bean in the registry would be "filesystem.
  *
  * @author Alfonso Vásquez

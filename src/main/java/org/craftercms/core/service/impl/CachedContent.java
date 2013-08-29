@@ -33,7 +33,8 @@ public class CachedContent extends CachingAwareObjectBase implements Content {
     private long lastModified;
 
     /**
-     * Copy constructor. Performs a deep copy, copying the bytes of the passed {@code CachedContent} object if the {@code deepCopy}
+     * Copy constructor. Performs a deep copy, copying the bytes of the passed {@code CachedContent} object if the
+     * {@code deepCopy}
      * parameter is true.
      */
     public CachedContent(CachedContent content, boolean deepCopy) {

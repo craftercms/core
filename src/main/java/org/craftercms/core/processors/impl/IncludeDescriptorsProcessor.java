@@ -36,7 +36,8 @@ import org.dom4j.Node;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * {@link org.craftercms.core.processors.ItemProcessor} that replaces special "include" tags found in a descriptor document with the document tree of
+ * {@link org.craftercms.core.processors.ItemProcessor} that replaces special "include" tags found in a descriptor
+ * document with the document tree of
  * descriptors specified in these "include" tags.
  *
  * @author Sumer Jabri
@@ -98,7 +99,8 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      *
      * @throws ItemProcessingException
      */
-    protected void includeDescriptors(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
+    protected void includeDescriptors(Context context, CachingOptions cachingOptions,
+                                      Item item) throws ItemProcessingException {
         String descriptorUrl = item.getDescriptorUrl();
         Document descriptorDom = item.getDescriptorDom();
 
@@ -129,7 +131,8 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
     /**
      * If path is relative, makes it absolute (resolves references to '.' and '..).
      */
-    protected String fromRelativeToAbsoluteUrl(String descriptorUrl, String includeSrcPath) throws ItemProcessingException {
+    protected String fromRelativeToAbsoluteUrl(String descriptorUrl, String includeSrcPath) throws
+            ItemProcessingException {
         try {
             return UrlUtils.resolveRelative(descriptorUrl, includeSrcPath);
         } catch (URISyntaxException e) {
@@ -137,11 +140,13 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
         }
     }
 
-    protected Item getIncludeSrcItem(Context context, CachingOptions cachingOptions, String includeSrcPath) throws ItemProcessingException {
+    protected Item getIncludeSrcItem(Context context, CachingOptions cachingOptions,
+                                     String includeSrcPath) throws ItemProcessingException {
         try {
             return contentStoreService.getItem(context, cachingOptions, includeSrcPath);
         } catch (Exception e) {
-            throw new ItemProcessingException("Unable to load descriptor " + includeSrcPath + " from the underlying repository", e);
+            throw new ItemProcessingException("Unable to load descriptor " + includeSrcPath + " from the underlying " +
+                    "repository", e);
         }
     }
 
@@ -150,7 +155,8 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      *
      * @throws ItemProcessingException
      */
-    protected void doInclude(Element includeElement, String includeSrcPath, Document includeSrc) throws ItemProcessingException {
+    protected void doInclude(Element includeElement, String includeSrcPath,
+                             Document includeSrc) throws ItemProcessingException {
         List<Node> includeElementParentChildren = includeElement.getParent().content();
         int includeElementIdx = includeElementParentChildren.indexOf(includeElement);
         Element includeSrcRootElement = includeSrc.getRootElement().createCopy();

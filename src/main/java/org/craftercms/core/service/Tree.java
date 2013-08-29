@@ -98,7 +98,8 @@ public class Tree extends Item {
      * Overrides {@link Item#setFolder(boolean)}, by checking that the flag is never set to false, since a tree
      * is always a folder.
      *
-     * @throws IllegalArgumentException if the method was called with false (the folder flag should never being set to false).
+     * @throws IllegalArgumentException if the method was called with false (the folder flag should never being set
+     * to false).
      */
     @Override
     public void setFolder(boolean folder) {

@@ -46,7 +46,8 @@ import org.springframework.expression.spel.support.StandardTypeLocator;
  *
  * @author Alfonso Vásquez
  */
-public class SpELStringTemplateCompiler implements TemplateCompiler<IdentifiableStringTemplateSource>, BeanFactoryAware {
+public class SpELStringTemplateCompiler implements TemplateCompiler<IdentifiableStringTemplateSource>,
+        BeanFactoryAware {
 
     private ExpressionParser parser;
     private ParserContext parserContext;

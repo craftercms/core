@@ -57,7 +57,8 @@ public class ShortToLongUrlTransformer implements UrlTransformer {
     }
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
         String result = getLongUrl(context, cachingOptions, url, true);
 
         if ( logger.isDebugEnabled() ) {
@@ -88,7 +89,8 @@ public class ShortToLongUrlTransformer implements UrlTransformer {
         return null;
     }
 
-    protected String getLongUrl(Context context, CachingOptions cachingOptions, String shortUrl, boolean useShortNameIfLongNameNotFound)
+    protected String getLongUrl(Context context, CachingOptions cachingOptions, String shortUrl,
+                                boolean useShortNameIfLongNameNotFound)
             throws UrlTransformationException {
         String[] levels = StringUtils.strip(shortUrl, "/").split("/");
         StringBuilder result = new StringBuilder();

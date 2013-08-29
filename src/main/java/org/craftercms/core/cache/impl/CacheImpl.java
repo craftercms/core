@@ -34,7 +34,8 @@ import org.craftercms.core.util.generators.impl.IncrementalTimestampGenerator;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * {@link org.craftercms.core.cache.Cache} that implements common functionality, such as logging, expiration/refresh check every tick and
+ * {@link org.craftercms.core.cache.Cache} that implements common functionality, such as logging,
+ * expiration/refresh check every tick and
  * dependency management, and uses and underlying {@link CacheStoreAdapter} to store the items.
  *
  * @author Sumer Jabri
@@ -61,7 +62,8 @@ public class CacheImpl implements Cache {
     protected TimestampGenerator timestampGenerator;
 
     /**
-     * Default constructor. Sets <code>timestampGenerator</code> to {@link org.craftercms.core.util.generators.impl.IncrementalTimestampGenerator}.
+     * Default constructor. Sets <code>timestampGenerator</code> to {@link org.craftercms.core.util.generators.impl
+     * .IncrementalTimestampGenerator}.
      */
     public CacheImpl() {
         ticks = 0;
@@ -100,7 +102,8 @@ public class CacheImpl implements Cache {
         try {
             return cacheStoreAdapter.hasScope(scope);
         } catch (Exception ex) {
-            throw new InternalCacheEngineException("Exception while checking if the scope " + scope + " exists in the cache", ex);
+            throw new InternalCacheEngineException("Exception while checking if the scope " + scope + " exists in the" +
+                    " cache", ex);
         }
     }
 
@@ -180,7 +183,8 @@ public class CacheImpl implements Cache {
         } catch (InvalidScopeException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new InternalCacheEngineException("Exception while checking if the scope " + scope + " has key " + key, ex);
+            throw new InternalCacheEngineException("Exception while checking if the scope " + scope + " has key " +
+                    key, ex);
         }
     }
 
@@ -201,7 +205,8 @@ public class CacheImpl implements Cache {
         } catch (InvalidScopeException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new InternalCacheEngineException("Exception while getting item with key " + key + " from scope " + scope, ex);
+            throw new InternalCacheEngineException("Exception while getting item with key " + key + " from scope " +
+                    scope, ex);
         }
     }
 
@@ -239,7 +244,8 @@ public class CacheImpl implements Cache {
         } catch (InvalidScopeException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new InternalCacheEngineException("Exception while getting item with key " + key + " from scope " + scope, ex);
+            throw new InternalCacheEngineException("Exception while getting item with key " + key + " from scope " +
+                    scope, ex);
         }
     }
 
@@ -299,7 +305,8 @@ public class CacheImpl implements Cache {
         }
 
         try {
-            CacheItem item = new CacheItemImpl(scope, ticks, key, value, expireAfter, refreshFrequency, timestampGenerator.generate(),
+            CacheItem item = new CacheItemImpl(scope, ticks, key, value, expireAfter, refreshFrequency,
+                    timestampGenerator.generate(),
                     dependencyKeys, loader, loaderParams);
 
             cacheStoreAdapter.put(item);
@@ -389,7 +396,8 @@ public class CacheImpl implements Cache {
                                 doChecks(item, itemsToRefresh);
                             } else {
                                 if ( logger.isDebugEnabled() ) {
-                                    logger.debug(item + " was removed before it could be checked for expiration/refresh");
+                                    logger.debug(item + " was removed before it could be checked for " +
+                                            "expiration/refresh");
                                 }
                             }
                         }

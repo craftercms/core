@@ -61,15 +61,19 @@ public interface ContentStoreService {
     Context getContext(String contextId);
 
     /**
-     * Returns a new context with the specified params, login in to a remote repository (if needed) and creating a new cache scope
+     * Returns a new context with the specified params, login in to a remote repository (if needed) and creating a
+     * new cache scope
      * associated to the context. If a context with the same params was already created, an exception is thrown.
      */
-    Context createContext(String storeType, String storeServerUrl, String username, String password, String rootFolderPath, boolean cacheOn,
-                          int maxAllowedItemsInCache, boolean ignoreHiddenFiles) throws InvalidStoreTypeException, StoreException,
+    Context createContext(String storeType, String storeServerUrl, String username, String password,
+                          String rootFolderPath, boolean cacheOn,
+                          int maxAllowedItemsInCache, boolean ignoreHiddenFiles) throws InvalidStoreTypeException,
+            StoreException,
             AuthenticationException;
 
     /**
-     * Destroys the specified context, login out of any remote repository (if a login was issued) and destroying the cache scope
+     * Destroys the specified context, login out of any remote repository (if a login was issued) and destroying the
+     * cache scope
      * associated to the context.
      */
     void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException;
@@ -98,7 +102,8 @@ public interface ContentStoreService {
      * @throws PathNotFoundException   if the file the url points to can't be found
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Content getContent(Context context, CachingOptions cachingOptions, String url) throws InvalidScopeException, PathNotFoundException,
+    Content getContent(Context context, CachingOptions cachingOptions, String url) throws InvalidScopeException,
+            PathNotFoundException,
             StoreException;
 
     /**
@@ -116,7 +121,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing the item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Item getItem(Context context, String url) throws InvalidContextException, PathNotFoundException, XmlFileParseException,
+    Item getItem(Context context, String url) throws InvalidContextException, PathNotFoundException,
+            XmlFileParseException,
             XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -133,7 +139,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing the item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Item getItem(Context context, CachingOptions cachingOptions, String url) throws InvalidContextException, PathNotFoundException,
+    Item getItem(Context context, CachingOptions cachingOptions, String url) throws InvalidContextException,
+            PathNotFoundException,
             XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -150,7 +157,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing the item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Item getItem(Context context, String url, ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
+    Item getItem(Context context, String url, ItemProcessor processor) throws InvalidContextException,
+            PathNotFoundException,
             XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -168,7 +176,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing the item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Item getItem(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor) throws InvalidContextException,
+    Item getItem(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor) throws
+            InvalidContextException,
             PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -184,7 +193,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    List<Item> getChildren(Context context, String url) throws InvalidContextException, PathNotFoundException, XmlFileParseException,
+    List<Item> getChildren(Context context, String url) throws InvalidContextException, PathNotFoundException,
+            XmlFileParseException,
             XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -218,7 +228,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    List<Item> getChildren(Context context, String url, ItemFilter filter) throws InvalidContextException, PathNotFoundException,
+    List<Item> getChildren(Context context, String url, ItemFilter filter) throws InvalidContextException,
+            PathNotFoundException,
             XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -236,7 +247,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    List<Item> getChildren(Context context, CachingOptions cachingOptions, String url, ItemFilter filter) throws InvalidContextException,
+    List<Item> getChildren(Context context, CachingOptions cachingOptions, String url,
+                           ItemFilter filter) throws InvalidContextException,
             PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -253,7 +265,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    List<Item> getChildren(Context context, String url, ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
+    List<Item> getChildren(Context context, String url, ItemProcessor processor) throws InvalidContextException,
+            PathNotFoundException,
             XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -272,7 +285,8 @@ public interface ContentStoreService {
      * @throws StoreException          if an error occurred while accessing the content store
      */
     List<Item> getChildren(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+            throws InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException,
+            ItemProcessingException,
             StoreException;
 
     /**
@@ -290,7 +304,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    List<Item> getChildren(Context context, String url, ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
+    List<Item> getChildren(Context context, String url, ItemFilter filter, ItemProcessor processor) throws
+            InvalidContextException,
             PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -309,8 +324,10 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    List<Item> getChildren(Context context, CachingOptions cachingOptions, String url, ItemFilter filter, ItemProcessor processor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+    List<Item> getChildren(Context context, CachingOptions cachingOptions, String url, ItemFilter filter,
+                           ItemProcessor processor)
+            throws InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException,
+            ItemProcessingException,
             StoreException;
 
     /**
@@ -327,7 +344,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, String url) throws InvalidContextException, PathNotFoundException, XmlFileParseException,
+    Tree getTree(Context context, String url) throws InvalidContextException, PathNotFoundException,
+            XmlFileParseException,
             XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -345,7 +363,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, CachingOptions cachingOptions, String url) throws InvalidContextException, PathNotFoundException,
+    Tree getTree(Context context, CachingOptions cachingOptions, String url) throws InvalidContextException,
+            PathNotFoundException,
             XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -354,7 +373,8 @@ public interface ContentStoreService {
      *
      * @param context the context to the content store
      * @param url     the url of the folder
-     * @param depth   the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to include
+     * @param depth   the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to
+     *                include
      *                all files/folder until the bottom of the folder hierarchy
      * @return the folder as a tree
      * @throws InvalidContextException if the context is invalid
@@ -364,7 +384,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, String url, int depth) throws InvalidContextException, PathNotFoundException, XmlFileParseException,
+    Tree getTree(Context context, String url, int depth) throws InvalidContextException, PathNotFoundException,
+            XmlFileParseException,
             XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -374,7 +395,8 @@ public interface ContentStoreService {
      * @param context        the context to the content store
      * @param cachingOptions the caching options for any caching operation done inside this service call
      * @param url            the url of the folder
-     * @param depth          the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to include
+     * @param depth          the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the
+     *                       tree to include
      *                       all files/folder until the bottom of the folder hierarchy
      * @return the folder as a tree
      * @throws InvalidContextException if the context is invalid
@@ -421,7 +443,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, CachingOptions cachingOptions, String url, ItemFilter filter) throws InvalidContextException,
+    Tree getTree(Context context, CachingOptions cachingOptions, String url,
+                 ItemFilter filter) throws InvalidContextException,
             PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -430,7 +453,8 @@ public interface ContentStoreService {
      *
      * @param context the context to the content store
      * @param url     the url of the folder
-     * @param depth   the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to include
+     * @param depth   the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to
+     *                include
      *                all files/folder until the bottom of the folder hierarchy
      * @param filter  an {@link ItemFilter} to filter out undesired items in the tree
      * @return the folder as a tree
@@ -441,7 +465,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, String url, int depth, ItemFilter filter) throws InvalidContextException, PathNotFoundException,
+    Tree getTree(Context context, String url, int depth, ItemFilter filter) throws InvalidContextException,
+            PathNotFoundException,
             XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -451,7 +476,8 @@ public interface ContentStoreService {
      * @param context        the context to the content store
      * @param cachingOptions the caching options for any caching operation done inside this service call
      * @param url            the url of the folder
-     * @param depth          the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to include
+     * @param depth          the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the
+     *                       tree to include
      *                       all files/folder until the bottom of the folder hierarchy
      * @param filter         an {@link ItemFilter} to filter out undesired items in the tree
      * @return the folder as a tree
@@ -462,7 +488,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, CachingOptions cachingOptions, String url, int depth, ItemFilter filter) throws InvalidContextException,
+    Tree getTree(Context context, CachingOptions cachingOptions, String url, int depth,
+                 ItemFilter filter) throws InvalidContextException,
             PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -480,7 +507,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, String url, ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
+    Tree getTree(Context context, String url, ItemProcessor processor) throws InvalidContextException,
+            PathNotFoundException,
             XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -499,7 +527,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor) throws InvalidContextException,
+    Tree getTree(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor) throws
+            InvalidContextException,
             PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -508,7 +537,8 @@ public interface ContentStoreService {
      *
      * @param context   the context to the content store
      * @param url       the url of the folder
-     * @param depth     the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to include
+     * @param depth     the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree
+     *                  to include
      *                  all files/folder until the bottom of the folder hierarchy
      * @param processor additional {@link ItemProcessor} for the tree's items
      * @return the folder as a tree
@@ -519,7 +549,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, String url, int depth, ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
+    Tree getTree(Context context, String url, int depth, ItemProcessor processor) throws InvalidContextException,
+            PathNotFoundException,
             XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -529,7 +560,8 @@ public interface ContentStoreService {
      * @param context        the context to the content store
      * @param cachingOptions the caching options for any caching operation done inside this service call
      * @param url            the url of the folder
-     * @param depth          the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to include
+     * @param depth          the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the
+     *                       tree to include
      *                       all files/folder until the bottom of the folder hierarchy
      * @param processor      additional {@link ItemProcessor} for the tree's items
      * @return the folder as a tree
@@ -541,7 +573,8 @@ public interface ContentStoreService {
      * @throws StoreException          if an error occurred while accessing the content store
      */
     Tree getTree(Context context, CachingOptions cachingOptions, String url, int depth, ItemProcessor processor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+            throws InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException,
+            ItemProcessingException,
             StoreException;
 
     /**
@@ -560,7 +593,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, String url, ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
+    Tree getTree(Context context, String url, ItemFilter filter, ItemProcessor processor) throws
+            InvalidContextException,
             PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -581,7 +615,8 @@ public interface ContentStoreService {
      * @throws StoreException          if an error occurred while accessing the content store
      */
     Tree getTree(Context context, CachingOptions cachingOptions, String url, ItemFilter filter, ItemProcessor processor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+            throws InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException,
+            ItemProcessingException,
             StoreException;
 
     /**
@@ -590,7 +625,8 @@ public interface ContentStoreService {
      *
      * @param context   the context to the content store
      * @param url       the url of the folder
-     * @param depth     the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to include
+     * @param depth     the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree
+     *                  to include
      *                  all files/folder until the bottom of the folder hierarchy
      * @param filter    an {@link ItemFilter} to filter out undesired items in the tree
      * @param processor additional {@link ItemProcessor} for the tree's items
@@ -602,7 +638,8 @@ public interface ContentStoreService {
      * @throws ItemProcessingException if there was an error while processing an item
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Tree getTree(Context context, String url, int depth, ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
+    Tree getTree(Context context, String url, int depth, ItemFilter filter, ItemProcessor processor) throws
+            InvalidContextException,
             PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     /**
@@ -612,7 +649,8 @@ public interface ContentStoreService {
      * @param context        the context to the content store
      * @param cachingOptions the caching options for any caching operation done inside this service call
      * @param url            the url of the folder
-     * @param depth          the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the tree to include
+     * @param depth          the number of levels the tree should have. Use #UNLIMITED_TREE_DEPTH when you want the
+     *                       tree to include
      *                       all files/folder until the bottom of the folder hierarchy
      * @param filter         an {@link ItemFilter} to filter out undesired items in the tree
      * @param processor      additional {@link ItemProcessor} for the tree's items

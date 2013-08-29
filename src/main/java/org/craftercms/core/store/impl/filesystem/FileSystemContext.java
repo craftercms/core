@@ -27,8 +27,10 @@ public class FileSystemContext extends Context {
 
     FileSystemFile rootFolder;
 
-    public FileSystemContext(String id, FileSystemContentStoreAdapter storeAdapter, String storeServerUrl, String rootFolderPath,
-                             FileSystemFile rootFolder, boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
+    public FileSystemContext(String id, FileSystemContentStoreAdapter storeAdapter, String storeServerUrl,
+                             String rootFolderPath,
+                             FileSystemFile rootFolder, boolean cacheOn, int maxAllowedItemsInCache,
+                             boolean ignoreHiddenFiles) {
         super(id, storeAdapter, storeServerUrl, rootFolderPath, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 
         this.rootFolder = rootFolder;

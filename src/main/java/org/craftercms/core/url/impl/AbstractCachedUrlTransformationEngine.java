@@ -46,7 +46,8 @@ public abstract class AbstractCachedUrlTransformationEngine implements UrlTransf
     }
 
     @Override
-    public String transformUrl(final Context context, final CachingOptions cachingOptions, final String transformerName, final String url)
+    public String transformUrl(final Context context, final CachingOptions cachingOptions,
+                               final String transformerName, final String url)
             throws UrlTransformationException {
         return cacheTemplate.execute(context, cachingOptions, new CacheCallback<String>() {
 
@@ -57,7 +58,8 @@ public abstract class AbstractCachedUrlTransformationEngine implements UrlTransf
 
             @Override
             public String toString() {
-                return String.format(AbstractCachedUrlTransformationEngine.this.getClass().getName() + ".transformUrl(%s, %s, %s)",
+                return String.format(AbstractCachedUrlTransformationEngine.this.getClass().getName() + ".transformUrl" +
+                        "(%s, %s, %s)",
                         context, transformerName, url);
             }
 

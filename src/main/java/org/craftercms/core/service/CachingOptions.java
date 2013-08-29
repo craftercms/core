@@ -19,7 +19,8 @@ package org.craftercms.core.service;
 import org.craftercms.core.cache.CacheItem;
 
 /**
- * Set of options that should be used when caching in a service call. {@code expireAfter} and {@code refreshFrequency} are expressed in
+ * Set of options that should be used when caching in a service call. {@code expireAfter} and {@code
+ * refreshFrequency} are expressed in
  * ticks.
  *
  * @author Alfonso Vásquez

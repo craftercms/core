@@ -61,7 +61,8 @@ public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransf
     }
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
         String result = getLongUrlLookingInBundle(context, cachingOptions, url);
 
         if ( logger.isDebugEnabled() ) {

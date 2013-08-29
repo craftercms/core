@@ -253,7 +253,8 @@ public class Item extends CachingAwareObjectBase {
     }
 
     /**
-     * Returns true if the specified {@code Item}'s and this instance's {@code name}, {@code url}, {@code descriptorUrl} and
+     * Returns true if the specified {@code Item}'s and this instance's {@code name}, {@code url},
+     * {@code descriptorUrl} and
      * {@code isFolder} are equal.
      */
     @Override
@@ -284,7 +285,8 @@ public class Item extends CachingAwareObjectBase {
     }
 
     /**
-     * Returns the hash code, which is the combination of the hash code of {@code name}, {@code url}, {@code descriptorUrl} and
+     * Returns the hash code, which is the combination of the hash code of {@code name}, {@code url},
+     * {@code descriptorUrl} and
      * {@code folder}.
      */
     @Override

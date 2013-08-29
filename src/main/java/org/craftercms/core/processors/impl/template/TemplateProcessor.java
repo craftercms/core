@@ -116,7 +116,8 @@ public class TemplateProcessor implements ItemProcessor {
 
                 String templateId = templateNodePath + "@" + descriptorUrl;
                 String template = templateNode.getText();
-                IdentifiableStringTemplateSource templateSource = new IdentifiableStringTemplateSource(templateId, template);
+                IdentifiableStringTemplateSource templateSource = new IdentifiableStringTemplateSource(templateId,
+                        template);
                 Object model = modelFactory.getModel(item, templateNode, template);
                 StringWriter output = new StringWriter();
 

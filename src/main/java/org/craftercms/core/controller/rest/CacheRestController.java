@@ -80,7 +80,8 @@ public class CacheRestController extends RestControllerBase {
 
     @RequestMapping(value = URL_CLEAR_SCOPE, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public void clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId) throws InvalidContextException, CacheException {
+    public void clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId) throws InvalidContextException,
+            CacheException {
         Context context = storeService.getContext(contextId);
         if ( context == null ) {
             throw new InvalidContextException("No context found for ID " + contextId);
@@ -94,28 +95,36 @@ public class CacheRestController extends RestControllerBase {
 
     @RequestMapping(value = URL_REMOVE_ITEM, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public void removeItem(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId, @RequestParam(REQUEST_PARAM_URL) String url)
+    public void removeItem(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+                           @RequestParam(REQUEST_PARAM_URL) String url)
             throws InvalidContextException, CacheException {
         Context context = storeService.getContext(contextId);
         if ( context == null ) {
             throw new InvalidContextException("No context found for ID " + contextId);
         }
 
-        // Content store service always adds a "/" at the beginning before requesting the items from the store adapter, so we need
+        // Content store service always adds a "/" at the beginning before requesting the items from the store
+        // adapter, so we need
         // to add it too.
         if ( !url.startsWith("/") ) {
             url = "/" + url;
         }
 
         CacheService cacheService = cacheTemplate.getCacheService();
-        // Remove all possible cached versions IN STORE ADAPTER. Since cached store service items depend on store adapter items,
+        // Remove all possible cached versions IN STORE ADAPTER. Since cached store service items depend on store
+        // adapter items,
         // we don't need to remove them manually.
-        cacheService.remove(context, cacheTemplate.getKey(context, url, AbstractCachedContentStoreAdapter.CONST_KEY_ELEM_CONTENT));
-        cacheService.remove(context, cacheTemplate.getKey(context, url, true, AbstractCachedContentStoreAdapter.CONST_KEY_ELEM_ITEM));
-        cacheService.remove(context, cacheTemplate.getKey(context, url, false, AbstractCachedContentStoreAdapter.CONST_KEY_ELEM_ITEM));
+        cacheService.remove(context, cacheTemplate.getKey(context, url, AbstractCachedContentStoreAdapter
+                .CONST_KEY_ELEM_CONTENT));
+        cacheService.remove(context, cacheTemplate.getKey(context, url, true, AbstractCachedContentStoreAdapter
+                .CONST_KEY_ELEM_ITEM));
+        cacheService.remove(context, cacheTemplate.getKey(context, url, false, AbstractCachedContentStoreAdapter
+                .CONST_KEY_ELEM_ITEM));
         // In case the item is a folder, remove cached children lists
-        cacheService.remove(context, cacheTemplate.getKey(context, url, true, AbstractCachedContentStoreAdapter.CONST_KEY_ELEM_ITEMS));
-        cacheService.remove(context, cacheTemplate.getKey(context, url, false, AbstractCachedContentStoreAdapter.CONST_KEY_ELEM_ITEMS));
+        cacheService.remove(context, cacheTemplate.getKey(context, url, true, AbstractCachedContentStoreAdapter
+                .CONST_KEY_ELEM_ITEMS));
+        cacheService.remove(context, cacheTemplate.getKey(context, url, false, AbstractCachedContentStoreAdapter
+                .CONST_KEY_ELEM_ITEMS));
 
         if ( logger.isInfoEnabled() ) {
             logger.info("[CACHE] removed " + url + " from scope for context " + context);
