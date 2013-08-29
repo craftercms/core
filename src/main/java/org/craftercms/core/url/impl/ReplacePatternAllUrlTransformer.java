@@ -52,7 +52,7 @@ public class ReplacePatternAllUrlTransformer implements UrlTransformer {
                                String url) throws UrlTransformationException {
         String result = doReplacing(url);
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 

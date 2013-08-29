@@ -40,9 +40,9 @@ public class ElementMergeMatcherImpl implements ElementMergeMatcher {
         String parentId = parent.attributeValue(idAttributeName);
         String childId = child.attributeValue(idAttributeName);
 
-        if ( parentId == null && childId == null ) {
+        if (parentId == null && childId == null) {
             return parent.getQualifiedName().equals(child.getQualifiedName());
-        } else if ( parentId != null ) {
+        } else if (parentId != null) {
             return parentId.equals(childId);
         } else {
             return false;

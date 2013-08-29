@@ -86,9 +86,9 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
      */
     @Override
     public boolean supports(Class clazz) {
-        if ( ArrayUtils.isNotEmpty(unsupportedClasses) ) {
+        if (ArrayUtils.isNotEmpty(unsupportedClasses)) {
             for (Class unsupportedClass : unsupportedClasses) {
-                if ( unsupportedClass.isAssignableFrom(clazz) ) {
+                if (unsupportedClass.isAssignableFrom(clazz)) {
                     return false;
                 }
             }
@@ -104,13 +104,13 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
      */
     @Override
     protected void marshalWriter(Object graph, Writer writer) throws XmlMappingException, IOException {
-        if ( graph instanceof Document ) {
+        if (graph instanceof Document) {
             OutputFormat outputFormat = OutputFormat.createCompactFormat();
             outputFormat.setSuppressDeclaration(suppressXmlDeclaration);
 
             XMLWriter xmlWriter = new XMLWriter(writer, outputFormat);
             try {
-                xmlWriter.write((Document) graph);
+                xmlWriter.write((Document)graph);
             } finally {
                 try {
                     xmlWriter.flush();
@@ -119,7 +119,7 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
                 }
             }
         } else {
-            if ( !suppressXmlDeclaration ) {
+            if (!suppressXmlDeclaration) {
                 writer.write(XML_DECLARATION);
             }
 

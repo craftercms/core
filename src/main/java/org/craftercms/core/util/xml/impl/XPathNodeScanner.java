@@ -47,7 +47,7 @@ public class XPathNodeScanner implements NodeScanner {
 
             for (String xPathQuery : xPathQueries) {
                 List<Node> queryResult = document.selectNodes(xPathQuery);
-                if ( CollectionUtils.isNotEmpty(queryResult) ) {
+                if (CollectionUtils.isNotEmpty(queryResult)) {
                     nodes.addAll(queryResult);
                 }
             }
@@ -60,16 +60,16 @@ public class XPathNodeScanner implements NodeScanner {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        XPathNodeScanner that = (XPathNodeScanner) o;
+        XPathNodeScanner that = (XPathNodeScanner)o;
 
-        if ( !xPathQueries.equals(that.xPathQueries) ) {
+        if (!xPathQueries.equals(that.xPathQueries)) {
             return false;
         }
 

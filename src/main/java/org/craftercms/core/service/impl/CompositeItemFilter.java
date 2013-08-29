@@ -64,7 +64,7 @@ public class CompositeItemFilter implements ItemFilter {
      * Adds the specified {@link ItemFilter} to the filter list, creating the list if necessary.
      */
     public void addFilter(ItemFilter filter) {
-        if ( filters == null ) {
+        if (filters == null) {
             filters = new ArrayList<ItemFilter>();
         }
 
@@ -75,7 +75,7 @@ public class CompositeItemFilter implements ItemFilter {
      * Removes the specified {@link ItemFilter} from the filter list, only if the list is not <code>null</code>.
      */
     public boolean removeFilter(ItemFilter filter) {
-        if ( filters != null ) {
+        if (filters != null) {
             return filters.remove(filter);
         } else {
             return false;
@@ -107,12 +107,12 @@ public class CompositeItemFilter implements ItemFilter {
     public boolean accepts(Item item, boolean runningBeforeProcessing) {
         boolean accepted = true;
 
-        if ( CollectionUtils.isNotEmpty(filters) ) {
+        if (CollectionUtils.isNotEmpty(filters)) {
             for (Iterator<ItemFilter> filterIter = filters.iterator(); accepted && filterIter.hasNext(); ) {
                 ItemFilter filter = filterIter.next();
-                if ( runningBeforeProcessing && filter.runBeforeProcessing() ) {
+                if (runningBeforeProcessing && filter.runBeforeProcessing()) {
                     accepted = filter.accepts(item, runningBeforeProcessing);
-                } else if ( !runningBeforeProcessing && filter.runAfterProcessing() ) {
+                } else if (!runningBeforeProcessing && filter.runAfterProcessing()) {
                     accepted = filter.accepts(item, runningBeforeProcessing);
                 }
             }
@@ -123,16 +123,16 @@ public class CompositeItemFilter implements ItemFilter {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        CompositeItemFilter that = (CompositeItemFilter) o;
+        CompositeItemFilter that = (CompositeItemFilter)o;
 
-        if ( filters != null ? !filters.equals(that.filters) : that.filters != null ) {
+        if (filters != null? !filters.equals(that.filters): that.filters != null) {
             return false;
         }
 
@@ -141,14 +141,14 @@ public class CompositeItemFilter implements ItemFilter {
 
     @Override
     public int hashCode() {
-        return filters != null ? filters.hashCode() : 0;
+        return filters != null? filters.hashCode(): 0;
     }
 
     @Override
     public String toString() {
         return "CompositeItemFilter[" +
-                "filters=" + filters +
-                ']';
+            "filters=" + filters +
+            ']';
     }
 
 }

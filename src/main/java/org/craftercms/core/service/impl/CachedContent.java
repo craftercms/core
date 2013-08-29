@@ -42,7 +42,7 @@ public class CachedContent extends CachingAwareObjectBase implements Content {
 
         lastModified = content.lastModified;
 
-        if ( deepCopy ) {
+        if (deepCopy) {
             data = new byte[content.data.length];
             System.arraycopy(content.data, 0, data, 0, data.length);
         } else {

@@ -58,13 +58,13 @@ public class LongToShortUrlTransformer implements UrlTransformer {
         String[] levels = StringUtils.strip(longUrl, "/").split("/");
         StringBuilder result = new StringBuilder();
 
-        if ( ArrayUtils.isNotEmpty(levels) ) {
+        if (ArrayUtils.isNotEmpty(levels)) {
             for (String level : levels) {
                 result.append("/").append(UrlUtils.getShortName(level, containsShortNameRegex, shortNameRegexGroup));
             }
         }
 
-        if ( longUrl.endsWith("/") ) {
+        if (longUrl.endsWith("/")) {
             result.append("/");
         }
 
@@ -74,7 +74,7 @@ public class LongToShortUrlTransformer implements UrlTransformer {
     public String transformUrl(Context context, CachingOptions cachingOptions, String url) {
         String result = getShortUrl(url);
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 

@@ -58,7 +58,7 @@ public class DescriptorMergerImpl implements DescriptorMerger {
     public Document merge(List<Document> descriptorsToMerge) throws XmlMergeException {
         Document merged = DocumentHelper.createDocument();
 
-        if ( CollectionUtils.isNotEmpty(descriptorsToMerge) ) {
+        if (CollectionUtils.isNotEmpty(descriptorsToMerge)) {
             Element mergedRoot = descriptorsToMerge.get(0).getRootElement().createCopy();
 
             for (Iterator<Document> i = descriptorsToMerge.listIterator(1); i.hasNext(); ) {

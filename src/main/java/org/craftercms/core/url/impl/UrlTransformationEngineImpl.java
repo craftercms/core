@@ -45,19 +45,19 @@ public class UrlTransformationEngineImpl extends AbstractCachedUrlTransformation
     }
 
     @Override
-    protected String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName, String url)
-            throws UrlTransformationException {
+    protected String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName,
+                                    String url) throws UrlTransformationException {
         UrlTransformer transformer = transformers.get(transformerName);
-        if ( transformer == null ) {
+        if (transformer == null) {
             throw new UrlTransformationException("Url transformer " + transformerName + " not found");
         }
 
         String result = transformer.transformUrl(context, cachingOptions, url);
-        if ( StringUtils.isEmpty(result) ) {
+        if (StringUtils.isEmpty(result)) {
             result = "/";
         }
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 

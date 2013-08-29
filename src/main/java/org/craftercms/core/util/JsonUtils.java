@@ -32,12 +32,12 @@ import org.dom4j.Document;
 public class JsonUtils {
 
     public static void setOrAccumulate(JsonObject jsonObject, String property, JsonElement value) {
-        if ( jsonObject.has(property) ) {
+        if (jsonObject.has(property)) {
             JsonElement propertyValue = jsonObject.get(property);
             JsonArray propertyValueArray;
 
-            if ( propertyValue instanceof JsonArray ) {
-                propertyValueArray = (JsonArray) propertyValue;
+            if (propertyValue instanceof JsonArray) {
+                propertyValueArray = (JsonArray)propertyValue;
             } else {
                 propertyValueArray = new JsonArray();
                 propertyValueArray.add(propertyValue);
@@ -52,10 +52,8 @@ public class JsonUtils {
     }
 
     public static GsonBuilder getDefaultGsonBuilder() {
-        return new GsonBuilder()
-                .registerTypeHierarchyAdapter(Document.class, Dom4JDocumentJsonSerializer.INSTANCE)
-                .registerTypeHierarchyAdapter(Throwable.class, ThrowableJsonSerializer.INSTANCE)
-                .serializeNulls();
+        return new GsonBuilder().registerTypeHierarchyAdapter(Document.class, Dom4JDocumentJsonSerializer.INSTANCE)
+            .registerTypeHierarchyAdapter(Throwable.class, ThrowableJsonSerializer.INSTANCE).serializeNulls();
     }
 
 }

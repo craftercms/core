@@ -101,9 +101,9 @@ public class Item extends CachingAwareObjectBase {
         descriptorUrl = item.descriptorUrl;
         isFolder = item.isFolder;
 
-        if ( deepCopy ) {
-            descriptorDom = item.descriptorDom != null ? (Document) item.descriptorDom.clone() : null;
-            properties = item.properties != null ? new HashMap<String, Object>(item.properties) : null;
+        if (deepCopy) {
+            descriptorDom = item.descriptorDom != null? (Document)item.descriptorDom.clone(): null;
+            properties = item.properties != null? new HashMap<String, Object>(item.properties): null;
         } else {
             descriptorDom = item.descriptorDom;
             properties = item.properties;
@@ -186,7 +186,7 @@ public class Item extends CachingAwareObjectBase {
      * Returns the property value for the specified key.
      */
     public Object getProperty(String key) {
-        if ( properties == null ) {
+        if (properties == null) {
             return null;
         }
 
@@ -197,7 +197,7 @@ public class Item extends CachingAwareObjectBase {
      * Adds the specified property value, associated to the specified key.
      */
     public void setProperty(String key, Object value) {
-        if ( properties == null ) {
+        if (properties == null) {
             properties = new HashMap<String, Object>();
         }
 
@@ -209,9 +209,9 @@ public class Item extends CachingAwareObjectBase {
      * query.
      */
     public String queryDescriptorValue(String xPathQuery) {
-        if ( descriptorDom != null ) {
-            String value = (String) getProperty(xPathQuery);
-            if ( value == null ) {
+        if (descriptorDom != null) {
+            String value = (String)getProperty(xPathQuery);
+            if (value == null) {
                 value = XmlUtils.selectSingleNodeValue(descriptorDom, xPathQuery);
             }
 
@@ -226,9 +226,9 @@ public class Item extends CachingAwareObjectBase {
      * query.
      */
     public List<String> queryDescriptorValues(String xPathQuery) {
-        if ( descriptorDom != null ) {
-            List<String> value = (List<String>) getProperty(xPathQuery);
-            if ( CollectionUtils.isEmpty(value) ) {
+        if (descriptorDom != null) {
+            List<String> value = (List<String>)getProperty(xPathQuery);
+            if (CollectionUtils.isEmpty(value)) {
                 value = XmlUtils.selectNodeValues(descriptorDom, xPathQuery);
             }
 
@@ -259,25 +259,25 @@ public class Item extends CachingAwareObjectBase {
      */
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        Item item = (Item) o;
+        Item item = (Item)o;
 
-        if ( name != null ? !name.equals(item.name) : item.name != null ) {
+        if (name != null? !name.equals(item.name): item.name != null) {
             return false;
         }
-        if ( url != null ? !url.equals(item.url) : item.url != null ) {
+        if (url != null? !url.equals(item.url): item.url != null) {
             return false;
         }
-        if ( descriptorUrl != null ? !descriptorUrl.equals(item.descriptorUrl) : item.descriptorUrl != null ) {
+        if (descriptorUrl != null? !descriptorUrl.equals(item.descriptorUrl): item.descriptorUrl != null) {
             return false;
         }
-        if ( isFolder != item.isFolder ) {
+        if (isFolder != item.isFolder) {
             return false;
         }
 
@@ -291,22 +291,22 @@ public class Item extends CachingAwareObjectBase {
      */
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (descriptorUrl != null ? descriptorUrl.hashCode() : 0);
-        result = 31 * result + (isFolder ? 1 : 0);
+        int result = name != null? name.hashCode(): 0;
+        result = 31 * result + (url != null? url.hashCode(): 0);
+        result = 31 * result + (descriptorUrl != null? descriptorUrl.hashCode(): 0);
+        result = 31 * result + (isFolder? 1: 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Item[" +
-                "name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", descriptorUrl='" + descriptorUrl + '\'' +
-                ", properties=" + properties +
-                ", folder=" + isFolder +
-                ']';
+            "name='" + name + '\'' +
+            ", url='" + url + '\'' +
+            ", descriptorUrl='" + descriptorUrl + '\'' +
+            ", properties=" + properties +
+            ", folder=" + isFolder +
+            ']';
     }
 
 }

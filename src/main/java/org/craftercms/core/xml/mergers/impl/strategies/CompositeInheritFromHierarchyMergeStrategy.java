@@ -43,8 +43,7 @@ public class CompositeInheritFromHierarchyMergeStrategy extends AbstractInheritF
                                                    List<MergeableDescriptor> inheritedDescriptors, String folder,
                                                    String primaryDescriptorUrl) {
         for (AbstractInheritFromHierarchyMergeStrategy strategy : strategies) {
-            strategy.addInheritedDescriptorsInFolder(context, cachingOptions, inheritedDescriptors, folder,
-                    primaryDescriptorUrl);
+            strategy.addInheritedDescriptorsInFolder(context, cachingOptions, inheritedDescriptors, folder, primaryDescriptorUrl);
         }
     }
 

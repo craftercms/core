@@ -16,7 +16,11 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
@@ -64,14 +68,14 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         MergeCue childMergeCue;
 
         Attribute parentMergeCueAttribute = getMergeCueAttribute(parent, parentMergeCues);
-        if ( parentMergeCueAttribute != null ) {
+        if (parentMergeCueAttribute != null) {
             parentMergeCue = parentMergeCues.get(parentMergeCueAttribute.getQName());
         } else {
             parentMergeCue = defaultParentMergeCue;
         }
 
         Attribute childMergeCueAttribute = getMergeCueAttribute(child, childMergeCues);
-        if ( childMergeCueAttribute != null ) {
+        if (childMergeCueAttribute != null) {
             childMergeCue = childMergeCues.get(childMergeCueAttribute.getQName());
         } else {
             childMergeCue = defaultChildMergeCue;
@@ -80,10 +84,10 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         MergeCue chosenMergeCue;
         Map<String, String> mergeCueParams;
 
-        if ( parentMergeCue.getPriority() > childMergeCue.getPriority() ) {
+        if (parentMergeCue.getPriority() > childMergeCue.getPriority()) {
             chosenMergeCue = parentMergeCue;
 
-            if ( parentMergeCueAttribute != null ) {
+            if (parentMergeCueAttribute != null) {
                 mergeCueParams = getMergeCueParams(parent, parentMergeCueAttribute);
             } else {
                 mergeCueParams = Collections.emptyMap();
@@ -91,7 +95,7 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         } else {
             chosenMergeCue = childMergeCue;
 
-            if ( childMergeCueAttribute != null ) {
+            if (childMergeCueAttribute != null) {
                 mergeCueParams = getMergeCueParams(child, childMergeCueAttribute);
             } else {
                 mergeCueParams = Collections.emptyMap();
@@ -105,7 +109,7 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         List<Attribute> attributes = element.attributes();
         for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
             Attribute attribute = i.next();
-            if ( mergeCues.containsKey(attribute.getQName()) ) {
+            if (mergeCues.containsKey(attribute.getQName())) {
                 i.remove();
 
                 return attribute;
@@ -123,7 +127,7 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
             Attribute attribute = i.next();
             String attributeQualifiedName = attribute.getQualifiedName();
-            if ( attributeQualifiedName.startsWith(paramsPrefix) ) {
+            if (attributeQualifiedName.startsWith(paramsPrefix)) {
                 i.remove();
 
                 String paramName = attributeQualifiedName.substring(paramsPrefix.length());

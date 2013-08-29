@@ -47,7 +47,7 @@ import org.springframework.expression.spel.support.StandardTypeLocator;
  * @author Alfonso Vásquez
  */
 public class SpELStringTemplateCompiler implements TemplateCompiler<IdentifiableStringTemplateSource>,
-        BeanFactoryAware {
+    BeanFactoryAware {
 
     private ExpressionParser parser;
     private ParserContext parserContext;
@@ -72,33 +72,33 @@ public class SpELStringTemplateCompiler implements TemplateCompiler<Identifiable
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        if ( !(beanFactory instanceof ConfigurableBeanFactory) ) {
+        if (!(beanFactory instanceof ConfigurableBeanFactory)) {
             throw new IllegalArgumentException("beanFactory should be of type ConfigurableBeanFactory");
         }
 
-        this.beanFactory = (ConfigurableBeanFactory) beanFactory;
+        this.beanFactory = (ConfigurableBeanFactory)beanFactory;
     }
 
     @PostConstruct
     public void init() {
-        if ( evalContext == null ) {
+        if (evalContext == null) {
             evalContext = new StandardEvaluationContext();
         }
 
-        if ( evalContext instanceof StandardEvaluationContext ) {
-            StandardEvaluationContext standardEvalContext = (StandardEvaluationContext) evalContext;
+        if (evalContext instanceof StandardEvaluationContext) {
+            StandardEvaluationContext standardEvalContext = (StandardEvaluationContext)evalContext;
             // PropertyAccessor used when the model is a BeanFactory.
             standardEvalContext.addPropertyAccessor(new BeanFactoryAccessor());
-            if ( beanFactory != null ) {
-                if ( standardEvalContext.getBeanResolver() == null ) {
+            if (beanFactory != null) {
+                if (standardEvalContext.getBeanResolver() == null) {
                     standardEvalContext.setBeanResolver(new BeanFactoryResolver(beanFactory));
                 }
-                if ( standardEvalContext.getTypeLocator() == null ) {
+                if (standardEvalContext.getTypeLocator() == null) {
                     standardEvalContext.setTypeLocator(new StandardTypeLocator(beanFactory.getBeanClassLoader()));
                 }
-                if ( standardEvalContext.getTypeConverter() == null ) {
+                if (standardEvalContext.getTypeConverter() == null) {
                     ConversionService conversionService = beanFactory.getConversionService();
-                    if ( conversionService != null ) {
+                    if (conversionService != null) {
                         standardEvalContext.setTypeConverter(new StandardTypeConverter(conversionService));
                     }
                 }
@@ -113,7 +113,7 @@ public class SpELStringTemplateCompiler implements TemplateCompiler<Identifiable
 
         try {
             Expression expression = expressionCache.get(id);
-            if ( expression == null || !expression.getExpressionString().equals(source) ) {
+            if (expression == null || !expression.getExpressionString().equals(source)) {
                 expression = parser.parseExpression(source, parserContext);
                 expressionCache.put(id, expression);
             }

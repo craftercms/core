@@ -40,8 +40,7 @@ public class SingleFileMergeStrategy implements DescriptorMergeStrategy {
     }
 
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String primaryDescriptorUrl,
-                                                    boolean primaryDescriptorOptional) {
+                                                    String primaryDescriptorUrl, boolean primaryDescriptorOptional) {
         return Arrays.asList(new MergeableDescriptor(primaryDescriptorUrl, primaryDescriptorOptional));
     }
 

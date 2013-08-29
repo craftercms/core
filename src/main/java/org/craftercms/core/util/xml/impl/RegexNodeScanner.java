@@ -22,7 +22,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.craftercms.core.util.xml.NodeScanner;
-import org.dom4j.*;
+import org.dom4j.Attribute;
+import org.dom4j.CDATA;
+import org.dom4j.Document;
+import org.dom4j.Node;
+import org.dom4j.Text;
+import org.dom4j.VisitorSupport;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
@@ -71,21 +76,21 @@ public class RegexNodeScanner implements NodeScanner {
 
         @Override
         public void visit(Text text) {
-            if ( matchNodeText(text) ) {
+            if (matchNodeText(text)) {
                 matchingNodes.add(text);
             }
         }
 
         @Override
         public void visit(CDATA cdata) {
-            if ( matchNodeText(cdata) ) {
+            if (matchNodeText(cdata)) {
                 matchingNodes.add(cdata);
             }
         }
 
         @Override
         public void visit(Attribute attribute) {
-            if ( matchNodeText(attribute) ) {
+            if (matchNodeText(attribute)) {
                 matchingNodes.add(attribute);
             }
         }
@@ -94,7 +99,7 @@ public class RegexNodeScanner implements NodeScanner {
             String text = node.getText();
             Matcher matcher = pattern.matcher(text);
 
-            if ( matchEntireNodeText ) {
+            if (matchEntireNodeText) {
                 return matcher.matches();
             } else {
                 return matcher.find();
@@ -105,19 +110,19 @@ public class RegexNodeScanner implements NodeScanner {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        RegexNodeScanner that = (RegexNodeScanner) o;
+        RegexNodeScanner that = (RegexNodeScanner)o;
 
-        if ( matchEntireNodeText != that.matchEntireNodeText ) {
+        if (matchEntireNodeText != that.matchEntireNodeText) {
             return false;
         }
-        if ( !patterns.equals(that.patterns) ) {
+        if (!patterns.equals(that.patterns)) {
             return false;
         }
 
@@ -127,7 +132,7 @@ public class RegexNodeScanner implements NodeScanner {
     @Override
     public int hashCode() {
         int result = patterns.hashCode();
-        result = 31 * result + (matchEntireNodeText ? 1 : 0);
+        result = 31 * result + (matchEntireNodeText? 1: 0);
         return result;
     }
 

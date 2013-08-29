@@ -76,12 +76,12 @@ public class Tree extends Item {
     public Tree(Tree tree, boolean deepCopy) {
         super(tree, deepCopy);
 
-        if ( deepCopy ) {
-            if ( CollectionUtils.isNotEmpty(tree.children) ) {
+        if (deepCopy) {
+            if (CollectionUtils.isNotEmpty(tree.children)) {
                 children = new ArrayList<Item>(tree.children.size());
                 for (Item child : tree.children) {
-                    if ( child instanceof Tree ) {
-                        children.add(new Tree((Tree) child, deepCopy));
+                    if (child instanceof Tree) {
+                        children.add(new Tree((Tree)child, deepCopy));
                     } else {
                         children.add(new Item(child, deepCopy));
                     }
@@ -99,11 +99,11 @@ public class Tree extends Item {
      * is always a folder.
      *
      * @throws IllegalArgumentException if the method was called with false (the folder flag should never being set
-     * to false).
+     *                                  to false).
      */
     @Override
     public void setFolder(boolean folder) {
-        if ( !folder ) {
+        if (!folder) {
             throw new IllegalArgumentException("A tree must always be a folder");
         }
 
@@ -130,7 +130,7 @@ public class Tree extends Item {
      * Adds a child. The child can be both {@link Item}s or another {@link Tree}s.
      */
     public void addChild(Item child) {
-        if ( children == null ) {
+        if (children == null) {
             children = new ArrayList<Item>();
         }
 
@@ -141,7 +141,7 @@ public class Tree extends Item {
      * Removes a child.
      */
     public boolean removeChild(Item child) {
-        if ( children != null ) {
+        if (children != null) {
             return children.remove(child);
         } else {
             return false;
@@ -154,19 +154,19 @@ public class Tree extends Item {
      */
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if ( !super.equals(o) ) {
+        if (!super.equals(o)) {
             return false;
         }
 
-        Tree tree = (Tree) o;
+        Tree tree = (Tree)o;
 
-        if ( children != null ? !children.equals(tree.children) : tree.children != null ) {
+        if (children != null? !children.equals(tree.children): tree.children != null) {
             return false;
         }
 
@@ -179,19 +179,19 @@ public class Tree extends Item {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (children != null ? children.hashCode() : 0);
+        result = 31 * result + (children != null? children.hashCode(): 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Tree[" +
-                "name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", descriptorUrl='" + descriptorUrl + '\'' +
-                ", properties=" + properties +
-                ", children=" + children +
-                ']';
+            "name='" + name + '\'' +
+            ", url='" + url + '\'' +
+            ", descriptorUrl='" + descriptorUrl + '\'' +
+            ", properties=" + properties +
+            ", children=" + children +
+            ']';
     }
 
 }

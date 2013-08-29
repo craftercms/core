@@ -24,14 +24,14 @@ package org.craftercms.core.util;
 public class ExceptionUtils extends org.apache.commons.lang.exception.ExceptionUtils {
 
     public static final <T> T getThrowableOfType(Throwable throwable, Class<T> type) {
-        if ( throwable == null || type == null ) {
+        if (throwable == null || type == null) {
             return null;
         }
 
         Throwable[] throwables = getThrowables(throwable);
         for (Throwable throwableInChain : throwables) {
-            if ( type.isAssignableFrom(throwableInChain.getClass()) ) {
-                return (T) throwableInChain;
+            if (type.isAssignableFrom(throwableInChain.getClass())) {
+                return (T)throwableInChain;
             }
         }
 

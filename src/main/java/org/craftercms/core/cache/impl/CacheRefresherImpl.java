@@ -85,18 +85,18 @@ public class CacheRefresherImpl implements CacheRefresher {
         CacheLoader loader = item.getLoader();
         Object[] loaderParams = item.getLoaderParams();
 
-        if ( loader == null ) {
+        if (loader == null) {
             throw new InternalCacheEngineException("No cache loader for " + item);
         }
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Refreshing " + item);
         }
 
         Object newValue = loader.load(loaderParams);
-        if ( newValue != null ) {
+        if (newValue != null) {
             cache.put(item.getScope(), item.getKey(), newValue, item.getDependencyKeys(), item.getTicksToExpire(),
-                    item.getTicksToRefresh(), item.getLoader(), item.getLoaderParams());
+                item.getTicksToRefresh(), item.getLoader(), item.getLoaderParams());
         } else {
             // If newValue returned is null, remove the item from the cache
             cache.remove(item.getScope(), item.getKey());

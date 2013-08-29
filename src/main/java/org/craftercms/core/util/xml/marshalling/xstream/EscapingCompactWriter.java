@@ -52,7 +52,7 @@ public class EscapingCompactWriter extends com.thoughtworks.xstream.io.xml.Compa
 
     @Override
     protected void writeText(QuickWriter writer, String text) {
-        if ( escapeXml ) {
+        if (escapeXml) {
             super.writeText(writer, text);
         } else {
             writer.write(text);
@@ -61,7 +61,7 @@ public class EscapingCompactWriter extends com.thoughtworks.xstream.io.xml.Compa
 
     @Override
     protected void writeAttributeValue(QuickWriter writer, String text) {
-        if ( escapeXml ) {
+        if (escapeXml) {
             super.writeAttributeValue(writer, text);
         } else {
             writer.write(text);

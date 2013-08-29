@@ -51,7 +51,7 @@ public class ReplaceSubstringUrlTransformer implements UrlTransformer {
                                String url) throws UrlTransformationException {
         String result = url.replace(substringToReplace, replacement);
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 

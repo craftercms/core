@@ -113,7 +113,7 @@ public interface Cache {
      * @throws InternalCacheEngineException if an error occurred in the underlying cache implementation
      */
     public CacheItem getWithDependencyCheck(String scope, Object key) throws InvalidScopeException,
-            InternalCacheEngineException;
+        InternalCacheEngineException;
 
     /**
      * Puts an item in a scope.
@@ -153,8 +153,8 @@ public interface Cache {
      * @throws InvalidScopeException        if the specified scope isn't a registered one
      * @throws InternalCacheEngineException if an error occurred in the underlying cache implementation
      */
-    void put(String scope, Object key, Object value, long expireAfter, long refreshFrequency,
-             CacheLoader loader, Object... loaderParams) throws InvalidScopeException, InternalCacheEngineException;
+    void put(String scope, Object key, Object value, long expireAfter, long refreshFrequency, CacheLoader loader,
+             Object... loaderParams) throws InvalidScopeException, InternalCacheEngineException;
 
     /**
      * Puts an item in a scope.
@@ -167,7 +167,7 @@ public interface Cache {
      * @throws InternalCacheEngineException if an error occurred in the underlying cache implementation
      */
     void put(String scope, Object key, Object value, List<Object> dependencyKeys) throws InvalidScopeException,
-            InternalCacheEngineException;
+        InternalCacheEngineException;
 
     /**
      * Puts an item in a scope.
@@ -199,7 +199,7 @@ public interface Cache {
      */
     void put(String scope, Object key, Object value, List<Object> dependencyKeys, long expireAfter,
              long refreshFrequency, CacheLoader loader, Object... loaderParams) throws InvalidScopeException,
-            InternalCacheEngineException;
+        InternalCacheEngineException;
 
     /**
      * Removes an item from a scope.

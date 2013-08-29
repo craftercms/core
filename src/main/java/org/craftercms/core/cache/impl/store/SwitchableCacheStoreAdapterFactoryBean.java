@@ -53,7 +53,7 @@ public class SwitchableCacheStoreAdapterFactoryBean implements FactoryBean<Cache
 
     @Override
     public CacheStoreAdapter getObject() throws Exception {
-        if ( cacheOn ) {
+        if (cacheOn) {
             return onCacheStoreAdapter;
         } else {
             return offCacheStoreAdapter;

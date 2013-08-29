@@ -105,19 +105,19 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
         Document descriptorDom = item.getDescriptorDom();
 
         List<Element> includeElements = descriptorDom.selectNodes(includeElementXPathQuery);
-        if ( CollectionUtils.isEmpty(includeElements) ) {
+        if (CollectionUtils.isEmpty(includeElements)) {
             return;
         }
 
         for (Element includeElement : includeElements) {
             String includeSrcPath = includeElement.getTextTrim();
-            if ( StringUtils.isEmpty(includeSrcPath) ) {
+            if (StringUtils.isEmpty(includeSrcPath)) {
                 throw new ItemProcessingException("No path provided in the <" + includeElement.getName() + "> element");
             }
 
             includeSrcPath = fromRelativeToAbsoluteUrl(descriptorUrl, includeSrcPath);
 
-            if ( logger.isDebugEnabled() ) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Include found in " + descriptorUrl + ": " + includeSrcPath);
             }
 
@@ -132,7 +132,7 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      * If path is relative, makes it absolute (resolves references to '.' and '..).
      */
     protected String fromRelativeToAbsoluteUrl(String descriptorUrl, String includeSrcPath) throws
-            ItemProcessingException {
+        ItemProcessingException {
         try {
             return UrlUtils.resolveRelative(descriptorUrl, includeSrcPath);
         } catch (URISyntaxException e) {
@@ -146,7 +146,7 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
             return contentStoreService.getItem(context, cachingOptions, includeSrcPath);
         } catch (Exception e) {
             throw new ItemProcessingException("Unable to load descriptor " + includeSrcPath + " from the underlying " +
-                    "repository", e);
+                "repository", e);
         }
     }
 
@@ -173,19 +173,19 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      */
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        IncludeDescriptorsProcessor that = (IncludeDescriptorsProcessor) o;
+        IncludeDescriptorsProcessor that = (IncludeDescriptorsProcessor)o;
 
-        if ( !includeElementXPathQuery.equals(that.includeElementXPathQuery) ) {
+        if (!includeElementXPathQuery.equals(that.includeElementXPathQuery)) {
             return false;
         }
-        if ( !contentStoreService.equals(that.contentStoreService) ) {
+        if (!contentStoreService.equals(that.contentStoreService)) {
             return false;
         }
 
@@ -208,9 +208,9 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
     @Override
     public String toString() {
         return "IncludeDescriptorsProcessor[" +
-                "contentStoreService=" + contentStoreService +
-                ", includeElementXPathQuery='" + includeElementXPathQuery + '\'' +
-                ']';
+            "contentStoreService=" + contentStoreService +
+            ", includeElementXPathQuery='" + includeElementXPathQuery + '\'' +
+            ']';
     }
 
 }

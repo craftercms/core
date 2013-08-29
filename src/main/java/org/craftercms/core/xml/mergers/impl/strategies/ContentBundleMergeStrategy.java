@@ -73,15 +73,13 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
     }
 
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String primaryDescriptorUrl)
-            throws XmlMergeException {
+                                                    String primaryDescriptorUrl) throws XmlMergeException {
         return getDescriptors(context, cachingOptions, primaryDescriptorUrl, false);
     }
 
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String primaryDescriptorUrl,
-                                                    boolean primaryDescriptorOptional)
-            throws XmlMergeException {
+                                                    String primaryDescriptorUrl, boolean primaryDescriptorOptional)
+        throws XmlMergeException {
         List<MergeableDescriptor> descriptors = new ArrayList<MergeableDescriptor>();
         List<MergeableDescriptor> tmp;
 
@@ -92,7 +90,7 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
         String suffix = parsedUrl.getSuffix(); // suffix = /file.xml
 
         // If the prefix is the same length as the initial URI, ignore, otherwise process
-        if ( prefix.length() < primaryDescriptorUrl.length() ) {
+        if (prefix.length() < primaryDescriptorUrl.length()) {
             // Get the index of the delimiter that separates the base name from the extension token (the _ in
             // folder2_es).
             String baseName = baseNameAndExtensionToken;
@@ -108,17 +106,17 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
                     baseDescriptorDom = getDescriptorDom(context, cachingOptions, baseDescriptor);
                     baseFound = true;
                 } catch (PathNotFoundException e) {
-                    if ( logger.isDebugEnabled() ) {
+                    if (logger.isDebugEnabled()) {
                         logger.debug("No base descriptor " + baseDescriptor + " was found");
                     }
                 }
 
-                if ( baseFound ) {
+                if (baseFound) {
                     // This can recurse if the selected strategy is also an ContentBundleMergeStrategy and the base
                     // descriptor path has more families.
                     DescriptorMergeStrategy baseMergeStrategy = baseMergeStrategyResolver.getStrategy(baseDescriptor,
-                            baseDescriptorDom);
-                    if ( baseMergeStrategy == null ) {
+                        baseDescriptorDom);
+                    if (baseMergeStrategy == null) {
                         throw new XmlMergeException("No merge strategy for descriptor " + baseDescriptor);
                     }
 
@@ -139,7 +137,7 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
             // if it's not already in the results.
             for (MergeableDescriptor descriptor : tmp) {
                 descriptor.setUrl(prefix + descriptor.getUrl());
-                if ( !descriptors.contains(descriptor) ) {
+                if (!descriptors.contains(descriptor)) {
                     descriptors.add(descriptor);
                 }
             }
@@ -147,7 +145,7 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
             descriptors.add(new MergeableDescriptor(primaryDescriptorUrl, primaryDescriptorOptional));
         }
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Final merge list for " + primaryDescriptorUrl + ": " + descriptors);
         }
 

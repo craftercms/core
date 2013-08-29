@@ -43,10 +43,10 @@ public class RemovePrefixAndSuffixUrlTransformer implements UrlTransformer {
     @Override
     public String transformUrl(Context context, CachingOptions cachingOptions,
                                String url) throws UrlTransformationException {
-        if ( StringUtils.isNotEmpty(prefix) ) {
+        if (StringUtils.isNotEmpty(prefix)) {
             url = StringUtils.removeStart(url, prefix);
         }
-        if ( StringUtils.isNotEmpty(suffix) ) {
+        if (StringUtils.isNotEmpty(suffix)) {
             url = StringUtils.removeEnd(url, suffix);
         }
 

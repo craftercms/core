@@ -90,21 +90,19 @@ public interface CacheService {
      * Puts an item in the scope of the given context.
      */
     void put(Context context, Object key, Object value, List<Object> dependencyKeys) throws InvalidScopeException,
-            InternalCacheEngineException;
+        InternalCacheEngineException;
 
     /**
      * Puts and item in the scope of the given context.
      */
     void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
-             Object... loaderParams)
-            throws InvalidContextException, InternalCacheEngineException;
+             Object... loaderParams) throws InvalidContextException, InternalCacheEngineException;
 
     /**
      * Puts and item in the scope of the given context.
      */
     void put(Context context, Object key, Object value, List<Object> dependencyKeys, CachingOptions cachingOptions,
-             CacheLoader loader,
-             Object... loaderParams) throws InvalidContextException, InternalCacheEngineException;
+             CacheLoader loader, Object... loaderParams) throws InvalidContextException, InternalCacheEngineException;
 
     /**
      * Removes an item from the scope of the given context.

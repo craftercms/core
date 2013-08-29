@@ -51,7 +51,7 @@ public class UrlPatternProcessorResolver implements ItemProcessorResolver {
     @Override
     public ItemProcessor getProcessor(Item item) {
         for (Map.Entry<String, ItemProcessor> mapping : patternToProcessorMappings.entrySet()) {
-            if ( item.getUrl().matches(mapping.getKey()) ) {
+            if (item.getUrl().matches(mapping.getKey())) {
                 return mapping.getValue();
             }
         }

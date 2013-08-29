@@ -68,13 +68,13 @@ public class MetaDataProcessorResolver implements ItemProcessorResolver {
     @Override
     public ItemProcessor getProcessor(Item item) throws XmlException {
         String processorElementValue = item.queryDescriptorValue(processorElementXPathQuery);
-        if ( StringUtils.isNotEmpty(processorElementValue) ) {
+        if (StringUtils.isNotEmpty(processorElementValue)) {
             ItemProcessor processor = elementValueToProcessorMappings.get(processorElementValue);
-            if ( processor != null ) {
+            if (processor != null) {
                 return processor;
             } else {
                 throw new XmlException("Element value \"" + processorElementValue + "\" doesn't refer to a registered" +
-                        " processor");
+                    " processor");
             }
         } else {
             return null;

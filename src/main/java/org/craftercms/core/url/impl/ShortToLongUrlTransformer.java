@@ -61,49 +61,48 @@ public class ShortToLongUrlTransformer implements UrlTransformer {
                                String url) throws UrlTransformationException {
         String result = getLongUrl(context, cachingOptions, url, true);
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 
         return result;
     }
 
-    protected String getLongName(Context context, CachingOptions cachingOptions, String folderPath, String shortName)
-            throws UrlTransformationException {
+    protected String getLongName(Context context, CachingOptions cachingOptions, String folderPath,
+                                 String shortName) throws UrlTransformationException {
         try {
             List<Item> items = context.getStoreAdapter().getItems(context, cachingOptions, folderPath, false);
-            if ( CollectionUtils.isNotEmpty(items) ) {
+            if (CollectionUtils.isNotEmpty(items)) {
                 for (Item item : items) {
                     String itemName = item.getName();
-                    if ( UrlUtils.getShortName(itemName, containsShortNameRegex, shortNameRegexGroup).equalsIgnoreCase(
-                            shortName) ) {
+                    if (UrlUtils.getShortName(itemName, containsShortNameRegex, shortNameRegexGroup).equalsIgnoreCase
+                        (shortName)) {
                         return itemName;
                     }
                 }
             }
         } catch (Exception e) {
             throw new UrlTransformationException("An error occurred while retrieving the items at " + folderPath +
-                    " and trying to map the short name '" + shortName + "' to an item's name (long name)", e);
+                " and trying to map the short name '" + shortName + "' to an item's name (long name)", e);
         }
 
         return null;
     }
 
     protected String getLongUrl(Context context, CachingOptions cachingOptions, String shortUrl,
-                                boolean useShortNameIfLongNameNotFound)
-            throws UrlTransformationException {
+                                boolean useShortNameIfLongNameNotFound) throws UrlTransformationException {
         String[] levels = StringUtils.strip(shortUrl, "/").split("/");
         StringBuilder result = new StringBuilder();
 
-        if ( ArrayUtils.isNotEmpty(levels) ) {
+        if (ArrayUtils.isNotEmpty(levels)) {
             for (String level : levels) {
                 String folderPath = result.toString();
-                folderPath = StringUtils.isNotEmpty(folderPath) ? folderPath : "/";
+                folderPath = StringUtils.isNotEmpty(folderPath)? folderPath: "/";
 
                 String longName = getLongName(context, cachingOptions, folderPath, level);
-                if ( StringUtils.isNotEmpty(longName) ) {
+                if (StringUtils.isNotEmpty(longName)) {
                     result.append("/").append(longName);
-                } else if ( useShortNameIfLongNameNotFound ) {
+                } else if (useShortNameIfLongNameNotFound) {
                     result.append("/").append(level);
                 } else {
                     return null;
@@ -111,7 +110,7 @@ public class ShortToLongUrlTransformer implements UrlTransformer {
             }
         }
 
-        if ( shortUrl.endsWith("/") ) {
+        if (shortUrl.endsWith("/")) {
             result.append("/");
         }
 

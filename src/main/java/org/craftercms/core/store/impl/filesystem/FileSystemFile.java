@@ -85,16 +85,16 @@ public class FileSystemFile implements File, Content {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        FileSystemFile other = (FileSystemFile) o;
+        FileSystemFile other = (FileSystemFile)o;
 
-        if ( !file.equals(other.file) ) {
+        if (!file.equals(other.file)) {
             return false;
         }
 

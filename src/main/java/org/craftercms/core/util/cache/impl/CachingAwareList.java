@@ -16,7 +16,11 @@
  */
 package org.craftercms.core.util.cache.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Class description goes HERE
@@ -36,7 +40,7 @@ public class CachingAwareList<T> extends CachingAwareObjectBase implements List<
     }
 
     public CachingAwareList(List<T> actualList) {
-        if ( actualList == null ) {
+        if (actualList == null) {
             throw new IllegalArgumentException("The actual list argument should not be null");
         }
 
@@ -168,7 +172,7 @@ public class CachingAwareList<T> extends CachingAwareObjectBase implements List<
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
 

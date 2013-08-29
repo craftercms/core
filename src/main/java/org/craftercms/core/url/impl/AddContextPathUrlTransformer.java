@@ -41,13 +41,13 @@ public class AddContextPathUrlTransformer implements UrlTransformer, ServletCont
     @Override
     public String transformUrl(Context context, CachingOptions cachingOptions,
                                String url) throws UrlTransformationException {
-        if ( servletContext == null ) {
+        if (servletContext == null) {
             throw new IllegalStateException("No ServletContext was set. Are you sure you're running in a servlet " +
-                    "environment?");
+                "environment?");
         }
 
         String contextPath = servletContext.getContextPath();
-        if ( contextPath.equals("/") && url.startsWith("/") ) {
+        if (contextPath.equals("/") && url.startsWith("/")) {
             return url;
         } else {
             return contextPath + url;

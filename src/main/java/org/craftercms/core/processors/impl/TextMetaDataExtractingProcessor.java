@@ -54,7 +54,7 @@ public class TextMetaDataExtractingProcessor implements ItemProcessor {
     public Item process(Context context, CachingOptions cachingOptions, Item item) {
         for (String xPathQuery : metaDataNodesXPathQueries) {
             String metaDataValue = item.queryDescriptorValue(xPathQuery);
-            if ( StringUtils.isNotEmpty(metaDataValue) ) {
+            if (StringUtils.isNotEmpty(metaDataValue)) {
                 item.setProperty(xPathQuery, metaDataValue);
             }
         }
@@ -68,16 +68,16 @@ public class TextMetaDataExtractingProcessor implements ItemProcessor {
      */
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        TextMetaDataExtractingProcessor that = (TextMetaDataExtractingProcessor) o;
+        TextMetaDataExtractingProcessor that = (TextMetaDataExtractingProcessor)o;
 
-        if ( !metaDataNodesXPathQueries.equals(that.metaDataNodesXPathQueries) ) {
+        if (!metaDataNodesXPathQueries.equals(that.metaDataNodesXPathQueries)) {
             return false;
         }
 
@@ -97,8 +97,8 @@ public class TextMetaDataExtractingProcessor implements ItemProcessor {
     @Override
     public String toString() {
         return "TextMetaDataExtractingProcessor[" +
-                "metaDataNodesXPathQueries=" + Arrays.toString(metaDataNodesXPathQueries) +
-                ']';
+            "metaDataNodesXPathQueries=" + Arrays.toString(metaDataNodesXPathQueries) +
+            ']';
     }
 
 }

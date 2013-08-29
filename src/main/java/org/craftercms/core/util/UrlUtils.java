@@ -49,7 +49,7 @@ public class UrlUtils {
         Pattern pattern = Pattern.compile(containsShortNameRegex);
         Matcher matcher = pattern.matcher(longName);
 
-        if ( matcher.matches() ) {
+        if (matcher.matches()) {
             return matcher.group(shortNameRegexGroup);
         } else {
             return longName;
@@ -57,13 +57,13 @@ public class UrlUtils {
     }
 
     public static String resolveRelative(String baseUrl, String relativeUrl) throws URISyntaxException {
-        if ( !relativeUrl.startsWith("/") ) {
+        if (!relativeUrl.startsWith("/")) {
             baseUrl = FilenameUtils.getFullPath(baseUrl);
 
-            if ( !baseUrl.startsWith("/") ) {
+            if (!baseUrl.startsWith("/")) {
                 baseUrl = "/" + baseUrl;
             }
-            if ( !baseUrl.endsWith("/") ) {
+            if (!baseUrl.endsWith("/")) {
                 baseUrl += "/";
             }
 
@@ -78,9 +78,9 @@ public class UrlUtils {
     public static final String appendUrl(String mainUrl, String urlToAppend) {
         StringBuilder joinedUrl = new StringBuilder(mainUrl);
 
-        if ( mainUrl.endsWith("/") && urlToAppend.startsWith("/") ) {
+        if (mainUrl.endsWith("/") && urlToAppend.startsWith("/")) {
             urlToAppend = StringUtils.stripStart(urlToAppend, "/");
-        } else if ( !mainUrl.endsWith("/") && !urlToAppend.startsWith("/") ) {
+        } else if (!mainUrl.endsWith("/") && !urlToAppend.startsWith("/")) {
             joinedUrl.append("/");
         }
 

@@ -155,7 +155,7 @@ public class MapCacheStoreAdapter implements CacheStoreAdapter {
      */
     private Map<Object, CacheItem> getScopeCache(String scope) throws InvalidScopeException {
         Map<Object, CacheItem> scopeCache = scopeCaches.get(scope);
-        if ( scopeCache == null ) {
+        if (scopeCache == null) {
             throw new InvalidScopeException("The scope " + scope + " doesn't exist");
         } else {
             return scopeCache;

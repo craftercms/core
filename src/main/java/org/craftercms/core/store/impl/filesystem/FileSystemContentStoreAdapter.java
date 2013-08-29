@@ -52,15 +52,14 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
 
     @Override
     public Context createContext(String id, String storeServerUrl, String username, String password,
-                                 String rootFolderPath, boolean cacheOn,
-                                 int maxAllowedItemsInCache, boolean ignoreHiddenFiles) throws StoreException,
-            AuthenticationException {
+                                 String rootFolderPath, boolean cacheOn, int maxAllowedItemsInCache,
+                                 boolean ignoreHiddenFiles) throws StoreException, AuthenticationException {
         try {
             Resource rootFolderResource = resourceLoader.getResource(rootFolderPath);
             FileSystemFile rootFolder = new FileSystemFile(rootFolderResource.getFile());
 
             return new FileSystemContext(id, this, null, rootFolderPath, rootFolder, cacheOn, maxAllowedItemsInCache,
-                    ignoreHiddenFiles);
+                ignoreHiddenFiles);
         } catch (IOException e) {
             throw new StoreException("Unable to get a File object from the specified rootFolderPath", e);
         }
@@ -68,7 +67,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
 
     @Override
     public void destroyContext(Context context) throws InvalidContextException, StoreException,
-            AuthenticationException {
+        AuthenticationException {
     }
 
     /**
@@ -76,12 +75,12 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
      */
     @Override
     protected File getFile(Context context, String path) throws InvalidContextException, PathNotFoundException,
-            StoreException {
-        FileSystemFile rootFolder = ((FileSystemContext) context).getRootFolder();
+        StoreException {
+        FileSystemFile rootFolder = ((FileSystemContext)context).getRootFolder();
 
-        if ( StringUtils.isNotEmpty(path) ) {
+        if (StringUtils.isNotEmpty(path)) {
             FileSystemFile file = new FileSystemFile(rootFolder, path);
-            if ( file.getFile().exists() ) {
+            if (file.getFile().exists()) {
                 return file;
             } else {
                 throw new PathNotFoundException("File " + file + " can't be found");
@@ -93,15 +92,15 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
 
     @Override
     protected List<File> getChildren(Context context, File dir) throws InvalidContextException,
-            PathNotFoundException, StoreException {
+        PathNotFoundException, StoreException {
         java.io.File[] listing;
-        if ( context.ignoreHiddenFiles() ) {
-            listing = ((FileSystemFile) dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);
+        if (context.ignoreHiddenFiles()) {
+            listing = ((FileSystemFile)dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);
         } else {
-            listing = ((FileSystemFile) dir).getFile().listFiles();
+            listing = ((FileSystemFile)dir).getFile().listFiles();
         }
 
-        if ( listing != null ) {
+        if (listing != null) {
             List<File> children = new ArrayList<File>(listing.length);
             for (java.io.File file : listing) {
                 children.add(new FileSystemFile(file));

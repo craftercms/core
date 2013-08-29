@@ -50,7 +50,7 @@ public class UrlPatternMergeStrategyResolver implements DescriptorMergeStrategyR
      */
     public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) {
         for (Map.Entry<String, DescriptorMergeStrategy> entry : urlPatternToStrategyMappings.entrySet()) {
-            if ( descriptorUrl.matches(entry.getKey()) ) {
+            if (descriptorUrl.matches(entry.getKey())) {
                 return entry.getValue();
             }
         }

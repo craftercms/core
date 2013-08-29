@@ -65,24 +65,24 @@ public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransf
                                String url) throws UrlTransformationException {
         String result = getLongUrlLookingInBundle(context, cachingOptions, url);
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 
         return result;
     }
 
-    private String getLongUrlLookingInBundle(Context context, CachingOptions cachingOptions, String shortUrl)
-            throws UrlTransformationException {
+    private String getLongUrlLookingInBundle(Context context, CachingOptions cachingOptions,
+                                             String shortUrl) throws UrlTransformationException {
         ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(shortUrl);
         String prefix = parsedUrl.getPrefix();
         String originalBase = parsedUrl.getBaseNameAndExtensionToken();
         String suffix = parsedUrl.getSuffix();
 
-        if ( originalBase == null ) {
+        if (originalBase == null) {
             originalBase = "";
         }
-        if ( suffix == null ) {
+        if (suffix == null) {
             suffix = "";
         }
 
@@ -92,8 +92,8 @@ public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransf
         do {
             String currentShortUrl = prefix + base + suffix;
             String longUrl = getLongUrl(context, cachingOptions, currentShortUrl, false);
-            if ( StringUtils.isNotEmpty(longUrl) ) {
-                if ( !originalBase.equals(base) ) {
+            if (StringUtils.isNotEmpty(longUrl)) {
+                if (!originalBase.equals(base)) {
                     // Put original base back in long URL.
                     longUrl = longUrl.replace(base, originalBase);
                 }
@@ -102,7 +102,7 @@ public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransf
             }
 
             delimiterIdx = base.lastIndexOf(baseDelimiter);
-            if ( delimiterIdx > 0 ) {
+            if (delimiterIdx > 0) {
                 base = base.substring(0, delimiterIdx);
             }
         } while (delimiterIdx >= 0);

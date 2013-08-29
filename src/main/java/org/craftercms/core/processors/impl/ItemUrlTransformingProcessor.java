@@ -61,9 +61,8 @@ public class ItemUrlTransformingProcessor implements ItemProcessor {
 
     @Override
     public String toString() {
-        return "ItemUrlTransformingProcessor[" + "transformedUrlPropName='" + transformedUrlPropName + '\''
-                + ", transformerName='" + transformerName + '\'' + ", urlTransformationEngine="
-                + urlTransformationEngine + ']';
+        return "ItemUrlTransformingProcessor[" + "transformedUrlPropName='" + transformedUrlPropName + '\'' + ", " +
+            "transformerName='" + transformerName + '\'' + ", urlTransformationEngine=" + urlTransformationEngine + ']';
     }
 
 }

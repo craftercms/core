@@ -73,7 +73,7 @@ public class CacheRestController extends RestControllerBase {
     @ResponseStatus(HttpStatus.OK)
     public void clearAllScopes() throws CacheException {
         cacheTemplate.getCacheService().clearAll();
-        if ( logger.isInfoEnabled() ) {
+        if (logger.isInfoEnabled()) {
             logger.info("[CACHE] All scopes are cleared.");
         }
     }
@@ -81,14 +81,14 @@ public class CacheRestController extends RestControllerBase {
     @RequestMapping(value = URL_CLEAR_SCOPE, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public void clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId) throws InvalidContextException,
-            CacheException {
+        CacheException {
         Context context = storeService.getContext(contextId);
-        if ( context == null ) {
+        if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
         }
 
         cacheTemplate.getCacheService().clearScope(context);
-        if ( logger.isInfoEnabled() ) {
+        if (logger.isInfoEnabled()) {
             logger.info("[CACHE] Scope for context " + context + " is cleared.");
         }
     }
@@ -96,17 +96,16 @@ public class CacheRestController extends RestControllerBase {
     @RequestMapping(value = URL_REMOVE_ITEM, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public void removeItem(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                           @RequestParam(REQUEST_PARAM_URL) String url)
-            throws InvalidContextException, CacheException {
+                           @RequestParam(REQUEST_PARAM_URL) String url) throws InvalidContextException, CacheException {
         Context context = storeService.getContext(contextId);
-        if ( context == null ) {
+        if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
         }
 
         // Content store service always adds a "/" at the beginning before requesting the items from the store
         // adapter, so we need
         // to add it too.
-        if ( !url.startsWith("/") ) {
+        if (!url.startsWith("/")) {
             url = "/" + url;
         }
 
@@ -115,18 +114,18 @@ public class CacheRestController extends RestControllerBase {
         // adapter items,
         // we don't need to remove them manually.
         cacheService.remove(context, cacheTemplate.getKey(context, url, AbstractCachedContentStoreAdapter
-                .CONST_KEY_ELEM_CONTENT));
+            .CONST_KEY_ELEM_CONTENT));
         cacheService.remove(context, cacheTemplate.getKey(context, url, true, AbstractCachedContentStoreAdapter
-                .CONST_KEY_ELEM_ITEM));
+            .CONST_KEY_ELEM_ITEM));
         cacheService.remove(context, cacheTemplate.getKey(context, url, false, AbstractCachedContentStoreAdapter
-                .CONST_KEY_ELEM_ITEM));
+            .CONST_KEY_ELEM_ITEM));
         // In case the item is a folder, remove cached children lists
         cacheService.remove(context, cacheTemplate.getKey(context, url, true, AbstractCachedContentStoreAdapter
-                .CONST_KEY_ELEM_ITEMS));
+            .CONST_KEY_ELEM_ITEMS));
         cacheService.remove(context, cacheTemplate.getKey(context, url, false, AbstractCachedContentStoreAdapter
-                .CONST_KEY_ELEM_ITEMS));
+            .CONST_KEY_ELEM_ITEMS));
 
-        if ( logger.isInfoEnabled() ) {
+        if (logger.isInfoEnabled()) {
             logger.info("[CACHE] removed " + url + " from scope for context " + context);
         }
     }

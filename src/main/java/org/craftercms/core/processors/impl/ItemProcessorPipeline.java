@@ -67,7 +67,7 @@ public class ItemProcessorPipeline implements ItemProcessor {
      * Adds a processor to the pipeline of processors.
      */
     public void addProcessor(ItemProcessor processor) {
-        if ( processors == null ) {
+        if (processors == null) {
             processors = new ArrayList<ItemProcessor>();
         }
 
@@ -80,7 +80,7 @@ public class ItemProcessorPipeline implements ItemProcessor {
      * @return true if the processor was removed
      */
     public boolean removeProcessor(ItemProcessor processor) {
-        if ( processors != null ) {
+        if (processors != null) {
             return processors.remove(processor);
         } else {
             return false;
@@ -97,7 +97,7 @@ public class ItemProcessorPipeline implements ItemProcessor {
      */
     @Override
     public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
-        if ( CollectionUtils.isNotEmpty(processors) ) {
+        if (CollectionUtils.isNotEmpty(processors)) {
             for (ItemProcessor processor : processors) {
                 item = processor.process(context, cachingOptions, item);
             }
@@ -111,16 +111,16 @@ public class ItemProcessorPipeline implements ItemProcessor {
      */
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        ItemProcessorPipeline that = (ItemProcessorPipeline) o;
+        ItemProcessorPipeline that = (ItemProcessorPipeline)o;
 
-        if ( processors != null ? !processors.equals(that.processors) : that.processors != null ) {
+        if (processors != null? !processors.equals(that.processors): that.processors != null) {
             return false;
         }
 
@@ -134,14 +134,14 @@ public class ItemProcessorPipeline implements ItemProcessor {
      */
     @Override
     public int hashCode() {
-        return processors != null ? processors.hashCode() : 0;
+        return processors != null? processors.hashCode(): 0;
     }
 
     @Override
     public String toString() {
         return "ItemProcessorPipeline[" +
-                "processors=" + processors +
-                ']';
+            "processors=" + processors +
+            ']';
     }
 
 }

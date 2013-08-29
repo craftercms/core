@@ -49,7 +49,7 @@ public class UrlTransformerPipeline implements UrlTransformer {
     @Override
     public String transformUrl(Context context, CachingOptions cachingOptions,
                                String url) throws UrlTransformationException {
-        if ( CollectionUtils.isNotEmpty(transformers) ) {
+        if (CollectionUtils.isNotEmpty(transformers)) {
             for (UrlTransformer transformer : transformers) {
                 url = transformer.transformUrl(context, cachingOptions, url);
             }

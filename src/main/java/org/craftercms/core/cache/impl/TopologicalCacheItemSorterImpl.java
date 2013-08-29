@@ -16,7 +16,11 @@
  */
 package org.craftercms.core.cache.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
@@ -69,7 +73,7 @@ public class TopologicalCacheItemSorterImpl implements TopologicalCacheItemSorte
         // Keep only items that are contained in the original list.
         for (Iterator<CacheItem> i = sortedItems.iterator(); i.hasNext(); ) {
             CacheItem item = i.next();
-            if ( !items.contains(item) ) {
+            if (!items.contains(item)) {
                 i.remove();
             }
         }
@@ -82,16 +86,16 @@ public class TopologicalCacheItemSorterImpl implements TopologicalCacheItemSorte
      */
     private void visitItem(CacheItem item, Set<CacheItem> visitedItems, List<CacheItem> sortedItems, Cache cache) {
         // if n has not been visited yet then
-        if ( !visitedItems.contains(item) ) {
+        if (!visitedItems.contains(item)) {
             // mark n as visited
             visitedItems.add(item);
 
             // for each node m with an edge from n to m do
             List<Object> dependencyKeys = item.getDependencyKeys();
-            if ( CollectionUtils.isNotEmpty(dependencyKeys) ) {
+            if (CollectionUtils.isNotEmpty(dependencyKeys)) {
                 for (Object dependencyKey : dependencyKeys) {
                     CacheItem dependency = getCacheItem(cache, item.getScope(), dependencyKey);
-                    if ( dependency != null ) {
+                    if (dependency != null) {
                         visitItem(dependency, visitedItems, sortedItems, cache);
                     }
                 }
@@ -115,8 +119,8 @@ public class TopologicalCacheItemSorterImpl implements TopologicalCacheItemSorte
             for (Iterator<CacheItem> j = items.iterator(); j.hasNext() && !isDependency; ) {
                 CacheItem item = j.next();
 
-                if ( !item.equals(possibleDependency) ) {
-                    if ( isDependency(item, possibleDependency, cache) ) {
+                if (!item.equals(possibleDependency)) {
+                    if (isDependency(item, possibleDependency, cache)) {
                         itemsWithNoDependants.remove(possibleDependency);
 
                         isDependency = true;
@@ -133,13 +137,13 @@ public class TopologicalCacheItemSorterImpl implements TopologicalCacheItemSorte
      */
     private boolean isDependency(CacheItem item, CacheItem possibleDependency, Cache cache) {
         List<Object> dependencyKeys = item.getDependencyKeys();
-        if ( CollectionUtils.isNotEmpty(dependencyKeys) ) {
+        if (CollectionUtils.isNotEmpty(dependencyKeys)) {
             for (Object dependencyKey : dependencyKeys) {
-                if ( dependencyKey.equals(possibleDependency.getKey()) ) {
+                if (dependencyKey.equals(possibleDependency.getKey())) {
                     return true;
                 } else {
                     CacheItem dependency = getCacheItem(cache, item.getScope(), dependencyKey);
-                    if ( dependency != null && isDependency(dependency, possibleDependency, cache) ) {
+                    if (dependency != null && isDependency(dependency, possibleDependency, cache)) {
                         return true;
                     }
                 }

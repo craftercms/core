@@ -65,22 +65,22 @@ public class CachingOptions {
 
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        CachingOptions options = (CachingOptions) o;
+        CachingOptions options = (CachingOptions)o;
 
-        if ( doCaching != options.doCaching ) {
+        if (doCaching != options.doCaching) {
             return false;
         }
-        if ( expireAfter != options.expireAfter ) {
+        if (expireAfter != options.expireAfter) {
             return false;
         }
-        if ( refreshFrequency != options.refreshFrequency ) {
+        if (refreshFrequency != options.refreshFrequency) {
             return false;
         }
 
@@ -89,9 +89,9 @@ public class CachingOptions {
 
     @Override
     public int hashCode() {
-        int result = (doCaching ? 1 : 0);
-        result = 31 * result + (int) (expireAfter ^ (expireAfter >>> 32));
-        result = 31 * result + (int) (refreshFrequency ^ (refreshFrequency >>> 32));
+        int result = (doCaching? 1: 0);
+        result = 31 * result + (int)(expireAfter ^ (expireAfter >>> 32));
+        result = 31 * result + (int)(refreshFrequency ^ (refreshFrequency >>> 32));
         return result;
     }
 

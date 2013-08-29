@@ -95,7 +95,7 @@ public class GsonView extends AbstractView {
     protected void prepareResponse(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType(getContentType());
         response.setCharacterEncoding(DEFAULT_CHARACTER_ENCODING);
-        if ( disableCaching ) {
+        if (disableCaching) {
             response.addHeader(PRAGMA_HEADER_NAME, DISABLED_CACHING_PRAGMA_HEADER_VALUE);
             response.addHeader(CACHE_CONTROL_HEADER_NAME, DISABLED_CACHING_CACHE_CONTROL_HEADER_VALUE);
             response.addDateHeader(EXPIRES_HEADER_NAME, DISABLED_CACHING_EXPIRES_HEADER_VALUE);
@@ -109,11 +109,11 @@ public class GsonView extends AbstractView {
 
         Writer output = response.getWriter();
 
-        if ( prefixJson ) {
+        if (prefixJson) {
             output.write(JSON_ANTI_HIJACKING_PREFIX);
         }
 
-        if ( renderSingleAttributeAsRootObject && model.size() == 1 ) {
+        if (renderSingleAttributeAsRootObject && model.size() == 1) {
             gson.toJson(model.values().iterator().next(), output);
         } else {
             gson.toJson(model, output);
@@ -131,11 +131,11 @@ public class GsonView extends AbstractView {
      */
     protected Map<String, Object> filterModel(Map<String, Object> model) {
         Map<String, Object> filteredModel = new HashMap<String, Object>(model.size());
-        Set<String> renderedAttributes = CollectionUtils.isNotEmpty(this.renderedAttributes) ? this.renderedAttributes
-                : model.keySet();
+        Set<String> renderedAttributes = CollectionUtils.isNotEmpty(this.renderedAttributes)? this
+            .renderedAttributes: model.keySet();
 
         for (Map.Entry<String, Object> attribute : model.entrySet()) {
-            if ( !(attribute.getValue() instanceof BindingResult) && renderedAttributes.contains(attribute.getKey()) ) {
+            if (!(attribute.getValue() instanceof BindingResult) && renderedAttributes.contains(attribute.getKey())) {
                 filteredModel.put(attribute.getKey(), attribute.getValue());
             }
         }

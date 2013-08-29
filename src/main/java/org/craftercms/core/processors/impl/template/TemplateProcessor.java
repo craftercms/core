@@ -106,18 +106,18 @@ public class TemplateProcessor implements ItemProcessor {
         Document descriptorDom = item.getDescriptorDom();
 
         List<Node> templateNodes = templateNodeScanner.scan(descriptorDom);
-        if ( CollectionUtils.isNotEmpty(templateNodes) ) {
+        if (CollectionUtils.isNotEmpty(templateNodes)) {
             for (Node templateNode : templateNodes) {
                 String templateNodePath = templateNode.getUniquePath();
 
-                if ( logger.isDebugEnabled() ) {
+                if (logger.isDebugEnabled()) {
                     logger.debug("Template found in " + descriptorUrl + " at " + templateNodePath);
                 }
 
                 String templateId = templateNodePath + "@" + descriptorUrl;
                 String template = templateNode.getText();
                 IdentifiableStringTemplateSource templateSource = new IdentifiableStringTemplateSource(templateId,
-                        template);
+                    template);
                 Object model = modelFactory.getModel(item, templateNode, template);
                 StringWriter output = new StringWriter();
 
@@ -140,22 +140,22 @@ public class TemplateProcessor implements ItemProcessor {
      */
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        TemplateProcessor that = (TemplateProcessor) o;
+        TemplateProcessor that = (TemplateProcessor)o;
 
-        if ( !modelFactory.equals(that.modelFactory) ) {
+        if (!modelFactory.equals(that.modelFactory)) {
             return false;
         }
-        if ( !templateCompiler.equals(that.templateCompiler) ) {
+        if (!templateCompiler.equals(that.templateCompiler)) {
             return false;
         }
-        if ( !templateNodeScanner.equals(that.templateNodeScanner) ) {
+        if (!templateNodeScanner.equals(that.templateNodeScanner)) {
             return false;
         }
 
@@ -179,10 +179,10 @@ public class TemplateProcessor implements ItemProcessor {
     @Override
     public String toString() {
         return "TemplateProcessor[" +
-                "modelFactory=" + modelFactory +
-                ", templateNodeScanner=" + templateNodeScanner +
-                ", templateCompiler=" + templateCompiler +
-                ']';
+            "modelFactory=" + modelFactory +
+            ", templateNodeScanner=" + templateNodeScanner +
+            ", templateCompiler=" + templateCompiler +
+            ']';
     }
 
 }

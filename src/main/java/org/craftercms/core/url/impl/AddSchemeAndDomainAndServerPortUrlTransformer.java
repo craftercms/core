@@ -44,11 +44,11 @@ public class AddSchemeAndDomainAndServerPortUrlTransformer implements UrlTransfo
         StringBuilder fullUrl = new StringBuilder();
         fullUrl.append(scheme).append("://").append(domain);
 
-        if ( !(scheme.equals("http") && serverPort == 80) && !(scheme.equals("https") && serverPort == 443) ) {
+        if (!(scheme.equals("http") && serverPort == 80) && !(scheme.equals("https") && serverPort == 443)) {
             fullUrl.append(":").append(serverPort);
         }
 
-        if ( !url.startsWith("/") ) {
+        if (!url.startsWith("/")) {
             fullUrl.append("/");
         }
 

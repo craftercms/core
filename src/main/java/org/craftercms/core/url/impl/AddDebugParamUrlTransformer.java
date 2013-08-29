@@ -50,7 +50,7 @@ public class AddDebugParamUrlTransformer implements UrlTransformer {
         String result;
         int indexOfParamDelim = url.indexOf(UrlUtils.URL_PARAM_DELIM);
 
-        if ( indexOfParamDelim < 0 ) {
+        if (indexOfParamDelim < 0) {
             // The URL doesn't have a param delim, add it and tack on the debug flag
             result = url + UrlUtils.URL_PARAM_DELIM + debugParam + "=true";
         } else {
@@ -58,7 +58,7 @@ public class AddDebugParamUrlTransformer implements UrlTransformer {
             result = url + UrlUtils.URL_PARAM_SEPARATOR + debugParam + "=true";
         }
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 

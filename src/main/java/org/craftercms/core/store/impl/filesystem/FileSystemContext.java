@@ -28,9 +28,8 @@ public class FileSystemContext extends Context {
     FileSystemFile rootFolder;
 
     public FileSystemContext(String id, FileSystemContentStoreAdapter storeAdapter, String storeServerUrl,
-                             String rootFolderPath,
-                             FileSystemFile rootFolder, boolean cacheOn, int maxAllowedItemsInCache,
-                             boolean ignoreHiddenFiles) {
+                             String rootFolderPath, FileSystemFile rootFolder, boolean cacheOn,
+                             int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
         super(id, storeAdapter, storeServerUrl, rootFolderPath, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 
         this.rootFolder = rootFolder;
@@ -43,15 +42,15 @@ public class FileSystemContext extends Context {
     @Override
     public String toString() {
         return "FileSystemContext[" +
-                "id='" + id + '\'' +
-                ", storeAdapter='" + storeAdapter + '\'' +
-                ", storeServerUrl='" + storeServerUrl + '\'' +
-                ", rootFolderPath='" + rootFolderPath + '\'' +
-                ", rootFolder=" + rootFolder +
-                ", cacheOn=" + cacheOn +
-                ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
-                ", ignoreHiddenFiles=" + ignoreHiddenFiles +
-                ']';
+            "id='" + id + '\'' +
+            ", storeAdapter='" + storeAdapter + '\'' +
+            ", storeServerUrl='" + storeServerUrl + '\'' +
+            ", rootFolderPath='" + rootFolderPath + '\'' +
+            ", rootFolder=" + rootFolder +
+            ", cacheOn=" + cacheOn +
+            ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
+            ", ignoreHiddenFiles=" + ignoreHiddenFiles +
+            ']';
     }
 
 }

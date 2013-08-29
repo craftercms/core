@@ -57,10 +57,10 @@ public class DescriptorMergeStrategyResolverChain implements DescriptorMergeStra
     public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) {
         DescriptorMergeStrategy strategy;
 
-        if ( CollectionUtils.isNotEmpty(resolvers) ) {
+        if (CollectionUtils.isNotEmpty(resolvers)) {
             for (DescriptorMergeStrategyResolver resolver : resolvers) {
                 strategy = resolver.getStrategy(descriptorUrl, descriptorDom);
-                if ( strategy != null ) {
+                if (strategy != null) {
                     return strategy;
                 }
             }

@@ -103,7 +103,7 @@ public class CacheImpl implements Cache {
             return cacheStoreAdapter.hasScope(scope);
         } catch (Exception ex) {
             throw new InternalCacheEngineException("Exception while checking if the scope " + scope + " exists in the" +
-                    " cache", ex);
+                " cache", ex);
         }
     }
 
@@ -184,7 +184,7 @@ public class CacheImpl implements Cache {
             throw ex;
         } catch (Exception ex) {
             throw new InternalCacheEngineException("Exception while checking if the scope " + scope + " has key " +
-                    key, ex);
+                key, ex);
         }
     }
 
@@ -195,9 +195,9 @@ public class CacheImpl implements Cache {
     public CacheItem get(String scope, Object key) throws InvalidScopeException, InternalCacheEngineException {
         try {
             CacheItem item = cacheStoreAdapter.get(scope, key);
-            if ( item != null && logger.isDebugEnabled() ) {
+            if (item != null && logger.isDebugEnabled()) {
                 logger.debug("Cache hit: found " + item);
-            } else if ( logger.isDebugEnabled() ) {
+            } else if (logger.isDebugEnabled()) {
                 logger.debug("Cache miss: item with key " + key + " not found in scope " + scope);
             }
 
@@ -206,7 +206,7 @@ public class CacheImpl implements Cache {
             throw ex;
         } catch (Exception ex) {
             throw new InternalCacheEngineException("Exception while getting item with key " + key + " from scope " +
-                    scope, ex);
+                scope, ex);
         }
     }
 
@@ -215,16 +215,16 @@ public class CacheImpl implements Cache {
      */
     @Override
     public CacheItem getWithDependencyCheck(String scope, Object key) throws InvalidScopeException,
-            InternalCacheEngineException {
+        InternalCacheEngineException {
         try {
             CacheItem item = cacheStoreAdapter.get(scope, key);
-            if ( item != null ) {
-                if ( logger.isDebugEnabled() ) {
+            if (item != null) {
+                if (logger.isDebugEnabled()) {
                     logger.debug("Cache hit: found " + item);
                 }
 
-                if ( haveDependenciesChanged(item) ) {
-                    if ( logger.isDebugEnabled() ) {
+                if (haveDependenciesChanged(item)) {
+                    if (logger.isDebugEnabled()) {
                         logger.debug("Dependencies have changed for " + item + ". Removing it from the cache.");
                     }
 
@@ -235,7 +235,7 @@ public class CacheImpl implements Cache {
                     return item;
                 }
             } else {
-                if ( logger.isDebugEnabled() ) {
+                if (logger.isDebugEnabled()) {
                     logger.debug("Cache miss: item with key " + key + " not found in scope " + scope);
                 }
 
@@ -245,7 +245,7 @@ public class CacheImpl implements Cache {
             throw ex;
         } catch (Exception ex) {
             throw new InternalCacheEngineException("Exception while getting item with key " + key + " from scope " +
-                    scope, ex);
+                scope, ex);
         }
     }
 
@@ -253,8 +253,7 @@ public class CacheImpl implements Cache {
      * {@inheritDoc}
      */
     @Override
-    public void put(String scope, Object key, Object value) throws InvalidScopeException,
-            InternalCacheEngineException {
+    public void put(String scope, Object key, Object value) throws InvalidScopeException, InternalCacheEngineException {
         put(scope, key, value, null, CacheItem.NEVER_EXPIRE, CacheItem.NEVER_REFRESH, null);
     }
 
@@ -264,7 +263,7 @@ public class CacheImpl implements Cache {
     @Override
     public void put(String scope, Object key, Object value, long expireAfter, long refreshFrequency,
                     CacheLoader loader, Object... loaderParams) throws InvalidScopeException,
-            InternalCacheEngineException {
+        InternalCacheEngineException {
         put(scope, key, value, null, expireAfter, refreshFrequency, loader, loaderParams);
     }
 
@@ -272,8 +271,8 @@ public class CacheImpl implements Cache {
      * {@inheritDoc}
      */
     @Override
-    public void put(String scope, Object key, Object value, List<Object> dependencyKeys) throws InvalidScopeException,
-            InternalCacheEngineException {
+    public void put(String scope, Object key, Object value, List<Object> dependencyKeys) throws
+        InvalidScopeException, InternalCacheEngineException {
         put(scope, key, value, dependencyKeys, CacheItem.NEVER_EXPIRE, CacheItem.NEVER_REFRESH, null);
     }
 
@@ -283,19 +282,19 @@ public class CacheImpl implements Cache {
     @Override
     public void put(String scope, Object key, Object value, List<Object> dependencyKeys, long expireAfter,
                     long refreshFrequency, CacheLoader loader, Object... loaderParams) throws InvalidScopeException,
-            InternalCacheEngineException {
-        if ( expireAfter < 0 ) {
+        InternalCacheEngineException {
+        if (expireAfter < 0) {
             throw new IllegalArgumentException("The expireAfter argument should be 0 or positive");
         }
 
-        if ( refreshFrequency < 0 ) {
+        if (refreshFrequency < 0) {
             throw new IllegalArgumentException("The refreshFrequency argument should be 0 or positive");
         }
 
-        if ( value instanceof CachingAwareObject ) {
-            CachingAwareObject cachingAwareObj = (CachingAwareObject) value;
+        if (value instanceof CachingAwareObject) {
+            CachingAwareObject cachingAwareObj = (CachingAwareObject)value;
 
-            if ( CollectionUtils.isEmpty(dependencyKeys) ) {
+            if (CollectionUtils.isEmpty(dependencyKeys)) {
                 dependencyKeys = cachingAwareObj.getDependencyKeys();
             }
 
@@ -306,19 +305,18 @@ public class CacheImpl implements Cache {
 
         try {
             CacheItem item = new CacheItemImpl(scope, ticks, key, value, expireAfter, refreshFrequency,
-                    timestampGenerator.generate(),
-                    dependencyKeys, loader, loaderParams);
+                timestampGenerator.generate(), dependencyKeys, loader, loaderParams);
 
             cacheStoreAdapter.put(item);
 
-            if ( logger.isDebugEnabled() ) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Put into cache: " + item);
             }
         } catch (InvalidScopeException ex) {
             throw ex;
         } catch (Exception ex) {
             throw new InternalCacheEngineException("Exception while putting item with key " + key +
-                    " into scope " + scope, ex);
+                " into scope " + scope, ex);
         }
     }
 
@@ -327,7 +325,7 @@ public class CacheImpl implements Cache {
      */
     @Override
     public boolean remove(String scope, Object key) throws InvalidScopeException, InternalCacheEngineException {
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Removing item with key " + key + " from scope " + scope);
         }
 
@@ -337,7 +335,7 @@ public class CacheImpl implements Cache {
             throw ex;
         } catch (Exception ex) {
             throw new InternalCacheEngineException("Exception while removing item with key " +
-                    key + " from scope " + scope, ex);
+                key + " from scope " + scope, ex);
         }
     }
 
@@ -378,7 +376,7 @@ public class CacheImpl implements Cache {
     public void tick() {
         ticks++;
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Tick!");
         }
 
@@ -386,18 +384,18 @@ public class CacheImpl implements Cache {
 
         try {
             Collection<String> scopes = cacheStoreAdapter.getScopes();
-            if ( CollectionUtils.isNotEmpty(scopes) ) {
+            if (CollectionUtils.isNotEmpty(scopes)) {
                 for (String scope : scopes) {
                     Collection<Object> keys = cacheStoreAdapter.getKeys(scope);
-                    if ( CollectionUtils.isNotEmpty(keys) ) {
+                    if (CollectionUtils.isNotEmpty(keys)) {
                         for (Object key : keys) {
                             CacheItem item = cacheStoreAdapter.get(scope, key);
-                            if ( item != null ) {
+                            if (item != null) {
                                 doChecks(item, itemsToRefresh);
                             } else {
-                                if ( logger.isDebugEnabled() ) {
+                                if (logger.isDebugEnabled()) {
                                     logger.debug(item + " was removed before it could be checked for " +
-                                            "expiration/refresh");
+                                        "expiration/refresh");
                                 }
                             }
                         }
@@ -405,7 +403,7 @@ public class CacheImpl implements Cache {
                 }
             }
 
-            if ( cacheRefresher != null && CollectionUtils.isNotEmpty(itemsToRefresh) ) {
+            if (cacheRefresher != null && CollectionUtils.isNotEmpty(itemsToRefresh)) {
                 cacheRefresher.refreshItems(itemsToRefresh, this);
             }
         } catch (Exception ex) {
@@ -425,14 +423,14 @@ public class CacheImpl implements Cache {
 
         try {
             expired = checkForExpiration(item);
-            if ( expired ) {
-                if ( logger.isDebugEnabled() ) {
+            if (expired) {
+                if (logger.isDebugEnabled()) {
                     logger.debug(item + " was removed because it expired");
                 }
             } else {
                 willBeRefreshed = checkForRefresh(item, itemsToRefresh);
-                if ( willBeRefreshed ) {
-                    if ( logger.isDebugEnabled() ) {
+                if (willBeRefreshed) {
+                    if (logger.isDebugEnabled()) {
                         logger.debug(item + " will be refreshed");
                     }
                 }
@@ -450,7 +448,7 @@ public class CacheImpl implements Cache {
      * @throws Exception
      */
     protected boolean checkForExpiration(CacheItem item) throws Exception {
-        if ( item.isExpired(ticks) ) {
+        if (item.isExpired(ticks)) {
             cacheStoreAdapter.remove(item.getScope(), item.getKey());
 
             return true;
@@ -468,7 +466,7 @@ public class CacheImpl implements Cache {
      * @return true if the item will be refreshed, false otherwise
      */
     protected boolean checkForRefresh(CacheItem item, List<CacheItem> itemsToRefresh) {
-        if ( item.getLoader() != null && item.needsRefresh(ticks) ) {
+        if (item.getLoader() != null && item.needsRefresh(ticks)) {
             itemsToRefresh.add(item);
 
             return true;
@@ -488,12 +486,12 @@ public class CacheImpl implements Cache {
      */
     protected boolean haveDependenciesChanged(CacheItem item) throws Exception {
         List<Object> dependencyKeys = item.getDependencyKeys();
-        if ( CollectionUtils.isNotEmpty(dependencyKeys) ) {
+        if (CollectionUtils.isNotEmpty(dependencyKeys)) {
             for (Object dependencyKey : dependencyKeys) {
                 CacheItem dependency = cacheStoreAdapter.get(item.getScope(), dependencyKey);
-                if ( dependency == null ||
-                        item.getTimestamp() < dependency.getTimestamp() ||
-                        haveDependenciesChanged(dependency) ) {
+                if (dependency == null ||
+                    item.getTimestamp() < dependency.getTimestamp() ||
+                    haveDependenciesChanged(dependency)) {
                     return true;
                 }
             }

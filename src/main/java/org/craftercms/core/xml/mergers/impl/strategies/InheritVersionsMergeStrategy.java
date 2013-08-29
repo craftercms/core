@@ -41,7 +41,7 @@ public class InheritVersionsMergeStrategy extends AbstractInheritFromHierarchyMe
         String inheritedDescriptorUrl = folder + '/' + primaryDescriptorFilename;
 
         // Avoid adding the primary descriptor twice.
-        if ( !inheritedDescriptorUrl.equals(primaryDescriptorUrl) ) {
+        if (!inheritedDescriptorUrl.equals(primaryDescriptorUrl)) {
             inheritedDescriptors.add(new MergeableDescriptor(inheritedDescriptorUrl, true));
         }
     }

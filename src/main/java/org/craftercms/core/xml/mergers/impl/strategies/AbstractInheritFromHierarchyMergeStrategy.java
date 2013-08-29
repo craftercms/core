@@ -40,8 +40,7 @@ public abstract class AbstractInheritFromHierarchyMergeStrategy implements Descr
     }
 
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String primaryDescriptorUrl,
-                                                    boolean primaryDescriptorOptional) {
+                                                    String primaryDescriptorUrl, boolean primaryDescriptorOptional) {
         List<MergeableDescriptor> descriptors = new ArrayList<MergeableDescriptor>();
 
         // If the url is absolute (starts with '/'), the descriptors included will start from root (i.e. if url is
@@ -62,8 +61,6 @@ public abstract class AbstractInheritFromHierarchyMergeStrategy implements Descr
         return descriptors;
     }
 
-    protected abstract void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
-                                                            List<MergeableDescriptor> inheritedDescriptors, String folder,
-                                                            String primaryDescriptorUrl);
+    protected abstract void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions, List<MergeableDescriptor> inheritedDescriptors, String folder, String primaryDescriptorUrl);
 
 }

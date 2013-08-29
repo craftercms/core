@@ -59,7 +59,7 @@ public class RegexBasedContentBundleUrlParser implements ContentBundleUrlParser 
         ContentBundleUrlImpl parsedUrl = new ContentBundleUrlImpl();
         Matcher matcher = pattern.matcher(rawUrl);
 
-        if ( matcher.matches() ) {
+        if (matcher.matches()) {
             try {
                 parsedUrl.setPrefix(matcher.group(prefixGroup));
             } catch (IndexOutOfBoundsException e) {

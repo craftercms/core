@@ -58,15 +58,15 @@ public class MetaDataMergeStrategyResolver implements DescriptorMergeStrategyRes
      * @throws XmlException if the element value doesn't refer to an existing strategy
      */
     public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) throws XmlException {
-        if ( descriptorDom != null ) {
+        if (descriptorDom != null) {
             Node element = descriptorDom.selectSingleNode(mergeStrategyElementXPathQuery);
-            if ( element != null ) {
+            if (element != null) {
                 DescriptorMergeStrategy strategy = elementValueToStrategyMappings.get(element.getText());
-                if ( strategy != null ) {
+                if (strategy != null) {
                     return strategy;
                 } else {
                     throw new XmlException("Element value \"" + element.getText() + "\" doesn't refer to an " +
-                            "registered strategy");
+                        "registered strategy");
                 }
             } else {
                 return null;

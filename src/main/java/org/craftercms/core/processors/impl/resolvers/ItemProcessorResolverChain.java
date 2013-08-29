@@ -68,10 +68,10 @@ public class ItemProcessorResolverChain implements ItemProcessorResolver {
     public ItemProcessor getProcessor(Item item) {
         ItemProcessor processor;
 
-        if ( CollectionUtils.isNotEmpty(resolvers) ) {
+        if (CollectionUtils.isNotEmpty(resolvers)) {
             for (ItemProcessorResolver resolver : resolvers) {
                 processor = resolver.getProcessor(item);
-                if ( processor != null ) {
+                if (processor != null) {
                     return processor;
                 }
             }

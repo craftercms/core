@@ -145,8 +145,8 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
     @Override
     public CacheItem get(String scope, Object key) throws Exception {
         Element element = getScopeCache(scope).get(key);
-        if ( element != null ) {
-            return (CacheItem) element.getObjectValue();
+        if (element != null) {
+            return (CacheItem)element.getObjectValue();
         } else {
             return null;
         }
@@ -191,7 +191,7 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
      */
     private Cache getScopeCache(String scope) throws InvalidScopeException {
         Cache scopeCache = scopeManager.getCache(scope);
-        if ( scopeCache == null ) {
+        if (scopeCache == null) {
             throw new InvalidScopeException("The scope " + scope + " doesn't exist");
         } else {
             return scopeCache;

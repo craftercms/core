@@ -42,9 +42,9 @@ public class Dom4jDocumentConverter implements Converter {
 
     @Override
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-        Document document = (Document) source;
+        Document document = (Document)source;
 
-        EscapingCompactWriter escapingCompactWriter = (EscapingCompactWriter) writer.underlyingWriter();
+        EscapingCompactWriter escapingCompactWriter = (EscapingCompactWriter)writer.underlyingWriter();
         escapingCompactWriter.setEscapeXml(false);
         escapingCompactWriter.setValue(document.getRootElement().asXML());
         escapingCompactWriter.setEscapeXml(true);
