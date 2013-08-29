@@ -16,12 +16,11 @@
  */
 package org.craftercms.core.util.cache.impl;
 
-import org.craftercms.core.util.cache.CachingAwareObject;
-import org.craftercms.core.util.cache.CachingAwareObject;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.craftercms.core.util.cache.CachingAwareObject;
 
 /**
  * Class description goes HERE
@@ -43,8 +42,8 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
         this.key = cachingAwareObject.getKey();
         this.cachingTime = cachingAwareObject.getCachingTime();
 
-        if (deepCopy) {
-            this.dependencyKeys = cachingAwareObject.getDependencyKeys() != null? new ArrayList<Object>(
+        if ( deepCopy ) {
+            this.dependencyKeys = cachingAwareObject.getDependencyKeys() != null ? new ArrayList<Object>(
                     cachingAwareObject.getDependencyKeys()) : null;
         } else {
             this.dependencyKeys = cachingAwareObject.getDependencyKeys();
@@ -83,7 +82,7 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
 
     @Override
     public void addDependencyKeys(Collection<Object> dependencyKeys) {
-        if (this.dependencyKeys == null) {
+        if ( this.dependencyKeys == null ) {
             this.dependencyKeys = new ArrayList<Object>();
         }
 
@@ -92,7 +91,7 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
 
     @Override
     public void addDependencyKey(Object dependencyKey) {
-        if (dependencyKeys == null) {
+        if ( dependencyKeys == null ) {
             dependencyKeys = new ArrayList<Object>();
         }
 
@@ -101,7 +100,7 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
 
     @Override
     public boolean removeDependencyKeys(Collection<Object> dependencyKeys) {
-        if (this.dependencyKeys != null) {
+        if ( this.dependencyKeys != null ) {
             return this.dependencyKeys.removeAll(dependencyKeys);
         } else {
             return false;
@@ -110,7 +109,7 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
 
     @Override
     public boolean removeDependencyKey(Object dependencyKey) {
-        if (dependencyKeys != null) {
+        if ( dependencyKeys != null ) {
             return dependencyKeys.remove(dependencyKey);
         } else {
             return false;

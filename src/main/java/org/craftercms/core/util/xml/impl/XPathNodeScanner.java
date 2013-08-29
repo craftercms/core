@@ -16,16 +16,15 @@
  */
 package org.craftercms.core.util.xml.impl;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.exception.XmlException;
-import org.dom4j.Document;
-import org.dom4j.Node;
-import org.craftercms.core.exception.XmlException;
-import org.craftercms.core.util.xml.NodeScanner;
-import org.springframework.beans.factory.annotation.Required;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.craftercms.core.exception.XmlException;
+import org.craftercms.core.util.xml.NodeScanner;
+import org.dom4j.Document;
+import org.dom4j.Node;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Class description goes HERE
@@ -48,7 +47,7 @@ public class XPathNodeScanner implements NodeScanner {
 
             for (String xPathQuery : xPathQueries) {
                 List<Node> queryResult = document.selectNodes(xPathQuery);
-                if (CollectionUtils.isNotEmpty(queryResult)) {
+                if ( CollectionUtils.isNotEmpty(queryResult) ) {
                     nodes.addAll(queryResult);
                 }
             }
@@ -61,16 +60,16 @@ public class XPathNodeScanner implements NodeScanner {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
+        if ( this == o ) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if ( o == null || getClass() != o.getClass() ) {
             return false;
         }
 
         XPathNodeScanner that = (XPathNodeScanner) o;
 
-        if (!xPathQueries.equals(that.xPathQueries)) {
+        if ( !xPathQueries.equals(that.xPathQueries) ) {
             return false;
         }
 

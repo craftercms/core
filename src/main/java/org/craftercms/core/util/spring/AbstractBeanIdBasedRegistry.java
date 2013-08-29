@@ -16,11 +16,11 @@
  */
 package org.craftercms.core.util.spring;
 
+import java.util.Map;
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-
-import javax.annotation.PostConstruct;
-import java.util.Map;
 
 /**
  * Picks up any bean of a specific type defined in the Spring application context, and puts it in a registry, with the key or
@@ -45,8 +45,8 @@ public abstract class AbstractBeanIdBasedRegistry<T> implements BeanPostProcesso
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (getRegistryType().isAssignableFrom(bean.getClass())) {
-            if (beanName.startsWith(getBeanNameIdPrefix())) {
+        if ( getRegistryType().isAssignableFrom(bean.getClass()) ) {
+            if ( beanName.startsWith(getBeanNameIdPrefix()) ) {
                 String id = beanName.substring(getBeanNameIdPrefix().length());
 
                 register(id, (T) bean);

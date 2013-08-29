@@ -16,33 +16,32 @@
  */
 package org.craftercms.core.service;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.util.XmlUtils;
-import org.dom4j.Document;
-import org.craftercms.core.util.XmlUtils;
-import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.craftercms.core.util.XmlUtils;
+import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
+import org.dom4j.Document;
+
 /**
  * Represents an item of a content store. Content store items can be separated into 3 main categories:
- *
+ * <p/>
  * <ol>
- *     <li>
- *         <b>Standalone descriptors</b>: XML files that contain metadata and content for web pages. These type of
- *         descriptors are in themselves items, so the item url and the descriptor url should be the same.
- *     </li>
- *     <li>
- *         <b>Static assets</b>: Static files like images, css and javascript.
- *     </li>
- *     <li>
- *         <b>Folders</b>: Plain old folders/directories.
- *     </li>
+ * <li>
+ * <b>Standalone descriptors</b>: XML files that contain metadata and content for web pages. These type of
+ * descriptors are in themselves items, so the item url and the descriptor url should be the same.
+ * </li>
+ * <li>
+ * <b>Static assets</b>: Static files like images, css and javascript.
+ * </li>
+ * <li>
+ * <b>Folders</b>: Plain old folders/directories.
+ * </li>
  * </ol>
- *
+ * <p/>
  * <p>Both static assets and folders can have their own metadata files or descriptors. So we can also say that
  * there are two types of descriptors: standalone descriptors and (static asset and folder) metadata files.</p>
  *
@@ -102,9 +101,9 @@ public class Item extends CachingAwareObjectBase {
         descriptorUrl = item.descriptorUrl;
         isFolder = item.isFolder;
 
-        if (deepCopy) {
-            descriptorDom = item.descriptorDom != null? (Document) item.descriptorDom.clone() : null;
-            properties = item.properties != null? new HashMap<String, Object>(item.properties) : null;
+        if ( deepCopy ) {
+            descriptorDom = item.descriptorDom != null ? (Document) item.descriptorDom.clone() : null;
+            properties = item.properties != null ? new HashMap<String, Object>(item.properties) : null;
         } else {
             descriptorDom = item.descriptorDom;
             properties = item.properties;
@@ -187,7 +186,7 @@ public class Item extends CachingAwareObjectBase {
      * Returns the property value for the specified key.
      */
     public Object getProperty(String key) {
-        if (properties == null) {
+        if ( properties == null ) {
             return null;
         }
 
@@ -198,7 +197,7 @@ public class Item extends CachingAwareObjectBase {
      * Adds the specified property value, associated to the specified key.
      */
     public void setProperty(String key, Object value) {
-        if (properties == null) {
+        if ( properties == null ) {
             properties = new HashMap<String, Object>();
         }
 
@@ -210,9 +209,9 @@ public class Item extends CachingAwareObjectBase {
      * query.
      */
     public String queryDescriptorValue(String xPathQuery) {
-        if (descriptorDom != null) {
+        if ( descriptorDom != null ) {
             String value = (String) getProperty(xPathQuery);
-            if (value == null) {
+            if ( value == null ) {
                 value = XmlUtils.selectSingleNodeValue(descriptorDom, xPathQuery);
             }
 
@@ -227,9 +226,9 @@ public class Item extends CachingAwareObjectBase {
      * query.
      */
     public List<String> queryDescriptorValues(String xPathQuery) {
-        if (descriptorDom != null) {
+        if ( descriptorDom != null ) {
             List<String> value = (List<String>) getProperty(xPathQuery);
-            if (CollectionUtils.isEmpty(value)) {
+            if ( CollectionUtils.isEmpty(value) ) {
                 value = XmlUtils.selectNodeValues(descriptorDom, xPathQuery);
             }
 
@@ -259,25 +258,25 @@ public class Item extends CachingAwareObjectBase {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
+        if ( this == o ) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if ( o == null || getClass() != o.getClass() ) {
             return false;
         }
 
         Item item = (Item) o;
 
-        if (name != null ? !name.equals(item.name) : item.name != null) {
+        if ( name != null ? !name.equals(item.name) : item.name != null ) {
             return false;
         }
-        if (url != null ? !url.equals(item.url) : item.url != null) {
+        if ( url != null ? !url.equals(item.url) : item.url != null ) {
             return false;
         }
-        if (descriptorUrl != null ? !descriptorUrl.equals(item.descriptorUrl) : item.descriptorUrl != null) {
+        if ( descriptorUrl != null ? !descriptorUrl.equals(item.descriptorUrl) : item.descriptorUrl != null ) {
             return false;
         }
-        if (isFolder != item.isFolder) {
+        if ( isFolder != item.isFolder ) {
             return false;
         }
 

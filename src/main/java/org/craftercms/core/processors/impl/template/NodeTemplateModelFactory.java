@@ -16,8 +16,8 @@
  */
 package org.craftercms.core.processors.impl.template;
 
-import org.dom4j.Node;
 import org.craftercms.core.service.Item;
+import org.dom4j.Node;
 
 /**
  * Factory that returns models for DOM node templates.
@@ -29,12 +29,9 @@ public interface NodeTemplateModelFactory {
     /**
      * Returns the model for a given template of a given node.
      *
-     * @param item
-     *          the {@link Item} whose descriptor contains the specified node
-     * @param node
-     *          the DOM node whose content is the specified template
-     * @param template
-     *          the actual template
+     * @param item     the {@link Item} whose descriptor contains the specified node
+     * @param node     the DOM node whose content is the specified template
+     * @param template the actual template
      * @return the model to be used for processing the specified template
      */
     Object getModel(Item item, Node node, String template);

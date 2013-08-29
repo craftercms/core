@@ -16,14 +16,12 @@
  */
 package org.craftercms.core.xml.mergers.impl.strategies;
 
+import java.util.List;
+
 import org.apache.commons.io.FilenameUtils;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
-
-import java.util.List;
 
 /**
  * Implementation of {@link AbstractInheritFromHierarchyMergeStrategy}. Descriptors "inherited" are versions of the
@@ -43,7 +41,7 @@ public class InheritVersionsMergeStrategy extends AbstractInheritFromHierarchyMe
         String inheritedDescriptorUrl = folder + '/' + primaryDescriptorFilename;
 
         // Avoid adding the primary descriptor twice.
-        if (!inheritedDescriptorUrl.equals(primaryDescriptorUrl)) {
+        if ( !inheritedDescriptorUrl.equals(primaryDescriptorUrl) ) {
             inheritedDescriptors.add(new MergeableDescriptor(inheritedDescriptorUrl, true));
         }
     }

@@ -16,17 +16,14 @@
  */
 package org.craftercms.core.cache.impl;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.Cache;
-import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
 import org.craftercms.core.exception.InternalCacheEngineException;
-import org.craftercms.core.exception.InvalidScopeException;
-
-import java.util.*;
 
 /**
  * Default implementation of {@link CacheRefresher}. Uses a {@link TopologicalCacheItemSorter} to sort the items
@@ -87,16 +84,16 @@ public class CacheRefresherImpl implements CacheRefresher {
         CacheLoader loader = item.getLoader();
         Object[] loaderParams = item.getLoaderParams();
 
-        if (loader == null) {
+        if ( loader == null ) {
             throw new InternalCacheEngineException("No cache loader for " + item);
         }
 
-        if (logger.isDebugEnabled()) {
+        if ( logger.isDebugEnabled() ) {
             logger.debug("Refreshing " + item);
         }
 
         Object newValue = loader.load(loaderParams);
-        if (newValue != null) {
+        if ( newValue != null ) {
             cache.put(item.getScope(), item.getKey(), newValue, item.getDependencyKeys(), item.getTicksToExpire(),
                     item.getTicksToRefresh(), item.getLoader(), item.getLoaderParams());
         } else {

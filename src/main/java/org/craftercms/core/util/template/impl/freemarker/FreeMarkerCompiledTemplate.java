@@ -16,13 +16,12 @@
  */
 package org.craftercms.core.util.template.impl.freemarker;
 
-import freemarker.template.Template;
-import org.craftercms.core.util.template.CompiledTemplate;
-import org.craftercms.core.exception.TemplateException;
-import org.craftercms.core.util.template.CompiledTemplate;
-
 import java.io.IOException;
 import java.io.Writer;
+
+import freemarker.template.Template;
+import org.craftercms.core.exception.TemplateException;
+import org.craftercms.core.util.template.CompiledTemplate;
 
 /**
  * Class description goes HERE

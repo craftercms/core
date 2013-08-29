@@ -16,9 +16,10 @@
  */
 package org.craftercms.core.util.template.impl.spel;
 
-import org.craftercms.core.exception.TemplateException;
-import org.craftercms.core.util.template.CompiledTemplate;
-import org.craftercms.core.util.template.impl.IdentifiableStringTemplateSource;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
+
 import org.craftercms.core.exception.TemplateException;
 import org.craftercms.core.util.template.CompiledTemplate;
 import org.craftercms.core.util.template.TemplateCompiler;
@@ -30,16 +31,15 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.expression.BeanFactoryAccessor;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.expression.*;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParserContext;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeConverter;
 import org.springframework.expression.spel.support.StandardTypeLocator;
-
-import javax.annotation.PostConstruct;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Class description goes HERE
@@ -71,7 +71,7 @@ public class SpELStringTemplateCompiler implements TemplateCompiler<Identifiable
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        if (!(beanFactory instanceof ConfigurableBeanFactory)) {
+        if ( !(beanFactory instanceof ConfigurableBeanFactory) ) {
             throw new IllegalArgumentException("beanFactory should be of type ConfigurableBeanFactory");
         }
 
@@ -80,24 +80,24 @@ public class SpELStringTemplateCompiler implements TemplateCompiler<Identifiable
 
     @PostConstruct
     public void init() {
-        if (evalContext == null) {
+        if ( evalContext == null ) {
             evalContext = new StandardEvaluationContext();
         }
 
-        if (evalContext instanceof StandardEvaluationContext) {
+        if ( evalContext instanceof StandardEvaluationContext ) {
             StandardEvaluationContext standardEvalContext = (StandardEvaluationContext) evalContext;
             // PropertyAccessor used when the model is a BeanFactory.
             standardEvalContext.addPropertyAccessor(new BeanFactoryAccessor());
-            if (beanFactory != null) {
-                if (standardEvalContext.getBeanResolver() == null) {
+            if ( beanFactory != null ) {
+                if ( standardEvalContext.getBeanResolver() == null ) {
                     standardEvalContext.setBeanResolver(new BeanFactoryResolver(beanFactory));
                 }
-                if (standardEvalContext.getTypeLocator() == null) {
+                if ( standardEvalContext.getTypeLocator() == null ) {
                     standardEvalContext.setTypeLocator(new StandardTypeLocator(beanFactory.getBeanClassLoader()));
                 }
-                if (standardEvalContext.getTypeConverter() == null) {
+                if ( standardEvalContext.getTypeConverter() == null ) {
                     ConversionService conversionService = beanFactory.getConversionService();
-                    if (conversionService != null) {
+                    if ( conversionService != null ) {
                         standardEvalContext.setTypeConverter(new StandardTypeConverter(conversionService));
                     }
                 }
@@ -112,7 +112,7 @@ public class SpELStringTemplateCompiler implements TemplateCompiler<Identifiable
 
         try {
             Expression expression = expressionCache.get(id);
-            if (expression == null || !expression.getExpressionString().equals(source)) {
+            if ( expression == null || !expression.getExpressionString().equals(source) ) {
                 expression = parser.parseExpression(source, parserContext);
                 expressionCache.put(id, expression);
             }

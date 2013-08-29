@@ -16,14 +16,13 @@
  */
 package org.craftercms.core.util.template.impl.spel;
 
-import org.craftercms.core.util.template.CompiledTemplate;
+import java.io.IOException;
+import java.io.Writer;
+
 import org.craftercms.core.exception.TemplateException;
 import org.craftercms.core.util.template.CompiledTemplate;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
-
-import java.io.IOException;
-import java.io.Writer;
 
 /**
  * Class description goes HERE

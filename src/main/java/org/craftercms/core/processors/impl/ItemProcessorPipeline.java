@@ -16,19 +16,16 @@
  */
 package org.craftercms.core.processors.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Pipeline of {@link org.craftercms.core.processors.ItemProcessor}s. The output of each processor's {@link org.craftercms.core.processors.ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions, Item)}
@@ -68,7 +65,7 @@ public class ItemProcessorPipeline implements ItemProcessor {
      * Adds a processor to the pipeline of processors.
      */
     public void addProcessor(ItemProcessor processor) {
-        if (processors == null) {
+        if ( processors == null ) {
             processors = new ArrayList<ItemProcessor>();
         }
 
@@ -81,7 +78,7 @@ public class ItemProcessorPipeline implements ItemProcessor {
      * @return true if the processor was removed
      */
     public boolean removeProcessor(ItemProcessor processor) {
-        if (processors != null) {
+        if ( processors != null ) {
             return processors.remove(processor);
         } else {
             return false;
@@ -93,13 +90,11 @@ public class ItemProcessorPipeline implements ItemProcessor {
      * {@link ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions, Item)} call is passed as input to the next processor.
      *
      * @return the result of the final processor in the pipeline.
-     *
-     * @throws ItemProcessingException
-     *          if one of the processors in the pipeline couldn't process the item
+     * @throws ItemProcessingException if one of the processors in the pipeline couldn't process the item
      */
     @Override
     public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
-        if (CollectionUtils.isNotEmpty(processors)) {
+        if ( CollectionUtils.isNotEmpty(processors) ) {
             for (ItemProcessor processor : processors) {
                 item = processor.process(context, cachingOptions, item);
             }
@@ -113,16 +108,16 @@ public class ItemProcessorPipeline implements ItemProcessor {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
+        if ( this == o ) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if ( o == null || getClass() != o.getClass() ) {
             return false;
         }
 
         ItemProcessorPipeline that = (ItemProcessorPipeline) o;
 
-        if (processors != null ? !processors.equals(that.processors) : that.processors != null) {
+        if ( processors != null ? !processors.equals(that.processors) : that.processors != null ) {
             return false;
         }
 

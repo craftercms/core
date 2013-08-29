@@ -16,13 +16,13 @@
  */
 package org.craftercms.core.xml.mergers.impl.resolvers;
 
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
-import org.dom4j.Document;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
+import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.List;
 
 /**
  * Chain of {@link DescriptorMergeStrategyResolver}s. The strategy returned is the first non-null one returned by a
@@ -49,20 +49,18 @@ public class DescriptorMergeStrategyResolverChain implements DescriptorMergeStra
      * If there a no resolvers in the chain, or non of resolvers returns a {@link DescriptorMergeStrategy}, a
      * default strategy is returned.
      *
-     * @param descriptorUrl
-     *          the URL that identifies the descriptor
-     * @param descriptorDom
-     *          the XML DOM of the descriptor
+     * @param descriptorUrl the URL that identifies the descriptor
+     * @param descriptorDom the XML DOM of the descriptor
      * @return the first non-null strategy returned by a {@link DescriptorMergeStrategyResolver} of the chain,
      *         or a default one if all the resolvers returned null.
      */
     public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) {
         DescriptorMergeStrategy strategy;
 
-        if (CollectionUtils.isNotEmpty(resolvers)) {
+        if ( CollectionUtils.isNotEmpty(resolvers) ) {
             for (DescriptorMergeStrategyResolver resolver : resolvers) {
                 strategy = resolver.getStrategy(descriptorUrl, descriptorDom);
-                if (strategy != null) {
+                if ( strategy != null ) {
                     return strategy;
                 }
             }

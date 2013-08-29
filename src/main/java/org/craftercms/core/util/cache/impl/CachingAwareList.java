@@ -36,7 +36,7 @@ public class CachingAwareList<T> extends CachingAwareObjectBase implements List<
     }
 
     public CachingAwareList(List<T> actualList) {
-        if (actualList == null) {
+        if ( actualList == null ) {
             throw new IllegalArgumentException("The actual list argument should not be null");
         }
 
@@ -168,7 +168,7 @@ public class CachingAwareList<T> extends CachingAwareObjectBase implements List<
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
+        if ( this == o ) {
             return true;
         }
 

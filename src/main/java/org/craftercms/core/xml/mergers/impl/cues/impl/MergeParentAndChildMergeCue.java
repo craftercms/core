@@ -16,19 +16,18 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
-import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.util.CollectionUtils;
 import org.craftercms.core.xml.mergers.impl.cues.ElementMergeMatcher;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Class description goes HERE
@@ -67,11 +66,11 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
         Element merged = DocumentHelper.createElement(child.getQName());
         CollectionUtils.move(child.attributes(), merged.attributes());
 
-        if (parent.isTextOnly() && child.isTextOnly()) {
+        if ( parent.isTextOnly() && child.isTextOnly() ) {
             String parentText = parent.getText();
             String childText = child.getText();
 
-            if (getMergeOrder(params).equalsIgnoreCase("after")) {
+            if ( getMergeOrder(params).equalsIgnoreCase("after") ) {
                 merged.setText(parentText + childText);
             } else {
                 merged.setText(childText + parentText);
@@ -81,16 +80,16 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
             List<Element> childElements = child.elements();
             List<Element> mergedElements = merged.elements();
 
-            if (CollectionUtils.isNotEmpty(parentElements) && CollectionUtils.isNotEmpty(childElements)) {
-                for (Iterator<Element> i = parentElements.iterator(); i.hasNext();) {
+            if ( CollectionUtils.isNotEmpty(parentElements) && CollectionUtils.isNotEmpty(childElements) ) {
+                for (Iterator<Element> i = parentElements.iterator(); i.hasNext(); ) {
                     Element parentElement = i.next();
                     boolean elementsMerged = false;
 
-                    for (Iterator<Element> j = childElements.iterator(); !elementsMerged && j.hasNext();) {
+                    for (Iterator<Element> j = childElements.iterator(); !elementsMerged && j.hasNext(); ) {
                         Element childElement = j.next();
-                        if (elementMergeMatcher.matchForMerge(parentElement, childElement)) {
+                        if ( elementMergeMatcher.matchForMerge(parentElement, childElement) ) {
                             MergeCueContext context = mergeCueResolver.getMergeCue(parentElement, childElement);
-                            if (context != null) {
+                            if ( context != null ) {
                                 i.remove();
                                 j.remove();
 
@@ -107,7 +106,7 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
                 }
             }
 
-            if (getMergeOrder(params).equalsIgnoreCase("after")) {
+            if ( getMergeOrder(params).equalsIgnoreCase("after") ) {
                 CollectionUtils.move(parentElements, mergedElements);
                 CollectionUtils.move(childElements, mergedElements);
             } else {
@@ -121,7 +120,7 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
 
     protected String getMergeOrder(Map<String, String> mergeParams) throws XmlMergeException {
         String mergeOrder = mergeParams.get(mergeOrderParamName);
-        if (mergeOrder != null) {
+        if ( mergeOrder != null ) {
             return mergeOrder;
         } else {
             return defaultMergeOrder;

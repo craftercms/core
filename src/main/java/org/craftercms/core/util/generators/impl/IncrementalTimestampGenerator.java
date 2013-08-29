@@ -16,10 +16,9 @@
  */
 package org.craftercms.core.util.generators.impl;
 
-import org.craftercms.core.util.generators.TimestampGenerator;
-import org.craftercms.core.util.generators.TimestampGenerator;
-
 import java.util.concurrent.atomic.AtomicLong;
+
+import org.craftercms.core.util.generators.TimestampGenerator;
 
 /**
  * Implementation of {@link org.craftercms.core.util.generators.TimestampGenerator}
@@ -38,8 +37,7 @@ public class IncrementalTimestampGenerator implements TimestampGenerator {
     /**
      * Returns increments of a counter as timestamps.
      *
-     * @return
-     *      the timestamp
+     * @return the timestamp
      */
     public long generate() {
         return counter.getAndIncrement();

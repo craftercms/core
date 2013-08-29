@@ -16,6 +16,10 @@
  */
 package org.craftercms.core.service.impl;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
@@ -26,10 +30,6 @@ import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Default implementation of {@link CacheService}. Adapts a {@link Cache}.
@@ -61,14 +61,14 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public void addScope(Context context) throws InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             cache.addScope(context.getId(), context.getMaxAllowedItemsInCache());
         }
     }
 
     @Override
     public void removeScope(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 cache.removeScope(context.getId());
             } catch (InvalidScopeException e) {
@@ -79,7 +79,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public boolean hasScope(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 return cache.hasScope(context.getId());
             } catch (InvalidScopeException e) {
@@ -92,7 +92,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public int getSize(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 return cache.getSize(context.getId());
             } catch (InvalidScopeException e) {
@@ -105,7 +105,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public Collection<?> getKeys(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 return cache.getKeys(context.getId());
             } catch (InvalidScopeException e) {
@@ -118,7 +118,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public boolean hasKey(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 return cache.hasKey(context.getId(), key);
             } catch (InvalidScopeException e) {
@@ -131,7 +131,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public CacheItem getItem(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 return cache.getWithDependencyCheck(context.getId(), key);
             } catch (InvalidScopeException e) {
@@ -144,10 +144,10 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public Object get(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 CacheItem item = cache.getWithDependencyCheck(context.getId(), key);
-                if (item != null) {
+                if ( item != null ) {
                     return item.getValue();
                 } else {
                     return null;
@@ -162,7 +162,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public void put(Context context, Object key, Object value) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 cache.put(context.getId(), key, value);
             } catch (InvalidScopeException e) {
@@ -174,7 +174,7 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public void put(Context context, Object key, Object value, List<Object> dependencyKeys) throws InvalidScopeException,
             InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 cache.put(context.getId(), key, value, dependencyKeys);
             } catch (InvalidScopeException e) {
@@ -186,7 +186,7 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader, Object... loaderParams)
             throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn() && cachingOptions.doCaching()) {
+        if ( context.isCacheOn() && cachingOptions.doCaching() ) {
             try {
                 cache.put(context.getId(), key, value, cachingOptions.getExpireAfter(), cachingOptions.getRefreshFrequency(),
                         loader, loaderParams);
@@ -199,7 +199,7 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public void put(Context context, Object key, Object value, List<Object> dependencyKeys, CachingOptions cachingOptions,
                     CacheLoader loader, Object... loaderParams) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn() && cachingOptions.doCaching()) {
+        if ( context.isCacheOn() && cachingOptions.doCaching() ) {
             try {
                 cache.put(context.getId(), key, value, dependencyKeys, cachingOptions.getExpireAfter(), cachingOptions
                         .getRefreshFrequency(), loader, loaderParams);
@@ -211,7 +211,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public boolean remove(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 return cache.remove(context.getId(), key);
             } catch (InvalidScopeException e) {
@@ -224,7 +224,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public void clearScope(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
+        if ( context.isCacheOn() ) {
             try {
                 cache.clearScope(context.getId());
             } catch (InvalidScopeException e) {

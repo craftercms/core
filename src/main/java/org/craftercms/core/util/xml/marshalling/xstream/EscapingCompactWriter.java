@@ -16,10 +16,10 @@
  */
 package org.craftercms.core.util.xml.marshalling.xstream;
 
+import java.io.Writer;
+
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.naming.NameCoder;
-
-import java.io.Writer;
 
 /**
  * Extension of {@link com.thoughtworks.xstream.io.xml.CompactWriter} that enables setting on/off XML escaping.
@@ -27,7 +27,7 @@ import java.io.Writer;
  * @author Alfonso Vásquez
  */
 public class EscapingCompactWriter extends com.thoughtworks.xstream.io.xml.CompactWriter {
-    
+
     protected boolean escapeXml;
 
     public EscapingCompactWriter(Writer writer) {
@@ -52,7 +52,7 @@ public class EscapingCompactWriter extends com.thoughtworks.xstream.io.xml.Compa
 
     @Override
     protected void writeText(QuickWriter writer, String text) {
-        if (escapeXml) {
+        if ( escapeXml ) {
             super.writeText(writer, text);
         } else {
             writer.write(text);
@@ -61,7 +61,7 @@ public class EscapingCompactWriter extends com.thoughtworks.xstream.io.xml.Compa
 
     @Override
     protected void writeAttributeValue(QuickWriter writer, String text) {
-        if (escapeXml) {
+        if ( escapeXml ) {
             super.writeAttributeValue(writer, text);
         } else {
             writer.write(text);

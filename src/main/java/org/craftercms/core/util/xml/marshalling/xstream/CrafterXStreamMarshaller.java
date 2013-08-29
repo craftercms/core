@@ -16,6 +16,9 @@
  */
 package org.craftercms.core.util.xml.marshalling.xstream;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import org.apache.commons.lang.ArrayUtils;
@@ -27,15 +30,12 @@ import org.dom4j.io.XMLWriter;
 import org.springframework.oxm.XmlMappingException;
 import org.springframework.oxm.xstream.XStreamMarshaller;
 
-import java.io.IOException;
-import java.io.Writer;
-
 /**
  * Extension of {@link org.springframework.oxm.xstream.XStreamMarshaller} that:
- *
+ * <p/>
  * <ol>
- *      <li>Provides correct marshalling/unmarshalling support for Crafter objects.</li>
- *      <li>Adds a {@code unsupportedClasses} property to exclude any unwanted classes from being marshalled/unmarshalled</li>
+ * <li>Provides correct marshalling/unmarshalling support for Crafter objects.</li>
+ * <li>Adds a {@code unsupportedClasses} property to exclude any unwanted classes from being marshalled/unmarshalled</li>
  * </ol>
  *
  * @author Alfonso Vásquez
@@ -43,11 +43,11 @@ import java.io.Writer;
 public class CrafterXStreamMarshaller extends XStreamMarshaller {
 
     public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    
+
     public static final String ITEM_CLASS_ALIAS = "item";
     public static final String TREE_CLASS_ALIAS = "tree";
     public static final String DOCUMENT_CLASS_ALIAS = "document";
-    
+
     protected Class[] unsupportedClasses;
     protected boolean suppressXmlDeclaration;
 
@@ -74,20 +74,20 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
 
     /**
      * Returns true if the specified class:
-     *
+     * <p/>
      * <ol>
-     *     <li></li>
-     *     <li>Is NOT the same, a subclass or subinterface of one of the unsupported classes.</li>
-     *     <li>Is the the same, a subclass or subinterface of one of the supported classes.</li>
+     * <li></li>
+     * <li>Is NOT the same, a subclass or subinterface of one of the unsupported classes.</li>
+     * <li>Is the the same, a subclass or subinterface of one of the supported classes.</li>
      * </ol>
-     *
+     * <p/>
      * Also returns true if there aren't any unsupported or supported classes.
      */
     @Override
     public boolean supports(Class clazz) {
-        if (ArrayUtils.isNotEmpty(unsupportedClasses)) {
+        if ( ArrayUtils.isNotEmpty(unsupportedClasses) ) {
             for (Class unsupportedClass : unsupportedClasses) {
-                if (unsupportedClass.isAssignableFrom(clazz)) {
+                if ( unsupportedClass.isAssignableFrom(clazz) ) {
                     return false;
                 }
             }
@@ -102,7 +102,7 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
      */
     @Override
     protected void marshalWriter(Object graph, Writer writer) throws XmlMappingException, IOException {
-        if (graph instanceof Document) {
+        if ( graph instanceof Document ) {
             OutputFormat outputFormat = OutputFormat.createCompactFormat();
             outputFormat.setSuppressDeclaration(suppressXmlDeclaration);
 
@@ -112,28 +112,24 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
             } finally {
                 try {
                     xmlWriter.flush();
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     logger.debug("Could not flush XMLWriter", ex);
                 }
             }
         } else {
-            if (!suppressXmlDeclaration) {
+            if ( !suppressXmlDeclaration ) {
                 writer.write(XML_DECLARATION);
             }
 
             HierarchicalStreamWriter streamWriter = new EscapingCompactWriter(writer);
             try {
                 getXStream().marshal(graph, streamWriter);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 throw convertXStreamException(ex, true);
-            }
-            finally {
+            } finally {
                 try {
                     streamWriter.flush();
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     logger.debug("Could not flush HierarchicalStreamWriter", ex);
                 }
             }

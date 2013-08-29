@@ -16,12 +16,11 @@
  */
 package org.craftercms.core.service.impl;
 
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
+import org.craftercms.core.service.Content;
+import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
 
 /**
  * Implementation of {@link org.craftercms.core.service.Content} that keeps all the content data and metadata in memory.
@@ -42,7 +41,7 @@ public class CachedContent extends CachingAwareObjectBase implements Content {
 
         lastModified = content.lastModified;
 
-        if (deepCopy) {
+        if ( deepCopy ) {
             data = new byte[content.data.length];
             System.arraycopy(content.data, 0, data, 0, data.length);
         } else {

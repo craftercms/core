@@ -16,14 +16,14 @@
  */
 package org.craftercms.core.processors.impl.resolvers;
 
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.craftercms.core.exception.XmlException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
 import org.craftercms.core.service.Item;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.Map;
 
 /**
  * {@link ItemProcessorResolver} that searches the item's descriptor for a processor element that defines the name of
@@ -63,15 +63,14 @@ public class MetaDataProcessorResolver implements ItemProcessorResolver {
      * descriptor. If the element is found, the element value is mapped to a processor and that processor is
      * returned.
      *
-     * @throws XmlException
-     *          if the element value doesn't refer to an existing processor
+     * @throws XmlException if the element value doesn't refer to an existing processor
      */
     @Override
     public ItemProcessor getProcessor(Item item) throws XmlException {
         String processorElementValue = item.queryDescriptorValue(processorElementXPathQuery);
-        if (StringUtils.isNotEmpty(processorElementValue)) {
+        if ( StringUtils.isNotEmpty(processorElementValue) ) {
             ItemProcessor processor = elementValueToProcessorMappings.get(processorElementValue);
-            if (processor != null) {
+            if ( processor != null ) {
                 return processor;
             } else {
                 throw new XmlException("Element value \"" + processorElementValue + "\" doesn't refer to a registered processor");

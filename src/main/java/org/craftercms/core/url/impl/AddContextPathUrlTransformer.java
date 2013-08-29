@@ -16,14 +16,13 @@
  */
 package org.craftercms.core.url.impl;
 
-import org.craftercms.core.exception.UrlTransformationException;
+import javax.servlet.ServletContext;
+
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 import org.springframework.web.context.ServletContextAware;
-
-import javax.servlet.ServletContext;
 
 /**
  * Class description goes HERE
@@ -41,12 +40,12 @@ public class AddContextPathUrlTransformer implements UrlTransformer, ServletCont
 
     @Override
     public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
-        if (servletContext == null) {
+        if ( servletContext == null ) {
             throw new IllegalStateException("No ServletContext was set. Are you sure you're running in a servlet environment?");
         }
 
         String contextPath = servletContext.getContextPath();
-        if (contextPath.equals("/") && url.startsWith("/")) {
+        if ( contextPath.equals("/") && url.startsWith("/") ) {
             return url;
         } else {
             return contextPath + url;

@@ -16,16 +16,13 @@
  */
 package org.craftercms.core.url.impl;
 
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
+import javax.servlet.http.HttpServletRequest;
+
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 import org.craftercms.core.util.HttpServletUtils;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Prepends to a context relative url the schema, domain and port (if different than 80 and 443 in case of https) to URL, normally to get a
@@ -45,11 +42,11 @@ public class AddSchemeAndDomainAndServerPortUrlTransformer implements UrlTransfo
         StringBuilder fullUrl = new StringBuilder();
         fullUrl.append(scheme).append("://").append(domain);
 
-        if (!(scheme.equals("http") && serverPort == 80) && !(scheme.equals("https") && serverPort == 443)) {
+        if ( !(scheme.equals("http") && serverPort == 80) && !(scheme.equals("https") && serverPort == 443) ) {
             fullUrl.append(":").append(serverPort);
         }
 
-        if (!url.startsWith("/")) {
+        if ( !url.startsWith("/") ) {
             fullUrl.append("/");
         }
 

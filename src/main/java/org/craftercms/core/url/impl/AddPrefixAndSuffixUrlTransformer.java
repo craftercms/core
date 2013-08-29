@@ -19,8 +19,6 @@ package org.craftercms.core.url.impl;
 import org.apache.commons.lang.StringUtils;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 
@@ -69,15 +67,15 @@ public class AddPrefixAndSuffixUrlTransformer implements UrlTransformer {
     public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
         StringBuilder urlBuf = new StringBuilder(url);
 
-        if (StringUtils.isNotEmpty(prefix)) {
-            if (prefixPathSeparator && !url.startsWith("/")) {
+        if ( StringUtils.isNotEmpty(prefix) ) {
+            if ( prefixPathSeparator && !url.startsWith("/") ) {
                 urlBuf.insert(0, '/');
             }
 
             urlBuf.insert(0, prefix);
         }
-        if (StringUtils.isNotEmpty(suffix)) {
-            if (suffixPathSeparator && !url.endsWith("/")) {
+        if ( StringUtils.isNotEmpty(suffix) ) {
+            if ( suffixPathSeparator && !url.endsWith("/") ) {
                 urlBuf.append('/');
             }
 

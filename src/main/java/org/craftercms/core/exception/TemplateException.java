@@ -21,7 +21,6 @@ package org.craftercms.core.exception;
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
- *
  * @see org.craftercms.core.util.template.TemplateCompiler
  */
 public class TemplateException extends CrafterException {

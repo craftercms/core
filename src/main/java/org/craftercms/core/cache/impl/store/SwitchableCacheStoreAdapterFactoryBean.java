@@ -17,7 +17,6 @@
 package org.craftercms.core.cache.impl.store;
 
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
-import org.craftercms.core.cache.impl.CacheStoreAdapter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -53,7 +52,7 @@ public class SwitchableCacheStoreAdapterFactoryBean implements FactoryBean<Cache
 
     @Override
     public CacheStoreAdapter getObject() throws Exception {
-        if (cacheOn) {
+        if ( cacheOn ) {
             return onCacheStoreAdapter;
         } else {
             return offCacheStoreAdapter;

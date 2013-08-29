@@ -21,9 +21,6 @@ import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -53,7 +50,7 @@ public class ReplaceSubstringUrlTransformer implements UrlTransformer {
     public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
         String result = url.replace(substringToReplace, replacement);
 
-        if (logger.isDebugEnabled()) {
+        if ( logger.isDebugEnabled() ) {
             logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 

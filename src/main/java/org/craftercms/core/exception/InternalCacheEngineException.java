@@ -24,7 +24,7 @@ package org.craftercms.core.exception;
  */
 public class InternalCacheEngineException extends CacheException {
 
-	private static final long serialVersionUID = -1829926648009823411L;
+    private static final long serialVersionUID = -1829926648009823411L;
 
     public InternalCacheEngineException() {
     }

@@ -16,9 +16,9 @@
  */
 package org.craftercms.core.xml.mergers.impl.resolvers;
 
-import org.dom4j.Document;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
+import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
@@ -39,10 +39,8 @@ public class SingleMergeStrategyResolver implements DescriptorMergeStrategyResol
     /**
      * Returns always the same {@link DescriptorMergeStrategy}, defined in the <code>strategy</code> property.
      *
-     * @param descriptorUrl
-     *          the URL that identifies the descriptor
-     * @param descriptorDom
-     *          the XML DOM of the descriptor (optional)
+     * @param descriptorUrl the URL that identifies the descriptor
+     * @param descriptorDom the XML DOM of the descriptor (optional)
      * @return the value of the <code>strategy</code> property
      */
     @Override

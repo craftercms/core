@@ -16,16 +16,13 @@
  */
 package org.craftercms.core.cache.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.craftercms.core.cache.Cache;
-import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.CacheLoader;
-import org.craftercms.core.exception.InvalidScopeException;
-import org.craftercms.core.util.cache.CachingAwareObject;
-import org.craftercms.core.util.generators.TimestampGenerator;
-import org.craftercms.core.util.generators.impl.IncrementalTimestampGenerator;
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
@@ -35,10 +32,6 @@ import org.craftercms.core.util.cache.CachingAwareObject;
 import org.craftercms.core.util.generators.TimestampGenerator;
 import org.craftercms.core.util.generators.impl.IncrementalTimestampGenerator;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * {@link org.craftercms.core.cache.Cache} that implements common functionality, such as logging, expiration/refresh check every tick and
@@ -50,22 +43,18 @@ import java.util.List;
 public class CacheImpl implements Cache {
 
     private static final Log logger = LogFactory.getLog(CacheImpl.class);
-
     /**
      * Holds the current number of ticks.
      */
     protected volatile long ticks;
-
     /**
      * Adapter for the cache data structure.
      */
     protected CacheStoreAdapter cacheStoreAdapter;
-
     /**
      * Used to refresh a list of items.
      */
     protected CacheRefresher cacheRefresher;
-
     /**
      * The timestamp generator. Timestamps are used to check when dependencies have changed.
      */
@@ -82,8 +71,7 @@ public class CacheImpl implements Cache {
     /**
      * Sets the underlying {@link CacheStoreAdapter}
      *
-     * @param cacheStoreAdapter
-     *          the adapter for the cache data structure
+     * @param cacheStoreAdapter the adapter for the cache data structure
      */
     @Required
     public void setCacheStoreAdapter(CacheStoreAdapter cacheStoreAdapter) {
@@ -203,9 +191,9 @@ public class CacheImpl implements Cache {
     public CacheItem get(String scope, Object key) throws InvalidScopeException, InternalCacheEngineException {
         try {
             CacheItem item = cacheStoreAdapter.get(scope, key);
-            if (item != null && logger.isDebugEnabled()) {
+            if ( item != null && logger.isDebugEnabled() ) {
                 logger.debug("Cache hit: found " + item);
-            } else if (logger.isDebugEnabled()) {
+            } else if ( logger.isDebugEnabled() ) {
                 logger.debug("Cache miss: item with key " + key + " not found in scope " + scope);
             }
 
@@ -225,13 +213,13 @@ public class CacheImpl implements Cache {
             InternalCacheEngineException {
         try {
             CacheItem item = cacheStoreAdapter.get(scope, key);
-            if (item != null) {
-                if (logger.isDebugEnabled()) {
+            if ( item != null ) {
+                if ( logger.isDebugEnabled() ) {
                     logger.debug("Cache hit: found " + item);
                 }
 
-                if (haveDependenciesChanged(item)) {
-                    if (logger.isDebugEnabled()) {
+                if ( haveDependenciesChanged(item) ) {
+                    if ( logger.isDebugEnabled() ) {
                         logger.debug("Dependencies have changed for " + item + ". Removing it from the cache.");
                     }
 
@@ -242,7 +230,7 @@ public class CacheImpl implements Cache {
                     return item;
                 }
             } else {
-                if (logger.isDebugEnabled()) {
+                if ( logger.isDebugEnabled() ) {
                     logger.debug("Cache miss: item with key " + key + " not found in scope " + scope);
                 }
 
@@ -290,18 +278,18 @@ public class CacheImpl implements Cache {
     public void put(String scope, Object key, Object value, List<Object> dependencyKeys, long expireAfter,
                     long refreshFrequency, CacheLoader loader, Object... loaderParams) throws InvalidScopeException,
             InternalCacheEngineException {
-        if (expireAfter < 0) {
+        if ( expireAfter < 0 ) {
             throw new IllegalArgumentException("The expireAfter argument should be 0 or positive");
         }
 
-        if (refreshFrequency < 0) {
+        if ( refreshFrequency < 0 ) {
             throw new IllegalArgumentException("The refreshFrequency argument should be 0 or positive");
         }
 
-        if (value instanceof CachingAwareObject ) {
+        if ( value instanceof CachingAwareObject ) {
             CachingAwareObject cachingAwareObj = (CachingAwareObject) value;
 
-            if (CollectionUtils.isEmpty(dependencyKeys)) {
+            if ( CollectionUtils.isEmpty(dependencyKeys) ) {
                 dependencyKeys = cachingAwareObj.getDependencyKeys();
             }
 
@@ -316,7 +304,7 @@ public class CacheImpl implements Cache {
 
             cacheStoreAdapter.put(item);
 
-            if (logger.isDebugEnabled()) {
+            if ( logger.isDebugEnabled() ) {
                 logger.debug("Put into cache: " + item);
             }
         } catch (InvalidScopeException ex) {
@@ -332,7 +320,7 @@ public class CacheImpl implements Cache {
      */
     @Override
     public boolean remove(String scope, Object key) throws InvalidScopeException, InternalCacheEngineException {
-        if (logger.isDebugEnabled()) {
+        if ( logger.isDebugEnabled() ) {
             logger.debug("Removing item with key " + key + " from scope " + scope);
         }
 
@@ -375,7 +363,7 @@ public class CacheImpl implements Cache {
     /**
      * Called when a tick occurs. A tick is a logical unit of time. It basically symbolizes the time span between
      * calls to this method (i.e. 15 mins) by a job scheduler like Quartz.
-     *
+     * <p/>
      * Checks if some of the {@link CacheItem}s in the cache have expired or need to be refreshed. If the item
      * has expired, it is removed from the cache. If it needs to be refreshed, it is added to a list of items that
      * need to be refreshed that is later passed to the {@link CacheRefresher}.
@@ -383,7 +371,7 @@ public class CacheImpl implements Cache {
     public void tick() {
         ticks++;
 
-        if (logger.isDebugEnabled()) {
+        if ( logger.isDebugEnabled() ) {
             logger.debug("Tick!");
         }
 
@@ -391,16 +379,16 @@ public class CacheImpl implements Cache {
 
         try {
             Collection<String> scopes = cacheStoreAdapter.getScopes();
-            if (CollectionUtils.isNotEmpty(scopes)) {
+            if ( CollectionUtils.isNotEmpty(scopes) ) {
                 for (String scope : scopes) {
                     Collection<Object> keys = cacheStoreAdapter.getKeys(scope);
-                    if (CollectionUtils.isNotEmpty(keys)) {
+                    if ( CollectionUtils.isNotEmpty(keys) ) {
                         for (Object key : keys) {
                             CacheItem item = cacheStoreAdapter.get(scope, key);
-                            if (item != null) {
+                            if ( item != null ) {
                                 doChecks(item, itemsToRefresh);
                             } else {
-                                if (logger.isDebugEnabled()) {
+                                if ( logger.isDebugEnabled() ) {
                                     logger.debug(item + " was removed before it could be checked for expiration/refresh");
                                 }
                             }
@@ -409,7 +397,7 @@ public class CacheImpl implements Cache {
                 }
             }
 
-            if (cacheRefresher != null && CollectionUtils.isNotEmpty(itemsToRefresh)) {
+            if ( cacheRefresher != null && CollectionUtils.isNotEmpty(itemsToRefresh) ) {
                 cacheRefresher.refreshItems(itemsToRefresh, this);
             }
         } catch (Exception ex) {
@@ -421,8 +409,7 @@ public class CacheImpl implements Cache {
      * Checks if the given {@link CacheItem} has expired or needs to be refreshed.
      *
      * @param item
-     * @param itemsToRefresh
-     *          the list of items where to put the specified item if it needs to be refreshed
+     * @param itemsToRefresh the list of items where to put the specified item if it needs to be refreshed
      */
     protected void doChecks(CacheItem item, List<CacheItem> itemsToRefresh) {
         boolean expired;
@@ -430,14 +417,14 @@ public class CacheImpl implements Cache {
 
         try {
             expired = checkForExpiration(item);
-            if (expired) {
-                if (logger.isDebugEnabled()) {
+            if ( expired ) {
+                if ( logger.isDebugEnabled() ) {
                     logger.debug(item + " was removed because it expired");
                 }
             } else {
                 willBeRefreshed = checkForRefresh(item, itemsToRefresh);
-                if (willBeRefreshed) {
-                    if (logger.isDebugEnabled()) {
+                if ( willBeRefreshed ) {
+                    if ( logger.isDebugEnabled() ) {
                         logger.debug(item + " will be refreshed");
                     }
                 }
@@ -455,7 +442,7 @@ public class CacheImpl implements Cache {
      * @throws Exception
      */
     protected boolean checkForExpiration(CacheItem item) throws Exception {
-        if (item.isExpired(ticks)) {
+        if ( item.isExpired(ticks) ) {
             cacheStoreAdapter.remove(item.getScope(), item.getKey());
 
             return true;
@@ -469,12 +456,11 @@ public class CacheImpl implements Cache {
      * refresh.
      *
      * @param item
-     * @param itemsToRefresh
-     *          the list of items where to put the specified item if it needs to be refreshed
+     * @param itemsToRefresh the list of items where to put the specified item if it needs to be refreshed
      * @return true if the item will be refreshed, false otherwise
      */
     protected boolean checkForRefresh(CacheItem item, List<CacheItem> itemsToRefresh) {
-        if (item.getLoader() != null && item.needsRefresh(ticks)) {
+        if ( item.getLoader() != null && item.needsRefresh(ticks) ) {
             itemsToRefresh.add(item);
 
             return true;
@@ -494,12 +480,12 @@ public class CacheImpl implements Cache {
      */
     protected boolean haveDependenciesChanged(CacheItem item) throws Exception {
         List<Object> dependencyKeys = item.getDependencyKeys();
-        if (CollectionUtils.isNotEmpty(dependencyKeys)) {
+        if ( CollectionUtils.isNotEmpty(dependencyKeys) ) {
             for (Object dependencyKey : dependencyKeys) {
                 CacheItem dependency = cacheStoreAdapter.get(item.getScope(), dependencyKey);
-                if (dependency == null ||
-                    item.getTimestamp() < dependency.getTimestamp() ||
-                    haveDependenciesChanged(dependency)) {
+                if ( dependency == null ||
+                        item.getTimestamp() < dependency.getTimestamp() ||
+                        haveDependenciesChanged(dependency) ) {
                     return true;
                 }
             }

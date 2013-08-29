@@ -16,19 +16,19 @@
  */
 package org.craftercms.core.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.*;
 
 /**
  * @author Alfonso Vásquez
@@ -40,7 +40,7 @@ public class HttpServletUtils {
 
     public static HttpServletRequest getCurrentRequest() throws IllegalStateException {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        if (requestAttributes instanceof ServletRequestAttributes) {
+        if ( requestAttributes instanceof ServletRequestAttributes ) {
             return ((ServletRequestAttributes) requestAttributes).getRequest();
         } else {
             throw new IllegalStateException("Current RequestAttributes isn't of type ServletRequestAttributes. Are you sure you're" +
@@ -62,9 +62,9 @@ public class HttpServletUtils {
 
     public static Cookie getCookie(String name, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        if (ArrayUtils.isNotEmpty(cookies)) {
+        if ( ArrayUtils.isNotEmpty(cookies) ) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(name)) {
+                if ( cookie.getName().equals(name) ) {
                     return cookie;
                 }
             }
@@ -76,15 +76,15 @@ public class HttpServletUtils {
     public static Map<String, Object> getParamsFromQueryString(String queryString) {
         Map<String, Object> queryParams = new HashMap<String, Object>();
 
-        if (StringUtils.isNotEmpty(queryString)) {
+        if ( StringUtils.isNotEmpty(queryString) ) {
             String[] params = queryString.split("&");
             for (String param : params) {
                 String[] splitParam = param.split("=");
                 String paramName = splitParam[0];
                 String paramValue = splitParam[1];
 
-                if (queryParams.containsKey(paramName)) {
-                    if (queryParams.get(paramName) instanceof List) {
+                if ( queryParams.containsKey(paramName) ) {
+                    if ( queryParams.get(paramName) instanceof List ) {
                         ((List<String>) queryParams.get(paramName)).add(paramValue);
                     } else {
                         List<String> paramValues = Arrays.asList((String) queryParams.get(paramName), paramValue);
@@ -102,13 +102,13 @@ public class HttpServletUtils {
     public static String getQueryStringFromParams(Map<String, Object> queryParams, String charset) throws UnsupportedEncodingException {
         StringBuilder queryString = new StringBuilder();
 
-        if (MapUtils.isNotEmpty(queryParams)) {
+        if ( MapUtils.isNotEmpty(queryParams) ) {
             for (Map.Entry<String, Object> entry : queryParams.entrySet()) {
                 String paramName = URLEncoder.encode(entry.getKey(), charset);
 
-                if (entry.getValue() instanceof List) {
+                if ( entry.getValue() instanceof List ) {
                     for (String paramValue : (List<String>) entry.getValue()) {
-                        if (queryString.length() > 0) {
+                        if ( queryString.length() > 0 ) {
                             queryString.append('&');
                         }
 
@@ -117,7 +117,7 @@ public class HttpServletUtils {
                         queryString.append(paramName).append('=').append(paramValue);
                     }
                 } else {
-                    if (queryString.length() > 0) {
+                    if ( queryString.length() > 0 ) {
                         queryString.append('&');
                     }
 
@@ -135,11 +135,11 @@ public class HttpServletUtils {
 
     public static Map<String, Object> createRequestParamsMap(HttpServletRequest request) {
         Map<String, Object> paramsMap = new HashMap<String, Object>();
-        for (Enumeration paramNameEnum = request.getParameterNames(); paramNameEnum.hasMoreElements();) {
+        for (Enumeration paramNameEnum = request.getParameterNames(); paramNameEnum.hasMoreElements(); ) {
             String paramName = (String) paramNameEnum.nextElement();
             String[] paramValues = request.getParameterValues(paramName);
 
-            if (paramValues.length == 1) {
+            if ( paramValues.length == 1 ) {
                 paramsMap.put(paramName, paramValues[0]);
             } else {
                 paramsMap.put(paramName, paramValues);
@@ -151,7 +151,7 @@ public class HttpServletUtils {
 
     public static Map<String, Object> createRequestAttributesMap(HttpServletRequest request) {
         Map<String, Object> attributesMap = new HashMap<String, Object>();
-        for (Enumeration attributeNameEnum = request.getAttributeNames(); attributeNameEnum.hasMoreElements();) {
+        for (Enumeration attributeNameEnum = request.getAttributeNames(); attributeNameEnum.hasMoreElements(); ) {
             String attributeName = (String) attributeNameEnum.nextElement();
 
             attributesMap.put(attributeName, request.getAttribute(attributeName));
@@ -162,13 +162,13 @@ public class HttpServletUtils {
 
     public static Map<String, Object> createHeadersMap(HttpServletRequest request) {
         Map<String, Object> headersMap = new HashMap<String, Object>();
-        for (Enumeration headerNameEnum = request.getHeaderNames(); headerNameEnum.hasMoreElements();) {
+        for (Enumeration headerNameEnum = request.getHeaderNames(); headerNameEnum.hasMoreElements(); ) {
             String headerName = (String) headerNameEnum.nextElement();
             List<String> headerValues = new ArrayList<String>();
 
             CollectionUtils.addAll(headerValues, request.getHeaders(headerName));
 
-            if (headerValues.size() == 1) {
+            if ( headerValues.size() == 1 ) {
                 headersMap.put(headerName, headerValues.get(0));
             } else {
                 headersMap.put(headerName, headerValues.toArray(new String[headerValues.size()]));
@@ -182,7 +182,7 @@ public class HttpServletUtils {
         Map<String, String> cookiesMap = new HashMap<String, String>();
         Cookie[] cookies = request.getCookies();
 
-        if (ArrayUtils.isNotEmpty(cookies)) {
+        if ( ArrayUtils.isNotEmpty(cookies) ) {
             for (Cookie cookie : request.getCookies()) {
                 cookiesMap.put(cookie.getName(), cookie.getValue());
             }
@@ -195,8 +195,8 @@ public class HttpServletUtils {
         Map<String, Object> sessionMap = new HashMap<String, Object>();
         HttpSession session = request.getSession(false);
 
-        if (session != null) {
-            for (Enumeration attributeNameEnum = session.getAttributeNames(); attributeNameEnum.hasMoreElements();) {
+        if ( session != null ) {
+            for (Enumeration attributeNameEnum = session.getAttributeNames(); attributeNameEnum.hasMoreElements(); ) {
                 String attributeName = (String) attributeNameEnum.nextElement();
                 sessionMap.put(attributeName, session.getAttribute(attributeName));
             }

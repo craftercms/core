@@ -16,13 +16,11 @@
  */
 package org.craftercms.core.xml.mergers;
 
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
+import java.util.List;
+
 import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-
-import java.util.List;
 
 /**
  * Strategy for merging descriptor files.
@@ -35,12 +33,9 @@ public interface DescriptorMergeStrategy {
     /**
      * Returns the list of descriptors in the order they should be merged, given the URI of the primary descriptor.
      *
-     * @param context
-     *          the current context
-     * @param cachingOptions
-     *          caching options in case you need access to items
-     * @param primaryDescriptorUrl
-     *          the URL that identifies the primary descriptor
+     * @param context              the current context
+     * @param cachingOptions       caching options in case you need access to items
+     * @param primaryDescriptorUrl the URL that identifies the primary descriptor
      * @return a list of {@link MergeableDescriptor}s representing the descriptors to merge
      * @throws XmlMergeException
      */
@@ -50,14 +45,10 @@ public interface DescriptorMergeStrategy {
     /**
      * Returns the list of descriptors in the order they should be merged, given the URI of the primary descriptor.
      *
-     * @param context
-     *          the current context
-     * @param cachingOptions
-     *          caching options in case you need access to items
-     * @param primaryDescriptorUrl
-     *          the URL that identifies the primary descriptor
-     * @param primaryDescriptorOptional
-     *          if the primary descriptor should be marked as optional
+     * @param context                   the current context
+     * @param cachingOptions            caching options in case you need access to items
+     * @param primaryDescriptorUrl      the URL that identifies the primary descriptor
+     * @param primaryDescriptorOptional if the primary descriptor should be marked as optional
      * @return a list of {@link MergeableDescriptor}s representing the descriptors to merge
      * @throws XmlMergeException
      */

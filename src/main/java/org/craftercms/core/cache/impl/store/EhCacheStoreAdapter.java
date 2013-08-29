@@ -16,6 +16,11 @@
  */
 package org.craftercms.core.cache.impl.store;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import javax.annotation.PreDestroy;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -23,14 +28,8 @@ import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ConfigurationFactory;
 import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
 import org.craftercms.core.exception.InvalidScopeException;
-
-import javax.annotation.PreDestroy;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Implementation of a {@link CacheStoreAdapter} using an underlying EhCache <code>CacheManager</code>.
@@ -97,10 +96,8 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
     /**
      * Adds a new scope. The scope is an instance of EhCache's {@link Cache}.
      *
-     * @param scope
-     *          the name of the scope
-     * @param maxItemsInMemory
-     *          the maximum number of items in memory, before they are evicted
+     * @param scope            the name of the scope
+     * @param maxItemsInMemory the maximum number of items in memory, before they are evicted
      * @throws Exception
      */
     @Override
@@ -124,7 +121,7 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
     @Override
     public int getSize(String scope) throws Exception {
         return getScopeCache(scope).getSize();
-    }    
+    }
 
     /**
      * {@inheritDoc}
@@ -148,7 +145,7 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
     @Override
     public CacheItem get(String scope, Object key) throws Exception {
         Element element = getScopeCache(scope).get(key);
-        if (element != null) {
+        if ( element != null ) {
             return (CacheItem) element.getObjectValue();
         } else {
             return null;
@@ -190,12 +187,11 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
     /**
      * Returns the {@link Cache} object associated with the given scope.
      *
-     * @throws InvalidScopeException
-     *          if the specified scope isn't a registered one
+     * @throws InvalidScopeException if the specified scope isn't a registered one
      */
     private Cache getScopeCache(String scope) throws InvalidScopeException {
         Cache scopeCache = scopeManager.getCache(scope);
-        if (scopeCache == null) {
+        if ( scopeCache == null ) {
             throw new InvalidScopeException("The scope " + scope + " doesn't exist");
         } else {
             return scopeCache;

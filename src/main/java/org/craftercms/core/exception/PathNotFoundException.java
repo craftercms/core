@@ -40,5 +40,5 @@ public class PathNotFoundException extends CrafterException {
     public PathNotFoundException(Throwable cause) {
         super(cause);
     }
-    
+
 }

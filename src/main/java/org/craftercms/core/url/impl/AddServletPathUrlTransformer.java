@@ -19,10 +19,6 @@ package org.craftercms.core.url.impl;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.util.HttpServletUtils;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 import org.craftercms.core.util.HttpServletUtils;
 
@@ -36,7 +32,7 @@ public class AddServletPathUrlTransformer implements UrlTransformer {
     @Override
     public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
         String servletPath = HttpServletUtils.getCurrentRequest().getServletPath();
-        if (servletPath.equals("/") && url.startsWith("/")) {
+        if ( servletPath.equals("/") && url.startsWith("/") ) {
             return url;
         } else {
             return servletPath + url;

@@ -16,13 +16,11 @@
  */
 package org.craftercms.core.cache.impl;
 
-import org.craftercms.core.cache.Cache;
-import org.craftercms.core.cache.CacheItem;
+import java.util.List;
+
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
-
-import java.util.List;
 
 /**
  * Refreshes a list of {@link org.craftercms.core.cache.CacheItem}s in a {@link org.craftercms.core.cache.Cache}. New values for the items will usually be obtained through
@@ -37,8 +35,7 @@ public interface CacheRefresher {
      * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s.
      *
      * @param itemsToRefresh
-     * @param cache
-     *          the cache where the new item values should be put
+     * @param cache          the cache where the new item values should be put
      */
     void refreshItems(List<CacheItem> itemsToRefresh, Cache cache);
 

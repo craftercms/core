@@ -46,5 +46,5 @@ public class IdentifiableStringTemplateSource {
     public void setSource(String source) {
         this.source = source;
     }
-    
+
 }

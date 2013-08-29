@@ -16,24 +16,22 @@
  */
 package org.craftercms.core.util;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.dom4j.*;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.dom4j.*;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 
 
 /**
@@ -49,7 +47,7 @@ public class XmlUtils {
      */
     public static String selectSingleNodeValue(Node node, String xPathQuery) {
         Node resultNode = node.selectSingleNode(xPathQuery);
-        if (resultNode != null) {
+        if ( resultNode != null ) {
             return resultNode.getText();
         } else {
             return null;
@@ -64,7 +62,7 @@ public class XmlUtils {
         xPath.setNamespaceURIs(namespaceUris);
 
         Node resultNode = xPath.selectSingleNode(node);
-        if (resultNode != null) {
+        if ( resultNode != null ) {
             return resultNode.getText();
         } else {
             return null;
@@ -77,7 +75,7 @@ public class XmlUtils {
      */
     public static List<String> selectNodeValues(Node node, String xPathQuery) {
         List<Node> resultNodes = node.selectNodes(xPathQuery);
-        if (CollectionUtils.isNotEmpty(resultNodes)) {
+        if ( CollectionUtils.isNotEmpty(resultNodes) ) {
             List<String> resultNodeValues = new ArrayList<String>(resultNodes.size());
             for (Node resultNode : resultNodes) {
                 resultNodeValues.add(resultNode.getText());
@@ -98,7 +96,7 @@ public class XmlUtils {
         xPath.setNamespaceURIs(namespaceUris);
 
         List<Node> resultNodes = xPath.selectNodes(node);
-        if (CollectionUtils.isNotEmpty(resultNodes)) {
+        if ( CollectionUtils.isNotEmpty(resultNodes) ) {
             List<String> resultNodeValues = new ArrayList<String>(resultNodes.size());
             for (Node resultNode : resultNodes) {
                 resultNodeValues.add(resultNode.getText());
@@ -117,7 +115,7 @@ public class XmlUtils {
      * @return the document as an XML string
      */
     public static String documentToPrettyString(Document document) {
-		StringWriter stringWriter = new StringWriter();
+        StringWriter stringWriter = new StringWriter();
         OutputFormat prettyPrintFormat = OutputFormat.createPrettyPrint();
         XMLWriter xmlWriter = new XMLWriter(stringWriter, prettyPrintFormat);
 
@@ -132,9 +130,9 @@ public class XmlUtils {
 
     /**
      * Returns the given document as a JSON object.
-     *
+     * <p/>
      * The following are the conversion patterns used between XML and JSON:
-     *
+     * <p/>
      * XML                              JSON                                            Access
      * ---                              ----                                            ------
      * <e/>                             "e": null                                       o.e
@@ -145,7 +143,7 @@ public class XmlUtils {
      * <e><a>text</a><a>text</a></e>	"e": { "a": ["text", "text"] }                  o.e.a[0] o.e.a[1]
      * <e>text<a>text</a></e>           "e": { "text": "text", "a": "text" }            o.e["text"] o.e.a
      * <e>text<a>text</a>text</e>       "e": { "text": ["text", "text"], "a": "text" }  o.e["text"][0] o.e["text"][1] o.e.a
-     *
+     * <p/>
      * <b>IMPORTANT:</b> XML Namespaces are ALWAYS ignored.
      *
      * @param document
@@ -162,7 +160,7 @@ public class XmlUtils {
     private static void elementToJson(Element element, JsonObject parentJson) {
         JsonObject elementJson = null;
 
-        if (element.attributeCount() > 0) {
+        if ( element.attributeCount() > 0 ) {
             elementJson = new JsonObject();
 
             List<Attribute> attributes = element.attributes();
@@ -171,18 +169,18 @@ public class XmlUtils {
             }
         }
 
-        if (!element.hasContent()) {
-            if (elementJson == null) {
+        if ( !element.hasContent() ) {
+            if ( elementJson == null ) {
                 addElementTextToJson(parentJson, elementJson, element.getName(), null);
             }
-        } else if (element.isTextOnly()) {
+        } else if ( element.isTextOnly() ) {
             addElementTextToJson(parentJson, elementJson, element.getName(), element.getText());
         } else {
-            if (elementJson == null) {
+            if ( elementJson == null ) {
                 elementJson = new JsonObject();
             }
 
-            if (element.hasMixedContent()) {
+            if ( element.hasMixedContent() ) {
                 List<String> textContent = getTextContentFromMixedContent(element);
                 for (String text : textContent) {
                     addElementTextToJson(parentJson, elementJson, element.getName(), text);
@@ -195,20 +193,20 @@ public class XmlUtils {
             }
         }
 
-        if (elementJson != null) {
+        if ( elementJson != null ) {
             JsonUtils.setOrAccumulate(parentJson, element.getName(), elementJson);
         }
     }
 
     private static void addElementTextToJson(JsonObject parentJson, JsonObject elementJson, String elementName, String text) {
         JsonElement value;
-        if (text != null) {
+        if ( text != null ) {
             value = new JsonPrimitive(text);
         } else {
             value = JsonNull.INSTANCE;
         }
 
-        if (elementJson != null) {
+        if ( elementJson != null ) {
             JsonUtils.setOrAccumulate(elementJson, XML_ELEMENT_TEXT_JSON_KEY, value);
         } else {
             JsonUtils.setOrAccumulate(parentJson, elementName, value);
@@ -220,9 +218,9 @@ public class XmlUtils {
         List<String> textContent = new ArrayList<String>();
 
         for (Node node : content) {
-            if (node.getNodeType() == Node.TEXT_NODE) {
+            if ( node.getNodeType() == Node.TEXT_NODE ) {
                 String text = node.getText();
-                if (StringUtils.isNotBlank(text)) {
+                if ( StringUtils.isNotBlank(text) ) {
                     textContent.add(text);
                 }
             }

@@ -16,9 +16,9 @@
  */
 package org.craftercms.core.util.template;
 
-import org.craftercms.core.exception.TemplateException;
-
 import java.io.Writer;
+
+import org.craftercms.core.exception.TemplateException;
 
 /**
  * Class description goes HERE

@@ -16,13 +16,11 @@
  */
 package org.craftercms.core.xml.mergers.impl.strategies;
 
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
+import java.util.List;
+
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
-
-import java.util.List;
 
 /**
  * Implementation of {@link AbstractInheritFromHierarchyMergeStrategy} that delegates to several other

@@ -16,11 +16,9 @@
  */
 package org.craftercms.core.store.impl;
 
+import java.util.List;
+
 import org.craftercms.core.exception.*;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.util.cache.CacheTemplate;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
@@ -30,8 +28,6 @@ import org.craftercms.core.util.cache.CacheCallback;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.List;
 
 /**
  * Class description goes HERE
@@ -96,7 +92,7 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
             @Override
             public List<Item> doCacheable() {
                 List<Item> items = doGetItems(context, cachingOptions, path, withDescriptor);
-                if (items instanceof CachingAwareList) {
+                if ( items instanceof CachingAwareList ) {
                     return items;
                 } else {
                     return new CachingAwareList<Item>(items);

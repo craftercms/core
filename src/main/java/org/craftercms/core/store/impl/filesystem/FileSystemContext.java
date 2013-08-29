@@ -17,7 +17,6 @@
 package org.craftercms.core.store.impl.filesystem;
 
 import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Context;
 
 /**
  * Extension of context that adds properties used by the {@link FileSystemContentStoreAdapter}.

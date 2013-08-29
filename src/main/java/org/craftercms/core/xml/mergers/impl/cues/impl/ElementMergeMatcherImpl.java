@@ -19,7 +19,6 @@ package org.craftercms.core.xml.mergers.impl.cues.impl;
 import org.craftercms.core.xml.mergers.impl.cues.ElementMergeMatcher;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.craftercms.core.xml.mergers.impl.cues.ElementMergeMatcher;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
@@ -41,9 +40,9 @@ public class ElementMergeMatcherImpl implements ElementMergeMatcher {
         String parentId = parent.attributeValue(idAttributeName);
         String childId = child.attributeValue(idAttributeName);
 
-        if (parentId == null && childId == null) {
+        if ( parentId == null && childId == null ) {
             return parent.getQualifiedName().equals(child.getQualifiedName());
-        } else if (parentId != null) {
+        } else if ( parentId != null ) {
             return parentId.equals(childId);
         } else {
             return false;

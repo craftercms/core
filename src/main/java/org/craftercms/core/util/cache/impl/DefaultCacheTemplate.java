@@ -19,12 +19,6 @@ package org.craftercms.core.util.cache.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.service.CacheService;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.util.CacheUtils;
-import org.craftercms.core.util.cache.CacheTemplate;
-import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
 import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.CachingOptions;
@@ -65,9 +59,9 @@ public class DefaultCacheTemplate implements CacheTemplate {
         Object key = getKey(keyElements);
 
         T obj = doGet(context, callback, key);
-        if (obj == null) {
+        if ( obj == null ) {
             obj = callback.doCacheable();
-            if (obj != null) {
+            if ( obj != null ) {
                 obj = doPut(context, cachingOptions, callback, key, obj);
             }
         }
@@ -86,7 +80,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
         return obj;
     }
 
-    protected <T> T doPut(Context context, CachingOptions cachingOptions, CacheCallback<T> callback, Object key, T obj)  {
+    protected <T> T doPut(Context context, CachingOptions cachingOptions, CacheCallback<T> callback, Object key, T obj) {
         try {
             CacheLoader loader = getCacheLoader(callback, cachingOptions.getRefreshFrequency());
             cacheService.put(context, key, obj, cachingOptions, loader);
@@ -98,7 +92,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
     }
 
     protected <T> CacheLoader getCacheLoader(final CacheCallback<T> callback, long refreshFrequency) {
-        if (refreshFrequency != CacheItem.NEVER_REFRESH) {
+        if ( refreshFrequency != CacheItem.NEVER_REFRESH ) {
             return new CacheLoader() {
 
                 @Override
@@ -119,5 +113,5 @@ public class DefaultCacheTemplate implements CacheTemplate {
     protected void logPutFailure(Context context, CacheCallback<?> callback, Object key, Object obj, Exception e) {
         logger.error("Unable to cache object: key='" + key + "', context=" + context + ", obj=" + obj + ", callback=" + callback, e);
     }
-    
+
 }

@@ -16,14 +16,12 @@
  */
 package org.craftercms.core.store.impl.filesystem;
 
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
-import org.craftercms.core.exception.AuthenticationException;
-import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.PathNotFoundException;
-import org.craftercms.core.exception.StoreException;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.store.impl.AbstractFileBasedContentStoreAdapter;
-import org.craftercms.core.store.impl.File;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.PathNotFoundException;
@@ -34,11 +32,6 @@ import org.craftercms.core.store.impl.File;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implementation of {@link org.craftercms.core.store.ContentStoreAdapter} that enables access to a store in the filesystem.
@@ -80,9 +73,9 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     protected File getFile(Context context, String path) throws InvalidContextException, PathNotFoundException, StoreException {
         FileSystemFile rootFolder = ((FileSystemContext) context).getRootFolder();
 
-        if (StringUtils.isNotEmpty(path)) {
+        if ( StringUtils.isNotEmpty(path) ) {
             FileSystemFile file = new FileSystemFile(rootFolder, path);
-            if (file.getFile().exists()) {
+            if ( file.getFile().exists() ) {
                 return file;
             } else {
                 throw new PathNotFoundException("File " + file + " can't be found");
@@ -95,19 +88,19 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     @Override
     protected List<File> getChildren(Context context, File dir) throws InvalidContextException, PathNotFoundException, StoreException {
         java.io.File[] listing;
-        if (context.ignoreHiddenFiles()) {
+        if ( context.ignoreHiddenFiles() ) {
             listing = ((FileSystemFile) dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);
         } else {
             listing = ((FileSystemFile) dir).getFile().listFiles();
         }
 
-        if (listing != null) {
+        if ( listing != null ) {
             List<File> children = new ArrayList<File>(listing.length);
             for (java.io.File file : listing) {
                 children.add(new FileSystemFile(file));
             }
 
-            return  children;
+            return children;
         } else {
             return null;
         }

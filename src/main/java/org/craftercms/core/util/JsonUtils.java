@@ -20,10 +20,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.craftercms.core.util.json.gson.ThrowableJsonSerializer;
-import org.dom4j.Document;
 import org.craftercms.core.util.json.gson.Dom4JDocumentJsonSerializer;
 import org.craftercms.core.util.json.gson.ThrowableJsonSerializer;
+import org.dom4j.Document;
 
 /**
  * Class description goes HERE
@@ -33,11 +32,11 @@ import org.craftercms.core.util.json.gson.ThrowableJsonSerializer;
 public class JsonUtils {
 
     public static void setOrAccumulate(JsonObject jsonObject, String property, JsonElement value) {
-        if (jsonObject.has(property)) {
+        if ( jsonObject.has(property) ) {
             JsonElement propertyValue = jsonObject.get(property);
             JsonArray propertyValueArray;
 
-            if (propertyValue instanceof JsonArray) {
+            if ( propertyValue instanceof JsonArray ) {
                 propertyValueArray = (JsonArray) propertyValue;
             } else {
                 propertyValueArray = new JsonArray();

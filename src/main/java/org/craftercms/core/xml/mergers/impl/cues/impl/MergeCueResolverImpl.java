@@ -16,18 +16,15 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
+import java.util.*;
+
 import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.*;
 
 /**
  * Class description goes HERE
@@ -67,14 +64,14 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         MergeCue childMergeCue;
 
         Attribute parentMergeCueAttribute = getMergeCueAttribute(parent, parentMergeCues);
-        if (parentMergeCueAttribute != null) {
+        if ( parentMergeCueAttribute != null ) {
             parentMergeCue = parentMergeCues.get(parentMergeCueAttribute.getQName());
         } else {
             parentMergeCue = defaultParentMergeCue;
         }
 
         Attribute childMergeCueAttribute = getMergeCueAttribute(child, childMergeCues);
-        if (childMergeCueAttribute != null) {
+        if ( childMergeCueAttribute != null ) {
             childMergeCue = childMergeCues.get(childMergeCueAttribute.getQName());
         } else {
             childMergeCue = defaultChildMergeCue;
@@ -83,10 +80,10 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         MergeCue chosenMergeCue;
         Map<String, String> mergeCueParams;
 
-        if (parentMergeCue.getPriority() > childMergeCue.getPriority()) {
+        if ( parentMergeCue.getPriority() > childMergeCue.getPriority() ) {
             chosenMergeCue = parentMergeCue;
 
-            if (parentMergeCueAttribute != null) {
+            if ( parentMergeCueAttribute != null ) {
                 mergeCueParams = getMergeCueParams(parent, parentMergeCueAttribute);
             } else {
                 mergeCueParams = Collections.emptyMap();
@@ -94,7 +91,7 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         } else {
             chosenMergeCue = childMergeCue;
 
-            if (childMergeCueAttribute != null) {
+            if ( childMergeCueAttribute != null ) {
                 mergeCueParams = getMergeCueParams(child, childMergeCueAttribute);
             } else {
                 mergeCueParams = Collections.emptyMap();
@@ -106,9 +103,9 @@ public class MergeCueResolverImpl implements MergeCueResolver {
 
     protected Attribute getMergeCueAttribute(Element element, Map<QName, MergeCue> mergeCues) {
         List<Attribute> attributes = element.attributes();
-        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext();) {
+        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
             Attribute attribute = i.next();
-            if (mergeCues.containsKey(attribute.getQName())) {
+            if ( mergeCues.containsKey(attribute.getQName()) ) {
                 i.remove();
 
                 return attribute;
@@ -123,10 +120,10 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         String paramsPrefix = mergeCueAttribute.getQualifiedName() + "-";
         List<Attribute> attributes = element.attributes();
 
-        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext();) {
+        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
             Attribute attribute = i.next();
             String attributeQualifiedName = attribute.getQualifiedName();
-            if (attributeQualifiedName.startsWith(paramsPrefix)) {
+            if ( attributeQualifiedName.startsWith(paramsPrefix) ) {
                 i.remove();
 
                 String paramName = attributeQualifiedName.substring(paramsPrefix.length());

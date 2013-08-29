@@ -16,10 +16,9 @@
  */
 package org.craftercms.core.util.generators.impl;
 
-import org.craftercms.core.util.generators.IdentifierGenerator;
-import org.craftercms.core.util.generators.IdentifierGenerator;
-
 import java.util.UUID;
+
+import org.craftercms.core.util.generators.IdentifierGenerator;
 
 /**
  * Generator for UUID identifiers.

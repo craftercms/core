@@ -17,7 +17,6 @@
 package org.craftercms.core.processors;
 
 import org.craftercms.core.exception.CrafterException;
-import org.craftercms.core.exception.CrafterException;
 import org.craftercms.core.service.Item;
 
 /**

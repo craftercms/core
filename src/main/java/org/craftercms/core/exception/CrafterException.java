@@ -24,22 +24,22 @@ package org.craftercms.core.exception;
  */
 public class CrafterException extends RuntimeException {
 
-	private static final long serialVersionUID = 8922403836288820982L;
+    private static final long serialVersionUID = 8922403836288820982L;
 
-	public CrafterException() {
-		super();
-	}
+    public CrafterException() {
+        super();
+    }
 
-	public CrafterException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public CrafterException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public CrafterException(String message) {
-		super(message);
-	}
+    public CrafterException(String message) {
+        super(message);
+    }
 
-	public CrafterException(Throwable cause) {
-		super(cause);
-	}
+    public CrafterException(Throwable cause) {
+        super(cause);
+    }
 
 }

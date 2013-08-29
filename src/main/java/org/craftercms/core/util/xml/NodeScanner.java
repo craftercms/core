@@ -16,12 +16,11 @@
  */
 package org.craftercms.core.util.xml;
 
+import java.util.List;
+
 import org.craftercms.core.exception.XmlException;
 import org.dom4j.Document;
 import org.dom4j.Node;
-import org.craftercms.core.exception.XmlException;
-
-import java.util.List;
 
 /**
  * Scans an XML DOM for nodes that fit a certain condition.
@@ -35,6 +34,7 @@ public interface NodeScanner {
      *
      * @return the list of nodes that fit the condition
      * @throws org.craftercms.core.exception.XmlException
+     *
      */
     List<Node> scan(Document document) throws XmlException;
 

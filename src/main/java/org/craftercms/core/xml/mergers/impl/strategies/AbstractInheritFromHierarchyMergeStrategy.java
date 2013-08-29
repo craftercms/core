@@ -16,17 +16,13 @@
  */
 package org.craftercms.core.xml.mergers.impl.strategies;
 
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
-import org.craftercms.core.xml.mergers.MergeableDescriptor;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
-import org.craftercms.core.xml.mergers.MergeableDescriptor;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.craftercms.core.service.CachingOptions;
+import org.craftercms.core.service.Context;
+import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
+import org.craftercms.core.xml.mergers.MergeableDescriptor;
 
 /**
  * Abstract {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} that defines the base code for strategies that decide which descriptors
@@ -43,24 +39,24 @@ public abstract class AbstractInheritFromHierarchyMergeStrategy implements Descr
 
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl,
                                                     boolean primaryDescriptorOptional) {
-    	List<MergeableDescriptor> descriptors = new ArrayList<MergeableDescriptor>();
+        List<MergeableDescriptor> descriptors = new ArrayList<MergeableDescriptor>();
 
         // If the url is absolute (starts with '/'), the descriptors included will start from root (i.e. if url is
         // /folder/file.xml, first ones will start at '/'). If it's relative (doesn't start with '/), the descriptors
         // included start from the first folder in the url (i.e., if url is folder/file.xml, first ones will start at
         // folder/).
-    	int k = primaryDescriptorUrl.indexOf('/');
-    	while (k >= 0) {
+        int k = primaryDescriptorUrl.indexOf('/');
+        while (k >= 0) {
             String folder = primaryDescriptorUrl.substring(0, k);
 
             addInheritedDescriptorsInFolder(context, cachingOptions, descriptors, folder, primaryDescriptorUrl);
 
             k = primaryDescriptorUrl.indexOf('/', ++k);
-    	}
+        }
 
-    	descriptors.add(new MergeableDescriptor(primaryDescriptorUrl, primaryDescriptorOptional));
+        descriptors.add(new MergeableDescriptor(primaryDescriptorUrl, primaryDescriptorOptional));
 
-    	return descriptors;
+        return descriptors;
     }
 
     protected abstract void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,

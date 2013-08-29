@@ -16,14 +16,14 @@
  */
 package org.craftercms.core.util.json.gson;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Type;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Type;
 
 /**
  * Class description goes HERE

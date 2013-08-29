@@ -16,19 +16,16 @@
  */
 package org.craftercms.core.store.impl;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.StoreException;
-import org.craftercms.core.exception.XmlFileParseException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.Context;
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.StoreException;
@@ -40,12 +37,9 @@ import org.craftercms.core.service.Item;
 import org.craftercms.core.service.impl.CachedContent;
 import org.craftercms.core.util.CollectionUtils;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 /**
  * File-based content store adapter. Takes away common stuff from actual implementations, like handling metadata files and
@@ -77,11 +71,11 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
         File file = getFile(context, path);
 
-        if (!file.isFile()) {
+        if ( !file.isFile() ) {
             throw new StoreException("Unable to get content: " + file + " is not a file");
         }
 
-        if (context.isCacheOn() && cachingOptions.doCaching()) {
+        if ( context.isCacheOn() && cachingOptions.doCaching() ) {
             try {
                 InputStream fileInputStream = file.getInputStream();
                 try {
@@ -113,12 +107,12 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
         item.setUrl(path);
         item.setFolder(file.isDirectory());
 
-        if (withDescriptor) {
+        if ( withDescriptor ) {
             File descriptorFile;
 
             // If it's a file and it's a descriptor, set the descriptor url to the item's path and load the file as
             // a DOM.
-            if (file.isFile() && item.getName().endsWith(descriptorFileExtension)) {
+            if ( file.isFile() && item.getName().endsWith(descriptorFileExtension) ) {
                 item.setDescriptorUrl(path);
 
                 descriptorFile = file;
@@ -132,7 +126,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
                 try {
                     descriptorFile = getFile(context, descriptorPath);
-                    if (!descriptorFile.isFile()) {
+                    if ( !descriptorFile.isFile() ) {
                         throw new StoreException("Descriptor file at " + descriptorFile + " is not really a file");
                     }
                 } catch (PathNotFoundException e) {
@@ -140,7 +134,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
                 }
             }
 
-            if (descriptorFile != null) {
+            if ( descriptorFile != null ) {
                 try {
                     InputStream fileInputStream = new BufferedInputStream(descriptorFile.getInputStream());
                     try {
@@ -169,19 +163,19 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
         path = normalizePath(path);
 
         File dir = getFile(context, path);
-        if (!dir.isDirectory()) {
+        if ( !dir.isDirectory() ) {
             throw new StoreException("The path " + dir + " doesn't correspond to a dir");
         }
 
         List<File> children = getChildren(context, dir);
         CachingAwareList<Item> items = new CachingAwareList<Item>(children.size());
 
-        if (CollectionUtils.isNotEmpty(children)) {
+        if ( CollectionUtils.isNotEmpty(children) ) {
             for (File child : children) {
                 // Ignore any item metadata file. Metadata file DOMs are included in their respective
                 // items.
-                if (!child.isFile() || !child.getName().endsWith(metadataFileExtension)) {
-                    String fileRelPath = path + (!path.equals("/")? "/" : "") + child.getName();
+                if ( !child.isFile() || !child.getName().endsWith(metadataFileExtension) ) {
+                    String fileRelPath = path + (!path.equals("/") ? "/" : "") + child.getName();
                     Item item = getItem(context, cachingOptions, fileRelPath, withDescriptor);
 
                     items.add(item);
@@ -201,10 +195,10 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
      * @return the normalized path (with a leading '/' and without a trailing '/')
      */
     protected String normalizePath(String path) {
-        if (!path.startsWith("/")) {
+        if ( !path.startsWith("/") ) {
             path = "/" + path;
         }
-        if (!path.equals("/")) {
+        if ( !path.equals("/") ) {
             path = StringUtils.stripEnd(path, "/");
         }
 

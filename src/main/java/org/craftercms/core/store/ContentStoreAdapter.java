@@ -16,21 +16,17 @@
  */
 package org.craftercms.core.store;
 
+import java.util.List;
+
 import org.craftercms.core.exception.*;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
-
-import java.util.List;
 
 /**
  * Adapter that provides path based access to a repository of some type.
- * 
+ *
  * @author Sumer Jabri
  * @author Michiel Verkaik
  * @author Alfonso Vásquez

@@ -16,13 +16,11 @@
  */
 package org.craftercms.core.cache.impl.store;
 
-import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.impl.CacheStoreAdapter;
-import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.impl.CacheStoreAdapter;
-
 import java.util.Collection;
 import java.util.Collections;
+
+import org.craftercms.core.cache.CacheItem;
+import org.craftercms.core.cache.impl.CacheStoreAdapter;
 
 /**
  * Implementation of a {@link org.craftercms.core.cache.impl.CacheStoreAdapter} that uses no data structure and whose operations do nothing. Useful

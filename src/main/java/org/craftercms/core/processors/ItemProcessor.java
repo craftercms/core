@@ -16,8 +16,6 @@
  */
 package org.craftercms.core.processors;
 
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
@@ -34,15 +32,11 @@ public interface ItemProcessor {
     /**
      * Processes an {@link Item}.
      *
-     * @param context
-     *          the current context
-     * @param cachingOptions
-     *          caching options in case you need access to items
-     * @param item
-     *          the item to process
+     * @param context        the current context
+     * @param cachingOptions caching options in case you need access to items
+     * @param item           the item to process
      * @return the modified item or a new item.
-     * @throws ItemProcessingException
-     *          if an error occurred while processing the item
+     * @throws ItemProcessingException if an error occurred while processing the item
      */
     Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException;
 

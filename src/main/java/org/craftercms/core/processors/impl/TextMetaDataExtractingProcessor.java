@@ -16,15 +16,13 @@
  */
 package org.craftercms.core.processors.impl;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang.StringUtils;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
-
-import java.util.Arrays;
 
 /**
  * {@link ItemProcessor} that extracts single text values from descriptor XPath-selected nodes and sets them as the
@@ -56,7 +54,7 @@ public class TextMetaDataExtractingProcessor implements ItemProcessor {
     public Item process(Context context, CachingOptions cachingOptions, Item item) {
         for (String xPathQuery : metaDataNodesXPathQueries) {
             String metaDataValue = item.queryDescriptorValue(xPathQuery);
-            if (StringUtils.isNotEmpty(metaDataValue)) {
+            if ( StringUtils.isNotEmpty(metaDataValue) ) {
                 item.setProperty(xPathQuery, metaDataValue);
             }
         }
@@ -70,16 +68,16 @@ public class TextMetaDataExtractingProcessor implements ItemProcessor {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
+        if ( this == o ) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if ( o == null || getClass() != o.getClass() ) {
             return false;
         }
 
         TextMetaDataExtractingProcessor that = (TextMetaDataExtractingProcessor) o;
 
-        if (!metaDataNodesXPathQueries.equals(that.metaDataNodesXPathQueries)) {
+        if ( !metaDataNodesXPathQueries.equals(that.metaDataNodesXPathQueries) ) {
             return false;
         }
 

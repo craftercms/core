@@ -16,11 +16,11 @@
  */
 package org.craftercms.core.cache.impl;
 
-import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.CacheLoader;
-
 import java.util.Arrays;
 import java.util.List;
+
+import org.craftercms.core.cache.CacheItem;
+import org.craftercms.core.cache.CacheLoader;
 
 /**
  * Default implementation of {@link org.craftercms.core.cache.CacheItem}.
