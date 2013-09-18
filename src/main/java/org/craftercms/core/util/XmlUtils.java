@@ -60,10 +60,7 @@ public class XmlUtils {
      * Executes the specified namespace aware XPath query as a single node query, returning the text value of the resulting single node.
      */
     public static String selectSingleNodeValue(Node node, String xPathQuery, Map<String, String> namespaceUris) {
-        XPath xPath = DocumentHelper.createXPath(xPathQuery);
-        xPath.setNamespaceURIs(namespaceUris);
-
-        Node resultNode = xPath.selectSingleNode(node);
+        Node resultNode = selectSingleNode(node, xPathQuery, namespaceUris);
         if (resultNode != null) {
             return resultNode.getText();
         } else {
@@ -94,10 +91,7 @@ public class XmlUtils {
      * nodes.
      */
     public static List<String> selectNodeValues(Node node, String xPathQuery, Map<String, String> namespaceUris) {
-        XPath xPath = DocumentHelper.createXPath(xPathQuery);
-        xPath.setNamespaceURIs(namespaceUris);
-
-        List<Node> resultNodes = xPath.selectNodes(node);
+        List<Node> resultNodes = selectNodes(node, xPathQuery, namespaceUris);
         if (CollectionUtils.isNotEmpty(resultNodes)) {
             List<String> resultNodeValues = new ArrayList<String>(resultNodes.size());
             for (Node resultNode : resultNodes) {
@@ -108,6 +102,26 @@ public class XmlUtils {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    /**
+     * Executes the specified namespace aware XPath query as a single node query, returning the resulting single node.
+     */
+    public static Node selectSingleNode(Node node, String xPathQuery, Map<String, String> namespaceUris) {
+        XPath xPath = DocumentHelper.createXPath(xPathQuery);
+        xPath.setNamespaceURIs(namespaceUris);
+
+        return xPath.selectSingleNode(node);
+    }
+
+    /**
+     * Executes the specified namespace aware XPath query as a multiple node query, returning the resulting list of nodes.
+     */
+    public static List<Node> selectNodes(Node node, String xPathQuery, Map<String, String> namespaceUris) {
+        XPath xPath = DocumentHelper.createXPath(xPathQuery);
+        xPath.setNamespaceURIs(namespaceUris);
+
+        return xPath.selectNodes(node);
     }
 
     /**
