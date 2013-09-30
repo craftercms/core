@@ -40,10 +40,8 @@ public interface ItemFilter {
     /**
      * Return true if the given item is accepted by the filter.
      *
-     * @param item
-     *          the item to accept or reject
-     * @param runningBeforeProcessing
-     *          if the filter is running before processing (true) or after processing (false)
+     * @param item                    the item to accept or reject
+     * @param runningBeforeProcessing if the filter is running before processing (true) or after processing (false)
      */
     boolean accepts(Item item, boolean runningBeforeProcessing);
 

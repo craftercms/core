@@ -19,11 +19,6 @@ package org.craftercms.core.url.impl;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.util.cache.CacheCallback;
-import org.craftercms.core.util.cache.CacheTemplate;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformationEngine;
 import org.craftercms.core.util.cache.CacheCallback;
 import org.craftercms.core.util.cache.CacheTemplate;
@@ -51,8 +46,8 @@ public abstract class AbstractCachedUrlTransformationEngine implements UrlTransf
     }
 
     @Override
-    public String transformUrl(final Context context, final CachingOptions cachingOptions, final String transformerName, final String url)
-            throws UrlTransformationException {
+    public String transformUrl(final Context context, final CachingOptions cachingOptions,
+                               final String transformerName, final String url) throws UrlTransformationException {
         return cacheTemplate.execute(context, cachingOptions, new CacheCallback<String>() {
 
             @Override
@@ -62,14 +57,14 @@ public abstract class AbstractCachedUrlTransformationEngine implements UrlTransf
 
             @Override
             public String toString() {
-                return String.format(AbstractCachedUrlTransformationEngine.this.getClass().getName() + ".transformUrl(%s, %s, %s)",
-                        context, transformerName, url);
+                return String.format(AbstractCachedUrlTransformationEngine.this.getClass().getName() + ".transformUrl" +
+                    "(%s, %s, %s)", context, transformerName, url);
             }
 
         }, context, transformerName, url, TRANSFORMED_URL_CONST_KEY_ELEM);
     }
 
-    protected abstract String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName, String url)
-            throws UrlTransformationException;
+    protected abstract String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName,
+                                             String url) throws UrlTransformationException;
 
 }

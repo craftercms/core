@@ -24,7 +24,7 @@ package org.craftercms.core.exception;
  */
 public class InvalidScopeException extends CacheException {
 
-	private static final long serialVersionUID = -1829926648999823411L;
+    private static final long serialVersionUID = -1829926648999823411L;
 
     public InvalidScopeException() {
     }

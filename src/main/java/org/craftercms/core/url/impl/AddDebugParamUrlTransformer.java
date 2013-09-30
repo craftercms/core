@@ -20,9 +20,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.util.UrlUtils;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 import org.craftercms.core.util.UrlUtils;
 
@@ -34,7 +31,7 @@ import org.craftercms.core.util.UrlUtils;
  */
 public class AddDebugParamUrlTransformer implements UrlTransformer {
 
-	private static final Log logger = LogFactory.getLog(AddDebugParamUrlTransformer.class);
+    private static final Log logger = LogFactory.getLog(AddDebugParamUrlTransformer.class);
 
     public static final String DEFAULT_DEBUG_URL_PARAM = "debug";
 
@@ -45,27 +42,27 @@ public class AddDebugParamUrlTransformer implements UrlTransformer {
     }
 
     public void setDebugParam(String debugParam) {
-		this.debugParam = debugParam;
-	}
+        this.debugParam = debugParam;
+    }
 
     @Override
-	public String transformUrl(Context context, CachingOptions cachingOptions, String url) {
+    public String transformUrl(Context context, CachingOptions cachingOptions, String url) {
         String result;
-		int indexOfParamDelim = url.indexOf(UrlUtils.URL_PARAM_DELIM);
+        int indexOfParamDelim = url.indexOf(UrlUtils.URL_PARAM_DELIM);
 
-		if (indexOfParamDelim < 0) {
-			// The URL doesn't have a param delim, add it and tack on the debug flag
-			result = url + UrlUtils.URL_PARAM_DELIM + debugParam + "=true";
-		} else {
-			// The URL does have a param delim, add param separator and tack on the debug flag
-			result = url + UrlUtils.URL_PARAM_SEPARATOR + debugParam + "=true";
-		}
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+        if (indexOfParamDelim < 0) {
+            // The URL doesn't have a param delim, add it and tack on the debug flag
+            result = url + UrlUtils.URL_PARAM_DELIM + debugParam + "=true";
+        } else {
+            // The URL does have a param delim, add param separator and tack on the debug flag
+            result = url + UrlUtils.URL_PARAM_SEPARATOR + debugParam + "=true";
         }
 
-		return result;
-	}
+        if (logger.isDebugEnabled()) {
+            logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+        }
+
+        return result;
+    }
 
 }

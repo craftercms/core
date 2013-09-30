@@ -19,13 +19,9 @@ package org.craftercms.core.url;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 
 /**
  * @author Sumer Jabri
- *
  */
 public interface UrlTransformer {
 

@@ -16,16 +16,15 @@
  */
 package org.craftercms.core.util.xml.impl;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.exception.XmlException;
-import org.dom4j.Document;
-import org.dom4j.Node;
-import org.craftercms.core.exception.XmlException;
-import org.craftercms.core.util.xml.NodeScanner;
-import org.springframework.beans.factory.annotation.Required;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.craftercms.core.exception.XmlException;
+import org.craftercms.core.util.xml.NodeScanner;
+import org.dom4j.Document;
+import org.dom4j.Node;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Class description goes HERE
@@ -68,7 +67,7 @@ public class XPathNodeScanner implements NodeScanner {
             return false;
         }
 
-        XPathNodeScanner that = (XPathNodeScanner) o;
+        XPathNodeScanner that = (XPathNodeScanner)o;
 
         if (!xPathQueries.equals(that.xPathQueries)) {
             return false;

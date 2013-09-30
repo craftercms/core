@@ -22,9 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.util.UrlUtils;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 import org.craftercms.core.util.UrlUtils;
 
@@ -36,7 +33,7 @@ import org.craftercms.core.util.UrlUtils;
  */
 public class LongToShortUrlTransformer implements UrlTransformer {
 
-	private static final Log logger = LogFactory.getLog(LongToShortUrlTransformer.class);
+    private static final Log logger = LogFactory.getLog(LongToShortUrlTransformer.class);
 
     public static final String URL_NUMBERED_NAME_REGEX = "\\b\\d*_(.+)\\b";
     public static final int URL_NUMBERED_NAME_REGEX_SHORT_NAME_GROUP = 1;
@@ -57,31 +54,31 @@ public class LongToShortUrlTransformer implements UrlTransformer {
         this.shortNameRegexGroup = shortNameRegexGroup;
     }
 
-	protected String getShortUrl(String longUrl) {
-		String[] levels = StringUtils.strip(longUrl, "/").split("/");
+    protected String getShortUrl(String longUrl) {
+        String[] levels = StringUtils.strip(longUrl, "/").split("/");
         StringBuilder result = new StringBuilder();
 
-		if (ArrayUtils.isNotEmpty(levels)) {
-			for (String level : levels) {
-				result.append("/").append(UrlUtils.getShortName(level, containsShortNameRegex, shortNameRegexGroup));
-			}
-		}
-
-		if (longUrl.endsWith("/")) {
-			result.append("/");
+        if (ArrayUtils.isNotEmpty(levels)) {
+            for (String level : levels) {
+                result.append("/").append(UrlUtils.getShortName(level, containsShortNameRegex, shortNameRegexGroup));
+            }
         }
 
-		return result.toString();
-	}
-
-	public String transformUrl(Context context, CachingOptions cachingOptions, String url) {
-		String result = getShortUrl(url);
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+        if (longUrl.endsWith("/")) {
+            result.append("/");
         }
 
-		return result;
-	}
+        return result.toString();
+    }
+
+    public String transformUrl(Context context, CachingOptions cachingOptions, String url) {
+        String result = getShortUrl(url);
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+        }
+
+        return result;
+    }
 
 }

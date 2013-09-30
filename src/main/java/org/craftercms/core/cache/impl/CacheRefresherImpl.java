@@ -16,17 +16,14 @@
  */
 package org.craftercms.core.cache.impl;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.Cache;
-import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
 import org.craftercms.core.exception.InternalCacheEngineException;
-import org.craftercms.core.exception.InvalidScopeException;
-
-import java.util.*;
 
 /**
  * Default implementation of {@link CacheRefresher}. Uses a {@link TopologicalCacheItemSorter} to sort the items
@@ -61,7 +58,8 @@ public class CacheRefresherImpl implements CacheRefresher {
     }
 
     /**
-     * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s. Before the items are refreshed one by one, the
+     * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s. Before the items are refreshed
+     * one by one, the
      * {@link TopologicalCacheItemSorter} is called to sort the items by their relationships, so that items with
      * dependencies will always be refreshed after their dependencies have been refreshed.
      */
@@ -98,7 +96,7 @@ public class CacheRefresherImpl implements CacheRefresher {
         Object newValue = loader.load(loaderParams);
         if (newValue != null) {
             cache.put(item.getScope(), item.getKey(), newValue, item.getDependencyKeys(), item.getTicksToExpire(),
-                    item.getTicksToRefresh(), item.getLoader(), item.getLoaderParams());
+                item.getTicksToRefresh(), item.getLoader(), item.getLoaderParams());
         } else {
             // If newValue returned is null, remove the item from the cache
             cache.remove(item.getScope(), item.getKey());

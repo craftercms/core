@@ -22,9 +22,6 @@ import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.util.url.ContentBundleUrl;
 import org.craftercms.core.util.url.ContentBundleUrlParser;
 import org.springframework.beans.factory.annotation.Required;
@@ -32,10 +29,10 @@ import org.springframework.beans.factory.annotation.Required;
 /**
  * This transformer is similar to {@link ShortToLongUrlTransformer}, but also looks in a content bundle for an
  * item name (long name) that can be mapped to the short name.
- *
+ * <p/>
  * See {@link org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategy} for more information
  * about content bundles.
- *
+ * <p/>
  * E.g., from the request <code>/main/website/groups/sport/base_fr_nhl/sport_page_one.xml</code> it looks in folders
  * in the following order <code>base_fr_nhl</code>, <code>base_fr</code> and <code>base</code>. Then suppose that
  * <code>sport_page_one.xml</code> exists only in <code>base</code> folder with name
@@ -44,7 +41,6 @@ import org.springframework.beans.factory.annotation.Required;
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
- *
  * @see org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategy
  */
 public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransformer {
@@ -65,18 +61,19 @@ public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransf
     }
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
         String result = getLongUrlLookingInBundle(context, cachingOptions, url);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 
-		return result;
+        return result;
     }
 
-    private String getLongUrlLookingInBundle(Context context, CachingOptions cachingOptions, String shortUrl)
-            throws UrlTransformationException {
+    private String getLongUrlLookingInBundle(Context context, CachingOptions cachingOptions,
+                                             String shortUrl) throws UrlTransformationException {
         ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(shortUrl);
         String prefix = parsedUrl.getPrefix();
         String originalBase = parsedUrl.getBaseNameAndExtensionToken();
@@ -96,7 +93,7 @@ public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransf
             String currentShortUrl = prefix + base + suffix;
             String longUrl = getLongUrl(context, cachingOptions, currentShortUrl, false);
             if (StringUtils.isNotEmpty(longUrl)) {
-                if(!originalBase.equals(base)) {
+                if (!originalBase.equals(base)) {
                     // Put original base back in long URL.
                     longUrl = longUrl.replace(base, originalBase);
                 }
@@ -108,7 +105,7 @@ public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransf
             if (delimiterIdx > 0) {
                 base = base.substring(0, delimiterIdx);
             }
-        } while(delimiterIdx >= 0);
+        } while (delimiterIdx >= 0);
 
         // come here if URL is not found in content store
         throw new UrlTransformationException("Unable to map the short url '" + shortUrl + "' to a long url");

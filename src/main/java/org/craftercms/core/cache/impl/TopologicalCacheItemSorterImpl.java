@@ -16,15 +16,17 @@
  */
 package org.craftercms.core.cache.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.Cache;
-import org.craftercms.core.cache.CacheItem;
-
-import java.util.*;
 
 /**
  * Default implementation of {@link TopologicalCacheItemSorter}.
@@ -36,24 +38,23 @@ public class TopologicalCacheItemSorterImpl implements TopologicalCacheItemSorte
     private static final Log logger = LogFactory.getLog(TopologicalCacheItemSorterImpl.class);
 
     /**
-     * Sorts the given {@link org.craftercms.core.cache.CacheItem}s through the following depth-first search based topological sorting
+     * Sorts the given {@link org.craftercms.core.cache.CacheItem}s through the following depth-first search based
+     * topological sorting
      * algorithm:
-     *
+     * <p/>
      * L ← Empty list that will contain the sorted nodes
      * S ← Set of all nodes with no incoming edges
      * for each node n in S do
-     *     visit(n)
+     * visit(n)
      * function visit(node n)
-     *     if n has not been visited yet then
-     *         mark n as visited
-     *         for each node m with an edge from n to m do
-     *             visit(m)
-     *         add n to L
+     * if n has not been visited yet then
+     * mark n as visited
+     * for each node m with an edge from n to m do
+     * visit(m)
+     * add n to L
      *
-     * @param items
-     *          the items to sort
+     * @param items the items to sort
      * @return the sorted items
-     *
      * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">Topological sorting</a>
      */
     public List<CacheItem> sortTopologically(List<CacheItem> items, Cache cache) {
@@ -70,7 +71,7 @@ public class TopologicalCacheItemSorterImpl implements TopologicalCacheItemSorte
         }
 
         // Keep only items that are contained in the original list.
-        for (Iterator<CacheItem> i = sortedItems.iterator(); i.hasNext();) {
+        for (Iterator<CacheItem> i = sortedItems.iterator(); i.hasNext(); ) {
             CacheItem item = i.next();
             if (!items.contains(item)) {
                 i.remove();
@@ -111,11 +112,11 @@ public class TopologicalCacheItemSorterImpl implements TopologicalCacheItemSorte
     private List<CacheItem> getItemsWithNoDependants(List<CacheItem> items, Cache cache) {
         List<CacheItem> itemsWithNoDependants = new ArrayList<CacheItem>(items);
 
-        for (Iterator<CacheItem> i = items.iterator(); i.hasNext();) {
+        for (Iterator<CacheItem> i = items.iterator(); i.hasNext(); ) {
             boolean isDependency = false;
             CacheItem possibleDependency = i.next();
 
-            for (Iterator<CacheItem> j = items.iterator(); j.hasNext() && !isDependency;) {
+            for (Iterator<CacheItem> j = items.iterator(); j.hasNext() && !isDependency; ) {
                 CacheItem item = j.next();
 
                 if (!item.equals(possibleDependency)) {

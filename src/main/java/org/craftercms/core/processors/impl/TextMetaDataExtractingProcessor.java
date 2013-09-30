@@ -16,15 +16,13 @@
  */
 package org.craftercms.core.processors.impl;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang.StringUtils;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
-
-import java.util.Arrays;
 
 /**
  * {@link ItemProcessor} that extracts single text values from descriptor XPath-selected nodes and sets them as the
@@ -77,7 +75,7 @@ public class TextMetaDataExtractingProcessor implements ItemProcessor {
             return false;
         }
 
-        TextMetaDataExtractingProcessor that = (TextMetaDataExtractingProcessor) o;
+        TextMetaDataExtractingProcessor that = (TextMetaDataExtractingProcessor)o;
 
         if (!metaDataNodesXPathQueries.equals(that.metaDataNodesXPathQueries)) {
             return false;
@@ -99,8 +97,8 @@ public class TextMetaDataExtractingProcessor implements ItemProcessor {
     @Override
     public String toString() {
         return "TextMetaDataExtractingProcessor[" +
-                "metaDataNodesXPathQueries=" + Arrays.toString(metaDataNodesXPathQueries) +
-                ']';
+            "metaDataNodesXPathQueries=" + Arrays.toString(metaDataNodesXPathQueries) +
+            ']';
     }
 
 }

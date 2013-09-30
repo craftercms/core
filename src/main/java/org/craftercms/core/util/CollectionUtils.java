@@ -29,7 +29,7 @@ import java.util.Map;
 public class CollectionUtils extends org.apache.commons.collections.CollectionUtils {
 
     public static <T> void move(Collection<T> fromCollection, Collection<T> toCollection) {
-        for (Iterator<T> i = fromCollection.iterator(); i.hasNext();) {
+        for (Iterator<T> i = fromCollection.iterator(); i.hasNext(); ) {
             T element = i.next();
             i.remove();
 

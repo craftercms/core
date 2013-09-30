@@ -16,6 +16,10 @@
  */
 package org.craftercms.core.service.impl;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
@@ -26,10 +30,6 @@ import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Default implementation of {@link CacheService}. Adapts a {@link Cache}.
@@ -161,7 +161,8 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void put(Context context, Object key, Object value) throws InvalidContextException, InternalCacheEngineException {
+    public void put(Context context, Object key, Object value) throws InvalidContextException,
+        InternalCacheEngineException {
         if (context.isCacheOn()) {
             try {
                 cache.put(context.getId(), key, value);
@@ -172,8 +173,8 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void put(Context context, Object key, Object value, List<Object> dependencyKeys) throws InvalidScopeException,
-            InternalCacheEngineException {
+    public void put(Context context, Object key, Object value, List<Object> dependencyKeys) throws
+        InvalidScopeException, InternalCacheEngineException {
         if (context.isCacheOn()) {
             try {
                 cache.put(context.getId(), key, value, dependencyKeys);
@@ -184,12 +185,12 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader, Object... loaderParams)
-            throws InvalidContextException, InternalCacheEngineException {
+    public void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
+                    Object... loaderParams) throws InvalidContextException, InternalCacheEngineException {
         if (context.isCacheOn() && cachingOptions.doCaching()) {
             try {
-                cache.put(context.getId(), key, value, cachingOptions.getExpireAfter(), cachingOptions.getRefreshFrequency(),
-                        loader, loaderParams);
+                cache.put(context.getId(), key, value, cachingOptions.getExpireAfter(),
+                    cachingOptions.getRefreshFrequency(), loader, loaderParams);
             } catch (InvalidScopeException e) {
                 throw new InvalidContextException("No scope associated to context " + context);
             }
@@ -197,12 +198,13 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void put(Context context, Object key, Object value, List<Object> dependencyKeys, CachingOptions cachingOptions,
-                    CacheLoader loader, Object... loaderParams) throws InvalidContextException, InternalCacheEngineException {
+    public void put(Context context, Object key, Object value, List<Object> dependencyKeys,
+                    CachingOptions cachingOptions, CacheLoader loader, Object... loaderParams) throws
+        InvalidContextException, InternalCacheEngineException {
         if (context.isCacheOn() && cachingOptions.doCaching()) {
             try {
-                cache.put(context.getId(), key, value, dependencyKeys, cachingOptions.getExpireAfter(), cachingOptions
-                        .getRefreshFrequency(), loader, loaderParams);
+                cache.put(context.getId(), key, value, dependencyKeys, cachingOptions.getExpireAfter(),
+                    cachingOptions.getRefreshFrequency(), loader, loaderParams);
             } catch (InvalidScopeException e) {
                 throw new InvalidContextException("No scope associated to context " + context);
             }

@@ -16,12 +16,12 @@
  */
 package org.craftercms.core.xml.mergers.impl.resolvers;
 
-import org.dom4j.Document;
+import java.util.Map;
+
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
+import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.Map;
 
 /**
  * Resolves the {@link DescriptorMergeStrategy} to use for a given descriptor by matching the descriptor URL
@@ -43,10 +43,8 @@ public class UrlPatternMergeStrategyResolver implements DescriptorMergeStrategyR
      * Returns a {@link DescriptorMergeStrategy} for a given descriptor, picked by matching the descriptor URL to a
      * pattern associated to the strategy.
      *
-     * @param descriptorUrl
-     *          the URL that identifies the descriptor
-     * @param descriptorDom
-     *          the XML DOM of the descriptor
+     * @param descriptorUrl the URL that identifies the descriptor
+     * @param descriptorDom the XML DOM of the descriptor
      * @return the {@link DescriptorMergeStrategy} for the descriptor, or null if the descriptor URL doesn't
      *         match any pattern.
      */

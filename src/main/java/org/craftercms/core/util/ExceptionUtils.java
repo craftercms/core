@@ -31,7 +31,7 @@ public class ExceptionUtils extends org.apache.commons.lang.exception.ExceptionU
         Throwable[] throwables = getThrowables(throwable);
         for (Throwable throwableInChain : throwables) {
             if (type.isAssignableFrom(throwableInChain.getClass())) {
-                return (T) throwableInChain;
+                return (T)throwableInChain;
             }
         }
 

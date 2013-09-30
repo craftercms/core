@@ -38,8 +38,8 @@ public class Context {
     protected int maxAllowedItemsInCache;
     protected boolean ignoreHiddenFiles;
 
-    public Context(String id, ContentStoreAdapter storeAdapter, String storeServerUrl, String rootFolderPath, boolean cacheOn,
-                   int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
+    public Context(String id, ContentStoreAdapter storeAdapter, String storeServerUrl, String rootFolderPath,
+                   boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
         this.id = id;
         this.storeAdapter = storeAdapter;
         this.storeServerUrl = storeServerUrl;
@@ -85,7 +85,7 @@ public class Context {
             return false;
         }
 
-        Context context = (Context) o;
+        Context context = (Context)o;
 
         if (!getId().equals(context.getId())) {
             return false;
@@ -101,14 +101,14 @@ public class Context {
     @Override
     public String toString() {
         return "Context[" +
-                "id='" + id + '\'' +
-                ", storeAdapter='" + storeAdapter + '\'' +
-                ", storeServerUrl='" + storeServerUrl + '\'' +
-                ", rootFolderPath='" + rootFolderPath + '\'' +
-                ", cacheOn=" + cacheOn +
-                ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
-                ", ignoreHiddenFiles=" + ignoreHiddenFiles +
-                ']';
+            "id='" + id + '\'' +
+            ", storeAdapter='" + storeAdapter + '\'' +
+            ", storeServerUrl='" + storeServerUrl + '\'' +
+            ", rootFolderPath='" + rootFolderPath + '\'' +
+            ", cacheOn=" + cacheOn +
+            ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
+            ", ignoreHiddenFiles=" + ignoreHiddenFiles +
+            ']';
     }
 
 }

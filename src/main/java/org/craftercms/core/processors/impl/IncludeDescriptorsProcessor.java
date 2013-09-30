@@ -16,6 +16,9 @@
 */
 package org.craftercms.core.processors.impl;
 
+import java.net.URISyntaxException;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -30,20 +33,11 @@ import org.craftercms.core.util.UrlUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
-import org.craftercms.core.exception.ItemProcessingException;
-import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.ContentStoreService;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.util.UrlUtils;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.net.URISyntaxException;
-import java.util.List;
-
 /**
- * {@link org.craftercms.core.processors.ItemProcessor} that replaces special "include" tags found in a descriptor document with the document tree of
+ * {@link org.craftercms.core.processors.ItemProcessor} that replaces special "include" tags found in a descriptor
+ * document with the document tree of
  * descriptors specified in these "include" tags.
  *
  * @author Sumer Jabri
@@ -95,17 +89,18 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
 
     /**
      * Does the actual include:
-     *
+     * <p/>
      * <ol>
-     *     <li>Queries for all the include elements in the item's descriptor.</li>
-     *     <li>Retrieves the descriptors to include by the url attribute.</li>
-     *     <li>Includes the descriptor into the current item's descriptor</li>
-     *     <li>Adds those descriptors' items as dependencies of the current item.</li>
+     * <li>Queries for all the include elements in the item's descriptor.</li>
+     * <li>Retrieves the descriptors to include by the url attribute.</li>
+     * <li>Includes the descriptor into the current item's descriptor</li>
+     * <li>Adds those descriptors' items as dependencies of the current item.</li>
      * </ol>
      *
      * @throws ItemProcessingException
      */
-    protected void includeDescriptors(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
+    protected void includeDescriptors(Context context, CachingOptions cachingOptions,
+                                      Item item) throws ItemProcessingException {
         String descriptorUrl = item.getDescriptorUrl();
         Document descriptorDom = item.getDescriptorDom();
 
@@ -136,7 +131,8 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
     /**
      * If path is relative, makes it absolute (resolves references to '.' and '..).
      */
-    protected String fromRelativeToAbsoluteUrl(String descriptorUrl, String includeSrcPath) throws ItemProcessingException {
+    protected String fromRelativeToAbsoluteUrl(String descriptorUrl, String includeSrcPath) throws
+        ItemProcessingException {
         try {
             return UrlUtils.resolveRelative(descriptorUrl, includeSrcPath);
         } catch (URISyntaxException e) {
@@ -144,11 +140,13 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
         }
     }
 
-    protected Item getIncludeSrcItem(Context context, CachingOptions cachingOptions, String includeSrcPath) throws ItemProcessingException {
+    protected Item getIncludeSrcItem(Context context, CachingOptions cachingOptions,
+                                     String includeSrcPath) throws ItemProcessingException {
         try {
             return contentStoreService.getItem(context, cachingOptions, includeSrcPath);
         } catch (Exception e) {
-            throw new ItemProcessingException("Unable to load descriptor " + includeSrcPath + " from the underlying repository", e);
+            throw new ItemProcessingException("Unable to load descriptor " + includeSrcPath + " from the underlying " +
+                "repository", e);
         }
     }
 
@@ -157,7 +155,8 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      *
      * @throws ItemProcessingException
      */
-    protected void doInclude(Element includeElement, String includeSrcPath, Document includeSrc) throws ItemProcessingException {
+    protected void doInclude(Element includeElement, String includeSrcPath,
+                             Document includeSrc) throws ItemProcessingException {
         List<Node> includeElementParentChildren = includeElement.getParent().content();
         int includeElementIdx = includeElementParentChildren.indexOf(includeElement);
         Element includeSrcRootElement = includeSrc.getRootElement().createCopy();
@@ -174,14 +173,14 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o){
+        if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        IncludeDescriptorsProcessor that = (IncludeDescriptorsProcessor) o;
+        IncludeDescriptorsProcessor that = (IncludeDescriptorsProcessor)o;
 
         if (!includeElementXPathQuery.equals(that.includeElementXPathQuery)) {
             return false;
@@ -209,9 +208,9 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
     @Override
     public String toString() {
         return "IncludeDescriptorsProcessor[" +
-                "contentStoreService=" + contentStoreService +
-                ", includeElementXPathQuery='" + includeElementXPathQuery + '\'' +
-                ']';
+            "contentStoreService=" + contentStoreService +
+            ", includeElementXPathQuery='" + includeElementXPathQuery + '\'' +
+            ']';
     }
 
 }

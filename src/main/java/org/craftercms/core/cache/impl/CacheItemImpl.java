@@ -16,11 +16,11 @@
  */
 package org.craftercms.core.cache.impl;
 
-import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.CacheLoader;
-
 import java.util.Arrays;
 import java.util.List;
+
+import org.craftercms.core.cache.CacheItem;
+import org.craftercms.core.cache.CacheLoader;
 
 /**
  * Default implementation of {@link org.craftercms.core.cache.CacheItem}.
@@ -48,11 +48,9 @@ public class CacheItemImpl implements CacheItem {
     /**
      * Value constructor.
      */
-    public CacheItemImpl(final String scope, final long ticksAtCreation,
-                         final Object key, final Object value,
-                         final long ticksToExpire, final long ticksToRefresh,
-                         final long timestamp, final List<Object> dependencyKeys,
-                         final CacheLoader loader, final Object[] loaderParams) {
+    public CacheItemImpl(final String scope, final long ticksAtCreation, final Object key, final Object value,
+                         final long ticksToExpire, final long ticksToRefresh, final long timestamp,
+                         final List<Object> dependencyKeys, final CacheLoader loader, final Object[] loaderParams) {
         this.scope = scope;
         this.ticksAtCreation = ticksAtCreation;
 
@@ -162,8 +160,7 @@ public class CacheItemImpl implements CacheItem {
      */
     @Override
     public boolean needsRefresh(long currentTicks) {
-        return this.ticksToRefresh != NEVER_REFRESH && currentTicks >= (this.ticksAtCreation
-                + this.ticksToRefresh);
+        return this.ticksToRefresh != NEVER_REFRESH && currentTicks >= (this.ticksAtCreation + this.ticksToRefresh);
     }
 
     /**
@@ -171,19 +168,19 @@ public class CacheItemImpl implements CacheItem {
      */
     @Override
     public boolean equals(Object o) {
-        if ( this == o ) {
+        if (this == o) {
             return true;
         }
-        if ( o == null || getClass() != o.getClass() ) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        CacheItemImpl item = (CacheItemImpl) o;
+        CacheItemImpl item = (CacheItemImpl)o;
 
-        if ( !this.key.equals(item.key) ) {
+        if (!this.key.equals(item.key)) {
             return false;
         }
-        if ( !this.scope.equals(item.scope) ) {
+        if (!this.scope.equals(item.scope)) {
             return false;
         }
 
@@ -200,17 +197,17 @@ public class CacheItemImpl implements CacheItem {
     @Override
     public String toString() {
         return "CacheItemImpl[" +
-                "scope='" + this.scope + '\'' +
-                ", ticksAtCreation=" + this.ticksAtCreation +
-                ", key=" + this.key +
-                ", value=" + this.value +
-                ", ticksToExpire=" + this.ticksToExpire +
-                ", ticksToRefresh=" + this.ticksToRefresh +
-                ", timestamp=" + this.timestamp +
-                ", dependencyKeys=" + this.dependencyKeys +
-                ", loader=" + this.loader +
-                ", loaderParams=" + (this.loaderParams == null ? null : Arrays.asList(this.loaderParams)) +
-                ']';
+            "scope='" + this.scope + '\'' +
+            ", ticksAtCreation=" + this.ticksAtCreation +
+            ", key=" + this.key +
+            ", value=" + this.value +
+            ", ticksToExpire=" + this.ticksToExpire +
+            ", ticksToRefresh=" + this.ticksToRefresh +
+            ", timestamp=" + this.timestamp +
+            ", dependencyKeys=" + this.dependencyKeys +
+            ", loader=" + this.loader +
+            ", loaderParams=" + (this.loaderParams == null? null: Arrays.asList(this.loaderParams)) +
+            ']';
     }
 
 }

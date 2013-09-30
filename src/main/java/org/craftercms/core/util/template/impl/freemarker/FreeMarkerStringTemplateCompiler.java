@@ -60,7 +60,7 @@ public class FreeMarkerStringTemplateCompiler implements TemplateCompiler<Identi
         String id = templateSource.getId().replace('/', ';');
         String source = templateSource.getSource();
 
-        StringTemplateSource currentTemplateSource = (StringTemplateSource) templateLoader.findTemplateSource(id);
+        StringTemplateSource currentTemplateSource = (StringTemplateSource)templateLoader.findTemplateSource(id);
 
         if (currentTemplateSource == null || !currentTemplateSource.getSource().equals(source)) {
             templateLoader.putTemplateSource(id, source);

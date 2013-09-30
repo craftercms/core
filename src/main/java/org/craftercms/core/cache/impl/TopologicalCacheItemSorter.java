@@ -16,11 +16,10 @@
  */
 package org.craftercms.core.cache.impl;
 
+import java.util.List;
+
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.exception.CacheException;
-
-import java.util.List;
 
 /**
  * {@link CacheItem} sorter that sorts the items according to their dependency relationships. The dependency
@@ -29,7 +28,6 @@ import java.util.List;
  * are refreshed.
  *
  * @author Alfonso Vásquez
- *
  * @see <a href="http://en.wikipedia.org/wiki/Topological_sorting">Topological sorting</a>
  */
 public interface TopologicalCacheItemSorter {
@@ -37,10 +35,8 @@ public interface TopologicalCacheItemSorter {
     /**
      * Sorts the given {@link CacheItem}s through a topological sorting algorithm.
      *
-     * @param items
-     *          the items to sort
-     * @param cache
-     *          the cache, used to get the dependencies when needed for the sorting.
+     * @param items the items to sort
+     * @param cache the cache, used to get the dependencies when needed for the sorting.
      * @return the sorted items
      */
     List<CacheItem> sortTopologically(List<CacheItem> items, Cache cache);

@@ -16,21 +16,19 @@
  */
 package org.craftercms.core.processors.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
- * {@link org.craftercms.core.processors.ItemProcessor} that extracts a list of text values from descriptor XPath-selected nodes and sets them as the
+ * {@link org.craftercms.core.processors.ItemProcessor} that extracts a list of text values from descriptor
+ * XPath-selected nodes and sets them as the
  * properties of the item. For extracting single values from a node use {@link TextMetaDataExtractingProcessor}.
  *
  * @author Sumer Jabri
@@ -79,7 +77,7 @@ public class TextMetaDataCollectionExtractingProcessor implements ItemProcessor 
             return false;
         }
 
-        TextMetaDataCollectionExtractingProcessor that = (TextMetaDataCollectionExtractingProcessor) o;
+        TextMetaDataCollectionExtractingProcessor that = (TextMetaDataCollectionExtractingProcessor)o;
 
         if (!metaDataNodesXPathQueries.equals(that.metaDataNodesXPathQueries)) {
             return false;
@@ -101,8 +99,8 @@ public class TextMetaDataCollectionExtractingProcessor implements ItemProcessor 
     @Override
     public String toString() {
         return "TextMetaDataCollectionExtractingProcessor[" +
-                "metaDataNodesXPathQueries=" + Arrays.toString(metaDataNodesXPathQueries) +
-                ']';
+            "metaDataNodesXPathQueries=" + Arrays.toString(metaDataNodesXPathQueries) +
+            ']';
     }
 
 }

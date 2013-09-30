@@ -16,14 +16,14 @@
  */
 package org.craftercms.core.service.impl;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.service.ItemFilter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.craftercms.core.service.Item;
+import org.craftercms.core.service.ItemFilter;
 
 /**
  * Composite {@link ItemFilter} implementation. Calls {@link ItemFilter}s before processing and after processing,
@@ -36,7 +36,7 @@ import java.util.List;
 public class CompositeItemFilter implements ItemFilter {
 
     /**
-     * List of {@link ItemFilter}s that are executed sequentially
+     * List of {@link ItemFilter}s that are executed sequentially.
      */
     private List<ItemFilter> filters;
 
@@ -49,21 +49,21 @@ public class CompositeItemFilter implements ItemFilter {
     /**
      * Creates a composite filter with the specified list of {@link ItemFilter}s.
      */
-    public CompositeItemFilter(List<ItemFilter> filters) {
+    public CompositeItemFilter(final List<ItemFilter> filters) {
         this.filters = filters;
     }
 
     /**
      * Creates a composite filter with the specified array of {@link ItemFilter}s.
      */
-    public CompositeItemFilter(ItemFilter... filters) {
+    public CompositeItemFilter(final ItemFilter... filters) {
         this.filters = Arrays.asList(filters);
     }
 
     /**
-     * Adds the specified {@link ItemFilter} to the filter list, creating the list if necessary
+     * Adds the specified {@link ItemFilter} to the filter list, creating the list if necessary.
      */
-    public void addFilter(ItemFilter filter) {
+    public void addFilter(final ItemFilter filter) {
         if (filters == null) {
             filters = new ArrayList<ItemFilter>();
         }
@@ -74,7 +74,7 @@ public class CompositeItemFilter implements ItemFilter {
     /**
      * Removes the specified {@link ItemFilter} from the filter list, only if the list is not <code>null</code>.
      */
-    public boolean removeFilter(ItemFilter filter) {
+    public boolean removeFilter(final ItemFilter filter) {
         if (filters != null) {
             return filters.remove(filter);
         } else {
@@ -104,7 +104,7 @@ public class CompositeItemFilter implements ItemFilter {
      * one of them rejects the item.
      */
     @Override
-    public boolean accepts(Item item, boolean runningBeforeProcessing) {
+    public boolean accepts(final Item item, final boolean runningBeforeProcessing) {
         boolean accepted = true;
 
         if (CollectionUtils.isNotEmpty(filters)) {
@@ -122,7 +122,7 @@ public class CompositeItemFilter implements ItemFilter {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -130,23 +130,23 @@ public class CompositeItemFilter implements ItemFilter {
             return false;
         }
 
-        CompositeItemFilter that = (CompositeItemFilter) o;
+        CompositeItemFilter that = (CompositeItemFilter)o;
 
-        if (filters != null ? !filters.equals(that.filters) : that.filters != null) return false;
+        if (filters != null? !filters.equals(that.filters): that.filters != null) {
+            return false;
+        }
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return filters != null ? filters.hashCode() : 0;
+        return filters != null? filters.hashCode(): 0;
     }
 
     @Override
     public String toString() {
-        return "CompositeItemFilter[" +
-                "filters=" + filters +
-                ']';
+        return "CompositeItemFilter[filters=" + filters + ']';
     }
 
 }

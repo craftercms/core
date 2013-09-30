@@ -20,17 +20,13 @@ import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.exception.ItemProcessingException;
-import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.url.UrlTransformationEngine;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * {@link org.craftercms.core.processors.ItemProcessor} that takes the item url, transforms it by calling the transformation engine, and places
- * the transformed url in the properties.
+ * {@link org.craftercms.core.processors.ItemProcessor} that takes the item url, transforms it by calling
+ * the transformation engine, and places the transformed url in the properties.
  *
  * @author Alfonso Vásquez
  */
@@ -57,7 +53,7 @@ public class ItemUrlTransformingProcessor implements ItemProcessor {
 
     @Override
     public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
-        String transformedUrl = urlTransformationEngine.transformUrl(context, transformerName, item.getUrl());
+        final String transformedUrl = urlTransformationEngine.transformUrl(context, transformerName, item.getUrl());
         item.setProperty(transformedUrlPropName, transformedUrl);
 
         return item;
@@ -65,11 +61,8 @@ public class ItemUrlTransformingProcessor implements ItemProcessor {
 
     @Override
     public String toString() {
-        return "ItemUrlTransformingProcessor[" +
-                "transformedUrlPropName='" + transformedUrlPropName + '\'' +
-                ", transformerName='" + transformerName + '\'' +
-                ", urlTransformationEngine=" + urlTransformationEngine +
-                ']';
+        return "ItemUrlTransformingProcessor[" + "transformedUrlPropName='" + transformedUrlPropName + '\'' + ", " +
+            "transformerName='" + transformerName + '\'' + ", urlTransformationEngine=" + urlTransformationEngine + ']';
     }
 
 }

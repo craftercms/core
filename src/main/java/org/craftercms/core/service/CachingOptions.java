@@ -17,10 +17,10 @@
 package org.craftercms.core.service;
 
 import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.CacheItem;
 
 /**
- * Set of options that should be used when caching in a service call. {@code expireAfter} and {@code refreshFrequency} are expressed in
+ * Set of options that should be used when caching in a service call. {@code expireAfter} and {@code
+ * refreshFrequency} are expressed in
  * ticks.
  *
  * @author Alfonso Vásquez
@@ -72,7 +72,7 @@ public class CachingOptions {
             return false;
         }
 
-        CachingOptions options = (CachingOptions) o;
+        CachingOptions options = (CachingOptions)o;
 
         if (doCaching != options.doCaching) {
             return false;
@@ -89,9 +89,9 @@ public class CachingOptions {
 
     @Override
     public int hashCode() {
-        int result = (doCaching ? 1 : 0);
-        result = 31 * result + (int) (expireAfter ^ (expireAfter >>> 32));
-        result = 31 * result + (int) (refreshFrequency ^ (refreshFrequency >>> 32));
+        int result = (doCaching? 1: 0);
+        result = 31 * result + (int)(expireAfter ^ (expireAfter >>> 32));
+        result = 31 * result + (int)(refreshFrequency ^ (refreshFrequency >>> 32));
         return result;
     }
 

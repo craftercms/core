@@ -16,14 +16,12 @@
  */
 package org.craftercms.core.xml.mergers.impl.strategies;
 
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
+import java.util.List;
+
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.List;
 
 /**
  * Implementation of {@link AbstractInheritFromHierarchyMergeStrategy}. Descriptors "inherited" are level descriptors

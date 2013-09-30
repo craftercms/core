@@ -16,19 +16,18 @@
  */
 package org.craftercms.core.util.spring.mvc;
 
-import com.google.gson.Gson;
-import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.util.JsonUtils;
-import org.craftercms.core.util.JsonUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.view.AbstractView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+import org.apache.commons.collections.CollectionUtils;
+import org.craftercms.core.util.JsonUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.view.AbstractView;
 
 /**
  * Class description goes HERE
@@ -66,20 +65,20 @@ public class GsonView extends AbstractView {
         this.gson = gson;
     }
 
-	/**
-	 * Indicates whether the JSON output by this view should be prefixed with "{@code {} &&}". Default is false.
-	 *
-	 * <p>Prefixing the JSON string in this manner is used to help prevent JSON Hijacking. The prefix renders the
+    /**
+     * Indicates whether the JSON output by this view should be prefixed with "{@code {} &&}". Default is false.
+     * <p/>
+     * <p>Prefixing the JSON string in this manner is used to help prevent JSON Hijacking. The prefix renders the
      * string syntactically invalid as a script so that it cannot be hijacked. This prefix does not affect the
      * evaluation of JSON, but if JSON validation is performed on the string, the prefix would need to be ignored.</p>
-	 */
-	public void setPrefixJson(boolean prefixJson) {
-		this.prefixJson = prefixJson;
-	}
+     */
+    public void setPrefixJson(boolean prefixJson) {
+        this.prefixJson = prefixJson;
+    }
 
-	/**
-	 * Tells the client to disable caching of the generated JSON. Default is false.
-	 */
+    /**
+     * Tells the client to disable caching of the generated JSON. Default is false.
+     */
     public void setDisableCaching(boolean disableCaching) {
         this.disableCaching = disableCaching;
     }
@@ -94,13 +93,13 @@ public class GsonView extends AbstractView {
 
     @Override
     protected void prepareResponse(HttpServletRequest request, HttpServletResponse response) {
-		response.setContentType(getContentType());
-		response.setCharacterEncoding(DEFAULT_CHARACTER_ENCODING);
-		if (disableCaching) {
-			response.addHeader(PRAGMA_HEADER_NAME, DISABLED_CACHING_PRAGMA_HEADER_VALUE);
-			response.addHeader(CACHE_CONTROL_HEADER_NAME, DISABLED_CACHING_CACHE_CONTROL_HEADER_VALUE);
-			response.addDateHeader(EXPIRES_HEADER_NAME, DISABLED_CACHING_EXPIRES_HEADER_VALUE);
-		}
+        response.setContentType(getContentType());
+        response.setCharacterEncoding(DEFAULT_CHARACTER_ENCODING);
+        if (disableCaching) {
+            response.addHeader(PRAGMA_HEADER_NAME, DISABLED_CACHING_PRAGMA_HEADER_VALUE);
+            response.addHeader(CACHE_CONTROL_HEADER_NAME, DISABLED_CACHING_CACHE_CONTROL_HEADER_VALUE);
+            response.addDateHeader(EXPIRES_HEADER_NAME, DISABLED_CACHING_EXPIRES_HEADER_VALUE);
+        }
     }
 
     @Override
@@ -121,28 +120,27 @@ public class GsonView extends AbstractView {
         }
     }
 
-	/**
-	 * Filters out undesired attributes from the given model.
-	 *
-	 * <p>Default implementation removes {@link BindingResult} instances and entries not included in the {@link
+    /**
+     * Filters out undesired attributes from the given model.
+     * <p/>
+     * <p>Default implementation removes {@link BindingResult} instances and entries not included in the {@link
      * #setRenderedAttributes(java.util.Set)} property.</p>
-	 *
-	 * @param model
-     *          the model, as passed on to {@link #renderMergedOutputModel}
-	 * @return the model with only the attributes to render
-	 */
-	protected Map<String, Object> filterModel(Map<String, Object> model) {
-		Map<String, Object> filteredModel = new HashMap<String, Object>(model.size());
-		Set<String> renderedAttributes = CollectionUtils.isNotEmpty(this.renderedAttributes) ? this.renderedAttributes
-                : model.keySet();
+     *
+     * @param model the model, as passed on to {@link #renderMergedOutputModel}
+     * @return the model with only the attributes to render
+     */
+    protected Map<String, Object> filterModel(Map<String, Object> model) {
+        Map<String, Object> filteredModel = new HashMap<String, Object>(model.size());
+        Set<String> renderedAttributes = CollectionUtils.isNotEmpty(this.renderedAttributes)? this
+            .renderedAttributes: model.keySet();
 
-		for (Map.Entry<String, Object> attribute : model.entrySet()) {
-			if (!(attribute.getValue() instanceof BindingResult) && renderedAttributes.contains(attribute.getKey())) {
-				filteredModel.put(attribute.getKey(), attribute.getValue());
-			}
-		}
+        for (Map.Entry<String, Object> attribute : model.entrySet()) {
+            if (!(attribute.getValue() instanceof BindingResult) && renderedAttributes.contains(attribute.getKey())) {
+                filteredModel.put(attribute.getKey(), attribute.getValue());
+            }
+        }
 
-		return filteredModel;
-	}
+        return filteredModel;
+    }
 
 }

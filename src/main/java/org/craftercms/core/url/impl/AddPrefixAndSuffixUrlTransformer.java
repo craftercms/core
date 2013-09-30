@@ -19,8 +19,6 @@ package org.craftercms.core.url.impl;
 import org.apache.commons.lang.StringUtils;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 
@@ -66,7 +64,8 @@ public class AddPrefixAndSuffixUrlTransformer implements UrlTransformer {
     }
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
         StringBuilder urlBuf = new StringBuilder(url);
 
         if (StringUtils.isNotEmpty(prefix)) {

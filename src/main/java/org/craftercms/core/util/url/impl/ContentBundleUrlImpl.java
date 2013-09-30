@@ -17,7 +17,6 @@
 package org.craftercms.core.util.url.impl;
 
 import org.craftercms.core.util.url.ContentBundleUrl;
-import org.craftercms.core.util.url.ContentBundleUrl;
 
 /**
  * @author Alfonso Vásquez

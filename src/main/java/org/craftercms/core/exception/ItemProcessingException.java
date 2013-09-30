@@ -22,7 +22,6 @@ package org.craftercms.core.exception;
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
- *
  * @see org.craftercms.core.processors.ItemProcessor
  * @see org.craftercms.core.service.Item
  */
@@ -44,5 +43,5 @@ public class ItemProcessingException extends CrafterException {
     public ItemProcessingException(Throwable cause) {
         super(cause);
     }
-    
+
 }

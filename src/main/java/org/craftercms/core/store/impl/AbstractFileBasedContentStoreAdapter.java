@@ -16,19 +16,16 @@
  */
 package org.craftercms.core.store.impl;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.StoreException;
-import org.craftercms.core.exception.XmlFileParseException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.Context;
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.StoreException;
@@ -40,15 +37,13 @@ import org.craftercms.core.service.Item;
 import org.craftercms.core.service.impl.CachedContent;
 import org.craftercms.core.util.CollectionUtils;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
 /**
- * File-based content store adapter. Takes away common stuff from actual implementations, like handling metadata files and
+ * File-based content store adapter. Takes away common stuff from actual implementations,
+ * like handling metadata files and
  * loading descriptor DOMs.
  *
  * @author Alfonso Vásquez
@@ -71,8 +66,8 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    protected Content doGetContent(Context context, CachingOptions cachingOptions, String path) throws InvalidContextException,
-            PathNotFoundException, StoreException {
+    protected Content doGetContent(Context context, CachingOptions cachingOptions,
+                                   String path) throws InvalidContextException, PathNotFoundException, StoreException {
         path = normalizePath(path);
 
         File file = getFile(context, path);
@@ -102,8 +97,9 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    protected Item doGetItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException {
+    protected Item doGetItem(Context context, CachingOptions cachingOptions, String path,
+                             boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
+        XmlFileParseException, StoreException {
         path = normalizePath(path);
 
         File file = getFile(context, path);
@@ -164,8 +160,9 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    protected List<Item> doGetItems(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException {
+    protected List<Item> doGetItems(Context context, CachingOptions cachingOptions, String path,
+                                    boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
+        XmlFileParseException, StoreException {
         path = normalizePath(path);
 
         File dir = getFile(context, path);
@@ -181,7 +178,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
                 // Ignore any item metadata file. Metadata file DOMs are included in their respective
                 // items.
                 if (!child.isFile() || !child.getName().endsWith(metadataFileExtension)) {
-                    String fileRelPath = path + (!path.equals("/")? "/" : "") + child.getName();
+                    String fileRelPath = path + (!path.equals("/")? "/": "") + child.getName();
                     Item item = getItem(context, cachingOptions, fileRelPath, withDescriptor);
 
                     items.add(item);
@@ -226,12 +223,12 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     /**
      * Returns the {@link File} at the given path.
      */
-    protected abstract File getFile(Context context, String path) throws InvalidContextException, PathNotFoundException, StoreException;
+    protected abstract File getFile(Context context, String path) throws InvalidContextException,
+        PathNotFoundException, StoreException;
 
     /**
      * Returns the list of children of the given directory.
      */
-    protected abstract List<File> getChildren(Context context, File dir) throws InvalidContextException, PathNotFoundException,
-            StoreException;
+    protected abstract List<File> getChildren(Context context, File dir) throws InvalidContextException, PathNotFoundException, StoreException;
 
 }

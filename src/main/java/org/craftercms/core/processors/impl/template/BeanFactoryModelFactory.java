@@ -16,9 +16,8 @@
  */
 package org.craftercms.core.processors.impl.template;
 
-import org.dom4j.Element;
-import org.dom4j.Node;
 import org.craftercms.core.service.Item;
+import org.dom4j.Node;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 

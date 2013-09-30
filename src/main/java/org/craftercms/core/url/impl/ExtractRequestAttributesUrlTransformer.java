@@ -16,9 +16,8 @@
  */
 package org.craftercms.core.url.impl;
 
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
+import java.util.Map;
+
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
@@ -26,8 +25,6 @@ import org.craftercms.core.url.UrlTransformer;
 import org.craftercms.core.util.HttpServletUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriTemplate;
-
-import java.util.Map;
 
 /**
  * Extracts a request attribute from the URL, and finally removes it from the URL. E.g.: with a URI template like
@@ -47,7 +44,8 @@ public class ExtractRequestAttributesUrlTransformer implements UrlTransformer {
     }
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
         if (uriTemplate.matches(url)) {
             Map<String, String> variables = uriTemplate.match(url);
             for (Map.Entry<String, String> entry : variables.entrySet()) {

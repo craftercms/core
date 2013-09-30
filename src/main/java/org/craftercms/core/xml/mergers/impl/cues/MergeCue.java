@@ -16,11 +16,10 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues;
 
+import java.util.Map;
+
 import org.craftercms.core.exception.XmlMergeException;
 import org.dom4j.Element;
-import org.craftercms.core.exception.XmlMergeException;
-
-import java.util.Map;
 
 /**
  * Class description goes HERE

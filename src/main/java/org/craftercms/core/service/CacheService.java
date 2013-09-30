@@ -16,16 +16,14 @@
  */
 package org.craftercms.core.service;
 
-import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.exception.InvalidContextException;
+import java.util.Collection;
+import java.util.List;
+
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
 import org.craftercms.core.exception.InternalCacheEngineException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.InvalidScopeException;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Sumer Jabri
@@ -38,10 +36,10 @@ public interface CacheService {
      */
     Collection<String> getScopes() throws InternalCacheEngineException;
 
-	/**
-	 * Clears the contents of the entire cache.
-	 */
-	void clearAll() throws InternalCacheEngineException;
+    /**
+     * Clears the contents of the entire cache.
+     */
+    void clearAll() throws InternalCacheEngineException;
 
     /**
      * Adds a new scope to the cache for the given context.
@@ -92,19 +90,19 @@ public interface CacheService {
      * Puts an item in the scope of the given context.
      */
     void put(Context context, Object key, Object value, List<Object> dependencyKeys) throws InvalidScopeException,
-            InternalCacheEngineException;
+        InternalCacheEngineException;
 
     /**
      * Puts and item in the scope of the given context.
      */
-    void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader, Object... loaderParams)
-            throws InvalidContextException, InternalCacheEngineException;
-
-    /**
-     * Puts and item in the scope of the given context.
-     */
-    void put(Context context, Object key, Object value, List<Object> dependencyKeys, CachingOptions cachingOptions, CacheLoader loader,
+    void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
              Object... loaderParams) throws InvalidContextException, InternalCacheEngineException;
+
+    /**
+     * Puts and item in the scope of the given context.
+     */
+    void put(Context context, Object key, Object value, List<Object> dependencyKeys, CachingOptions cachingOptions,
+             CacheLoader loader, Object... loaderParams) throws InvalidContextException, InternalCacheEngineException;
 
     /**
      * Removes an item from the scope of the given context.

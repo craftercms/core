@@ -16,12 +16,11 @@
  */
 package org.craftercms.core.util.cache.impl;
 
-import org.craftercms.core.util.cache.CachingAwareObject;
-import org.craftercms.core.util.cache.CachingAwareObject;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.craftercms.core.util.cache.CachingAwareObject;
 
 /**
  * Class description goes HERE
@@ -44,8 +43,8 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
         this.cachingTime = cachingAwareObject.getCachingTime();
 
         if (deepCopy) {
-            this.dependencyKeys = cachingAwareObject.getDependencyKeys() != null? new ArrayList<Object>(
-                    cachingAwareObject.getDependencyKeys()) : null;
+            this.dependencyKeys = cachingAwareObject.getDependencyKeys() != null? new ArrayList<Object>
+                (cachingAwareObject.getDependencyKeys()): null;
         } else {
             this.dependencyKeys = cachingAwareObject.getDependencyKeys();
         }

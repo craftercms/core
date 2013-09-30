@@ -16,10 +16,10 @@
  */
 package org.craftercms.core.store;
 
-import org.craftercms.core.util.spring.AbstractBeanIdBasedRegistry;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.craftercms.core.util.spring.AbstractBeanIdBasedRegistry;
 
 /**
  * {@link AbstractBeanIdBasedRegistry} for {@link ContentStoreAdapter}.

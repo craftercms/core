@@ -17,12 +17,12 @@
 package org.craftercms.core.cache.impl.store;
 
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
-import org.craftercms.core.cache.impl.CacheStoreAdapter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * {@link FactoryBean} that returns a different {@link org.craftercms.core.cache.impl.CacheStoreAdapter} depending on the value of a flag property
+ * {@link FactoryBean} that returns a different {@link org.craftercms.core.cache.impl.CacheStoreAdapter} depending on
+ * the value of a flag property
  * that indicates if caching should be turned on or off.
  *
  * @author Alfonso Vásquez

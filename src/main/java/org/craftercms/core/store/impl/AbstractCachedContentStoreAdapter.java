@@ -16,11 +16,13 @@
  */
 package org.craftercms.core.store.impl;
 
-import org.craftercms.core.exception.*;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.util.cache.CacheTemplate;
+import java.util.List;
+
+import org.craftercms.core.exception.InvalidContextException;
+import org.craftercms.core.exception.InvalidScopeException;
+import org.craftercms.core.exception.PathNotFoundException;
+import org.craftercms.core.exception.StoreException;
+import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
@@ -30,8 +32,6 @@ import org.craftercms.core.util.cache.CacheCallback;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.List;
 
 /**
  * Class description goes HERE
@@ -52,8 +52,8 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
     }
 
     @Override
-    public Content getContent(final Context context, final CachingOptions cachingOptions, final String path)
-            throws InvalidScopeException, PathNotFoundException, StoreException {
+    public Content getContent(final Context context, final CachingOptions cachingOptions,
+                              final String path) throws InvalidScopeException, PathNotFoundException, StoreException {
         return cacheTemplate.execute(context, cachingOptions, new CacheCallback<Content>() {
 
             @Override
@@ -63,15 +63,17 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
 
             @Override
             public String toString() {
-                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() + ".doGetContent(%s, %s)", context, path);
+                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() + ".doGetContent(%s," +
+                    " %s)", context, path);
             }
 
         }, context, path, CONST_KEY_ELEM_CONTENT);
     }
 
     @Override
-    public Item getItem(final Context context, final CachingOptions cachingOptions, final String path, final boolean withDescriptor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException {
+    public Item getItem(final Context context, final CachingOptions cachingOptions, final String path,
+                        final boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
+        XmlFileParseException, StoreException {
         return cacheTemplate.execute(context, cachingOptions, new CacheCallback<Item>() {
 
             @Override
@@ -81,16 +83,17 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
 
             @Override
             public String toString() {
-                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() + ".doGetItem(%s, %s, %s)", context,
-                        path, withDescriptor);
+                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() + ".doGetItem(%s, " +
+                    "%s, %s)", context, path, withDescriptor);
             }
 
         }, context, path, withDescriptor, CONST_KEY_ELEM_ITEM);
     }
 
     @Override
-    public List<Item> getItems(final Context context, final CachingOptions cachingOptions, final String path, final boolean withDescriptor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException {
+    public List<Item> getItems(final Context context, final CachingOptions cachingOptions, final String path,
+                               final boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
+        XmlFileParseException, StoreException {
         return cacheTemplate.execute(context, cachingOptions, new CacheCallback<List<Item>>() {
 
             @Override
@@ -105,20 +108,21 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
 
             @Override
             public String toString() {
-                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() + ".doGetItems(%s, %s, %s)", context,
-                        path, withDescriptor);
+                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() + ".doGetItems(%s, " +
+                    "%s, %s)", context, path, withDescriptor);
             }
 
         }, context, path, withDescriptor, CONST_KEY_ELEM_ITEMS);
     }
 
-    protected abstract Content doGetContent(Context context, CachingOptions cachingOptions, String path) throws InvalidContextException,
-            PathNotFoundException, StoreException;
+    protected abstract Content doGetContent(Context context, CachingOptions cachingOptions,
+                                            String path) throws InvalidContextException, PathNotFoundException,
+        StoreException;
 
-    protected abstract Item doGetItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
+    protected abstract Item doGetItem(Context context, CachingOptions cachingOptions, String path,
+                                      boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
+        XmlFileParseException, StoreException;
 
-    protected abstract List<Item> doGetItems(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
+    protected abstract List<Item> doGetItems(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor) throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
 
 }

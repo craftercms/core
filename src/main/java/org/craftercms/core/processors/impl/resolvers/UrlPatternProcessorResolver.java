@@ -16,18 +16,16 @@
  */
 package org.craftercms.core.processors.impl.resolvers;
 
-import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.processors.ItemProcessorResolver;
-import org.craftercms.core.service.Item;
+import java.util.Map;
+
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
 import org.craftercms.core.service.Item;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.util.Map;
-
 /**
- * {@link org.craftercms.core.processors.ItemProcessorResolver} that returns certain {@link org.craftercms.core.processors.ItemProcessor}s for certain url patterns.
+ * {@link org.craftercms.core.processors.ItemProcessorResolver} that returns certain {@link org.craftercms.core
+ * .processors.ItemProcessor}s for certain url patterns.
  *
  * @author Alfonso Vásquez
  */
@@ -52,7 +50,7 @@ public class UrlPatternProcessorResolver implements ItemProcessorResolver {
      */
     @Override
     public ItemProcessor getProcessor(Item item) {
-        for (Map.Entry<String, ItemProcessor> mapping: patternToProcessorMappings.entrySet()) {
+        for (Map.Entry<String, ItemProcessor> mapping : patternToProcessorMappings.entrySet()) {
             if (item.getUrl().matches(mapping.getKey())) {
                 return mapping.getValue();
             }

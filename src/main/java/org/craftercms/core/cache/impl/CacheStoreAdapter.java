@@ -16,10 +16,9 @@
  */
 package org.craftercms.core.cache.impl;
 
-import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.CacheItem;
-
 import java.util.Collection;
+
+import org.craftercms.core.cache.CacheItem;
 
 /**
  * Adapter to the real data structure used to store the items of a cache.
@@ -43,24 +42,21 @@ public interface CacheStoreAdapter {
      */
     Collection<String> getScopes() throws Exception;
 
-	/**
-	 * Adds a new scope to the underlying store.
-	 *
-	 * @param scope
-	 *          the name of the scope
-	 * @param maxItemsInMemory
-	 *          the maximum number of items in memory, before they are evicted
-	 * @throws Exception
-	 */
+    /**
+     * Adds a new scope to the underlying store.
+     *
+     * @param scope            the name of the scope
+     * @param maxItemsInMemory the maximum number of items in memory, before they are evicted
+     * @throws Exception
+     */
     void addScope(String scope, int maxItemsInMemory) throws Exception;
 
-	/**
-	 * Removes an existing scope and all the items that are in it.
-	 *
-	 * @param scope
-	 *          scope to remove
-	 * @throws Exception
-	 */
+    /**
+     * Removes an existing scope and all the items that are in it.
+     *
+     * @param scope scope to remove
+     * @throws Exception
+     */
     void removeScope(String scope) throws Exception;
 
     /**
@@ -88,52 +84,46 @@ public interface CacheStoreAdapter {
     boolean hasKey(String scope, Object key) throws Exception;
 
     /**
-	 * Retrieves an item from a scope.
-	 *
-	 * @param scope
-	 *            scope to get the item from
-	 * @param key
-	 *            unique key for the item within this scope
-	 * @return the requested item if found, null otherwise
-	 * @throws Exception
-	 */
+     * Retrieves an item from a scope.
+     *
+     * @param scope scope to get the item from
+     * @param key   unique key for the item within this scope
+     * @return the requested item if found, null otherwise
+     * @throws Exception
+     */
     CacheItem get(String scope, Object key) throws Exception;
 
     /**
      * Puts an item in a scope. The scope is obtained through {@link CacheItem#getScope()}.
      *
-     * @param item
-     *          the item to put
-	 * @throws Exception
+     * @param item the item to put
+     * @throws Exception
      */
     void put(CacheItem item) throws Exception;
 
-	/**
-	 * Removes an item from a scope.
-	 *
-	 * @param scope
-	 *            scope to remove the item from
-	 * @param key
-	 *            unique key for the item within this scope
-	 * @return true if the removal was successful, false otherwise
-	 * @throws Exception
-	 */
+    /**
+     * Removes an item from a scope.
+     *
+     * @param scope scope to remove the item from
+     * @param key   unique key for the item within this scope
+     * @return true if the removal was successful, false otherwise
+     * @throws Exception
+     */
     boolean remove(String scope, Object key) throws Exception;
 
-	/**
-	 * Clears the contents of the entire store.
-	 *
-	 * @throws Exception
-	 */
+    /**
+     * Clears the contents of the entire store.
+     *
+     * @throws Exception
+     */
     void clearAll() throws Exception;
 
-	/**
-	 * Clears the contents of the specified scope in the underlying store.
-	 *
-	 * @param scope
-	 *            scope to clear
-	 * @throws Exception
-	 */
-    void clearScope(String scope) throws Exception;    
+    /**
+     * Clears the contents of the specified scope in the underlying store.
+     *
+     * @param scope scope to clear
+     * @throws Exception
+     */
+    void clearScope(String scope) throws Exception;
 
 }

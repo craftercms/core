@@ -17,7 +17,6 @@
 package org.craftercms.core.processors.impl.resolvers;
 
 import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
 import org.craftercms.core.service.Item;
 import org.springframework.beans.factory.annotation.Required;

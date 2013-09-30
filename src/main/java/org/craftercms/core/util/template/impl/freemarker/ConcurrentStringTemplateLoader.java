@@ -16,12 +16,12 @@
  */
 package org.craftercms.core.util.template.impl.freemarker;
 
-import freemarker.cache.TemplateLoader;
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import freemarker.cache.TemplateLoader;
 
 /**
  * Class description goes HERE
@@ -73,13 +73,13 @@ public class ConcurrentStringTemplateLoader implements TemplateLoader {
         private final long lastModified;
 
         public StringTemplateSource(String name, String source, long lastModified) {
-            if(name == null) {
+            if (name == null) {
                 throw new IllegalArgumentException("name == null");
             }
-            if(source == null) {
+            if (source == null) {
                 throw new IllegalArgumentException("source == null");
             }
-            if(lastModified < -1L) {
+            if (lastModified < -1L) {
                 throw new IllegalArgumentException("lastModified < -1L");
             }
             this.name = name;
@@ -100,7 +100,7 @@ public class ConcurrentStringTemplateLoader implements TemplateLoader {
         }
 
         public boolean equals(Object obj) {
-            if(obj instanceof StringTemplateSource) {
+            if (obj instanceof StringTemplateSource) {
                 return name.equals(((StringTemplateSource)obj).name);
             }
             return false;

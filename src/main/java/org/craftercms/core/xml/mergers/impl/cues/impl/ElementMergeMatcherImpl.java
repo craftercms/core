@@ -19,7 +19,6 @@ package org.craftercms.core.xml.mergers.impl.cues.impl;
 import org.craftercms.core.xml.mergers.impl.cues.ElementMergeMatcher;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.craftercms.core.xml.mergers.impl.cues.ElementMergeMatcher;
 import org.springframework.beans.factory.annotation.Required;
 
 /**

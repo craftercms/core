@@ -16,34 +16,33 @@
  */
 package org.craftercms.core.util;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @author Sumer Jabri
- * 
  */
 public class UrlUtils {
 
-	public static final char URL_PARAM_DELIM = '?';
-	public static final char URL_PARAM_SEPARATOR = '&';
+    public static final char URL_PARAM_DELIM = '?';
+    public static final char URL_PARAM_SEPARATOR = '&';
 
     /**
      * Returns the short name representation of a long name.
      *
      * @param longName
-     * @param containsShortNameRegex
-     *          the regex that identifies whether the long name contains a short name. This regex should also contain
-     *          a group expression that can be use to capture for the short name (see the Pattern class javadoc).
-     * @param shortNameRegexGroup
-     *          the index of the captured group that represents the short name (see the Pattern class javadoc)
+     * @param containsShortNameRegex the regex that identifies whether the long name contains a short name. This
+     *                               regex should also contain
+     *                               a group expression that can be use to capture for the short name (see the
+     *                               Pattern class javadoc).
+     * @param shortNameRegexGroup    the index of the captured group that represents the short name (see the Pattern
+     *                               class javadoc)
      * @return the short name, or the long name if there was no short name match
-     *
      * @see {@link Pattern}
      */
     public static String getShortName(String longName, String containsShortNameRegex, int shortNameRegexGroup) {

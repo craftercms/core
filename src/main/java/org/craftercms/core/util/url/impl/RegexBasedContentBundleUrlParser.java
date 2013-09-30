@@ -16,14 +16,12 @@
  */
 package org.craftercms.core.util.url.impl;
 
-import org.craftercms.core.util.url.ContentBundleUrl;
-import org.craftercms.core.util.url.ContentBundleUrlParser;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.craftercms.core.util.url.ContentBundleUrl;
 import org.craftercms.core.util.url.ContentBundleUrlParser;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Alfonso Vásquez

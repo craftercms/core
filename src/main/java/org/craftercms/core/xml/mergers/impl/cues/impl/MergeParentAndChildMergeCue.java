@@ -16,19 +16,18 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
-import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.util.CollectionUtils;
 import org.craftercms.core.xml.mergers.impl.cues.ElementMergeMatcher;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Class description goes HERE
@@ -82,11 +81,11 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
             List<Element> mergedElements = merged.elements();
 
             if (CollectionUtils.isNotEmpty(parentElements) && CollectionUtils.isNotEmpty(childElements)) {
-                for (Iterator<Element> i = parentElements.iterator(); i.hasNext();) {
+                for (Iterator<Element> i = parentElements.iterator(); i.hasNext(); ) {
                     Element parentElement = i.next();
                     boolean elementsMerged = false;
 
-                    for (Iterator<Element> j = childElements.iterator(); !elementsMerged && j.hasNext();) {
+                    for (Iterator<Element> j = childElements.iterator(); !elementsMerged && j.hasNext(); ) {
                         Element childElement = j.next();
                         if (elementMergeMatcher.matchForMerge(parentElement, childElement)) {
                             MergeCueContext context = mergeCueResolver.getMergeCue(parentElement, childElement);
@@ -100,7 +99,7 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
                                 elementsMerged = true;
                             } else {
                                 throw new XmlMergeException("No merge cue was resolved for matching elements " +
-                                        parentElement + " (parent) and " + childElement + " (child)");
+                                    parentElement + " (parent) and " + childElement + " (child)");
                             }
                         }
                     }

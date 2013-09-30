@@ -16,17 +16,14 @@
  */
 package org.craftercms.core.cache.impl.store;
 
-import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.impl.CacheStoreAdapter;
-import org.craftercms.core.exception.InvalidScopeException;
-import org.craftercms.core.cache.CacheItem;
-import org.craftercms.core.cache.impl.CacheStoreAdapter;
-import org.craftercms.core.exception.InvalidScopeException;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.craftercms.core.cache.CacheItem;
+import org.craftercms.core.cache.impl.CacheStoreAdapter;
+import org.craftercms.core.exception.InvalidScopeException;
 
 /**
  * Implementation of a {@link org.craftercms.core.cache.impl.CacheStoreAdapter} using an underlying {@link Map}.
@@ -78,10 +75,8 @@ public class MapCacheStoreAdapter implements CacheStoreAdapter {
     /**
      * Adds a new scope. The scope is an instance of {@link ConcurrentHashMap}.
      *
-     * @param scope
-     *          the name of the scope
-     * @param maxItemsInMemory
-     *          the maximum number of items in memory, before they are evicted
+     * @param scope            the name of the scope
+     * @param maxItemsInMemory the maximum number of items in memory, before they are evicted
      * @throws Exception
      */
     public void addScope(String scope, int maxItemsInMemory) throws Exception {
@@ -101,7 +96,7 @@ public class MapCacheStoreAdapter implements CacheStoreAdapter {
      */
     public int getSize(String scope) throws Exception {
         return getScopeCache(scope).size();
-    }    
+    }
 
     /**
      * {@inheritDoc}

@@ -16,14 +16,12 @@
  */
 package org.craftercms.core.store.impl.filesystem;
 
-import org.craftercms.core.service.Content;
-import org.craftercms.core.store.impl.File;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.store.impl.File;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+
+import org.craftercms.core.service.Content;
+import org.craftercms.core.store.impl.File;
 
 /**
  * Adapter to a filesystem {@link java.io.File}, used by {@link org.craftercms.core.store.ContentStoreAdapter}s;
@@ -94,7 +92,7 @@ public class FileSystemFile implements File, Content {
             return false;
         }
 
-        FileSystemFile other = (FileSystemFile) o;
+        FileSystemFile other = (FileSystemFile)o;
 
         if (!file.equals(other.file)) {
             return false;

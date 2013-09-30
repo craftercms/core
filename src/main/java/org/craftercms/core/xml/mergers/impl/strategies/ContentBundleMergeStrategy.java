@@ -16,11 +16,11 @@
  */
 package org.craftercms.core.xml.mergers.impl.strategies;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
-import org.dom4j.Document;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.service.CachingOptions;
@@ -30,10 +30,8 @@ import org.craftercms.core.util.url.ContentBundleUrlParser;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
+import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * {@link DescriptorMergeStrategy} that returns the level descriptors in the hierarchy and the base descriptors
@@ -74,20 +72,21 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
         this.regularMergeStrategy = regularMergeStrategy;
     }
 
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl)
-            throws XmlMergeException {
+    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                                    String primaryDescriptorUrl) throws XmlMergeException {
         return getDescriptors(context, cachingOptions, primaryDescriptorUrl, false);
     }
 
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions, String primaryDescriptorUrl,
-                                                    boolean primaryDescriptorOptional)
-            throws XmlMergeException {
+    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+                                                    String primaryDescriptorUrl, boolean primaryDescriptorOptional)
+        throws XmlMergeException {
         List<MergeableDescriptor> descriptors = new ArrayList<MergeableDescriptor>();
         List<MergeableDescriptor> tmp;
 
         ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(primaryDescriptorUrl);
         String prefix = parsedUrl.getPrefix(); // prefix = folder1/
-        String baseNameAndExtensionToken = parsedUrl.getBaseNameAndExtensionToken(); // baseNameAndExtensionToken = folder2_es
+        String baseNameAndExtensionToken = parsedUrl.getBaseNameAndExtensionToken(); // baseNameAndExtensionToken =
+        // folder2_es
         String suffix = parsedUrl.getSuffix(); // suffix = /file.xml
 
         // If the prefix is the same length as the initial URI, ignore, otherwise process
@@ -115,7 +114,8 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
                 if (baseFound) {
                     // This can recurse if the selected strategy is also an ContentBundleMergeStrategy and the base
                     // descriptor path has more families.
-                    DescriptorMergeStrategy baseMergeStrategy = baseMergeStrategyResolver.getStrategy(baseDescriptor, baseDescriptorDom);
+                    DescriptorMergeStrategy baseMergeStrategy = baseMergeStrategyResolver.getStrategy(baseDescriptor,
+                        baseDescriptorDom);
                     if (baseMergeStrategy == null) {
                         throw new XmlMergeException("No merge strategy for descriptor " + baseDescriptor);
                     }

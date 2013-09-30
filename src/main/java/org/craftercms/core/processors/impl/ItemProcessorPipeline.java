@@ -16,22 +16,21 @@
  */
 package org.craftercms.core.processors.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
- * Pipeline of {@link org.craftercms.core.processors.ItemProcessor}s. The output of each processor's {@link org.craftercms.core.processors.ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions, Item)}
+ * Pipeline of {@link org.craftercms.core.processors.ItemProcessor}s. The output of each processor's {@link org
+ * .craftercms.core.processors.ItemProcessor#process(org.craftercms.core.service.Context,
+ * org.craftercms.core.service.CachingOptions, Item)}
  * call is passed as input to the next processor.
  *
  * @author Sumer Jabri
@@ -90,12 +89,11 @@ public class ItemProcessorPipeline implements ItemProcessor {
 
     /**
      * Processes the given {@link Item}, by calling a pipeline of processors. The output of each processor's
-     * {@link ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions, Item)} call is passed as input to the next processor.
+     * {@link ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions,
+     * Item)} call is passed as input to the next processor.
      *
      * @return the result of the final processor in the pipeline.
-     *
-     * @throws ItemProcessingException
-     *          if one of the processors in the pipeline couldn't process the item
+     * @throws ItemProcessingException if one of the processors in the pipeline couldn't process the item
      */
     @Override
     public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
@@ -120,9 +118,9 @@ public class ItemProcessorPipeline implements ItemProcessor {
             return false;
         }
 
-        ItemProcessorPipeline that = (ItemProcessorPipeline) o;
+        ItemProcessorPipeline that = (ItemProcessorPipeline)o;
 
-        if (processors != null ? !processors.equals(that.processors) : that.processors != null) {
+        if (processors != null? !processors.equals(that.processors): that.processors != null) {
             return false;
         }
 
@@ -136,14 +134,14 @@ public class ItemProcessorPipeline implements ItemProcessor {
      */
     @Override
     public int hashCode() {
-        return processors != null ? processors.hashCode() : 0;
+        return processors != null? processors.hashCode(): 0;
     }
 
     @Override
     public String toString() {
         return "ItemProcessorPipeline[" +
-                "processors=" + processors +
-                ']';
+            "processors=" + processors +
+            ']';
     }
 
 }

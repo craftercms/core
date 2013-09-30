@@ -16,33 +16,32 @@
  */
 package org.craftercms.core.service;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.util.XmlUtils;
-import org.dom4j.Document;
-import org.craftercms.core.util.XmlUtils;
-import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.craftercms.core.util.XmlUtils;
+import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
+import org.dom4j.Document;
+
 /**
  * Represents an item of a content store. Content store items can be separated into 3 main categories:
- *
+ * <p/>
  * <ol>
- *     <li>
- *         <b>Standalone descriptors</b>: XML files that contain metadata and content for web pages. These type of
- *         descriptors are in themselves items, so the item url and the descriptor url should be the same.
- *     </li>
- *     <li>
- *         <b>Static assets</b>: Static files like images, css and javascript.
- *     </li>
- *     <li>
- *         <b>Folders</b>: Plain old folders/directories.
- *     </li>
+ * <li>
+ * <b>Standalone descriptors</b>: XML files that contain metadata and content for web pages. These type of
+ * descriptors are in themselves items, so the item url and the descriptor url should be the same.
+ * </li>
+ * <li>
+ * <b>Static assets</b>: Static files like images, css and javascript.
+ * </li>
+ * <li>
+ * <b>Folders</b>: Plain old folders/directories.
+ * </li>
  * </ol>
- *
+ * <p/>
  * <p>Both static assets and folders can have their own metadata files or descriptors. So we can also say that
  * there are two types of descriptors: standalone descriptors and (static asset and folder) metadata files.</p>
  *
@@ -103,8 +102,8 @@ public class Item extends CachingAwareObjectBase {
         isFolder = item.isFolder;
 
         if (deepCopy) {
-            descriptorDom = item.descriptorDom != null? (Document) item.descriptorDom.clone() : null;
-            properties = item.properties != null? new HashMap<String, Object>(item.properties) : null;
+            descriptorDom = item.descriptorDom != null? (Document)item.descriptorDom.clone(): null;
+            properties = item.properties != null? new HashMap<String, Object>(item.properties): null;
         } else {
             descriptorDom = item.descriptorDom;
             properties = item.properties;
@@ -211,7 +210,7 @@ public class Item extends CachingAwareObjectBase {
      */
     public String queryDescriptorValue(String xPathQuery) {
         if (descriptorDom != null) {
-            String value = (String) getProperty(xPathQuery);
+            String value = (String)getProperty(xPathQuery);
             if (value == null) {
                 value = XmlUtils.selectSingleNodeValue(descriptorDom, xPathQuery);
             }
@@ -228,7 +227,7 @@ public class Item extends CachingAwareObjectBase {
      */
     public List<String> queryDescriptorValues(String xPathQuery) {
         if (descriptorDom != null) {
-            List<String> value = (List<String>) getProperty(xPathQuery);
+            List<String> value = (List<String>)getProperty(xPathQuery);
             if (CollectionUtils.isEmpty(value)) {
                 value = XmlUtils.selectNodeValues(descriptorDom, xPathQuery);
             }
@@ -254,7 +253,8 @@ public class Item extends CachingAwareObjectBase {
     }
 
     /**
-     * Returns true if the specified {@code Item}'s and this instance's {@code name}, {@code url}, {@code descriptorUrl} and
+     * Returns true if the specified {@code Item}'s and this instance's {@code name}, {@code url},
+     * {@code descriptorUrl} and
      * {@code isFolder} are equal.
      */
     @Override
@@ -266,15 +266,15 @@ public class Item extends CachingAwareObjectBase {
             return false;
         }
 
-        Item item = (Item) o;
+        Item item = (Item)o;
 
-        if (name != null ? !name.equals(item.name) : item.name != null) {
+        if (name != null? !name.equals(item.name): item.name != null) {
             return false;
         }
-        if (url != null ? !url.equals(item.url) : item.url != null) {
+        if (url != null? !url.equals(item.url): item.url != null) {
             return false;
         }
-        if (descriptorUrl != null ? !descriptorUrl.equals(item.descriptorUrl) : item.descriptorUrl != null) {
+        if (descriptorUrl != null? !descriptorUrl.equals(item.descriptorUrl): item.descriptorUrl != null) {
             return false;
         }
         if (isFolder != item.isFolder) {
@@ -285,27 +285,28 @@ public class Item extends CachingAwareObjectBase {
     }
 
     /**
-     * Returns the hash code, which is the combination of the hash code of {@code name}, {@code url}, {@code descriptorUrl} and
+     * Returns the hash code, which is the combination of the hash code of {@code name}, {@code url},
+     * {@code descriptorUrl} and
      * {@code folder}.
      */
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (descriptorUrl != null ? descriptorUrl.hashCode() : 0);
-        result = 31 * result + (isFolder ? 1 : 0);
+        int result = name != null? name.hashCode(): 0;
+        result = 31 * result + (url != null? url.hashCode(): 0);
+        result = 31 * result + (descriptorUrl != null? descriptorUrl.hashCode(): 0);
+        result = 31 * result + (isFolder? 1: 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Item[" +
-                "name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", descriptorUrl='" + descriptorUrl + '\'' +
-                ", properties=" + properties +
-                ", folder=" + isFolder +
-                ']';
+            "name='" + name + '\'' +
+            ", url='" + url + '\'' +
+            ", descriptorUrl='" + descriptorUrl + '\'' +
+            ", properties=" + properties +
+            ", folder=" + isFolder +
+            ']';
     }
 
 }

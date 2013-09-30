@@ -16,24 +16,27 @@
  */
 package org.craftercms.core.util;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.dom4j.*;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.XPath;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 
 
 /**
@@ -57,7 +60,8 @@ public class XmlUtils {
     }
 
     /**
-     * Executes the specified namespace aware XPath query as a single node query, returning the text value of the resulting single node.
+     * Executes the specified namespace aware XPath query as a single node query,
+     * returning the text value of the resulting single node.
      */
     public static String selectSingleNodeValue(Node node, String xPathQuery, Map<String, String> namespaceUris) {
         Node resultNode = selectSingleNode(node, xPathQuery, namespaceUris);
@@ -87,7 +91,8 @@ public class XmlUtils {
     }
 
     /**
-     * Executes the specified namespace aware XPath query as a multiple node query, returning the text values of the resulting list of
+     * Executes the specified namespace aware XPath query as a multiple node query,
+     * returning the text values of the resulting list of
      * nodes.
      */
     public static List<String> selectNodeValues(Node node, String xPathQuery, Map<String, String> namespaceUris) {
@@ -131,7 +136,7 @@ public class XmlUtils {
      * @return the document as an XML string
      */
     public static String documentToPrettyString(Document document) {
-		StringWriter stringWriter = new StringWriter();
+        StringWriter stringWriter = new StringWriter();
         OutputFormat prettyPrintFormat = OutputFormat.createPrettyPrint();
         XMLWriter xmlWriter = new XMLWriter(stringWriter, prettyPrintFormat);
 
@@ -146,9 +151,9 @@ public class XmlUtils {
 
     /**
      * Returns the given document as a JSON object.
-     *
+     * <p/>
      * The following are the conversion patterns used between XML and JSON:
-     *
+     * <p/>
      * XML                              JSON                                            Access
      * ---                              ----                                            ------
      * <e/>                             "e": null                                       o.e
@@ -158,8 +163,9 @@ public class XmlUtils {
      * <e><a>text</a><b>text</b></e>    "e": { "a": "text", "b": "text" }               o.e.a o.e.b
      * <e><a>text</a><a>text</a></e>	"e": { "a": ["text", "text"] }                  o.e.a[0] o.e.a[1]
      * <e>text<a>text</a></e>           "e": { "text": "text", "a": "text" }            o.e["text"] o.e.a
-     * <e>text<a>text</a>text</e>       "e": { "text": ["text", "text"], "a": "text" }  o.e["text"][0] o.e["text"][1] o.e.a
-     *
+     * <e>text<a>text</a>text</e>       "e": { "text": ["text", "text"], "a": "text" }  o.e["text"][0] o.e["text"][1]
+     * o.e.a
+     * <p/>
      * <b>IMPORTANT:</b> XML Namespaces are ALWAYS ignored.
      *
      * @param document
@@ -214,7 +220,8 @@ public class XmlUtils {
         }
     }
 
-    private static void addElementTextToJson(JsonObject parentJson, JsonObject elementJson, String elementName, String text) {
+    private static void addElementTextToJson(JsonObject parentJson, JsonObject elementJson, String elementName,
+                                             String text) {
         JsonElement value;
         if (text != null) {
             value = new JsonPrimitive(text);

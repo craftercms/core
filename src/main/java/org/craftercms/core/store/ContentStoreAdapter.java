@@ -16,39 +16,42 @@
  */
 package org.craftercms.core.store;
 
-import org.craftercms.core.exception.*;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
-
 import java.util.List;
+
+import org.craftercms.core.exception.AuthenticationException;
+import org.craftercms.core.exception.InvalidContextException;
+import org.craftercms.core.exception.InvalidScopeException;
+import org.craftercms.core.exception.PathNotFoundException;
+import org.craftercms.core.exception.StoreException;
+import org.craftercms.core.exception.XmlFileParseException;
+import org.craftercms.core.service.CachingOptions;
+import org.craftercms.core.service.Content;
+import org.craftercms.core.service.Context;
+import org.craftercms.core.service.Item;
 
 /**
  * Adapter that provides path based access to a repository of some type.
- * 
+ *
  * @author Sumer Jabri
  * @author Michiel Verkaik
  * @author Alfonso Vásquez
  */
 public interface ContentStoreAdapter {
 
-    Context createContext(String id, String storeServerUrl, String username, String password, String rootFolderPath, boolean cacheOn,
-                          int maxAllowedItemsInCache, boolean ignoreHiddenFiles) throws StoreException, AuthenticationException;
+    Context createContext(String id, String storeServerUrl, String username, String password, String rootFolderPath,
+                          boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles) throws
+        StoreException, AuthenticationException;
 
     void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException;
 
-    Content getContent(Context context, CachingOptions cachingOptions, String path) throws InvalidScopeException, PathNotFoundException,
-            StoreException;
+    Content getContent(Context context, CachingOptions cachingOptions, String path) throws InvalidScopeException,
+        PathNotFoundException, StoreException;
 
-    Item getItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor) throws InvalidScopeException,
-            PathNotFoundException, XmlFileParseException, StoreException;
+    Item getItem(Context context, CachingOptions cachingOptions, String path,
+                 boolean withDescriptor) throws InvalidScopeException, PathNotFoundException, XmlFileParseException,
+        StoreException;
 
-    List<Item> getItems(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor) throws InvalidScopeException,
-            PathNotFoundException, XmlFileParseException, StoreException;
+    List<Item> getItems(Context context, CachingOptions cachingOptions, String path,
+                        boolean withDescriptor) throws InvalidScopeException, PathNotFoundException, XmlFileParseException, StoreException;
 
 }

@@ -16,22 +16,22 @@
 */
 package org.craftercms.core.xml.mergers.impl.resolvers;
 
-import org.dom4j.Document;
-import org.dom4j.Node;
+import java.util.Map;
+
 import org.craftercms.core.exception.XmlException;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
+import org.dom4j.Document;
+import org.dom4j.Node;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.util.Map;
-
 /**
-* Resolves the {@link DescriptorMergeStrategy} to use for a given descriptor, based on the value of an element in
-* the descriptor document.
-*
-* @author Sumer Jabri
-* @author Alfonso Vasquez
-*/
+ * Resolves the {@link DescriptorMergeStrategy} to use for a given descriptor, based on the value of an element in
+ * the descriptor document.
+ *
+ * @author Sumer Jabri
+ * @author Alfonso Vasquez
+ */
 public class MetaDataMergeStrategyResolver implements DescriptorMergeStrategyResolver {
 
     private String mergeStrategyElementXPathQuery;
@@ -51,14 +51,11 @@ public class MetaDataMergeStrategyResolver implements DescriptorMergeStrategyRes
      * Returns a {@link DescriptorMergeStrategy} for a given descriptor. The strategy chosen is the one defined
      * in the descriptor document.
      *
-     * @param descriptorUrl
-     *          the URL that identifies the descriptor
-     * @param descriptorDom
-     *          the XML DOM of the descriptor
+     * @param descriptorUrl the URL that identifies the descriptor
+     * @param descriptorDom the XML DOM of the descriptor
      * @return the {@link DescriptorMergeStrategy} for the descriptor, or null if the DOM is null or if there's no
      *         element in the DOM that defines the merge strategy to use.
-     * @throws XmlException
-     *          if the element value doesn't refer to an existing strategy
+     * @throws XmlException if the element value doesn't refer to an existing strategy
      */
     public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) throws XmlException {
         if (descriptorDom != null) {
@@ -68,7 +65,8 @@ public class MetaDataMergeStrategyResolver implements DescriptorMergeStrategyRes
                 if (strategy != null) {
                     return strategy;
                 } else {
-                    throw new XmlException("Element value \"" + element.getText() + "\" doesn't refer to an registered strategy");
+                    throw new XmlException("Element value \"" + element.getText() + "\" doesn't refer to an " +
+                        "registered strategy");
                 }
             } else {
                 return null;

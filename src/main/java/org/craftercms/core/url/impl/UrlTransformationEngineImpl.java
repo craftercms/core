@@ -16,19 +16,16 @@
  */
 package org.craftercms.core.url.impl;
 
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.Map;
 
 /**
  * Class description goes HERE
@@ -48,8 +45,8 @@ public class UrlTransformationEngineImpl extends AbstractCachedUrlTransformation
     }
 
     @Override
-    protected String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName, String url)
-            throws UrlTransformationException {
+    protected String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName,
+                                    String url) throws UrlTransformationException {
         UrlTransformer transformer = transformers.get(transformerName);
         if (transformer == null) {
             throw new UrlTransformationException("Url transformer " + transformerName + " not found");

@@ -16,10 +16,10 @@
  */
 package org.craftercms.core.service;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Folder {@link Item} that also contains it's children.
@@ -61,7 +61,7 @@ public class Tree extends Item {
         isFolder = true;
     }
 
-     /**
+    /**
      * Copy constructor that takes another tree. Performs a deep copy (calls {@link #Item(Item, boolean)} with true).
      */
     public Tree(Tree tree) {
@@ -81,7 +81,7 @@ public class Tree extends Item {
                 children = new ArrayList<Item>(tree.children.size());
                 for (Item child : tree.children) {
                     if (child instanceof Tree) {
-                        children.add(new Tree((Tree) child, deepCopy));
+                        children.add(new Tree((Tree)child, deepCopy));
                     } else {
                         children.add(new Item(child, deepCopy));
                     }
@@ -98,8 +98,8 @@ public class Tree extends Item {
      * Overrides {@link Item#setFolder(boolean)}, by checking that the flag is never set to false, since a tree
      * is always a folder.
      *
-     * @throws IllegalArgumentException
-     *          if the method was called with false (the folder flag should never being set to false).
+     * @throws IllegalArgumentException if the method was called with false (the folder flag should never being set
+     *                                  to false).
      */
     @Override
     public void setFolder(boolean folder) {
@@ -164,9 +164,9 @@ public class Tree extends Item {
             return false;
         }
 
-        Tree tree = (Tree) o;
+        Tree tree = (Tree)o;
 
-        if (children != null ? !children.equals(tree.children) : tree.children != null) {
+        if (children != null? !children.equals(tree.children): tree.children != null) {
             return false;
         }
 
@@ -179,19 +179,19 @@ public class Tree extends Item {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (children != null ? children.hashCode() : 0);
+        result = 31 * result + (children != null? children.hashCode(): 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Tree[" +
-                "name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", descriptorUrl='" + descriptorUrl + '\'' +
-                ", properties=" + properties +
-                ", children=" + children +
-                ']';
+            "name='" + name + '\'' +
+            ", url='" + url + '\'' +
+            ", descriptorUrl='" + descriptorUrl + '\'' +
+            ", properties=" + properties +
+            ", children=" + children +
+            ']';
     }
 
 }

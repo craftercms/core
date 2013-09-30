@@ -21,9 +21,6 @@ import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -51,14 +48,15 @@ public class ReplacePatternAllUrlTransformer implements UrlTransformer {
     }
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
-		String result = doReplacing(url);
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
+        String result = doReplacing(url);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Transformation in: " + url + ", Transformation out: " + result);
         }
 
-		return result;
+        return result;
     }
 
     protected String doReplacing(String url) {

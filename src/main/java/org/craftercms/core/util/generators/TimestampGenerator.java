@@ -19,7 +19,7 @@ package org.craftercms.core.util.generators;
 /**
  * Generator for timestamps. The concrete class the represents the timestamp
  * is defined by implementing classes.
- *
+ * <p/>
  * Also, implementations should be thread safe.
  *
  * @author Alfonso Vásquez
@@ -30,8 +30,7 @@ public interface TimestampGenerator {
      * Generates a new timestamp. The implementations should return an identifier
      * that's unique across repeated calls in a considerable amount of time.
      *
-     * @return
-     *      the new timestamp
+     * @return the new timestamp
      */
     public long generate();
 

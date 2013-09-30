@@ -16,9 +16,10 @@
  */
 package org.craftercms.core.util.template.impl.spel;
 
-import org.craftercms.core.exception.TemplateException;
-import org.craftercms.core.util.template.CompiledTemplate;
-import org.craftercms.core.util.template.impl.IdentifiableStringTemplateSource;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
+
 import org.craftercms.core.exception.TemplateException;
 import org.craftercms.core.util.template.CompiledTemplate;
 import org.craftercms.core.util.template.TemplateCompiler;
@@ -30,23 +31,23 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.expression.BeanFactoryAccessor;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.expression.*;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParserContext;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeConverter;
 import org.springframework.expression.spel.support.StandardTypeLocator;
 
-import javax.annotation.PostConstruct;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * Class description goes HERE
  *
  * @author Alfonso Vásquez
  */
-public class SpELStringTemplateCompiler implements TemplateCompiler<IdentifiableStringTemplateSource>, BeanFactoryAware {
+public class SpELStringTemplateCompiler implements TemplateCompiler<IdentifiableStringTemplateSource>,
+    BeanFactoryAware {
 
     private ExpressionParser parser;
     private ParserContext parserContext;
@@ -75,7 +76,7 @@ public class SpELStringTemplateCompiler implements TemplateCompiler<Identifiable
             throw new IllegalArgumentException("beanFactory should be of type ConfigurableBeanFactory");
         }
 
-        this.beanFactory = (ConfigurableBeanFactory) beanFactory;
+        this.beanFactory = (ConfigurableBeanFactory)beanFactory;
     }
 
     @PostConstruct
@@ -85,7 +86,7 @@ public class SpELStringTemplateCompiler implements TemplateCompiler<Identifiable
         }
 
         if (evalContext instanceof StandardEvaluationContext) {
-            StandardEvaluationContext standardEvalContext = (StandardEvaluationContext) evalContext;
+            StandardEvaluationContext standardEvalContext = (StandardEvaluationContext)evalContext;
             // PropertyAccessor used when the model is a BeanFactory.
             standardEvalContext.addPropertyAccessor(new BeanFactoryAccessor());
             if (beanFactory != null) {

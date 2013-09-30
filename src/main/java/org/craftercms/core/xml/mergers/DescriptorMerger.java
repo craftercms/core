@@ -16,10 +16,10 @@
  */
 package org.craftercms.core.xml.mergers;
 
-import org.dom4j.Document;
-import org.craftercms.core.exception.XmlMergeException;
-
 import java.util.List;
+
+import org.craftercms.core.exception.XmlMergeException;
+import org.dom4j.Document;
 
 /**
  * Merges a set of XML DOM descriptors into a new DOM.
@@ -31,8 +31,7 @@ public interface DescriptorMerger {
     /**
      * Merges a set of XML DOM descriptors into a new DOM.
      *
-     * @param descriptorsToMerge
-     *          the XML DOMs of the descriptors to merge
+     * @param descriptorsToMerge the XML DOMs of the descriptors to merge
      * @return the result of the merging
      * @throws XmlMergeException
      */

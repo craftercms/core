@@ -21,9 +21,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
-import org.craftercms.core.exception.*;
+import org.craftercms.core.exception.AuthenticationException;
+import org.craftercms.core.exception.InvalidContextException;
+import org.craftercms.core.exception.ItemProcessingException;
+import org.craftercms.core.exception.PathNotFoundException;
+import org.craftercms.core.exception.StoreException;
+import org.craftercms.core.exception.XmlFileParseException;
+import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.service.*;
+import org.craftercms.core.service.CachingOptions;
+import org.craftercms.core.service.ContentStoreService;
+import org.craftercms.core.service.Context;
+import org.craftercms.core.service.Item;
+import org.craftercms.core.service.ItemFilter;
+import org.craftercms.core.service.Tree;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Required;
@@ -98,21 +109,21 @@ public class ContentStoreRestController extends RestControllerBase implements Ap
                                       @RequestParam(REQUEST_PARAM_PASSWORD) String password,
                                       @RequestParam(REQUEST_PARAM_ROOT_FOLDER_PATH) String rootFolderPath,
                                       @RequestParam(REQUEST_PARAM_CACHE_ON) boolean cacheOn,
-                                      @RequestParam(REQUEST_PARAM_MAX_ALLOWED_ITEMS_IN_CACHE) int maxAllowedItemsInCache,
-                                      @RequestParam(REQUEST_PARAM_IGNORE_HIDDEN_FILES) boolean ignoreHiddenFiles) throws StoreException,
-            AuthenticationException {
-        Context context = storeService.createContext(storeType, storeServerUrl, username, password, rootFolderPath, cacheOn,
-                maxAllowedItemsInCache, ignoreHiddenFiles);
+                                      @RequestParam(REQUEST_PARAM_MAX_ALLOWED_ITEMS_IN_CACHE) int
+                                          maxAllowedItemsInCache, @RequestParam(REQUEST_PARAM_IGNORE_HIDDEN_FILES)
+    boolean ignoreHiddenFiles) throws StoreException, AuthenticationException {
+        Context context = storeService.createContext(storeType, storeServerUrl, username, password, rootFolderPath,
+            cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 
         return new ModelAndView(REST_VIEW_NAME, MODEL_ATTR_CONTEXT_ID, context.getId());
     }
 
     @RequestMapping(value = URL_DESTROY_CONTEXT, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public void destroyContext(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId) throws InvalidContextException, StoreException,
-            AuthenticationException {
+    public void destroyContext(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId) throws
+        InvalidContextException, StoreException, AuthenticationException {
         Context context = storeService.getContext(contextId);
-        if ( context == null ) {
+        if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
         }
 
@@ -122,18 +133,19 @@ public class ContentStoreRestController extends RestControllerBase implements Ap
     @RequestMapping(value = URL_DESCRIPTOR, method = RequestMethod.GET)
     public ModelAndView getDescriptor(WebRequest request, HttpServletResponse response,
                                       @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                                      @RequestParam(value = REQUEST_PARAM_DO_CACHING, required = false) Boolean doCaching,
-                                      @RequestParam(value = REQUEST_PARAM_EXPIRE_AFTER, required = false) Long expireAfter,
-                                      @RequestParam(value = REQUEST_PARAM_REFRESH_FREQUENCY, required = false) Long refreshFrequency,
-                                      @RequestParam(REQUEST_PARAM_URL) String url,
-                                      @RequestParam(value = REQUEST_PARAM_PROCESSOR, required = false) String processor)
-            throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException, XmlMergeException,
-            XmlFileParseException {
-        ModelAndView modelAndView = getItem(request, response, contextId, doCaching, expireAfter, refreshFrequency, url, processor);
+                                      @RequestParam(value = REQUEST_PARAM_DO_CACHING,
+        required = false) Boolean doCaching, @RequestParam(value = REQUEST_PARAM_EXPIRE_AFTER,
+        required = false) Long expireAfter, @RequestParam(value = REQUEST_PARAM_REFRESH_FREQUENCY,
+        required = false) Long refreshFrequency, @RequestParam(REQUEST_PARAM_URL) String url,
+                                      @RequestParam(value = REQUEST_PARAM_PROCESSOR,
+                                          required = false) String processor) throws InvalidContextException,
+        StoreException, PathNotFoundException, ItemProcessingException, XmlMergeException, XmlFileParseException {
+        ModelAndView modelAndView = getItem(request, response, contextId, doCaching, expireAfter, refreshFrequency,
+            url, processor);
         ModelMap modelMap = modelAndView.getModelMap();
 
-        if ( MapUtils.isNotEmpty(modelMap) ) {
-            Item item = (Item) modelMap.remove(MODEL_ATTR_ITEM);
+        if (MapUtils.isNotEmpty(modelMap)) {
+            Item item = (Item)modelMap.remove(MODEL_ATTR_ITEM);
             modelMap.put(MODEL_ATTR_DESCRIPTOR, item.getDescriptorDom());
         }
 
@@ -145,30 +157,30 @@ public class ContentStoreRestController extends RestControllerBase implements Ap
                                 @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
                                 @RequestParam(value = REQUEST_PARAM_DO_CACHING, required = false) Boolean doCaching,
                                 @RequestParam(value = REQUEST_PARAM_EXPIRE_AFTER, required = false) Long expireAfter,
-                                @RequestParam(value = REQUEST_PARAM_REFRESH_FREQUENCY, required = false) Long refreshFrequency,
-                                @RequestParam(REQUEST_PARAM_URL) String url,
+                                @RequestParam(value = REQUEST_PARAM_REFRESH_FREQUENCY,
+        required = false) Long refreshFrequency, @RequestParam(REQUEST_PARAM_URL) String url,
                                 @RequestParam(value = REQUEST_PARAM_PROCESSOR, required = false) String processor)
-            throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException, XmlMergeException,
-            XmlFileParseException {
+        throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException,
+        XmlMergeException, XmlFileParseException {
         Context context = storeService.getContext(contextId);
-        if ( context == null ) {
+        if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
         }
 
         CachingOptions cachingOptions = new CachingOptions();
-        if ( doCaching != null ) {
+        if (doCaching != null) {
             cachingOptions.setDoCaching(doCaching);
         }
-        if ( expireAfter != null ) {
+        if (expireAfter != null) {
             cachingOptions.setExpireAfter(expireAfter);
         }
-        if ( refreshFrequency != null ) {
+        if (refreshFrequency != null) {
             cachingOptions.setRefreshFrequency(refreshFrequency);
         }
 
         Item item = storeService.getItem(context, cachingOptions, url, getProcessor(processor));
 
-        if ( checkNotModified(item.getCachingTime(), request, response) ) {
+        if (checkNotModified(item.getCachingTime(), request, response)) {
             return new ModelAndView(REST_VIEW_NAME);
         } else {
             return new ModelAndView(REST_VIEW_NAME, MODEL_ATTR_ITEM, item);
@@ -178,34 +190,35 @@ public class ContentStoreRestController extends RestControllerBase implements Ap
     @RequestMapping(value = URL_CHILDREN, method = RequestMethod.GET)
     public ModelAndView getChildren(WebRequest request, HttpServletResponse response,
                                     @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                                    @RequestParam(value = REQUEST_PARAM_DO_CACHING, required = false) Boolean doCaching,
-                                    @RequestParam(value = REQUEST_PARAM_EXPIRE_AFTER, required = false) Long expireAfter,
-                                    @RequestParam(value = REQUEST_PARAM_REFRESH_FREQUENCY, required = false) Long refreshFrequency,
-                                    @RequestParam(REQUEST_PARAM_URL) String url,
+                                    @RequestParam(value = REQUEST_PARAM_DO_CACHING,
+                                        required = false) Boolean doCaching,
+                                    @RequestParam(value = REQUEST_PARAM_EXPIRE_AFTER,
+        required = false) Long expireAfter, @RequestParam(value = REQUEST_PARAM_REFRESH_FREQUENCY,
+        required = false) Long refreshFrequency, @RequestParam(REQUEST_PARAM_URL) String url,
                                     @RequestParam(value = REQUEST_PARAM_FILTER, required = false) String filter,
-                                    @RequestParam(value = REQUEST_PARAM_PROCESSOR, required = false) String processor)
-            throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException, XmlMergeException,
-            XmlFileParseException {
+                                    @RequestParam(value = REQUEST_PARAM_PROCESSOR,
+                                        required = false) String processor) throws InvalidContextException,
+        StoreException, PathNotFoundException, ItemProcessingException, XmlMergeException, XmlFileParseException {
         Context context = storeService.getContext(contextId);
-        if ( context == null ) {
+        if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
         }
 
         CachingOptions cachingOptions = new CachingOptions();
-        if ( doCaching != null ) {
+        if (doCaching != null) {
             cachingOptions.setDoCaching(doCaching);
         }
-        if ( expireAfter != null ) {
+        if (expireAfter != null) {
             cachingOptions.setExpireAfter(expireAfter);
         }
-        if ( refreshFrequency != null ) {
+        if (refreshFrequency != null) {
             cachingOptions.setRefreshFrequency(refreshFrequency);
         }
 
-        CachingAwareList<Item> children = (CachingAwareList<Item>) storeService.getChildren(context, cachingOptions, url,
-                getFilter(filter), getProcessor(processor));
+        CachingAwareList<Item> children = (CachingAwareList<Item>)storeService.getChildren(context, cachingOptions,
+            url, getFilter(filter), getProcessor(processor));
 
-        if ( checkNotModified(children.getCachingTime(), request, response) ) {
+        if (checkNotModified(children.getCachingTime(), request, response)) {
             return new ModelAndView(REST_VIEW_NAME);
         } else {
             return new ModelAndView(REST_VIEW_NAME, MODEL_ATTR_CHILDREN, new ArrayList<Item>(children));
@@ -217,33 +230,32 @@ public class ContentStoreRestController extends RestControllerBase implements Ap
                                 @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
                                 @RequestParam(value = REQUEST_PARAM_DO_CACHING, required = false) Boolean doCaching,
                                 @RequestParam(value = REQUEST_PARAM_EXPIRE_AFTER, required = false) Long expireAfter,
-                                @RequestParam(value = REQUEST_PARAM_REFRESH_FREQUENCY, required = false) Long refreshFrequency,
-                                @RequestParam(REQUEST_PARAM_URL) String url,
+                                @RequestParam(value = REQUEST_PARAM_REFRESH_FREQUENCY,
+        required = false) Long refreshFrequency, @RequestParam(REQUEST_PARAM_URL) String url,
                                 @RequestParam(value = REQUEST_PARAM_TREE_DEPTH, required = false) Integer depth,
                                 @RequestParam(value = REQUEST_PARAM_FILTER, required = false) String filter,
                                 @RequestParam(value = REQUEST_PARAM_PROCESSOR, required = false) String processor)
-            throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException, XmlMergeException,
-            XmlFileParseException {
+        throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException,
+        XmlMergeException, XmlFileParseException {
         Context context = storeService.getContext(contextId);
-        if ( context == null ) {
+        if (context == null) {
             throw new IllegalArgumentException("No context found for ID " + contextId);
         }
 
         CachingOptions cachingOptions = new CachingOptions();
-        if ( doCaching != null ) {
+        if (doCaching != null) {
             cachingOptions.setDoCaching(doCaching);
         }
-        if ( expireAfter != null ) {
+        if (expireAfter != null) {
             cachingOptions.setExpireAfter(expireAfter);
         }
-        if ( refreshFrequency != null ) {
+        if (refreshFrequency != null) {
             cachingOptions.setRefreshFrequency(refreshFrequency);
         }
 
-        Tree tree = storeService.getTree(context, cachingOptions, url, depth != null ? depth : ContentStoreService.UNLIMITED_TREE_DEPTH,
-                getFilter(filter), getProcessor(processor));
+        Tree tree = storeService.getTree(context, cachingOptions, url, depth != null? depth: ContentStoreService.UNLIMITED_TREE_DEPTH, getFilter(filter), getProcessor(processor));
 
-        if ( checkNotModified(tree.getCachingTime(), request, response) ) {
+        if (checkNotModified(tree.getCachingTime(), request, response)) {
             return new ModelAndView(REST_VIEW_NAME);
         } else {
             return new ModelAndView(REST_VIEW_NAME, MODEL_ATTR_TREE, tree);
@@ -257,7 +269,7 @@ public class ContentStoreRestController extends RestControllerBase implements Ap
     }
 
     private ItemFilter getFilter(String filterName) {
-        if ( StringUtils.isNotEmpty(filterName) ) {
+        if (StringUtils.isNotEmpty(filterName)) {
             return applicationContext.getBean(filterName, ItemFilter.class);
         } else {
             return null;
@@ -265,7 +277,7 @@ public class ContentStoreRestController extends RestControllerBase implements Ap
     }
 
     private ItemProcessor getProcessor(String processorName) {
-        if ( StringUtils.isNotEmpty(processorName) ) {
+        if (StringUtils.isNotEmpty(processorName)) {
             return applicationContext.getBean(processorName, ItemProcessor.class);
         } else {
             return null;

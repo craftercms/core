@@ -16,21 +16,19 @@
  */
 package org.craftercms.core.xml.mergers.impl;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.exception.XmlMergeException;
-import org.craftercms.core.xml.mergers.DescriptorMerger;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.craftercms.core.exception.XmlMergeException;
-import org.craftercms.core.xml.mergers.DescriptorMerger;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
-import org.springframework.beans.factory.annotation.Required;
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.craftercms.core.exception.XmlMergeException;
+import org.craftercms.core.xml.mergers.DescriptorMerger;
+import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Default implementation of {@link org.craftercms.core.xml.mergers.DescriptorMerger}.
@@ -63,7 +61,7 @@ public class DescriptorMergerImpl implements DescriptorMerger {
         if (CollectionUtils.isNotEmpty(descriptorsToMerge)) {
             Element mergedRoot = descriptorsToMerge.get(0).getRootElement().createCopy();
 
-            for (Iterator<Document> i = descriptorsToMerge.listIterator(1); i.hasNext();) {
+            for (Iterator<Document> i = descriptorsToMerge.listIterator(1); i.hasNext(); ) {
                 Element descriptorRoot = i.next().getRootElement().createCopy();
 
                 mergedRoot = initialMergeCue.merge(mergedRoot, descriptorRoot, initialMergeCueParams);

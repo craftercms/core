@@ -33,7 +33,7 @@ public interface CacheItem {
     /**
      * Indicates that an item should never refresh.
      */
-	public static final long NEVER_REFRESH = 0;
+    public static final long NEVER_REFRESH = 0;
 
     /**
      * Returns the item's scope.
@@ -88,8 +88,7 @@ public interface CacheItem {
     /**
      * Returns true if the item has expired according to the number of ticks specified.
      *
-     * @param currentTicks
-     *          the current number of ticks
+     * @param currentTicks the current number of ticks
      * @return true if the item has expired according to the number of ticks specified, false otherwise
      */
     boolean isExpired(long currentTicks);
@@ -97,8 +96,7 @@ public interface CacheItem {
     /**
      * Returns true if the item needs to be refreshed according to the number of ticks specified.
      *
-     * @param currentTicks
-     *          the current number of ticks
+     * @param currentTicks the current number of ticks
      * @return true if the item needs to be refreshed according to the number of ticks specified, false otherwise
      */
     boolean needsRefresh(long currentTicks);

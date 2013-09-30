@@ -16,14 +16,19 @@
  */
 package org.craftercms.core.util.xml.impl;
 
-import org.dom4j.*;
-import org.craftercms.core.util.xml.NodeScanner;
-import org.springframework.beans.factory.annotation.Required;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.craftercms.core.util.xml.NodeScanner;
+import org.dom4j.Attribute;
+import org.dom4j.CDATA;
+import org.dom4j.Document;
+import org.dom4j.Node;
+import org.dom4j.Text;
+import org.dom4j.VisitorSupport;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Class description goes HERE
@@ -58,7 +63,7 @@ public class RegexNodeScanner implements NodeScanner {
 
         return matchingNodes;
     }
-    
+
     protected class RegexMatcherVisitor extends VisitorSupport {
 
         protected List<Node> matchingNodes;
@@ -112,7 +117,7 @@ public class RegexNodeScanner implements NodeScanner {
             return false;
         }
 
-        RegexNodeScanner that = (RegexNodeScanner) o;
+        RegexNodeScanner that = (RegexNodeScanner)o;
 
         if (matchEntireNodeText != that.matchEntireNodeText) {
             return false;
@@ -127,7 +132,7 @@ public class RegexNodeScanner implements NodeScanner {
     @Override
     public int hashCode() {
         int result = patterns.hashCode();
-        result = 31 * result + (matchEntireNodeText ? 1 : 0);
+        result = 31 * result + (matchEntireNodeText? 1: 0);
         return result;
     }
 

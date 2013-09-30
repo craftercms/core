@@ -19,18 +19,15 @@ package org.craftercms.core.url;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 
 /**
  * @author Sumer Jabri
- *
  */
 public interface UrlTransformationEngine {
 
-	String transformUrl(Context context, String transformerName, String url) throws UrlTransformationException;
+    String transformUrl(Context context, String transformerName, String url) throws UrlTransformationException;
 
-    String transformUrl(Context context, CachingOptions cachingOptions, String transformerName, String url) throws UrlTransformationException;
+    String transformUrl(Context context, CachingOptions cachingOptions, String transformerName,
+                        String url) throws UrlTransformationException;
 
 }

@@ -16,19 +16,24 @@
  */
 package org.craftercms.core.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.*;
 
 /**
  * @author Alfonso Vásquez
@@ -41,10 +46,11 @@ public class HttpServletUtils {
     public static HttpServletRequest getCurrentRequest() throws IllegalStateException {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         if (requestAttributes instanceof ServletRequestAttributes) {
-            return ((ServletRequestAttributes) requestAttributes).getRequest();
+            return ((ServletRequestAttributes)requestAttributes).getRequest();
         } else {
-            throw new IllegalStateException("Current RequestAttributes isn't of type ServletRequestAttributes. Are you sure you're" +
-                    "running in a Servlet environment?");
+            throw new IllegalStateException("Current RequestAttributes isn't of type ServletRequestAttributes. Are " +
+                "you sure you're" +
+                "running in a Servlet environment?");
         }
     }
 
@@ -85,9 +91,9 @@ public class HttpServletUtils {
 
                 if (queryParams.containsKey(paramName)) {
                     if (queryParams.get(paramName) instanceof List) {
-                        ((List<String>) queryParams.get(paramName)).add(paramValue);
+                        ((List<String>)queryParams.get(paramName)).add(paramValue);
                     } else {
-                        List<String> paramValues = Arrays.asList((String) queryParams.get(paramName), paramValue);
+                        List<String> paramValues = Arrays.asList((String)queryParams.get(paramName), paramValue);
                         queryParams.put(paramName, paramValues);
                     }
                 } else {
@@ -99,7 +105,8 @@ public class HttpServletUtils {
         return queryParams;
     }
 
-    public static String getQueryStringFromParams(Map<String, Object> queryParams, String charset) throws UnsupportedEncodingException {
+    public static String getQueryStringFromParams(Map<String, Object> queryParams,
+                                                  String charset) throws UnsupportedEncodingException {
         StringBuilder queryString = new StringBuilder();
 
         if (MapUtils.isNotEmpty(queryParams)) {
@@ -107,7 +114,7 @@ public class HttpServletUtils {
                 String paramName = URLEncoder.encode(entry.getKey(), charset);
 
                 if (entry.getValue() instanceof List) {
-                    for (String paramValue : (List<String>) entry.getValue()) {
+                    for (String paramValue : (List<String>)entry.getValue()) {
                         if (queryString.length() > 0) {
                             queryString.append('&');
                         }
@@ -121,7 +128,7 @@ public class HttpServletUtils {
                         queryString.append('&');
                     }
 
-                    String paramValue = URLEncoder.encode((String) entry.getValue(), charset);
+                    String paramValue = URLEncoder.encode((String)entry.getValue(), charset);
 
                     queryString.append(paramName).append('=').append(paramValue);
                 }
@@ -135,8 +142,8 @@ public class HttpServletUtils {
 
     public static Map<String, Object> createRequestParamsMap(HttpServletRequest request) {
         Map<String, Object> paramsMap = new HashMap<String, Object>();
-        for (Enumeration paramNameEnum = request.getParameterNames(); paramNameEnum.hasMoreElements();) {
-            String paramName = (String) paramNameEnum.nextElement();
+        for (Enumeration paramNameEnum = request.getParameterNames(); paramNameEnum.hasMoreElements(); ) {
+            String paramName = (String)paramNameEnum.nextElement();
             String[] paramValues = request.getParameterValues(paramName);
 
             if (paramValues.length == 1) {
@@ -151,8 +158,8 @@ public class HttpServletUtils {
 
     public static Map<String, Object> createRequestAttributesMap(HttpServletRequest request) {
         Map<String, Object> attributesMap = new HashMap<String, Object>();
-        for (Enumeration attributeNameEnum = request.getAttributeNames(); attributeNameEnum.hasMoreElements();) {
-            String attributeName = (String) attributeNameEnum.nextElement();
+        for (Enumeration attributeNameEnum = request.getAttributeNames(); attributeNameEnum.hasMoreElements(); ) {
+            String attributeName = (String)attributeNameEnum.nextElement();
 
             attributesMap.put(attributeName, request.getAttribute(attributeName));
         }
@@ -162,8 +169,8 @@ public class HttpServletUtils {
 
     public static Map<String, Object> createHeadersMap(HttpServletRequest request) {
         Map<String, Object> headersMap = new HashMap<String, Object>();
-        for (Enumeration headerNameEnum = request.getHeaderNames(); headerNameEnum.hasMoreElements();) {
-            String headerName = (String) headerNameEnum.nextElement();
+        for (Enumeration headerNameEnum = request.getHeaderNames(); headerNameEnum.hasMoreElements(); ) {
+            String headerName = (String)headerNameEnum.nextElement();
             List<String> headerValues = new ArrayList<String>();
 
             CollectionUtils.addAll(headerValues, request.getHeaders(headerName));
@@ -196,8 +203,8 @@ public class HttpServletUtils {
         HttpSession session = request.getSession(false);
 
         if (session != null) {
-            for (Enumeration attributeNameEnum = session.getAttributeNames(); attributeNameEnum.hasMoreElements();) {
-                String attributeName = (String) attributeNameEnum.nextElement();
+            for (Enumeration attributeNameEnum = session.getAttributeNames(); attributeNameEnum.hasMoreElements(); ) {
+                String attributeName = (String)attributeNameEnum.nextElement();
                 sessionMap.put(attributeName, session.getAttribute(attributeName));
             }
         }

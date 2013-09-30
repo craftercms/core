@@ -16,7 +16,6 @@
  */
 package org.craftercms.core.controller.rest;
 
-import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.PathNotFoundException;

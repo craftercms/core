@@ -18,7 +18,6 @@ package org.craftercms.core.xml.mergers;
 
 import org.craftercms.core.exception.CrafterException;
 import org.dom4j.Document;
-import org.craftercms.core.exception.CrafterException;
 
 /**
  * Resolves the {@link DescriptorMergeStrategy} to use for a given descriptor.
@@ -31,10 +30,8 @@ public interface DescriptorMergeStrategyResolver {
     /**
      * Returns a {@link DescriptorMergeStrategy} for a given descriptor.
      *
-     * @param descriptorUrl
-     *          the URL that identifies the descriptor
-     * @param descriptorDom
-     *          the XML DOM of the descriptor (optional)
+     * @param descriptorUrl the URL that identifies the descriptor
+     * @param descriptorDom the XML DOM of the descriptor (optional)
      * @return the {@link DescriptorMergeStrategy} for the descriptor.
      * @throws org.craftercms.core.exception.CrafterException
      *          if an error occurs while resolving the strategy

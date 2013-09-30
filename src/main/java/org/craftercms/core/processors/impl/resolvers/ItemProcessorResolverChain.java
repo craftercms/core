@@ -16,19 +16,17 @@
  */
 package org.craftercms.core.processors.impl.resolvers;
 
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.processors.ItemProcessorResolver;
-import org.craftercms.core.service.Item;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
 import org.craftercms.core.service.Item;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.util.List;
-
 /**
- * Composite {@link org.craftercms.core.processors.ItemProcessorResolver}, that iterates through a list of resolvers until one of them provides a
+ * Composite {@link org.craftercms.core.processors.ItemProcessorResolver}, that iterates through a list of resolvers
+ * until one of them provides a
  * non-null {@link org.craftercms.core.processors.ItemProcessor}.
  *
  * @author Sumer Jabri

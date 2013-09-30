@@ -16,18 +16,14 @@
  */
 package org.craftercms.core.url.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
-import org.craftercms.core.exception.UrlTransformationException;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.url.UrlTransformer;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Class description goes HERE
@@ -51,7 +47,8 @@ public class UrlTransformerPipeline implements UrlTransformer {
     }
 
     @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException {
+    public String transformUrl(Context context, CachingOptions cachingOptions,
+                               String url) throws UrlTransformationException {
         if (CollectionUtils.isNotEmpty(transformers)) {
             for (UrlTransformer transformer : transformers) {
                 url = transformer.transformUrl(context, cachingOptions, url);

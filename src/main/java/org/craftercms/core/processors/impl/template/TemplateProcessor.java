@@ -16,14 +16,12 @@
 */
 package org.craftercms.core.processors.impl.template;
 
+import java.io.StringWriter;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.util.template.impl.IdentifiableStringTemplateSource;
-import org.dom4j.Document;
-import org.dom4j.Node;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.exception.TemplateException;
 import org.craftercms.core.processors.ItemProcessor;
@@ -34,10 +32,9 @@ import org.craftercms.core.util.template.CompiledTemplate;
 import org.craftercms.core.util.template.TemplateCompiler;
 import org.craftercms.core.util.template.impl.IdentifiableStringTemplateSource;
 import org.craftercms.core.util.xml.NodeScanner;
+import org.dom4j.Document;
+import org.dom4j.Node;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.io.StringWriter;
-import java.util.List;
 
 /**
  * {@link ItemProcessor} that processes the content of certain XML nodes in item descriptors as templates. Template
@@ -47,13 +44,12 @@ import java.util.List;
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
- *
  * @see TemplateCompiler
  * @see org.craftercms.core.util.template.impl.freemarker.FreeMarkerStringTemplateCompiler
  * @see org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler
  * @see <a href="http://freemarker.sourceforge.net/">FreeMarker</a>
  * @see <a href="http://static.springsource.org/spring/docs/3.0.x/reference/expressions.html>Spring Expression
- * Language (SpEL)</a>
+ *      Language (SpEL)</a>
  */
 public class TemplateProcessor implements ItemProcessor {
 
@@ -103,8 +99,7 @@ public class TemplateProcessor implements ItemProcessor {
      * by compiling the node text templates through the {@code templateCompiler} and then processing the compiled
      * template with a model returned by {@code modelFactory}.
      *
-     * @throws ItemProcessingException
-     *          if an error occurred while processing a template
+     * @throws ItemProcessingException if an error occurred while processing a template
      */
     public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
         String descriptorUrl = item.getDescriptorUrl();
@@ -121,7 +116,8 @@ public class TemplateProcessor implements ItemProcessor {
 
                 String templateId = templateNodePath + "@" + descriptorUrl;
                 String template = templateNode.getText();
-                IdentifiableStringTemplateSource templateSource = new IdentifiableStringTemplateSource(templateId, template);
+                IdentifiableStringTemplateSource templateSource = new IdentifiableStringTemplateSource(templateId,
+                    template);
                 Object model = modelFactory.getModel(item, templateNode, template);
                 StringWriter output = new StringWriter();
 
@@ -151,7 +147,7 @@ public class TemplateProcessor implements ItemProcessor {
             return false;
         }
 
-        TemplateProcessor that = (TemplateProcessor) o;
+        TemplateProcessor that = (TemplateProcessor)o;
 
         if (!modelFactory.equals(that.modelFactory)) {
             return false;
@@ -183,10 +179,10 @@ public class TemplateProcessor implements ItemProcessor {
     @Override
     public String toString() {
         return "TemplateProcessor[" +
-                "modelFactory=" + modelFactory +
-                ", templateNodeScanner=" + templateNodeScanner +
-                ", templateCompiler=" + templateCompiler +
-                ']';
+            "modelFactory=" + modelFactory +
+            ", templateNodeScanner=" + templateNodeScanner +
+            ", templateCompiler=" + templateCompiler +
+            ']';
     }
 
 }

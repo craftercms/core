@@ -56,7 +56,7 @@ public class MergeableDescriptor {
             return false;
         }
 
-        MergeableDescriptor that = (MergeableDescriptor) o;
+        MergeableDescriptor that = (MergeableDescriptor)o;
 
         if (!url.equals(that.url)) {
             return false;
@@ -73,9 +73,9 @@ public class MergeableDescriptor {
     @Override
     public String toString() {
         return "MergeableDescriptor[" +
-                "url='" + url + '\'' +
-                ", optional=" + optional +
-                ']';
+            "url='" + url + '\'' +
+            ", optional=" + optional +
+            ']';
     }
 
 }

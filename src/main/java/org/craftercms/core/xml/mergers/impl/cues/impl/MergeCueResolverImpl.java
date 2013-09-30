@@ -16,18 +16,19 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.*;
 
 /**
  * Class description goes HERE
@@ -106,7 +107,7 @@ public class MergeCueResolverImpl implements MergeCueResolver {
 
     protected Attribute getMergeCueAttribute(Element element, Map<QName, MergeCue> mergeCues) {
         List<Attribute> attributes = element.attributes();
-        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext();) {
+        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
             Attribute attribute = i.next();
             if (mergeCues.containsKey(attribute.getQName())) {
                 i.remove();
@@ -123,7 +124,7 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         String paramsPrefix = mergeCueAttribute.getQualifiedName() + "-";
         List<Attribute> attributes = element.attributes();
 
-        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext();) {
+        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
             Attribute attribute = i.next();
             String attributeQualifiedName = attribute.getQualifiedName();
             if (attributeQualifiedName.startsWith(paramsPrefix)) {

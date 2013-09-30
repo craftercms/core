@@ -16,16 +16,35 @@
  */
 package org.craftercms.core.service.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.craftercms.core.exception.*;
+import org.craftercms.core.exception.AuthenticationException;
+import org.craftercms.core.exception.CrafterException;
+import org.craftercms.core.exception.InvalidContextException;
+import org.craftercms.core.exception.InvalidScopeException;
+import org.craftercms.core.exception.InvalidStoreTypeException;
+import org.craftercms.core.exception.ItemProcessingException;
+import org.craftercms.core.exception.PathNotFoundException;
+import org.craftercms.core.exception.StoreException;
+import org.craftercms.core.exception.XmlFileParseException;
+import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
-import org.craftercms.core.service.*;
+import org.craftercms.core.service.CachingOptions;
+import org.craftercms.core.service.Content;
+import org.craftercms.core.service.ContentStoreService;
+import org.craftercms.core.service.Context;
+import org.craftercms.core.service.Item;
+import org.craftercms.core.service.ItemFilter;
+import org.craftercms.core.service.Tree;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.store.ContentStoreAdapterRegistry;
 import org.craftercms.core.util.XmlUtils;
@@ -83,7 +102,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     }
 
     /**
-     * Sets the {@link DescriptorMergeStrategyResolver}, which resolves the {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} to use for a particular
+     * Sets the {@link DescriptorMergeStrategyResolver}, which resolves the {@link org.craftercms.core.xml.mergers
+     * .DescriptorMergeStrategy} to use for a particular
      * descriptor.
      */
     @Required
@@ -92,7 +112,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     }
 
     /**
-     * Sets the {@link DescriptorMerger}, which merges the primary descriptor with a list of other descriptors, according to
+     * Sets the {@link DescriptorMerger}, which merges the primary descriptor with a list of other descriptors,
+     * according to
      * the merge strategy.
      */
     @Required
@@ -101,7 +122,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     }
 
     /**
-     * Sets the {@link ItemProcessorResolver}, which resolves the {@link org.craftercms.core.processors.ItemProcessor} to use for a particular {@link Item}.
+     * Sets the {@link ItemProcessorResolver}, which resolves the {@link org.craftercms.core.processors
+     * .ItemProcessor} to use for a particular {@link Item}.
      */
     @Required
     public void setProcessorResolver(ItemProcessorResolver processorResolver) {
@@ -120,20 +142,21 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public Context createContext(String storeType, String storeServerUrl, String username, String password, String rootFolderPath,
-                                 boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles) throws InvalidStoreTypeException,
-            StoreException, AuthenticationException {
-        String id = createContextId(storeType, storeServerUrl, username, password, rootFolderPath, cacheOn, maxAllowedItemsInCache,
-                ignoreHiddenFiles);
+    public Context createContext(String storeType, String storeServerUrl, String username, String password,
+                                 String rootFolderPath, boolean cacheOn, int maxAllowedItemsInCache,
+                                 boolean ignoreHiddenFiles) throws InvalidStoreTypeException, StoreException,
+        AuthenticationException {
+        String id = createContextId(storeType, storeServerUrl, username, password, rootFolderPath, cacheOn,
+            maxAllowedItemsInCache, ignoreHiddenFiles);
 
-        if ( !contexts.containsKey(id) ) {
+        if (!contexts.containsKey(id)) {
             ContentStoreAdapter storeAdapter = storeAdapterRegistry.get(storeType);
-            if ( storeAdapter == null ) {
+            if (storeAdapter == null) {
                 throw new InvalidStoreTypeException("No registered content store adapter for store type " + storeType);
             }
 
-            Context context = storeAdapter.createContext(id, storeServerUrl, username, password, rootFolderPath, cacheOn,
-                    maxAllowedItemsInCache, ignoreHiddenFiles);
+            Context context = storeAdapter.createContext(id, storeServerUrl, username, password, rootFolderPath,
+                cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 
             cacheTemplate.getCacheService().addScope(context);
 
@@ -149,8 +172,9 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
-        if ( contexts.containsKey(context.getId()) ) {
+    public void destroyContext(Context context) throws InvalidContextException, StoreException,
+        AuthenticationException {
+        if (contexts.containsKey(context.getId())) {
             context.getStoreAdapter().destroyContext(context);
 
             cacheTemplate.getCacheService().removeScope(context);
@@ -165,7 +189,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public Content getContent(Context context, String url) throws InvalidScopeException, PathNotFoundException, StoreException {
+    public Content getContent(Context context, String url) throws InvalidScopeException, PathNotFoundException,
+        StoreException {
         return getContent(context, CachingOptions.DEFAULT_CACHING_OPTIONS, url);
     }
 
@@ -173,35 +198,38 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public Content getContent(Context context, CachingOptions cachingOptions, String url) throws InvalidScopeException,
-            PathNotFoundException, StoreException {
+    public Content getContent(Context context, CachingOptions cachingOptions,
+                              String url) throws InvalidScopeException, PathNotFoundException, StoreException {
         return context.getStoreAdapter().getContent(context, cachingOptions, url);
     }
 
     /**
      * Returns the content store item for the given url.
      * <p/>
-     * <p>After acquiring the item from the {@link ContentStoreAdapter}, the item's descriptor is merged (according to its
-     * {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy}) with related descriptors, and the final item is then processed.</p>
+     * <p>After acquiring the item from the {@link ContentStoreAdapter}, the item's descriptor is merged (according
+     * to its
+     * {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy}) with related descriptors,
+     * and the final item is then processed.</p>
      */
     @Override
-    protected Item doGetItem(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor)
-            throws InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException,
-            StoreException {
+    protected Item doGetItem(Context context, CachingOptions cachingOptions, String url,
+                             ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
+        XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         // Add a leading slash if not present at the beginning of the url. This is done because although the store
         // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
         // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
-        if ( !url.startsWith("/") ) {
+        if (!url.startsWith("/")) {
             url = "/" + url;
         }
 
         // Create a copy of the item, since it will be modified
         Item item = new Item(context.getStoreAdapter().getItem(context, cachingOptions, url, true));
-        if ( item.getDescriptorDom() != null ) {
+        if (item.getDescriptorDom() != null) {
             item = doMerging(context, cachingOptions, item);
             item = doProcessing(context, cachingOptions, item, processor);
         } else {
-            // Since there was no processing, add the original key (from the store adapter item) as dependency key. The store
+            // Since there was no processing, add the original key (from the store adapter item) as dependency key.
+            // The store
             // service item key will be set later.
             item.addDependencyKey(item.getKey());
         }
@@ -211,12 +239,12 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
     @Override
     protected List<Item> doGetChildren(Context context, CachingOptions cachingOptions, String url, ItemFilter filter,
-                                       ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
-            XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
+                                       ItemProcessor processor) throws InvalidContextException,
+        PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         // Add a leading slash if not present at the beginning of the url. This is done because although the store
         // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
         // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
-        if ( !url.startsWith("/") ) {
+        if (!url.startsWith("/")) {
             url = "/" + url;
         }
 
@@ -224,24 +252,24 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     }
 
     @Override
-    protected Tree doGetTree(Context context, CachingOptions cachingOptions, String url, int depth, ItemFilter filter,
-                             ItemProcessor processor) throws InvalidContextException, PathNotFoundException, XmlFileParseException,
-            XmlMergeException, ItemProcessingException, StoreException {
+    protected Tree doGetTree(Context context, CachingOptions cachingOptions, String url, int depth,
+                             ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
+        PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         // Add a leading slash if not present at the beginning of the url. This is done because although the store
         // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
         // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
-        if ( !url.startsWith("/") ) {
+        if (!url.startsWith("/")) {
             url = "/" + url;
         }
 
         Tree tree = new Tree(getItem(context, url, processor));
-        if ( depth == ContentStoreService.UNLIMITED_TREE_DEPTH || depth >= 1 ) {
-            if ( depth >= 1 ) {
+        if (depth == ContentStoreService.UNLIMITED_TREE_DEPTH || depth >= 1) {
+            if (depth >= 1) {
                 depth--;
             }
 
-            CachingAwareList<Item> treeChildren = (CachingAwareList<Item>) doGetChildren(context, cachingOptions, url, depth, filter,
-                    processor);
+            CachingAwareList<Item> treeChildren = (CachingAwareList<Item>)doGetChildren(context, cachingOptions, url,
+                depth, filter, processor);
 
             tree.setChildren(treeChildren.getActualList());
             tree.addDependencyKeys(treeChildren.getDependencyKeys());
@@ -256,23 +284,25 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * <ol>
      * <li>Retrieves the children from the underlying repository (without their descriptors).</li>
      * <li>Filters the returned list if {@link ItemFilter#runBeforeProcessing()} returns <code>true</code>.</li>
-     * <li>Calls {@link #getTree(Context, String)} or {@link #getItem(Context, String)} for each item in the list (depending on
-     * whether the item is a folder or not, and if <code>depth</code> is not null), to obtain the merged and processed version
+     * <li>Calls {@link #getTree(Context, String)} or {@link #getItem(Context, String)} for each item in the list
+     * (depending on
+     * whether the item is a folder or not, and if <code>depth</code> is not null),
+     * to obtain the merged and processed version
      * of each item.</li>
      * <li>Filters the processed list if {@link ItemFilter#runAfterProcessing()} ()} returns <code>true</code>.</li>
      * <li>Returns the final list of processed items.</li>
      * </ol>
      */
-    protected List<Item> doGetChildren(Context context, CachingOptions cachingOptions, String url, Integer depth, ItemFilter filter,
-                                       ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
-            XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
+    protected List<Item> doGetChildren(Context context, CachingOptions cachingOptions, String url, Integer depth,
+                                       ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
+        PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         List<Object> dependencyKeys = new ArrayList<Object>();
         List<Item> children = context.getStoreAdapter().getItems(context, cachingOptions, url, false);
 
-        dependencyKeys.add(((CachingAwareList<Item>) children).getKey());
+        dependencyKeys.add(((CachingAwareList<Item>)children).getKey());
 
-        if ( filter != null && filter.runBeforeProcessing() ) {
-            if ( logger.isDebugEnabled() ) {
+        if (filter != null && filter.runBeforeProcessing()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Running filter " + filter + " before processing for " + url + "...");
             }
 
@@ -283,7 +313,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
         for (Item child : children) {
             Item processedChild;
-            if ( depth != null && child.isFolder() ) {
+            if (depth != null && child.isFolder()) {
                 processedChild = getTree(context, child.getUrl(), depth, filter, processor);
             } else {
                 processedChild = getItem(context, child.getUrl(), processor);
@@ -292,8 +322,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             processedChildren.add(processedChild);
         }
 
-        if ( filter != null && filter.runAfterProcessing() ) {
-            if ( logger.isDebugEnabled() ) {
+        if (filter != null && filter.runAfterProcessing()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Running filter " + filter + " after processing for " + url + "...");
             }
 
@@ -316,7 +346,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * Executes merging for the specified {@link Item}:
      * <p/>
      * <ol>
-     * <li>Gets the {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} for the item's descriptor from the {@link DescriptorMergeStrategyResolver}.</li>
+     * <li>Gets the {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} for the item's descriptor from
+     * the {@link DescriptorMergeStrategyResolver}.</li>
      * <li>Gets the actual descriptors to merge from the returned merge strategy.</li>
      * <li>Retrieves the descriptor documents from the underlying repository.</li>
      * <li>Merges the descriptor documents.</li>
@@ -324,29 +355,29 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * </ol>
      */
     protected Item doMerging(Context context, CachingOptions cachingOptions, Item item) throws CrafterException {
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Doing merge for " + item + "...");
         }
 
         String descriptorUrl = item.getDescriptorUrl();
 
         DescriptorMergeStrategy strategy = mergeStrategyResolver.getStrategy(descriptorUrl, item.getDescriptorDom());
-        if ( strategy == null ) {
+        if (strategy == null) {
             logger.warn("No merge strategy was found for " + descriptorUrl + ". Merging skipped");
 
             return item;
         }
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Merge strategy for " + descriptorUrl + ": " + strategy);
         }
 
         List<MergeableDescriptor> descriptorsToMerge = strategy.getDescriptors(context, cachingOptions, descriptorUrl);
-        if ( descriptorsToMerge == null ) {
+        if (descriptorsToMerge == null) {
             throw new XmlMergeException("There aren't any descriptors to merge for " + descriptorUrl);
         }
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Descriptors to merge for " + descriptorUrl + ": " + descriptorsToMerge);
         }
 
@@ -354,10 +385,11 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
         for (MergeableDescriptor descriptorToMerge : descriptorsToMerge) {
             try {
-                Item descriptorItem = context.getStoreAdapter().getItem(context, cachingOptions, descriptorToMerge.getUrl(), true);
+                Item descriptorItem = context.getStoreAdapter().getItem(context, cachingOptions,
+                    descriptorToMerge.getUrl(), true);
                 Document descriptorDom = descriptorItem.getDescriptorDom();
 
-                if ( descriptorDom == null ) {
+                if (descriptorDom == null) {
                     throw new PathNotFoundException("No descriptor file at " + item.getDescriptorUrl());
                 }
 
@@ -365,16 +397,17 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
                 item.addDependencyKey(descriptorItem.getKey());
             } catch (PathNotFoundException e) {
-                if ( !descriptorToMerge.isOptional() ) {
-                    throw new XmlMergeException("Descriptor file " + descriptorToMerge.getUrl() + " not found and is marked as " +
-                            "required for merging");
+                if (!descriptorToMerge.isOptional()) {
+                    throw new XmlMergeException("Descriptor file " + descriptorToMerge.getUrl() + " not found and is " +
+                        "marked as " +
+                        "required for merging");
                 }
             }
         }
 
         Document mergedDoc = merger.merge(documentsToMerge);
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Merged descriptor DOM for " + item + ":\n" + XmlUtils.documentToPrettyString(mergedDoc));
         }
 
@@ -393,68 +426,70 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * <li>Returns the processed item.</li>
      * </ol>
      */
-    protected Item doProcessing(Context context, CachingOptions cachingOptions, Item item, ItemProcessor additionalProcessor)
-            throws ItemProcessingException {
-        if ( logger.isDebugEnabled() ) {
+    protected Item doProcessing(Context context, CachingOptions cachingOptions, Item item,
+                                ItemProcessor additionalProcessor) throws ItemProcessingException {
+        if (logger.isDebugEnabled()) {
             logger.debug("Doing processing for " + item + "...");
         }
 
         ItemProcessor mainProcessor = processorResolver.getProcessor(item);
-        if ( mainProcessor != null ) {
-            if ( logger.isDebugEnabled() ) {
+        if (mainProcessor != null) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Main processor found for " + item + ": " + mainProcessor);
             }
 
             item = mainProcessor.process(context, cachingOptions, item);
         } else {
-            if ( logger.isDebugEnabled() ) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("No main processor was found for " + item);
             }
         }
 
-        if ( additionalProcessor != null ) {
+        if (additionalProcessor != null) {
             item = additionalProcessor.process(context, cachingOptions, item);
         }
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Processed item: " + item);
-            logger.debug("Processed descriptor DOM for " + item + ":\n" + XmlUtils.documentToPrettyString(
-                    item.getDescriptorDom()));
+            logger.debug("Processed descriptor DOM for " + item + ":\n" + XmlUtils.documentToPrettyString(item
+                .getDescriptorDom()));
         }
 
         return item;
     }
 
     /**
-     * Filters the given list of items by using the specified filter. The <code>runningBeforeProcessing</code> flag is passed to
+     * Filters the given list of items by using the specified filter. The <code>runningBeforeProcessing</code> flag
+     * is passed to
      * indicated the filter in which phase it is being executed (after or before processing).
      */
     protected List<Item> doFilter(List<Item> items, ItemFilter filter, boolean runningBeforeProcessing) {
         List<Item> filteredItems = new ArrayList<Item>();
 
         for (Item item : items) {
-            if ( filter.accepts(item, runningBeforeProcessing) ) {
+            if (filter.accepts(item, runningBeforeProcessing)) {
                 filteredItems.add(item);
             }
         }
 
-        if ( logger.isDebugEnabled() ) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Items filtered from " + items + " by " + filter + ": " + filteredItems);
         }
 
         return filteredItems;
     }
 
-    protected String createContextId(String storeType, String storeServerUrl, String username, String password, String rootFolderPath,
-                                     boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
+    protected String createContextId(String storeType, String storeServerUrl, String username, String password,
+                                     String rootFolderPath, boolean cacheOn, int maxAllowedItemsInCache,
+                                     boolean ignoreHiddenFiles) {
         String unHashedId = "storeType='" + storeType + '\'' +
-                ", storeServerUrl='" + storeServerUrl + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", rootFolderPath='" + rootFolderPath + '\'' +
-                ", cacheOn=" + cacheOn +
-                ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
-                ", ignoreHiddenFiles=" + ignoreHiddenFiles;
+            ", storeServerUrl='" + storeServerUrl + '\'' +
+            ", username='" + username + '\'' +
+            ", password='" + password + '\'' +
+            ", rootFolderPath='" + rootFolderPath + '\'' +
+            ", cacheOn=" + cacheOn +
+            ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
+            ", ignoreHiddenFiles=" + ignoreHiddenFiles;
 
         return DigestUtils.md5Hex(unHashedId);
     }

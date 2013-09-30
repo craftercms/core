@@ -20,10 +20,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.craftercms.core.util.json.gson.ThrowableJsonSerializer;
-import org.dom4j.Document;
 import org.craftercms.core.util.json.gson.Dom4JDocumentJsonSerializer;
 import org.craftercms.core.util.json.gson.ThrowableJsonSerializer;
+import org.dom4j.Document;
 
 /**
  * Class description goes HERE
@@ -38,7 +37,7 @@ public class JsonUtils {
             JsonArray propertyValueArray;
 
             if (propertyValue instanceof JsonArray) {
-                propertyValueArray = (JsonArray) propertyValue;
+                propertyValueArray = (JsonArray)propertyValue;
             } else {
                 propertyValueArray = new JsonArray();
                 propertyValueArray.add(propertyValue);
@@ -53,10 +52,8 @@ public class JsonUtils {
     }
 
     public static GsonBuilder getDefaultGsonBuilder() {
-        return new GsonBuilder()
-                .registerTypeHierarchyAdapter(Document.class, Dom4JDocumentJsonSerializer.INSTANCE)
-                .registerTypeHierarchyAdapter(Throwable.class, ThrowableJsonSerializer.INSTANCE)
-                .serializeNulls();
+        return new GsonBuilder().registerTypeHierarchyAdapter(Document.class, Dom4JDocumentJsonSerializer.INSTANCE)
+            .registerTypeHierarchyAdapter(Throwable.class, ThrowableJsonSerializer.INSTANCE).serializeNulls();
     }
 
 }
