@@ -19,6 +19,7 @@ package org.craftercms.core.cache.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
@@ -47,7 +48,7 @@ public class CacheImpl implements Cache {
     /**
      * Holds the current number of ticks.
      */
-    protected volatile long ticks;
+    protected AtomicInteger ticks;
     /**
      * Adapter for the cache data structure.
      */
@@ -66,7 +67,7 @@ public class CacheImpl implements Cache {
      * .IncrementalTimestampGenerator}.
      */
     public CacheImpl() {
-        ticks = 0;
+        ticks = new AtomicInteger(0);
         timestampGenerator = new IncrementalTimestampGenerator();
     }
 
@@ -304,7 +305,7 @@ public class CacheImpl implements Cache {
         }
 
         try {
-            CacheItem item = new CacheItemImpl(scope, ticks, key, value, expireAfter, refreshFrequency,
+            CacheItem item = new CacheItemImpl(scope, ticks.get(), key, value, expireAfter, refreshFrequency,
                 timestampGenerator.generate(), dependencyKeys, loader, loaderParams);
 
             cacheStoreAdapter.put(item);
@@ -374,7 +375,7 @@ public class CacheImpl implements Cache {
      * need to be refreshed that is later passed to the {@link CacheRefresher}.
      */
     public void tick() {
-        ticks++;
+        ticks.incrementAndGet();
 
         if (logger.isDebugEnabled()) {
             logger.debug("Tick!");
@@ -448,7 +449,7 @@ public class CacheImpl implements Cache {
      * @throws Exception
      */
     protected boolean checkForExpiration(CacheItem item) throws Exception {
-        if (item.isExpired(ticks)) {
+        if (item.isExpired(ticks.get())) {
             cacheStoreAdapter.remove(item.getScope(), item.getKey());
 
             return true;
@@ -466,7 +467,7 @@ public class CacheImpl implements Cache {
      * @return true if the item will be refreshed, false otherwise
      */
     protected boolean checkForRefresh(CacheItem item, List<CacheItem> itemsToRefresh) {
-        if (item.getLoader() != null && item.needsRefresh(ticks)) {
+        if (item.getLoader() != null && item.needsRefresh(ticks.get())) {
             itemsToRefresh.add(item);
 
             return true;
