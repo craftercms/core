@@ -17,34 +17,32 @@
 package org.craftercms.core.controller.rest;
 
 import org.apache.commons.collections.MapUtils;
-import org.craftercms.core.controller.rest.ContentStoreRestController;
-import org.craftercms.core.service.*;
-import org.junit.Before;
-import org.junit.Test;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.processors.ItemProcessor;
-
+import org.craftercms.core.service.*;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.store.impl.filesystem.FileSystemContentStoreAdapter;
 import org.craftercms.core.util.cache.CachingAwareObject;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Map;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 import static org.craftercms.core.controller.rest.ContentStoreRestController.*;
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEPTH;
 import static org.craftercms.core.service.Context.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
 * Class description goes HERE
@@ -93,9 +91,8 @@ public class ContentStoreRestControllerTest {
 
     @Test
     public void testCreateContext() throws Exception {
-        ModelMap model = storeRestController.createContext(STORE_TYPE, context.getStoreServerUrl(), USERNAME, PASSWORD,
-                context.getRootFolderPath(), context.isCacheOn(), context.getMaxAllowedItemsInCache(), context.ignoreHiddenFiles())
-                .getModelMap();
+        Map<String, Object> model = storeRestController.createContext(STORE_TYPE, context.getStoreServerUrl(), USERNAME, PASSWORD,
+                context.getRootFolderPath(), context.isCacheOn(), context.getMaxAllowedItemsInCache(), context.ignoreHiddenFiles());
         assertEquals(context.getId(), model.get(MODEL_ATTR_CONTEXT_ID));
 
         verify(storeService).createContext(STORE_TYPE, context.getStoreServerUrl(), USERNAME, PASSWORD, context.getRootFolderPath(),
@@ -113,10 +110,9 @@ public class ContentStoreRestControllerTest {
     public void testGetItemNotModified() throws Exception {
         testNotModified(item, new RestMethodCallback() {
             @Override
-            public ModelMap executeMethod() throws Exception {
+            public Map<String, Object> executeMethod() throws Exception {
                 return storeRestController.getItem(webRequest, response, context.getId(), DEFAULT_CACHING_OPTIONS.doCaching(),
-                        DEFAULT_CACHING_OPTIONS.getExpireAfter(), DEFAULT_CACHING_OPTIONS.getRefreshFrequency(), ITEM_URL, "processor")
-                        .getModelMap();
+                        DEFAULT_CACHING_OPTIONS.getExpireAfter(), DEFAULT_CACHING_OPTIONS.getRefreshFrequency(), ITEM_URL, "processor");
             }
         });
 
@@ -127,10 +123,9 @@ public class ContentStoreRestControllerTest {
     public void testGetItemModified() throws Exception {
         testModified(item, MODEL_ATTR_ITEM, new RestMethodCallback() {
             @Override
-            public ModelMap executeMethod() throws Exception {
+            public Map<String, Object> executeMethod() throws Exception {
                 return storeRestController.getItem(webRequest, response, context.getId(), DEFAULT_CACHING_OPTIONS.doCaching(),
-                        DEFAULT_CACHING_OPTIONS.getExpireAfter(), DEFAULT_CACHING_OPTIONS.getRefreshFrequency(), ITEM_URL, "processor")
-                        .getModelMap();
+                        DEFAULT_CACHING_OPTIONS.getExpireAfter(), DEFAULT_CACHING_OPTIONS.getRefreshFrequency(), ITEM_URL, "processor");
             }
         });
 
@@ -141,10 +136,10 @@ public class ContentStoreRestControllerTest {
     public void testGetChildrenNotModified() throws Exception {
         testNotModified(children, new RestMethodCallback() {
             @Override
-            public ModelMap executeMethod() throws Exception {
+            public Map<String, Object> executeMethod() throws Exception {
                 return storeRestController.getChildren(webRequest, response, context.getId(), DEFAULT_CACHING_OPTIONS.doCaching(),
                         DEFAULT_CACHING_OPTIONS.getExpireAfter(), DEFAULT_CACHING_OPTIONS.getRefreshFrequency(), FOLDER_URL, "filter",
-                        "processor").getModelMap();
+                        "processor");
             }
         });
 
@@ -155,10 +150,10 @@ public class ContentStoreRestControllerTest {
     public void testGetChildrenModified() throws Exception {
         testModified(children, MODEL_ATTR_CHILDREN, new RestMethodCallback() {
             @Override
-            public ModelMap executeMethod() throws Exception {
+            public Map<String, Object> executeMethod() throws Exception {
                 return storeRestController.getChildren(webRequest, response, context.getId(), DEFAULT_CACHING_OPTIONS.doCaching(),
                         DEFAULT_CACHING_OPTIONS.getExpireAfter(), DEFAULT_CACHING_OPTIONS.getRefreshFrequency(), FOLDER_URL, "filter",
-                        "processor").getModelMap();
+                        "processor");
             }
         });
 
@@ -169,10 +164,10 @@ public class ContentStoreRestControllerTest {
     public void testGetTreeNotModified() throws Exception {
         testNotModified(tree, new RestMethodCallback() {
             @Override
-            public ModelMap executeMethod() throws Exception {
+            public Map<String, Object> executeMethod() throws Exception {
                 return storeRestController.getTree(webRequest, response, context.getId(), DEFAULT_CACHING_OPTIONS.doCaching(),
                         DEFAULT_CACHING_OPTIONS.getExpireAfter(), DEFAULT_CACHING_OPTIONS.getRefreshFrequency(), FOLDER_URL,
-                        UNLIMITED_TREE_DEPTH, "filter", "processor").getModelMap();
+                        UNLIMITED_TREE_DEPTH, "filter", "processor");
             }
         });
 
@@ -183,10 +178,10 @@ public class ContentStoreRestControllerTest {
     public void testGetTreeModified() throws Exception {
         testModified(tree, MODEL_ATTR_TREE, new RestMethodCallback() {
             @Override
-            public ModelMap executeMethod() throws Exception {
+            public Map<String, Object> executeMethod() throws Exception {
                 return storeRestController.getTree(webRequest, response, context.getId(), DEFAULT_CACHING_OPTIONS.doCaching(),
                         DEFAULT_CACHING_OPTIONS.getExpireAfter(), DEFAULT_CACHING_OPTIONS.getRefreshFrequency(), FOLDER_URL,
-                        UNLIMITED_TREE_DEPTH, "filter", "processor").getModelMap();
+                        UNLIMITED_TREE_DEPTH, "filter", "processor");
             }
         });
 
@@ -197,7 +192,7 @@ public class ContentStoreRestControllerTest {
     public void testHandleAuthenticationException() throws Exception {
         AuthenticationException ex = new AuthenticationException();
 
-        ModelMap model = storeRestController.handleAuthenticationException(ex).getModelMap();
+        Map<String, Object> model = storeRestController.handleAuthenticationException(ex);
         assertSame(ex, model.get(EXCEPTION_MODEL_ATTRIBUTE_NAME));
     }
 
@@ -205,7 +200,7 @@ public class ContentStoreRestControllerTest {
     public void testHandlePathNotFoundException() throws Exception {
         PathNotFoundException ex = new PathNotFoundException();
 
-        ModelMap model = storeRestController.handlePathNotFoundException(ex).getModelMap();
+        Map<String, Object> model = storeRestController.handlePathNotFoundException(ex);
         assertSame(ex, model.get(EXCEPTION_MODEL_ATTRIBUTE_NAME));
     }
 
@@ -213,7 +208,7 @@ public class ContentStoreRestControllerTest {
     public void testHandleException() throws Exception {
         Exception ex = new Exception();
 
-        ModelMap model = storeRestController.handleException(ex).getModelMap();
+        Map<String, Object> model = storeRestController.handleException(ex);
         assertSame(ex, model.get(EXCEPTION_MODEL_ATTRIBUTE_NAME));
     }
 
@@ -221,7 +216,7 @@ public class ContentStoreRestControllerTest {
         cachingAwareObject.setCachingTime(System.currentTimeMillis());
         request.addHeader(IF_MODIFIED_SINCE_HEADER_NAME, cachingAwareObject.getCachingTime());
 
-        ModelMap model = callback.executeMethod();
+        Map<String, Object> model = callback.executeMethod();
         assertTrue(MapUtils.isEmpty(model));
         assertEquals(HttpServletResponse.SC_NOT_MODIFIED, response.getStatus());
         assertEquals(MUST_REVALIDATE_HEADER_VALUE, response.getHeader(CACHE_CONTROL_HEADER_NAME));
@@ -235,7 +230,7 @@ public class ContentStoreRestControllerTest {
 
         cachingAwareObject.setCachingTime(System.currentTimeMillis());
 
-        ModelMap model = callback.executeMethod();
+        Map<String, Object> model = callback.executeMethod();
         assertEquals(cachingAwareObject, model.get(modelAttributeName));
         assertEquals(HttpServletResponse.SC_OK, response.getStatus());
         assertEquals(cachingAwareObject.getCachingTime(), new Long(response.getHeader(LAST_MODIFIED_HEADER_NAME)));
@@ -304,7 +299,7 @@ public class ContentStoreRestControllerTest {
 
     private interface RestMethodCallback {
 
-        ModelMap executeMethod() throws Exception;
+        Map<String, Object> executeMethod() throws Exception;
 
     }
 
