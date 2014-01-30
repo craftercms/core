@@ -19,8 +19,10 @@ package org.craftercms.core.controller.rest;
 import org.apache.commons.collections.MapUtils;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.PathNotFoundException;
-import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.service.*;
+import org.craftercms.core.service.ContentStoreService;
+import org.craftercms.core.service.Context;
+import org.craftercms.core.service.Item;
+import org.craftercms.core.service.Tree;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.util.cache.CachingAwareObject;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
@@ -60,8 +62,6 @@ public class ContentStoreRestControllerTest {
     private CachingAwareList<Item> children;
     private Tree tree;
     private Context context;
-    private ItemFilter filter;
-    private ItemProcessor processor;
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private WebRequest webRequest;
@@ -70,8 +70,6 @@ public class ContentStoreRestControllerTest {
     public void setUp() throws Exception {
         setUpTestContext();
         setUpTestItems();
-        setUpTestFilter();
-        setUpTestProcessor();
         setUpTestRequest();
         setUpTestResponse();
         setUpTestWebRequest();
@@ -213,14 +211,6 @@ public class ContentStoreRestControllerTest {
 
         context = new Context("0", storeAdapter, "http://localhost:8080", "/", DEFAULT_CACHE_ON,
                 DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
-    }
-
-    private void setUpTestFilter() {
-        filter = mock(ItemFilter.class);
-    }
-
-    private void setUpTestProcessor() {
-        processor = mock(ItemProcessor.class);
     }
 
     private void setUpTestRequest() {
