@@ -17,6 +17,25 @@
         <property name="storeService" ref="crafter.contentStoreService"/>
     </bean>
 
+    <!-- Main view resolver for REST services -->
+
+    <bean id="crafter.mainViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="favorPathExtension" value="true" />
+        <property name="defaultContentType" value="application/json" />
+        <property name="mediaTypes">
+            <map>
+                <entry key="xml" value="application/xml" />
+                <entry key="json" value="application/json" />
+            </map>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <ref bean="crafter.jsonView"/>
+                <ref bean="crafter.xmlView"/>
+            </list>
+        </property>
+    </bean>
+
     <!-- JSON REST View -->
 
     <bean id="crafter.jsonView" class="org.craftercms.core.util.spring.mvc.GsonView">
@@ -39,11 +58,5 @@
             </bean>
         </constructor-arg>
     </bean>
-
-    <!--
-        NOTE: For the RESTful API to completely work, you need to provide your own view resolver that delegates to the
-        appropiate view. If you're going to use Crafter standalone for REST, just create a BeanNameViewResolver and a
-        crafter.restView alias that points to either crafter.jsonView or crafter.xmlView.
-    -->
 
 </beans>

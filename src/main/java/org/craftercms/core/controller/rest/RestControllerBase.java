@@ -22,7 +22,9 @@ import org.craftercms.core.exception.PathNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class for all Crafter REST services. Handles exceptions thrown by service methods.
@@ -33,30 +35,36 @@ public class RestControllerBase {
 
     public static final String REST_BASE_URI = "/api/1";
     public static final String EXCEPTION_MODEL_ATTRIBUTE_NAME = "exception";
-    public static final String REST_VIEW_NAME = "crafter.restView";
 
     @ExceptionHandler(InvalidContextException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleInvalidContextException(InvalidContextException e) {
+    public Map<String, Object> handleInvalidContextException(InvalidContextException e) {
         return handleException(e);
     }
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ModelAndView handleAuthenticationException(AuthenticationException e) {
+    public Map<String, Object>  handleAuthenticationException(AuthenticationException e) {
         return handleException(e);
     }
 
     @ExceptionHandler(PathNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView handlePathNotFoundException(PathNotFoundException e) {
+    public Map<String, Object>  handlePathNotFoundException(PathNotFoundException e) {
         return handleException(e);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ModelAndView handleException(Exception e) {
-        return new ModelAndView(REST_VIEW_NAME, EXCEPTION_MODEL_ATTRIBUTE_NAME, e);
+    public Map<String, Object> handleException(Exception e) {
+        return createSingletonModel(EXCEPTION_MODEL_ATTRIBUTE_NAME, e);
+    }
+
+    protected Map<String, Object> createSingletonModel(String attributeName, Object attributeValue) {
+        Map<String, Object> model = new HashMap<String, Object>(1);
+        model.put(attributeName, attributeValue);
+
+        return model;
     }
 
 }
