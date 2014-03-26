@@ -16,13 +16,13 @@
  */
 package org.craftercms.core.url.impl;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 import org.craftercms.core.util.HttpServletUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Prepends to a context relative url the schema, domain and port (if different than 80 and 443 in case of https) to
@@ -33,6 +33,27 @@ import org.craftercms.core.util.HttpServletUtils;
  */
 public class AddSchemeAndDomainAndServerPortUrlTransformer implements UrlTransformer {
 
+    public static final String HTTP_SCHEME =        "http";
+    public static final String HTTPS_SCHEME =       "https";
+    public static final int DEFAULT_HTTP_PORT =     80;
+    public static final int DEFAULT_HTTPS_PORT =    443;
+
+    protected boolean forceHttps;
+    protected int httpsPort;
+
+    public AddSchemeAndDomainAndServerPortUrlTransformer() {
+        forceHttps = false;
+        httpsPort = DEFAULT_HTTPS_PORT;
+    }
+
+    public void setForceHttps(boolean forceHttps) {
+        this.forceHttps = forceHttps;
+    }
+
+    public void setHttpsPort(int httpsPort) {
+        this.httpsPort = httpsPort;
+    }
+
     @Override
     public String transformUrl(Context context, CachingOptions cachingOptions,
                                String url) throws UrlTransformationException {
@@ -41,10 +62,16 @@ public class AddSchemeAndDomainAndServerPortUrlTransformer implements UrlTransfo
         String domain = currentRequest.getServerName();
         int serverPort = currentRequest.getServerPort();
 
+        if (forceHttps) {
+            scheme = HTTPS_SCHEME;
+            serverPort = httpsPort;
+        }
+
         StringBuilder fullUrl = new StringBuilder();
         fullUrl.append(scheme).append("://").append(domain);
 
-        if (!(scheme.equals("http") && serverPort == 80) && !(scheme.equals("https") && serverPort == 443)) {
+        if (!(scheme.equals(HTTP_SCHEME) && serverPort == DEFAULT_HTTP_PORT) &&
+            !(scheme.equals(HTTPS_SCHEME) && serverPort == DEFAULT_HTTPS_PORT)) {
             fullUrl.append(":").append(serverPort);
         }
 
