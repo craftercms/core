@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.xml.mergers.DescriptorMerger;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCue;

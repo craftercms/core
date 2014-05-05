@@ -16,15 +16,15 @@
  */
 package org.craftercms.core.service;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.craftercms.core.util.XmlUtils;
+import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
+import org.dom4j.Document;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.craftercms.core.util.XmlUtils;
-import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
-import org.dom4j.Document;
 
 /**
  * Represents an item of a content store. Content store items can be separated into 3 main categories:

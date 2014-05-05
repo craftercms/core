@@ -18,7 +18,7 @@ package org.craftercms.core.processors.impl;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;

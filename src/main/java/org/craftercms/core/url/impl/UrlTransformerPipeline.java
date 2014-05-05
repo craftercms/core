@@ -19,7 +19,7 @@ package org.craftercms.core.url.impl;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;

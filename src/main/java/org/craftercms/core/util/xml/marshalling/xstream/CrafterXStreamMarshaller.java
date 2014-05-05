@@ -16,12 +16,10 @@
  */
 package org.craftercms.core.util.xml.marshalling.xstream;
 
-import java.io.IOException;
-import java.io.Writer;
-
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.DataHolder;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.service.Tree;
 import org.dom4j.Document;
@@ -29,6 +27,9 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.springframework.oxm.XmlMappingException;
 import org.springframework.oxm.xstream.XStreamMarshaller;
+
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * Extension of {@link org.springframework.oxm.xstream.XStreamMarshaller} that:
@@ -66,11 +67,11 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
 
     @Override
     protected void customizeXStream(XStream xstream) {
-        getXStream().alias(ITEM_CLASS_ALIAS, Item.class);
-        getXStream().alias(TREE_CLASS_ALIAS, Tree.class);
-        getXStream().aliasType(DOCUMENT_CLASS_ALIAS, Document.class);
+        xstream.alias(ITEM_CLASS_ALIAS, Item.class);
+        xstream.alias(TREE_CLASS_ALIAS, Tree.class);
+        xstream.aliasType(DOCUMENT_CLASS_ALIAS, Document.class);
 
-        getXStream().registerConverter(Dom4jDocumentConverter.INSTANCE);
+        xstream.registerConverter(Dom4jDocumentConverter.INSTANCE);
     }
 
     /**
@@ -103,7 +104,8 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
      * Also if the object graph is a Dom4j document, the document is written directly instead of using XStream.
      */
     @Override
-    protected void marshalWriter(Object graph, Writer writer) throws XmlMappingException, IOException {
+    public void marshalWriter(Object graph, Writer writer, DataHolder dataHolder) throws XmlMappingException,
+            IOException {
         if (graph instanceof Document) {
             OutputFormat outputFormat = OutputFormat.createCompactFormat();
             outputFormat.setSuppressDeclaration(suppressXmlDeclaration);
@@ -125,7 +127,7 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
 
             HierarchicalStreamWriter streamWriter = new EscapingCompactWriter(writer);
             try {
-                getXStream().marshal(graph, streamWriter);
+                getXStream().marshal(graph, streamWriter, dataHolder);
             } catch (Exception ex) {
                 throw convertXStreamException(ex, true);
             } finally {

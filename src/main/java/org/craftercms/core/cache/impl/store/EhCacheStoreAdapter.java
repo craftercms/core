@@ -16,11 +16,6 @@
  */
 package org.craftercms.core.cache.impl.store;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import javax.annotation.PreDestroy;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -30,6 +25,11 @@ import net.sf.ehcache.config.ConfigurationFactory;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
 import org.craftercms.core.exception.InvalidScopeException;
+
+import javax.annotation.PreDestroy;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Implementation of a {@link CacheStoreAdapter} using an underlying EhCache <code>CacheManager</code>.
@@ -51,7 +51,6 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
      * {@link net.sf.ehcache.CacheManager#newInstance(net.sf.ehcache.config.Configuration)}, because we want a
      * separate {@code CacheManager}, not the singleton one, since we don't want to the tick() method of a cache
      * implementation to be called on a CacheManager that doesn't have {@link CacheItem}s.
-     * called on a CacheManager that doesn't have {@link org.craftercms.core.cache.CacheItem}s.
      */
     public EhCacheStoreAdapter() {
         Configuration scopeManagerConfig = ConfigurationFactory.parseConfiguration();

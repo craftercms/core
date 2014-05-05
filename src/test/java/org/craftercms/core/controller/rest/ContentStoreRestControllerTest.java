@@ -16,7 +16,7 @@
 */
 package org.craftercms.core.controller.rest;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.service.ContentStoreService;

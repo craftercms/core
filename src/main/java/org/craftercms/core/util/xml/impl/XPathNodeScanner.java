@@ -19,7 +19,7 @@ package org.craftercms.core.util.xml.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.exception.XmlException;
 import org.craftercms.core.util.xml.NodeScanner;
 import org.dom4j.Document;

@@ -17,16 +17,14 @@
 package org.craftercms.core.util;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
- * Adds some utility methods to {@link org.apache.commons.collections.CollectionUtils}.
+ * Utility methods for collections.
  *
  * @author Alfonso Vásquez
  */
-public class CollectionUtils extends org.apache.commons.collections.CollectionUtils {
+public class CollectionUtils {
 
     public static <T> void move(Collection<T> fromCollection, Collection<T> toCollection) {
         for (Iterator<T> i = fromCollection.iterator(); i.hasNext(); ) {
@@ -35,13 +33,6 @@ public class CollectionUtils extends org.apache.commons.collections.CollectionUt
 
             toCollection.add(element);
         }
-    }
-
-    public static <K, V> Map<K, V> asMap(K key, V value) {
-        Map<K, V> map = new HashMap<K, V>();
-        map.put(key, value);
-
-        return map;
     }
 
 }

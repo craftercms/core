@@ -16,14 +16,10 @@
  */
 package org.craftercms.core.store.impl;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.InvalidContextException;
@@ -35,11 +31,15 @@ import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.service.impl.CachedContent;
-import org.craftercms.core.util.CollectionUtils;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Required;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 /**
  * File-based content store adapter. Takes away common stuff from actual implementations,
