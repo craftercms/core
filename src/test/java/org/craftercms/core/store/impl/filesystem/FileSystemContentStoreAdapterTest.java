@@ -16,7 +16,7 @@
  */
 package org.craftercms.core.store.impl.filesystem;
 
-import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections4.Predicate;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.junit.Before;
@@ -25,7 +25,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
-import org.craftercms.core.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.util.cache.CacheCallback;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.springframework.core.io.ClassPathResource;
@@ -142,11 +142,11 @@ public class FileSystemContentStoreAdapterTest {
 
         assertNotNull(items);
         assertEquals(3, items.size());
-        assertTrue(CollectionUtils.exists(items, new Predicate() {
+        assertTrue(CollectionUtils.exists(items, new Predicate<Item>() {
 
             @Override
-            public boolean evaluate(Object object) {
-                return HIDDEN_FILE_NAME.equals(((Item) object).getName());
+            public boolean evaluate(Item item) {
+                return HIDDEN_FILE_NAME.equals(item.getName());
             }
 
         }));

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;

@@ -16,18 +16,18 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.exception.XmlMergeException;
-import org.craftercms.core.util.CollectionUtils;
 import org.craftercms.core.xml.mergers.impl.cues.ElementMergeMatcher;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Required;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class description goes HERE
@@ -64,7 +64,7 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
     @Override
     public Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException {
         Element merged = DocumentHelper.createElement(child.getQName());
-        CollectionUtils.move(child.attributes(), merged.attributes());
+        org.craftercms.core.util.CollectionUtils.move(child.attributes(), merged.attributes());
 
         if (parent.isTextOnly() && child.isTextOnly()) {
             String parentText = parent.getText();
@@ -107,11 +107,11 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
             }
 
             if (getMergeOrder(params).equalsIgnoreCase("after")) {
-                CollectionUtils.move(parentElements, mergedElements);
-                CollectionUtils.move(childElements, mergedElements);
+                org.craftercms.core.util.CollectionUtils.move(parentElements, mergedElements);
+                org.craftercms.core.util.CollectionUtils.move(childElements, mergedElements);
             } else {
-                CollectionUtils.move(childElements, mergedElements);
-                CollectionUtils.move(parentElements, mergedElements);
+                org.craftercms.core.util.CollectionUtils.move(childElements, mergedElements);
+                org.craftercms.core.util.CollectionUtils.move(parentElements, mergedElements);
             }
         }
 

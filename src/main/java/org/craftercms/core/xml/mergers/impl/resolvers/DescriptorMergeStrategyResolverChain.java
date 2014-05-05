@@ -18,7 +18,7 @@ package org.craftercms.core.xml.mergers.impl.resolvers;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.dom4j.Document;

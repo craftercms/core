@@ -18,7 +18,7 @@ package org.craftercms.core.processors.impl.resolvers;
 
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.craftercms.core.exception.XmlException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;

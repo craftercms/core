@@ -19,7 +19,7 @@ package org.craftercms.core.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * Folder {@link Item} that also contains it's children.

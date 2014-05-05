@@ -16,8 +16,8 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
-import org.craftercms.core.xml.mergers.impl.cues.impl.ElementMergeMatcherImpl;
-import org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCue;
+import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
+import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -25,9 +25,6 @@ import org.dom4j.QName;
 import org.dom4j.io.SAXReader;
 import org.junit.Before;
 import org.junit.Test;
-import org.craftercms.core.util.CollectionUtils;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 
 import java.io.StringReader;
 import java.util.Collections;
@@ -95,7 +92,7 @@ public class MergeParentAndChildMergeCueTest {
         Element parent = (Element) parentDoc.selectSingleNode("/group");
         Element child = (Element) childDoc.selectSingleNode("/group");
 
-        Element merged = mergeCue.merge(parent, child, CollectionUtils.asMap(MERGE_ORDER_PARAM_NAME,
+        Element merged = mergeCue.merge(parent, child, Collections.singletonMap(MERGE_ORDER_PARAM_NAME,
                 DEFAULT_MERGE_ORDER));
         assertNotNull(merged);
         assertEquals(MERGED_XML, merged.asXML());

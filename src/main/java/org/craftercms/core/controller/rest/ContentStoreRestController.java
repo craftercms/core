@@ -16,7 +16,7 @@
  */
 package org.craftercms.core.controller.rest;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.craftercms.core.exception.*;
 import org.craftercms.core.service.ContentStoreService;
 import org.craftercms.core.service.Context;
@@ -32,7 +32,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -54,7 +53,6 @@ public class ContentStoreRestController extends RestControllerBase {
     public static final String URL_ITEM = "/item";
     public static final String URL_CHILDREN = "/children";
     public static final String URL_TREE = "/tree";
-    public static final String MODEL_ATTR_CONTEXT_ID = "contextId";
     public static final String MODEL_ATTR_DESCRIPTOR = "descriptor";
     public static final String MODEL_ATTR_ITEM = "item";
     public static final String MODEL_ATTR_CHILDREN = "children";
@@ -97,7 +95,7 @@ public class ContentStoreRestController extends RestControllerBase {
         Item item = storeService.getItem(context, url);
 
         if (item.getCachingTime() != null && checkNotModified(item.getCachingTime(), request, response)) {
-            return Collections.emptyMap();
+            return null;
         } else {
             return createSingletonModel(MODEL_ATTR_ITEM, item);
         }
@@ -117,7 +115,7 @@ public class ContentStoreRestController extends RestControllerBase {
         CachingAwareList<Item> children = (CachingAwareList<Item>) storeService.getChildren(context, url);
 
         if (children.getCachingTime() != null && checkNotModified(children.getCachingTime(), request, response)) {
-            return Collections.emptyMap();
+            return null;
         } else {
             return createSingletonModel(MODEL_ATTR_CHILDREN, new ArrayList<Item>(children));
         }
@@ -142,7 +140,7 @@ public class ContentStoreRestController extends RestControllerBase {
         Tree tree = storeService.getTree(context, url, depth);
 
         if (tree.getCachingTime() != null && checkNotModified(tree.getCachingTime(), request, response)) {
-            return Collections.emptyMap();
+            return null;
         } else {
             return createSingletonModel(MODEL_ATTR_TREE, tree);
         }

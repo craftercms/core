@@ -16,17 +16,13 @@
  */
 package org.craftercms.core.cache.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
+
+import java.util.*;
 
 /**
  * Default implementation of {@link TopologicalCacheItemSorter}.
