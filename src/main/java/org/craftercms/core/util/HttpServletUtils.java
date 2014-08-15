@@ -16,6 +16,18 @@
  */
 package org.craftercms.core.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,13 +35,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.*;
 
 /**
  * @author Alfonso Vásquez
@@ -50,8 +55,8 @@ public class HttpServletUtils {
         }
     }
 
-    public static Object getAttribute(String name, int scope) throws IllegalStateException {
-        return RequestContextHolder.currentRequestAttributes().getAttribute(name, scope);
+    public static <T> T getAttribute(String name, int scope) throws IllegalStateException {
+        return (T) RequestContextHolder.currentRequestAttributes().getAttribute(name, scope);
     }
 
     public static void setAttribute(String name, Object value, int scope) throws IllegalStateException {
