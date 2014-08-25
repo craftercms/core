@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,7 +33,6 @@ import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
-import org.craftercms.core.service.impl.CachedContent;
 import org.craftercms.core.util.CollectionUtils;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.dom4j.DocumentException;
@@ -76,24 +74,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
             throw new StoreException("Unable to get content: " + file + " is not a file");
         }
 
-        if (context.isCacheOn() && cachingOptions.doCaching()) {
-            try {
-                InputStream fileInputStream = file.getInputStream();
-                try {
-                    return new CachedContent(IOUtils.toByteArray(fileInputStream), file.getLastModified());
-                } finally {
-                    try {
-                        fileInputStream.close();
-                    } catch (IOException e) {
-                        logger.warn("Unable to close input stream for file at " + file, e);
-                    }
-                }
-            } catch (IOException e) {
-                throw new StoreException("Unable to open input stream for file at " + file, e);
-            }
-        } else {
-            return file;
-        }
+        return file;
     }
 
     @Override
