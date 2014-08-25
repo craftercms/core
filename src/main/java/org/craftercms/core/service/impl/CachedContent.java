@@ -27,6 +27,7 @@ import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
  *
  * @author Alfonso Vásquez
  */
+@Deprecated
 public class CachedContent extends CachingAwareObjectBase implements Content {
 
     private byte[] data;
