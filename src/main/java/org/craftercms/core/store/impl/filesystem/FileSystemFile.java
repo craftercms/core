@@ -16,6 +16,7 @@
  */
 package org.craftercms.core.store.impl.filesystem;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -80,7 +81,7 @@ public class FileSystemFile implements File, Content {
 
     @Override
     public InputStream getInputStream() throws FileNotFoundException {
-        return new FileInputStream(file);
+        return new BufferedInputStream(new FileInputStream(file));
     }
 
     @Override
