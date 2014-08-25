@@ -16,9 +16,13 @@
  */
 package org.craftercms.core.store.impl;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,16 +34,10 @@ import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
-import org.craftercms.core.service.impl.CachedContent;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 /**
  * File-based content store adapter. Takes away common stuff from actual implementations,
@@ -76,24 +74,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
             throw new StoreException("Unable to get content: " + file + " is not a file");
         }
 
-        if (context.isCacheOn() && cachingOptions.doCaching()) {
-            try {
-                InputStream fileInputStream = file.getInputStream();
-                try {
-                    return new CachedContent(IOUtils.toByteArray(fileInputStream), file.getLastModified());
-                } finally {
-                    try {
-                        fileInputStream.close();
-                    } catch (IOException e) {
-                        logger.warn("Unable to close input stream for file at " + file, e);
-                    }
-                }
-            } catch (IOException e) {
-                throw new StoreException("Unable to open input stream for file at " + file, e);
-            }
-        } else {
-            return file;
-        }
+        return file;
     }
 
     @Override
