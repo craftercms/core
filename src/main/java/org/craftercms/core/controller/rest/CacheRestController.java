@@ -16,6 +16,9 @@
  */
 package org.craftercms.core.controller.rest;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.CacheException;
@@ -26,12 +29,11 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.store.impl.AbstractCachedContentStoreAdapter;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * REST service that provides several methods to handle Crafter's cache engine.
@@ -56,6 +58,8 @@ public class CacheRestController extends RestControllerBase {
     public static final String REQUEST_PARAM_CONTEXT_ID = "contextId";
     public static final String REQUEST_PARAM_URL = "url";
 
+    public static final String MODEL_ATTRIBUTE_MESSAGE = "message";
+
     private CacheTemplate cacheTemplate;
     private ContentStoreService storeService;
 
@@ -70,18 +74,20 @@ public class CacheRestController extends RestControllerBase {
     }
 
     @RequestMapping(value = URL_CLEAR_ALL_SCOPES, method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public void clearAllScopes() throws CacheException {
+    @ResponseBody
+    public Map<String, String> clearAllScopes() throws CacheException {
         cacheTemplate.getCacheService().clearAll();
         if (logger.isInfoEnabled()) {
-            logger.info("[CACHE] All scopes are cleared.");
+            logger.info("[CACHE] All scopes have been cleared");
         }
+
+        return Collections.singletonMap(MODEL_ATTRIBUTE_MESSAGE, "All cache scopes have been cleared");
     }
 
     @RequestMapping(value = URL_CLEAR_SCOPE, method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public void clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId) throws InvalidContextException,
-        CacheException {
+    @ResponseBody
+    public Map<String, String> clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId)
+        throws InvalidContextException, CacheException {
         Context context = storeService.getContext(contextId);
         if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
@@ -89,14 +95,18 @@ public class CacheRestController extends RestControllerBase {
 
         cacheTemplate.getCacheService().clearScope(context);
         if (logger.isInfoEnabled()) {
-            logger.info("[CACHE] Scope for context " + context + " is cleared.");
+            logger.info("[CACHE] Scope for context " + context + " has been cleared");
         }
+
+        return Collections.singletonMap(MODEL_ATTRIBUTE_MESSAGE, "Cache scope for context '" + contextId +
+            "' has been cleared");
     }
 
     @RequestMapping(value = URL_REMOVE_ITEM, method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public void removeItem(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                           @RequestParam(REQUEST_PARAM_URL) String url) throws InvalidContextException, CacheException {
+    @ResponseBody
+    public Map<String, String> removeItem(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+                                          @RequestParam(REQUEST_PARAM_URL) String url) throws InvalidContextException,
+        CacheException {
         Context context = storeService.getContext(contextId);
         if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
@@ -126,8 +136,11 @@ public class CacheRestController extends RestControllerBase {
             .CONST_KEY_ELEM_ITEMS));
 
         if (logger.isInfoEnabled()) {
-            logger.info("[CACHE] removed " + url + " from scope for context " + context);
+            logger.info("[CACHE] Removed " + url + " from scope for context " + context);
         }
+
+        return Collections.singletonMap(MODEL_ATTRIBUTE_MESSAGE, "Removed " + url + " from cache scope for " +
+            "context '" + contextId + "'");
     }
 
 }
