@@ -16,10 +16,17 @@
  */
 package org.craftercms.core.service;
 
-import org.craftercms.core.exception.*;
-import org.craftercms.core.processors.ItemProcessor;
-
 import java.util.List;
+
+import org.craftercms.core.exception.AuthenticationException;
+import org.craftercms.core.exception.InvalidContextException;
+import org.craftercms.core.exception.InvalidStoreTypeException;
+import org.craftercms.core.exception.ItemProcessingException;
+import org.craftercms.core.exception.PathNotFoundException;
+import org.craftercms.core.exception.StoreException;
+import org.craftercms.core.exception.XmlFileParseException;
+import org.craftercms.core.exception.XmlMergeException;
+import org.craftercms.core.processors.ItemProcessor;
 
 /**
  * Main Crafter content access API. Besides providing an interface to a content store or repository, implementations
@@ -78,17 +85,28 @@ public interface ContentStoreService {
     void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException;
 
     /**
+     * Returns true if the file or folder at the specified URL exists
+     *
+     * @param context the context with the store configuration
+     * @param url     the url of the file
+     * @return true if the file or folder exists, false otherwise
+     * @throws InvalidContextException if the context is invalid
+     * @throws PathNotFoundException   if the file the url points to can't be found
+     * @throws StoreException          if an error occurred while accessing the content store
+     */
+    boolean exists(Context context, String url) throws InvalidContextException, PathNotFoundException, StoreException;
+
+    /**
      * Returns the content of the file for the given url.
      *
      * @param context the context with the store configuration
      * @param url     the url of the file
      * @return the file content
      * @throws InvalidContextException if the context is invalid
-     * @throws org.craftercms.core.exception.PathNotFoundException
-     *                                 if the file the url points to can't be found
+     * @throws PathNotFoundException   if the file the url points to can't be found
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Content getContent(Context context, String url) throws InvalidScopeException, PathNotFoundException, StoreException;
+    Content getContent(Context context, String url) throws InvalidContextException, PathNotFoundException, StoreException;
 
     /**
      * Returns the content of the file for the given url.
@@ -101,7 +119,7 @@ public interface ContentStoreService {
      * @throws PathNotFoundException   if the file the url points to can't be found
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    Content getContent(Context context, CachingOptions cachingOptions, String url) throws InvalidScopeException,
+    Content getContent(Context context, CachingOptions cachingOptions, String url) throws InvalidContextException,
         PathNotFoundException, StoreException;
 
     /**

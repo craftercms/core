@@ -19,7 +19,6 @@ package org.craftercms.core.store.impl;
 import java.util.List;
 
 import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.exception.XmlFileParseException;
@@ -52,8 +51,8 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
     }
 
     @Override
-    public Content getContent(final Context context, final CachingOptions cachingOptions,
-                              final String path) throws InvalidScopeException, PathNotFoundException, StoreException {
+    public Content getContent(final Context context, final CachingOptions cachingOptions, final String path)
+        throws InvalidContextException, PathNotFoundException, StoreException {
         return cacheTemplate.execute(context, cachingOptions, new CacheCallback<Content>() {
 
             @Override
@@ -115,14 +114,15 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
         }, context, path, withDescriptor, CONST_KEY_ELEM_ITEMS);
     }
 
-    protected abstract Content doGetContent(Context context, CachingOptions cachingOptions,
-                                            String path) throws InvalidContextException, PathNotFoundException,
-        StoreException;
+    protected abstract Content doGetContent(Context context, CachingOptions cachingOptions, String path)
+        throws InvalidContextException, PathNotFoundException, StoreException;
 
     protected abstract Item doGetItem(Context context, CachingOptions cachingOptions, String path,
                                       boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
         XmlFileParseException, StoreException;
 
-    protected abstract List<Item> doGetItems(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor) throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
+    protected abstract List<Item> doGetItems(Context context, CachingOptions cachingOptions, String path,
+                                             boolean withDescriptor) throws InvalidContextException,
+        PathNotFoundException, XmlFileParseException, StoreException;
 
 }

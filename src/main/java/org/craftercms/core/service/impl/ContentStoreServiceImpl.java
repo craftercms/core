@@ -185,6 +185,16 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         }
     }
 
+    @Override
+    public boolean exists(Context context, String url) throws InvalidContextException, PathNotFoundException,
+        StoreException {
+        if (!url.startsWith("/")) {
+            url = "/" + url;
+        }
+
+        return context.getStoreAdapter().exists(context, url);
+    }
+
     /**
      * {@inheritDoc}
      */
