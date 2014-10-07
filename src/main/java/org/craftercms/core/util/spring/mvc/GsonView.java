@@ -16,6 +16,8 @@
  */
 package org.craftercms.core.util.spring.mvc;
 
+import com.google.gson.Gson;
+
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +25,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
 import org.apache.commons.collections4.CollectionUtils;
+import org.craftercms.core.util.HttpServletUtils;
 import org.craftercms.core.util.JsonUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.AbstractView;
@@ -40,14 +42,6 @@ public class GsonView extends AbstractView {
     public static final String DEFAULT_CHARACTER_ENCODING = "UTF-8";
 
     public static final String JSON_ANTI_HIJACKING_PREFIX = "{} &&";
-
-    public static final String PRAGMA_HEADER_NAME = "Pragma";
-    public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
-    public static final String EXPIRES_HEADER_NAME = "Expires";
-
-    public static final String DISABLED_CACHING_PRAGMA_HEADER_VALUE = "no-cache";
-    public static final String DISABLED_CACHING_CACHE_CONTROL_HEADER_VALUE = "no-cache, no-store, max-age=0";
-    public static final long DISABLED_CACHING_EXPIRES_HEADER_VALUE = 1L;
 
     private Gson gson;
     private boolean prefixJson;
@@ -96,9 +90,7 @@ public class GsonView extends AbstractView {
         response.setContentType(getContentType());
         response.setCharacterEncoding(DEFAULT_CHARACTER_ENCODING);
         if (disableCaching) {
-            response.addHeader(PRAGMA_HEADER_NAME, DISABLED_CACHING_PRAGMA_HEADER_VALUE);
-            response.addHeader(CACHE_CONTROL_HEADER_NAME, DISABLED_CACHING_CACHE_CONTROL_HEADER_VALUE);
-            response.addDateHeader(EXPIRES_HEADER_NAME, DISABLED_CACHING_EXPIRES_HEADER_VALUE);
+            HttpServletUtils.disableCaching(response);
         }
     }
 
