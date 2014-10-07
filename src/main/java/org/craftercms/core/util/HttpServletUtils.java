@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -43,6 +44,10 @@ public class HttpServletUtils {
 
     public static final int SCOPE_REQUEST = RequestAttributes.SCOPE_REQUEST;
     public static final int SCOPE_SESSION = RequestAttributes.SCOPE_SESSION;
+
+    public static final String PRAGMA_HEADER_NAME = "Pragma";
+    public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
+    public static final String EXPIRES_HEADER_NAME = "Expires";
 
     public static HttpServletRequest getCurrentRequest() throws IllegalStateException {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
@@ -211,6 +216,12 @@ public class HttpServletUtils {
         }
 
         return sessionMap;
+    }
+
+    public static void disableCaching(HttpServletResponse response) {
+        response.addHeader(PRAGMA_HEADER_NAME, "no-cache");
+        response.addHeader(CACHE_CONTROL_HEADER_NAME, "no-cache, no-store, max-age=0");
+        response.addDateHeader(EXPIRES_HEADER_NAME, 1L);
     }
 
 }

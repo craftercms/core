@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.exception.XmlFileParseException;
@@ -39,19 +38,20 @@ import org.craftercms.core.service.Item;
 public interface ContentStoreAdapter {
 
     Context createContext(String id, String storeServerUrl, String username, String password, String rootFolderPath,
-                          boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles) throws
-        StoreException, AuthenticationException;
+                          boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles)
+        throws StoreException, AuthenticationException;
 
     void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException;
 
-    Content getContent(Context context, CachingOptions cachingOptions, String path) throws InvalidScopeException,
+    boolean exists(Context context, String path) throws InvalidContextException, StoreException;
+
+    Content getContent(Context context, CachingOptions cachingOptions, String path) throws InvalidContextException,
         PathNotFoundException, StoreException;
 
-    Item getItem(Context context, CachingOptions cachingOptions, String path,
-                 boolean withDescriptor) throws InvalidScopeException, PathNotFoundException, XmlFileParseException,
-        StoreException;
+    Item getItem(Context context, CachingOptions cachingOptions, String path,boolean withDescriptor)
+        throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
 
-    List<Item> getItems(Context context, CachingOptions cachingOptions, String path,
-                        boolean withDescriptor) throws InvalidScopeException, PathNotFoundException, XmlFileParseException, StoreException;
+    List<Item> getItems(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
+        throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
 
 }

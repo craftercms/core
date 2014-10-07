@@ -70,12 +70,8 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
         AuthenticationException {
     }
 
-    /**
-     * Returns the file for the specified relative path.
-     */
     @Override
-    protected File getFile(Context context, String path) throws InvalidContextException, PathNotFoundException,
-        StoreException {
+    protected File findFile(Context context, String path) {
         FileSystemFile rootFolder = ((FileSystemContext)context).getRootFolder();
 
         if (StringUtils.isNotEmpty(path)) {
@@ -83,7 +79,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
             if (file.getFile().exists()) {
                 return file;
             } else {
-                throw new PathNotFoundException("File " + file + " can't be found");
+                return null;
             }
         } else {
             return rootFolder;
@@ -91,8 +87,18 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     }
 
     @Override
-    protected List<File> getChildren(Context context, File dir) throws InvalidContextException,
-        PathNotFoundException, StoreException {
+    protected File getFile(Context context, String path) throws PathNotFoundException {
+        File file = findFile(context, path);
+
+        if (file == null) {
+            throw new PathNotFoundException("File " + file + " can't be found");
+        }
+
+        return file;
+    }
+
+    @Override
+    protected List<File> getChildren(Context context, File dir) throws PathNotFoundException {
         java.io.File[] listing;
         if (context.ignoreHiddenFiles()) {
             listing = ((FileSystemFile)dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);

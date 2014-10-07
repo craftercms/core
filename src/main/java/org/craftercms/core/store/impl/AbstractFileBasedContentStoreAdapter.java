@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.InvalidContextException;
+import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.exception.XmlFileParseException;
@@ -64,8 +65,13 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    protected Content doGetContent(Context context, CachingOptions cachingOptions,
-                                   String path) throws InvalidContextException, PathNotFoundException, StoreException {
+    public boolean exists(Context context, String path) throws InvalidScopeException, StoreException {
+        return findFile(context, path) != null;
+    }
+
+    @Override
+    protected Content doGetContent(Context context, CachingOptions cachingOptions, String path)
+        throws InvalidContextException, PathNotFoundException, StoreException {
         path = normalizePath(path);
 
         File file = getFile(context, path);
@@ -78,8 +84,8 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    protected Item doGetItem(Context context, CachingOptions cachingOptions, String path,
-                             boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
+    protected Item doGetItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
+        throws InvalidContextException, PathNotFoundException,
         XmlFileParseException, StoreException {
         path = normalizePath(path);
 
@@ -202,7 +208,13 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     /**
-     * Returns the {@link File} at the given path.
+     * Returns the {@link File} at the given path, returning null if not found.
+     */
+    protected abstract File findFile(Context context, String path) throws InvalidContextException,
+        PathNotFoundException, StoreException;
+
+    /**
+     * Returns the {@link File} at the given path, throwing a {@link PathNotFoundException} if not found.
      */
     protected abstract File getFile(Context context, String path) throws InvalidContextException,
         PathNotFoundException, StoreException;
@@ -210,6 +222,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     /**
      * Returns the list of children of the given directory.
      */
-    protected abstract List<File> getChildren(Context context, File dir) throws InvalidContextException, PathNotFoundException, StoreException;
+    protected abstract List<File> getChildren(Context context, File dir) throws InvalidContextException,
+        PathNotFoundException, StoreException;
 
 }
