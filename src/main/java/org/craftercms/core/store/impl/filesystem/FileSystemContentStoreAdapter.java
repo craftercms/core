@@ -91,7 +91,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
         File file = findFile(context, path);
 
         if (file == null) {
-            throw new PathNotFoundException("File " + file + " can't be found");
+            throw new PathNotFoundException("File " + path + " can't be found");
         }
 
         return file;
