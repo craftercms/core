@@ -29,7 +29,7 @@
         <constructor-arg>
             <list>
                 <!--ref bean="crafter.includeDescriptorsProcessor"/-->
-                <ref bean="crafter.templateProcessor"/>
+                <!--ref bean="crafter.templateProcessor"/-->
             </list>
         </constructor-arg>
     </bean>
