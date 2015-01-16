@@ -15,7 +15,7 @@
 
     <!-- Default configuration properties -->
     
-	<bean name="crafter.properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean name="crafter.properties" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>classpath:crafter/core/core.properties</value>
