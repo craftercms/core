@@ -17,6 +17,14 @@
         <property name="storeService" ref="crafter.contentStoreService"/>
     </bean>
 
+    <bean id="crafter.coreObjectMapper" class="org.craftercms.commons.jackson.CustomSerializationObjectMapper">
+        <property name="serializers">
+            <list>
+                <bean class="org.craftercms.core.util.json.jackson.Dom4jDocumentJsonSerializer"/>
+            </list>
+        </property>
+    </bean>
+
     <!-- Main view resolver for REST services -->
 
     <bean id="crafter.mainViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
@@ -30,10 +38,11 @@
 
     <!-- JSON REST View -->
 
-    <bean id="crafter.jsonView" class="org.craftercms.core.util.spring.mvc.GsonView">
+    <bean id="crafter.jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+        <property name="objectMapper" ref="crafter.coreObjectMapper"/>
         <property name="disableCaching" value="${crafter.core.rest.views.json.disableCaching}"/>
         <property name="prefixJson" value="${crafter.core.rest.views.json.prefixJson}"/>
-        <property name="renderSingleAttributeAsRootObject"
+        <property name="extractValueFromSingleKeyModel"
                   value="${crafter.core.rest.views.json.renderSingleAttributeAsRootObject}"/>
     </bean>
 

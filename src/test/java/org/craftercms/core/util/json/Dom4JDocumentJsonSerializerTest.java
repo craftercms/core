@@ -16,15 +16,19 @@
  */
 package org.craftercms.core.util.json;
 
-import com.google.gson.JsonElement;
+import com.fasterxml.jackson.databind.JsonSerializer;
+
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.craftercms.commons.jackson.CustomSerializationObjectMapper;
+import org.craftercms.core.util.json.jackson.Dom4jDocumentJsonSerializer;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.junit.Before;
 import org.junit.Test;
-import org.craftercms.core.util.json.gson.Dom4JDocumentJsonSerializer;
-
-import java.io.StringReader;
 
 import static org.junit.Assert.assertEquals;
 
@@ -43,8 +47,9 @@ public class Dom4JDocumentJsonSerializerTest {
                     "<e4 name='value'>text</e4>" +
                     "<e5><a>text</a><b>text</b></e5>" +
                     "<e6><a>text</a><a>text</a></e6>" +
-                    "<e7>text<a>text</a></e7>" +
-                    "<e8>text<a>text</a>text</e8>" +
+                    "<e7><a name='value'>text</a><a name='value'>text</a></e7>" +
+                    "<e8>text<a>text</a></e8>" +
+                    "<e9>text<a>text</a>text</e9>" +
             "</root>";
 
     public static final String XML_AS_JSON =
@@ -55,21 +60,24 @@ public class Dom4JDocumentJsonSerializerTest {
                     "\"e4\":{\"name\":\"value\",\"text\":\"text\"}," +
                     "\"e5\":{\"a\":\"text\",\"b\":\"text\"}," +
                     "\"e6\":{\"a\":[\"text\",\"text\"]}," +
-                    "\"e7\":{\"text\":\"text\",\"a\":\"text\"}," +
-                    "\"e8\":{\"text\":[\"text\",\"text\"],\"a\":\"text\"}" +
+                    "\"e7\":{\"a\":[{\"name\":\"value\",\"text\":\"text\"},{\"name\":\"value\",\"text\":\"text\"}]}," +
+                    "\"e8\":{\"text\":\"text\",\"a\":\"text\"}," +
+                    "\"e9\":{\"text\":[\"text\",\"text\"],\"a\":\"text\"}" +
                     "}" +
             "}";
 
     private Document document;
+    private CustomSerializationObjectMapper objectMapper;
 
     @Before
     public void setUp() throws Exception {
         setUpTestDocument();
+        setUpTestObjectMapper();
     }
 
     @Test
-    public void testSerializer() {
-        JsonElement json = Dom4JDocumentJsonSerializer.INSTANCE.serialize(document, null, null);
+    public void testSerializer() throws Exception {
+        String json = objectMapper.writeValueAsString(document);
 
         assertEquals(XML_AS_JSON, json.toString());
     }
@@ -80,6 +88,17 @@ public class Dom4JDocumentJsonSerializerTest {
             document = reader.read(new StringReader(XML));
         } catch (DocumentException e) {
         }
+    }
+
+    private void setUpTestObjectMapper() {
+        Dom4jDocumentJsonSerializer serializer = new Dom4jDocumentJsonSerializer();
+        List<JsonSerializer<?>> serializers = new ArrayList<>();
+
+        serializers.add(serializer);
+
+        objectMapper = new CustomSerializationObjectMapper();
+        objectMapper.setSerializers(serializers);
+        objectMapper.init();
     }
 
 }
