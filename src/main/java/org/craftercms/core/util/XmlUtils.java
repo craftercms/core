@@ -23,16 +23,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.OutputFormat;
@@ -147,109 +140,6 @@ public class XmlUtils {
         }
 
         return stringWriter.toString();
-    }
-
-    /**
-     * Returns the given document as a JSON object.
-     * <p/>
-     * The following are the conversion patterns used between XML and JSON:
-     * <p/>
-     * XML                              JSON                                            Access
-     * ---                              ----                                            ------
-     * <e/>                             "e": null                                       o.e
-     * <e>text</e>                      "e": "text"                                     o.e
-     * <e name="value" />               "e": { "name": "value" }                        o.e["name"]
-     * <e name="value">text</e>         "e": { "name": "value", "text": "text" }        o.e["name"] o.e["text"]
-     * <e><a>text</a><b>text</b></e>    "e": { "a": "text", "b": "text" }               o.e.a o.e.b
-     * <e><a>text</a><a>text</a></e>	"e": { "a": ["text", "text"] }                  o.e.a[0] o.e.a[1]
-     * <e>text<a>text</a></e>           "e": { "text": "text", "a": "text" }            o.e["text"] o.e.a
-     * <e>text<a>text</a>text</e>       "e": { "text": ["text", "text"], "a": "text" }  o.e["text"][0] o.e["text"][1]
-     * o.e.a
-     * <p/>
-     * <b>IMPORTANT:</b> XML Namespaces are ALWAYS ignored.
-     *
-     * @param document
-     * @return the document as an JSON object
-     */
-    public static JsonElement documentToJson(Document document) {
-        JsonObject json = new JsonObject();
-
-        elementToJson(document.getRootElement(), json);
-
-        return json;
-    }
-
-    private static void elementToJson(Element element, JsonObject parentJson) {
-        JsonObject elementJson = null;
-
-        if (element.attributeCount() > 0) {
-            elementJson = new JsonObject();
-
-            List<Attribute> attributes = element.attributes();
-            for (Attribute attribute : attributes) {
-                JsonUtils.setOrAccumulate(elementJson, attribute.getName(), new JsonPrimitive(attribute.getValue()));
-            }
-        }
-
-        if (!element.hasContent()) {
-            if (elementJson == null) {
-                addElementTextToJson(parentJson, elementJson, element.getName(), null);
-            }
-        } else if (element.isTextOnly()) {
-            addElementTextToJson(parentJson, elementJson, element.getName(), element.getText());
-        } else {
-            if (elementJson == null) {
-                elementJson = new JsonObject();
-            }
-
-            if (element.hasMixedContent()) {
-                List<String> textContent = getTextContentFromMixedContent(element);
-                for (String text : textContent) {
-                    addElementTextToJson(parentJson, elementJson, element.getName(), text);
-                }
-            }
-
-            List<Element> children = element.elements();
-            for (Element child : children) {
-                elementToJson(child, elementJson);
-            }
-        }
-
-        if (elementJson != null) {
-            JsonUtils.setOrAccumulate(parentJson, element.getName(), elementJson);
-        }
-    }
-
-    private static void addElementTextToJson(JsonObject parentJson, JsonObject elementJson, String elementName,
-                                             String text) {
-        JsonElement value;
-        if (text != null) {
-            value = new JsonPrimitive(text);
-        } else {
-            value = JsonNull.INSTANCE;
-        }
-
-        if (elementJson != null) {
-            JsonUtils.setOrAccumulate(elementJson, XML_ELEMENT_TEXT_JSON_KEY, value);
-        } else {
-            JsonUtils.setOrAccumulate(parentJson, elementName, value);
-        }
-    }
-
-    private static List<String> getTextContentFromMixedContent(Element element) {
-        List<Node> content = element.content();
-        List<String> textContent = new ArrayList<String>();
-
-        for (Node node : content) {
-            if (node.getNodeType() == Node.TEXT_NODE) {
-                String text = node.getText();
-                if (StringUtils.isNotBlank(text)) {
-                    textContent.add(text);
-                }
-            }
-        }
-
-        return textContent;
     }
 
 }

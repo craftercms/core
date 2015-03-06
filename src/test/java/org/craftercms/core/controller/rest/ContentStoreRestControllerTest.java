@@ -16,6 +16,10 @@
 */
 package org.craftercms.core.controller.rest;
 
+import java.util.ArrayList;
+import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.collections4.MapUtils;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.PathNotFoundException;
@@ -33,15 +37,21 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Map;
-
-import static org.craftercms.core.controller.rest.ContentStoreRestController.*;
+import static org.craftercms.core.controller.rest.ContentStoreRestController.CACHE_CONTROL_HEADER_NAME;
+import static org.craftercms.core.controller.rest.ContentStoreRestController.MESSAGE_MODEL_ATTRIBUTE_NAME;
+import static org.craftercms.core.controller.rest.ContentStoreRestController.MODEL_ATTR_CHILDREN;
+import static org.craftercms.core.controller.rest.ContentStoreRestController.MODEL_ATTR_ITEM;
+import static org.craftercms.core.controller.rest.ContentStoreRestController.MODEL_ATTR_TREE;
+import static org.craftercms.core.controller.rest.ContentStoreRestController.MUST_REVALIDATE_HEADER_VALUE;
 import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEPTH;
-import static org.craftercms.core.service.Context.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
+import static org.craftercms.core.service.Context.DEFAULT_IGNORE_HIDDEN_FILES;
+import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
 * Class description goes HERE
@@ -144,7 +154,7 @@ public class ContentStoreRestControllerTest {
             @Override
             public Map<String, Object> executeMethod() throws Exception {
                 return storeRestController.getTree(webRequest, response, context.getId(), FOLDER_URL,
-                        UNLIMITED_TREE_DEPTH);
+                                                   UNLIMITED_TREE_DEPTH);
             }
         });
 
@@ -153,26 +163,26 @@ public class ContentStoreRestControllerTest {
 
     @Test
     public void testHandleAuthenticationException() throws Exception {
-        AuthenticationException ex = new AuthenticationException();
+        AuthenticationException ex = new AuthenticationException("This is a test");
 
-        Map<String, Object> model = storeRestController.handleAuthenticationException(ex);
-        assertSame(ex, model.get(EXCEPTION_MODEL_ATTRIBUTE_NAME));
+        Map<String, Object> model = storeRestController.handleAuthenticationException(request, ex);
+        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
     }
 
     @Test
     public void testHandlePathNotFoundException() throws Exception {
-        PathNotFoundException ex = new PathNotFoundException();
+        PathNotFoundException ex = new PathNotFoundException("This is a test");
 
-        Map<String, Object> model = storeRestController.handlePathNotFoundException(ex);
-        assertSame(ex, model.get(EXCEPTION_MODEL_ATTRIBUTE_NAME));
+        Map<String, Object> model = storeRestController.handlePathNotFoundException(request, ex);
+        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
     }
 
     @Test
     public void testHandleException() throws Exception {
-        Exception ex = new Exception();
+        Exception ex = new Exception("This is a test");
 
-        Map<String, Object> model = storeRestController.handleException(ex);
-        assertSame(ex, model.get(EXCEPTION_MODEL_ATTRIBUTE_NAME));
+        Map<String, Object> model = storeRestController.handleException(request, ex);
+        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
     }
 
     private void testNotModified(CachingAwareObject cachingAwareObject, RestMethodCallback callback) throws Exception {
@@ -210,7 +220,7 @@ public class ContentStoreRestControllerTest {
         ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
 
         context = new Context("0", storeAdapter, "http://localhost:8080", "/", DEFAULT_CACHE_ON,
-                DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
+                              DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
     }
 
     private void setUpTestRequest() {
