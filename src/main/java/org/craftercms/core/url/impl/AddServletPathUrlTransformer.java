@@ -16,11 +16,11 @@
  */
 package org.craftercms.core.url.impl;
 
+import org.craftercms.commons.http.RequestContext;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
-import org.craftercms.core.util.HttpServletUtils;
 
 /**
  * Class description goes HERE
@@ -32,7 +32,7 @@ public class AddServletPathUrlTransformer implements UrlTransformer {
     @Override
     public String transformUrl(Context context, CachingOptions cachingOptions,
                                String url) throws UrlTransformationException {
-        String servletPath = HttpServletUtils.getCurrentRequest().getServletPath();
+        String servletPath = RequestContext.getCurrent().getRequest().getServletPath();
         if (servletPath.equals("/") && url.startsWith("/")) {
             return url;
         } else {

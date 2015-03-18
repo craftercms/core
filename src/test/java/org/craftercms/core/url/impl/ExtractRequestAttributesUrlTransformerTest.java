@@ -16,16 +16,11 @@
  */
 package org.craftercms.core.url.impl;
 
-import org.craftercms.core.url.impl.ExtractRequestAttributesUrlTransformer;
+import org.craftercms.commons.http.RequestContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.craftercms.core.util.HttpServletUtils;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import static org.junit.Assert.assertEquals;
 
@@ -55,8 +50,8 @@ public class ExtractRequestAttributesUrlTransformerTest {
     public void testTransformUrl() throws Exception {
         String transformedUrl = transformer.transformUrl(null, null, URL);
         assertEquals(TRANSFORMED_URL, transformedUrl);
-        assertEquals("1", HttpServletUtils.getAttribute("hotel", HttpServletUtils.SCOPE_REQUEST));
-        assertEquals("42", HttpServletUtils.getAttribute("booking", HttpServletUtils.SCOPE_REQUEST));
+        assertEquals("1", RequestContext.getCurrent().getRequest().getAttribute("hotel"));
+        assertEquals("42", RequestContext.getCurrent().getRequest().getAttribute("booking"));
     }
 
     private void setUpTestTransformer() {
@@ -65,61 +60,11 @@ public class ExtractRequestAttributesUrlTransformerTest {
     }
 
     private void setUpTestRequestAttributes() {
-        RequestContextHolder.setRequestAttributes(new StubRequestAtrributes());
+        RequestContext.setCurrent(new RequestContext(new MockHttpServletRequest(), null));
     }
 
     private void tearDownTestRequestAttributes() {
-        RequestContextHolder.resetRequestAttributes();
-    }
-
-    private static class StubRequestAtrributes implements RequestAttributes {
-
-        private Map<String, Object> attributes;
-
-        private StubRequestAtrributes() {
-            attributes = new HashMap<String, Object>();
-        }
-
-        @Override
-        public Object getAttribute(String name, int scope) {
-            return attributes.get(name);
-        }
-
-        @Override
-        public void setAttribute(String name, Object value, int scope) {
-            attributes.put(name, value);
-        }
-
-        @Override
-        public void removeAttribute(String name, int scope) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public String[] getAttributeNames(int scope) {
-            return new String[0];  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void registerDestructionCallback(String name, Runnable callback, int scope) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public Object resolveReference(String key) {
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public String getSessionId() {
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public Object getSessionMutex() {
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
+        RequestContext.clear();
     }
 
 }

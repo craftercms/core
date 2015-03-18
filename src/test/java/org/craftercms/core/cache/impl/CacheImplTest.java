@@ -16,19 +16,20 @@
  */
 package org.craftercms.core.cache.impl;
 
-import static org.craftercms.core.cache.CacheItem.*;
+import java.util.Arrays;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.impl.store.EhCacheStoreAdapter;
 import org.craftercms.core.exception.InternalCacheEngineException;
 import org.craftercms.core.exception.InvalidScopeException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
+import static org.craftercms.core.cache.CacheItem.NEVER_EXPIRE;
+import static org.craftercms.core.cache.CacheItem.NEVER_REFRESH;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * {@link org.craftercms.core.cache.impl.CacheImpl} unit test.
@@ -82,9 +83,9 @@ public class CacheImplTest {
     @Test
     public void testOnTick() throws InternalCacheEngineException, InvalidScopeException {
         cache.put(SCOPE, ITEM_KEY1, ITEM_VALUE1, NEVER_EXPIRE, REFRESH_FREQUENCY_VALUE1, new DummyCacheLoader(),
-                ITEM_VALUE1);
+                  ITEM_VALUE1);
         cache.put(SCOPE, ITEM_KEY2, ITEM_VALUE2, NEVER_EXPIRE, REFRESH_FREQUENCY_VALUE2, new DummyCacheLoader(),
-                ITEM_VALUE2);
+                  ITEM_VALUE2);
         cache.put(SCOPE, ITEM_KEY3, ITEM_VALUE3, EXPIRATION_VALUE1, NEVER_REFRESH, null);
 
         // Ticks = 1. Item #1 should be refreshed.

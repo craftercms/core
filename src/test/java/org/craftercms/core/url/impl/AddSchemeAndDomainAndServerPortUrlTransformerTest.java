@@ -16,14 +16,13 @@
  */
 package org.craftercms.core.url.impl;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.craftercms.commons.http.RequestContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static org.junit.Assert.assertEquals;
 
@@ -104,11 +103,11 @@ public class AddSchemeAndDomainAndServerPortUrlTransformerTest {
     }
 
     private void setCurrentRequest(HttpServletRequest request) {
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+        RequestContext.setCurrent(new RequestContext(request, null));
     }
 
     private void removeCurrentRequest() {
-        RequestContextHolder.resetRequestAttributes();
+        RequestContext.clear();
     }
 
 }

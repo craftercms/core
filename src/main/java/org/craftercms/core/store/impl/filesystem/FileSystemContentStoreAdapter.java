@@ -59,9 +59,9 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
             FileSystemFile rootFolder = new FileSystemFile(rootFolderResource.getFile());
 
             return new FileSystemContext(id, this, null, rootFolderPath, rootFolder, cacheOn, maxAllowedItemsInCache,
-                ignoreHiddenFiles);
+                                         ignoreHiddenFiles);
         } catch (IOException e) {
-            throw new StoreException("Unable to get a File object from the specified rootFolderPath", e);
+            throw new StoreException("Unable to get a file object from the specified rootFolderPath", e);
         }
     }
 

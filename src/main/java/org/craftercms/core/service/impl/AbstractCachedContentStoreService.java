@@ -18,6 +18,7 @@ package org.craftercms.core.service.impl;
 
 import java.util.List;
 
+import org.craftercms.commons.lang.Callback;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.exception.PathNotFoundException;
@@ -31,7 +32,6 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.service.ItemFilter;
 import org.craftercms.core.service.Tree;
-import org.craftercms.core.util.cache.CacheCallback;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.springframework.beans.factory.annotation.Required;
@@ -98,17 +98,17 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
     public Item getItem(final Context context, final CachingOptions cachingOptions, final String url,
                         final ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
         XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        return cacheTemplate.execute(context, cachingOptions, new CacheCallback<Item>() {
+        return cacheTemplate.getObject(context, cachingOptions, new Callback<Item>() {
 
             @Override
-            public Item doCacheable() {
+            public Item execute() {
                 return doGetItem(context, cachingOptions, url, processor);
             }
 
             @Override
             public String toString() {
-                return String.format(AbstractCachedContentStoreService.this.getClass().getName() + ".getItem(%s, %s, " +
-                    "" + "%s)", context, url, processor);
+                return String.format(AbstractCachedContentStoreService.this.getClass().getName() +
+                                     ".getItem(%s, %s, %s)", context, url, processor);
             }
 
         }, context, url, processor, CONST_KEY_ELEM_ITEM);
@@ -167,10 +167,10 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                                   final ItemFilter filter, final ItemProcessor processor) throws
         InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException,
         ItemProcessingException, StoreException {
-        return cacheTemplate.execute(context, cachingOptions, new CacheCallback<List<Item>>() {
+        return cacheTemplate.getObject(context, cachingOptions, new Callback<List<Item>>() {
 
             @Override
-            public List<Item> doCacheable() {
+            public List<Item> execute() {
                 List<Item> children = doGetChildren(context, cachingOptions, url, filter, processor);
                 if (children instanceof CachingAwareList) {
                     return children;
@@ -181,8 +181,8 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
 
             @Override
             public String toString() {
-                return String.format(AbstractCachedContentStoreService.this.getClass().getName() + ".getChildren(%s, " +
-                    "" + "%s, %s, %s)", context, url, filter, processor);
+                return String.format(AbstractCachedContentStoreService.this.getClass().getName() +
+                                     ".getChildren(%s, %s, %s, %s)", context, url, filter, processor);
             }
 
         }, context, url, filter, processor, CONST_KEY_ELEM_CHILDREN);
@@ -296,17 +296,17 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                         final int depth, final ItemFilter filter, final ItemProcessor processor) throws
         InvalidContextException, PathNotFoundException, XmlFileParseException, XmlMergeException,
         ItemProcessingException, StoreException {
-        return cacheTemplate.execute(context, cachingOptions, new CacheCallback<Tree>() {
+        return cacheTemplate.getObject(context, cachingOptions, new Callback<Tree>() {
 
             @Override
-            public Tree doCacheable() {
+            public Tree execute() {
                 return doGetTree(context, cachingOptions, url, depth, filter, processor);
             }
 
             @Override
             public String toString() {
-                return String.format(AbstractCachedContentStoreService.this.getClass().getName() + ".getTree(%s, %s, " +
-                    "" + "%d, %s, %s)", context, url, depth, filter, processor);
+                return String.format(AbstractCachedContentStoreService.this.getClass().getName() +
+                                     ".getTree(%s, %s, %d, %s, %s)", context, url, depth, filter, processor);
             }
 
         }, context, url, depth, filter, processor, CONST_KEY_ELEM_TREE);

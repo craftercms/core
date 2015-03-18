@@ -25,7 +25,7 @@ import org.craftercms.core.service.Context;
  */
 public class FileSystemContext extends Context {
 
-    FileSystemFile rootFolder;
+    private FileSystemFile rootFolder;
 
     public FileSystemContext(String id, FileSystemContentStoreAdapter storeAdapter, String storeServerUrl,
                              String rootFolderPath, FileSystemFile rootFolder, boolean cacheOn,
