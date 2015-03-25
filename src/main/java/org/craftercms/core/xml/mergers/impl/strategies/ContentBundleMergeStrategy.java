@@ -21,10 +21,10 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
+import org.craftercms.core.service.Item;
 import org.craftercms.core.util.url.ContentBundleUrl;
 import org.craftercms.core.util.url.ContentBundleUrlParser;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
@@ -80,7 +80,7 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
                                                     String primaryDescriptorUrl, boolean primaryDescriptorOptional)
         throws XmlMergeException {
-        List<MergeableDescriptor> descriptors = new ArrayList<MergeableDescriptor>();
+        List<MergeableDescriptor> descriptors = new ArrayList<>();
         List<MergeableDescriptor> tmp;
 
         ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(primaryDescriptorUrl);
@@ -100,22 +100,20 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
             while (delimiterIdx > 0 && !baseFound) {
                 baseName = baseName.substring(0, delimiterIdx); // baseName = folder2
                 String baseDescriptor = prefix + baseName + suffix; // baseDescriptor = folder1/folder2/file.xml
-                Document baseDescriptorDom = null;
+                Document baseDescriptorDom;
 
-                try {
-                    baseDescriptorDom = getDescriptorDom(context, cachingOptions, baseDescriptor);
+                baseDescriptorDom = getDescriptorDom(context, cachingOptions, baseDescriptor);
+                if (baseDescriptorDom != null) {
                     baseFound = true;
-                } catch (PathNotFoundException e) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("No base descriptor " + baseDescriptor + " was found");
-                    }
+                } else if (logger.isDebugEnabled()) {
+                    logger.debug("No base descriptor " + baseDescriptor + " was found");
                 }
 
                 if (baseFound) {
                     // This can recurse if the selected strategy is also an ContentBundleMergeStrategy and the base
                     // descriptor path has more families.
                     DescriptorMergeStrategy baseMergeStrategy = baseMergeStrategyResolver.getStrategy(baseDescriptor,
-                        baseDescriptorDom);
+                                                                                                      baseDescriptorDom);
                     if (baseMergeStrategy == null) {
                         throw new XmlMergeException("No merge strategy for descriptor " + baseDescriptor);
                     }
@@ -153,7 +151,12 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
     }
 
     protected Document getDescriptorDom(Context context, CachingOptions cachingOptions, String url) {
-        return context.getStoreAdapter().getItem(context, cachingOptions, url, true).getDescriptorDom();
+        Item item = context.getStoreAdapter().findItem(context, cachingOptions, url, true);
+        if (item != null) {
+            return item.getDescriptorDom();
+        } else {
+            return null;
+        }
     }
 
 }

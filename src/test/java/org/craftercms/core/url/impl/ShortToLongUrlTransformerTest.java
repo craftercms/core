@@ -16,19 +16,18 @@
  */
 package org.craftercms.core.url.impl;
 
-import org.craftercms.core.url.impl.ShortToLongUrlTransformer;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.Arrays;
+
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.store.ContentStoreAdapter;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.util.Arrays;
-
+import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 
 /**
  * Class description goes HERE
@@ -69,10 +68,12 @@ public class ShortToLongUrlTransformerTest {
         Item indexItem = new Item();
         indexItem.setName("003_index.html");
 
-        when(storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, "/", false)).thenReturn(Arrays.asList(folderItem));
-        when(storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName(), false)).thenReturn(Arrays.asList(
-                subFolderItem));
-        when(storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName() + "/" + subFolderItem.getName(), false))
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/", false)).thenReturn(
+            Arrays.asList(folderItem));
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName(), false)).thenReturn(
+            Arrays.asList(subFolderItem));
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS,
+                                    "/" + folderItem.getName() + "/" + subFolderItem.getName(), false))
                 .thenReturn(Arrays.asList(indexItem));
 
         when(context.getStoreAdapter()).thenReturn(storeAdapter);

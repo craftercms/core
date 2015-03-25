@@ -131,7 +131,7 @@ public class Tree extends Item {
      */
     public void addChild(Item child) {
         if (children == null) {
-            children = new ArrayList<Item>();
+            children = new ArrayList<>();
         }
 
         children.add(child);

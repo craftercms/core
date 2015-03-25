@@ -87,7 +87,7 @@ public class FileSystemContentStoreAdapterTest {
     public void testGetFolderItem() throws Exception {
         Context context = createTestContext(true);
 
-        Item item = storeAdapter.getItem(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
+        Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
         assertNotNull(item);
         assertEquals(FOLDER_NAME, item.getName());
         assertEquals(FOLDER_PATH, item.getUrl());
@@ -112,7 +112,7 @@ public class FileSystemContentStoreAdapterTest {
     public void testGetDescriptorItem() throws Exception {
         Context context = createTestContext(true);
 
-        Item item = storeAdapter.getItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR_PATH, true);
+        Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR_PATH, true);
         assertDescriptorItem(item);
     }
 
@@ -120,7 +120,7 @@ public class FileSystemContentStoreAdapterTest {
     public void testGetStaticAssetItem() throws Exception {
         Context context = createTestContext(true);
 
-        Item item = storeAdapter.getItem(context, DEFAULT_CACHING_OPTIONS, CRAFTER_CMS_LOGO_PATH, true);
+        Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, CRAFTER_CMS_LOGO_PATH, true);
         assertCrafterCMSLogoItem(item);
     }
 
@@ -128,7 +128,7 @@ public class FileSystemContentStoreAdapterTest {
     public void testGetItems() throws Exception {
         Context context = createTestContext(true);
 
-        List<Item> items = storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
+        List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
         assertNotNull(items);
 
         Collections.sort(items, ItemComparator.INSTANCE);
@@ -142,13 +142,13 @@ public class FileSystemContentStoreAdapterTest {
     public void testIgnoreHidden() throws Exception {
         Context context = createTestContext(true);
 
-        List<Item> items = storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
+        List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
         assertNotNull(items);
         assertEquals(2, items.size());
 
         context = createTestContext(false);
 
-        items = storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
+        items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
 
         assertNotNull(items);
         assertEquals(3, items.size());

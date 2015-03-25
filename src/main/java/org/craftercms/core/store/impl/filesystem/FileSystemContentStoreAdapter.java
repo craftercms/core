@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.store.impl.AbstractFileBasedContentStoreAdapter;
@@ -87,18 +86,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     }
 
     @Override
-    protected File getFile(Context context, String path) throws PathNotFoundException {
-        File file = findFile(context, path);
-
-        if (file == null) {
-            throw new PathNotFoundException("File " + path + " can't be found");
-        }
-
-        return file;
-    }
-
-    @Override
-    protected List<File> getChildren(Context context, File dir) throws PathNotFoundException {
+    protected List<File> getChildren(Context context, File dir) {
         java.io.File[] listing;
         if (context.ignoreHiddenFiles()) {
             listing = ((FileSystemFile)dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);

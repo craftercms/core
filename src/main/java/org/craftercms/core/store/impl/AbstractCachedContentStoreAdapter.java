@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.craftercms.commons.lang.Callback;
 import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.service.CachingOptions;
@@ -51,78 +50,82 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
     }
 
     @Override
-    public Content getContent(final Context context, final CachingOptions cachingOptions, final String path)
-        throws InvalidContextException, PathNotFoundException, StoreException {
+    public Content findContent(final Context context, final CachingOptions cachingOptions, final String path)
+        throws InvalidContextException, StoreException {
         return cacheTemplate.getObject(context, cachingOptions, new Callback<Content>() {
 
             @Override
             public Content execute() {
-                return doGetContent(context, cachingOptions, path);
+                return doFindContent(context, cachingOptions, path);
             }
 
             @Override
             public String toString() {
                 return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
-                                     ".doGetContent(%s, %s)", context, path);
+                                     ".findContent(%s, %s)", context, path);
             }
 
         }, context, path, CONST_KEY_ELEM_CONTENT);
     }
 
     @Override
-    public Item getItem(final Context context, final CachingOptions cachingOptions, final String path,
-                        final boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
-        XmlFileParseException, StoreException {
+    public Item findItem(final Context context, final CachingOptions cachingOptions, final String path,
+                         final boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
+        StoreException {
         return cacheTemplate.getObject(context, cachingOptions, new Callback<Item>() {
 
             @Override
             public Item execute() {
-                return doGetItem(context, cachingOptions, path, withDescriptor);
+                return doFindItem(context, cachingOptions, path, withDescriptor);
             }
 
             @Override
             public String toString() {
                 return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
-                                     ".doGetItem(%s, %s, %s)", context, path, withDescriptor);
+                                     ".findItem(%s, %s, %s)", context, path, withDescriptor);
             }
 
         }, context, path, withDescriptor, CONST_KEY_ELEM_ITEM);
     }
 
     @Override
-    public List<Item> getItems(final Context context, final CachingOptions cachingOptions, final String path,
-                               final boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
-        XmlFileParseException, StoreException {
+    public List<Item> findItems(final Context context, final CachingOptions cachingOptions, final String path,
+                                final boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
+        StoreException {
         return cacheTemplate.getObject(context, cachingOptions, new Callback<List<Item>>() {
 
             @Override
             public List<Item> execute() {
-                List<Item> items = doGetItems(context, cachingOptions, path, withDescriptor);
-                if (items instanceof CachingAwareList) {
-                    return items;
+                List<Item> items = doFindItems(context, cachingOptions, path, withDescriptor);
+                if (items != null) {
+                    if (items instanceof CachingAwareList) {
+                        return items;
+                    } else {
+                        return new CachingAwareList<>(items);
+                    }
                 } else {
-                    return new CachingAwareList<Item>(items);
+                    return null;
                 }
             }
 
             @Override
             public String toString() {
                 return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
-                                     ".doGetItems(%s, %s, %s)", context, path, withDescriptor);
+                                     ".findItems(%s, %s, %s)", context, path, withDescriptor);
             }
 
         }, context, path, withDescriptor, CONST_KEY_ELEM_ITEMS);
     }
 
-    protected abstract Content doGetContent(Context context, CachingOptions cachingOptions, String path)
-        throws InvalidContextException, PathNotFoundException, StoreException;
+    protected abstract Content doFindContent(Context context, CachingOptions cachingOptions, String path)
+        throws InvalidContextException, StoreException;
 
-    protected abstract Item doGetItem(Context context, CachingOptions cachingOptions, String path,
-                                      boolean withDescriptor)
-        throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
+    protected abstract Item doFindItem(Context context, CachingOptions cachingOptions, String path,
+                                       boolean withDescriptor)
+        throws InvalidContextException, XmlFileParseException, StoreException;
 
-    protected abstract List<Item> doGetItems(Context context, CachingOptions cachingOptions, String path,
-                                             boolean withDescriptor)
-        throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
+    protected abstract List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path,
+                                              boolean withDescriptor)
+        throws InvalidContextException, XmlFileParseException, StoreException;
 
 }

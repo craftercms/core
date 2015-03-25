@@ -71,19 +71,20 @@ public class ShortToLongUrlTransformer implements UrlTransformer {
     protected String getLongName(Context context, CachingOptions cachingOptions, String folderPath,
                                  String shortName) throws UrlTransformationException {
         try {
-            List<Item> items = context.getStoreAdapter().getItems(context, cachingOptions, folderPath, false);
+            List<Item> items = context.getStoreAdapter().findItems(context, cachingOptions, folderPath, false);
             if (CollectionUtils.isNotEmpty(items)) {
                 for (Item item : items) {
                     String itemName = item.getName();
-                    if (UrlUtils.getShortName(itemName, containsShortNameRegex, shortNameRegexGroup).equalsIgnoreCase
-                        (shortName)) {
+                    if (UrlUtils.getShortName(itemName, containsShortNameRegex, shortNameRegexGroup)
+                        .equalsIgnoreCase(shortName)) {
                         return itemName;
                     }
                 }
             }
         } catch (Exception e) {
             throw new UrlTransformationException("An error occurred while retrieving the items at " + folderPath +
-                " and trying to map the short name '" + shortName + "' to an item's name (long name)", e);
+                                                 " and trying to map the short name '" + shortName + "' to an " +
+                                                 "item's name (long name)", e);
         }
 
         return null;

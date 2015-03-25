@@ -16,21 +16,21 @@
  */
 package org.craftercms.core.url.impl;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.util.Arrays;
+import java.util.regex.Pattern;
+
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.util.url.impl.RegexBasedContentBundleUrlParser;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
+import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
+import static org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategyTest.BASE_DELIMITER;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
-import static org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategyTest.BASE_DELIMITER;
 
 /**
  * Class description goes HERE
@@ -77,10 +77,12 @@ public class ContentBundleShortToLongUrlTransformerTest {
         Item indexItem = new Item();
         indexItem.setName("002_index.html");
 
-        when(storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, "/", false)).thenReturn(Arrays.asList(folderItem));
-        when(storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName(), false)).thenReturn(Arrays.asList(
-                baseItem, baseFrItem, baseFrEsItem));
-        when(storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName() + "/" + baseItem.getName(), false))
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/", false)).thenReturn(
+            Arrays.asList(folderItem));
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName(), false)).thenReturn(
+            Arrays.asList(baseItem, baseFrItem, baseFrEsItem));
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS,
+                                    "/" + folderItem.getName() + "/" + baseItem.getName(), false))
                 .thenReturn(Arrays.asList(indexItem));
 
         when(context.getStoreAdapter()).thenReturn(storeAdapter);
