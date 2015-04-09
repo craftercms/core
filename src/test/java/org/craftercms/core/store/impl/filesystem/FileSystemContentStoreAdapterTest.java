@@ -16,31 +16,38 @@
  */
 package org.craftercms.core.store.impl.filesystem;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
+import org.craftercms.commons.lang.Callback;
+import org.craftercms.core.service.Context;
+import org.craftercms.core.service.Item;
+import org.craftercms.core.util.cache.CacheTemplate;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
-import org.apache.commons.collections4.CollectionUtils;
-import org.craftercms.core.util.cache.CacheCallback;
-import org.craftercms.core.util.cache.CacheTemplate;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
 import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyVararg;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Alfonso Vásquez
@@ -50,7 +57,8 @@ public class FileSystemContentStoreAdapterTest {
     private static final String DESCRIPTOR_FILE_EXTENSION = ".xml";
     private static final String METADATA_FILE_EXTENSION = ".meta.xml";
 
-    private static final String CLASSPATH_STORE_ROOT_FOLDER_PATH = "stores/" + FileSystemContentStoreAdapterTest.class.getSimpleName();
+    private static final String CLASSPATH_STORE_ROOT_FOLDER_PATH = "stores/" + FileSystemContentStoreAdapterTest
+        .class.getSimpleName();
 
     private static final String FOLDER_NAME = "folder";
     private static final String FOLDER_PATH = "/" + FOLDER_NAME;
@@ -61,7 +69,8 @@ public class FileSystemContentStoreAdapterTest {
 
     private static final String CRAFTER_CMS_LOGIC_NAME = "craftercms_logo.png";
     private static final String CRAFTER_CMS_LOGO_PATH = FOLDER_PATH + "/" + CRAFTER_CMS_LOGIC_NAME;
-    private static final String CRAFTER_CMS_LOGO_METADATA_FILE_PATH = FOLDER_PATH + "/craftercms_logo" + METADATA_FILE_EXTENSION;
+    private static final String CRAFTER_CMS_LOGO_METADATA_FILE_PATH = FOLDER_PATH + "/craftercms_logo" +
+                                                                      METADATA_FILE_EXTENSION;
 
     private static final String HIDDEN_FILE_NAME = ".hidden";
 
@@ -78,7 +87,7 @@ public class FileSystemContentStoreAdapterTest {
     public void testGetFolderItem() throws Exception {
         Context context = createTestContext(true);
 
-        Item item = storeAdapter.getItem(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
+        Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
         assertNotNull(item);
         assertEquals(FOLDER_NAME, item.getName());
         assertEquals(FOLDER_PATH, item.getUrl());
@@ -86,7 +95,8 @@ public class FileSystemContentStoreAdapterTest {
         assertEquals(FOLDER_METADATA_FILE_PATH, item.getDescriptorUrl());
         assertNotNull(item.getDescriptorDom());
 
-        Element permission = (Element) item.getDescriptorDom().selectSingleNode("/folder-metadata/permissions/permission");
+        Element permission = (Element) item.getDescriptorDom().selectSingleNode("/folder-metadata/permissions" +
+                                                                                "/permission");
         assertNotNull(permission);
 
         Element user = permission.element("user");
@@ -102,7 +112,7 @@ public class FileSystemContentStoreAdapterTest {
     public void testGetDescriptorItem() throws Exception {
         Context context = createTestContext(true);
 
-        Item item = storeAdapter.getItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR_PATH, true);
+        Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR_PATH, true);
         assertDescriptorItem(item);
     }
 
@@ -110,7 +120,7 @@ public class FileSystemContentStoreAdapterTest {
     public void testGetStaticAssetItem() throws Exception {
         Context context = createTestContext(true);
 
-        Item item = storeAdapter.getItem(context, DEFAULT_CACHING_OPTIONS, CRAFTER_CMS_LOGO_PATH, true);
+        Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, CRAFTER_CMS_LOGO_PATH, true);
         assertCrafterCMSLogoItem(item);
     }
 
@@ -118,7 +128,7 @@ public class FileSystemContentStoreAdapterTest {
     public void testGetItems() throws Exception {
         Context context = createTestContext(true);
 
-        List<Item> items = storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
+        List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
         assertNotNull(items);
 
         Collections.sort(items, ItemComparator.INSTANCE);
@@ -132,13 +142,13 @@ public class FileSystemContentStoreAdapterTest {
     public void testIgnoreHidden() throws Exception {
         Context context = createTestContext(true);
 
-        List<Item> items = storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
+        List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
         assertNotNull(items);
         assertEquals(2, items.size());
 
         context = createTestContext(false);
 
-        items = storeAdapter.getItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
+        items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
 
         assertNotNull(items);
         assertEquals(3, items.size());
@@ -159,11 +169,12 @@ public class FileSystemContentStoreAdapterTest {
 
     private void setUpTestCacheTemplate() {
         cacheTemplate = mock(CacheTemplate.class);
-        when(cacheTemplate.execute(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), any(CacheCallback.class), anyVararg())).thenAnswer(
+        when(cacheTemplate.getObject(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), any(Callback.class),
+                                     anyVararg())).thenAnswer(
                 new Answer<Object>() {
                     @Override
                     public Object answer(InvocationOnMock invocation) throws Throwable {
-                        return ((CacheCallback<?>) invocation.getArguments()[2]).doCacheable();
+                        return ((Callback<?>) invocation.getArguments()[2]).execute();
                     }
                 });
     }

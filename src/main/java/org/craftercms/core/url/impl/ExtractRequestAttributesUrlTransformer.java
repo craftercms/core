@@ -18,11 +18,11 @@ package org.craftercms.core.url.impl;
 
 import java.util.Map;
 
+import org.craftercms.commons.http.RequestContext;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
-import org.craftercms.core.util.HttpServletUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriTemplate;
 
@@ -49,7 +49,7 @@ public class ExtractRequestAttributesUrlTransformer implements UrlTransformer {
         if (uriTemplate.matches(url)) {
             Map<String, String> variables = uriTemplate.match(url);
             for (Map.Entry<String, String> entry : variables.entrySet()) {
-                HttpServletUtils.setAttribute(entry.getKey(), entry.getValue(), HttpServletUtils.SCOPE_REQUEST);
+                RequestContext.getCurrent().getRequest().setAttribute(entry.getKey(), entry.getValue());
             }
 
             url = uriTemplate.toString().replaceAll("\\{[^{}]+\\}", "");

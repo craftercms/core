@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.service.CachingOptions;
@@ -45,13 +44,13 @@ public interface ContentStoreAdapter {
 
     boolean exists(Context context, String path) throws InvalidContextException, StoreException;
 
-    Content getContent(Context context, CachingOptions cachingOptions, String path) throws InvalidContextException,
-        PathNotFoundException, StoreException;
+    Content findContent(Context context, CachingOptions cachingOptions, String path)
+        throws InvalidContextException, StoreException;
 
-    Item getItem(Context context, CachingOptions cachingOptions, String path,boolean withDescriptor)
-        throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
+    Item findItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
+        throws InvalidContextException, XmlFileParseException, StoreException;
 
-    List<Item> getItems(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
-        throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException;
+    List<Item> findItems(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
+        throws InvalidContextException, XmlFileParseException, StoreException;
 
 }

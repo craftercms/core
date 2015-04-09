@@ -16,24 +16,23 @@
  */
 package org.craftercms.core.processors.impl;
 
-import org.craftercms.core.processors.impl.IncludeDescriptorsProcessor;
+import java.io.StringReader;
+
+import org.craftercms.core.service.ContentStoreService;
+import org.craftercms.core.service.Context;
+import org.craftercms.core.service.Item;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.junit.Before;
 import org.junit.Test;
-import org.craftercms.core.service.ContentStoreService;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
 
-import java.io.StringReader;
-
+import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 
 /**
  * Class description goes HERE
@@ -110,7 +109,7 @@ public class IncludeDescriptorsProcessorTest {
         item.setDescriptorUrl(DESCRIPTOR2_URL);
         item.setDescriptorDom(descriptorDom2);
 
-        when(storeService.getItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR2_URL)).thenReturn(item);
+        when(storeService.getItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR2_URL, null)).thenReturn(item);
     }
 
     private void setUpTestProcessor() {

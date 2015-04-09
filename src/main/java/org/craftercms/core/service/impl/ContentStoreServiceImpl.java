@@ -195,6 +195,17 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         return context.getStoreAdapter().exists(context, url);
     }
 
+    @Override
+    public Content findContent(Context context, String url) throws InvalidContextException, StoreException {
+        return findContent(context, CachingOptions.DEFAULT_CACHING_OPTIONS, url);
+    }
+
+    @Override
+    public Content findContent(Context context, CachingOptions cachingOptions, String url)
+        throws InvalidContextException, StoreException {
+        return context.getStoreAdapter().findContent(context, cachingOptions, url);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -208,22 +219,55 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public Content getContent(Context context, CachingOptions cachingOptions,
-                              String url) throws InvalidScopeException, PathNotFoundException, StoreException {
-        return context.getStoreAdapter().getContent(context, cachingOptions, url);
+    public Content getContent(Context context, CachingOptions cachingOptions, String url) throws InvalidScopeException,
+        PathNotFoundException, StoreException {
+        Content content = findContent(context, cachingOptions, url);
+        if (content != null) {
+            return content;
+        } else {
+            throw new PathNotFoundException("No file found at " + url);
+        }
     }
 
     /**
-     * Returns the content store item for the given url.
+     * Returns the content store item for the given url, returning null if not found.
      * <p/>
      * <p>After acquiring the item from the {@link ContentStoreAdapter}, the item's descriptor is merged (according
-     * to its
-     * {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy}) with related descriptors,
-     * and the final item is then processed.</p>
+     * to its {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy}) with related descriptors, and the
+     * final item is then processed.</p>
      */
     @Override
-    protected Item doGetItem(Context context, CachingOptions cachingOptions, String url,
-                             ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
+    protected Item doFindItem(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor)
+        throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+        StoreException {
+        // Add a leading slash if not present at the beginning of the url. This is done because although the store
+        // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
+        // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
+        if (!url.startsWith("/")) {
+            url = "/" + url;
+        }
+
+        Item item = context.getStoreAdapter().findItem(context, cachingOptions, url, true);
+        if (item != null) {
+            // Create a copy of the item, since it will be modified
+            item = new Item(item);
+            if (item.getDescriptorDom() != null) {
+                item = doMerging(context, cachingOptions, item);
+                item = doProcessing(context, cachingOptions, item, processor);
+            } else {
+                // Since there was no processing, add the original key (from the store adapter item) as dependency key.
+                // The store
+                // service item key will be set later.
+                item.addDependencyKey(item.getKey());
+            }
+        }
+
+        return item;
+    }
+
+    @Override
+    protected List<Item> doFindChildren(Context context, CachingOptions cachingOptions, String url, ItemFilter filter,
+                                        ItemProcessor processor) throws InvalidContextException,
         XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         // Add a leading slash if not present at the beginning of the url. This is done because although the store
         // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
@@ -232,25 +276,13 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             url = "/" + url;
         }
 
-        // Create a copy of the item, since it will be modified
-        Item item = new Item(context.getStoreAdapter().getItem(context, cachingOptions, url, true));
-        if (item.getDescriptorDom() != null) {
-            item = doMerging(context, cachingOptions, item);
-            item = doProcessing(context, cachingOptions, item, processor);
-        } else {
-            // Since there was no processing, add the original key (from the store adapter item) as dependency key.
-            // The store
-            // service item key will be set later.
-            item.addDependencyKey(item.getKey());
-        }
-
-        return item;
+        return doFindChildren(context, cachingOptions, url, null, filter, processor);
     }
 
     @Override
-    protected List<Item> doGetChildren(Context context, CachingOptions cachingOptions, String url, ItemFilter filter,
-                                       ItemProcessor processor) throws InvalidContextException,
-        PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
+    protected Tree doFindTree(Context context, CachingOptions cachingOptions, String url, int depth, ItemFilter filter,
+                              ItemProcessor processor) throws InvalidContextException, XmlFileParseException,
+        XmlMergeException, ItemProcessingException, StoreException {
         // Add a leading slash if not present at the beginning of the url. This is done because although the store
         // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
         // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
@@ -258,34 +290,27 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             url = "/" + url;
         }
 
-        return doGetChildren(context, cachingOptions, url, null, filter, processor);
-    }
+        Item item = findItem(context, cachingOptions, url, processor);
+        if (item != null) {
+            Tree tree = new Tree(item);
+            if (depth == ContentStoreService.UNLIMITED_TREE_DEPTH || depth >= 1) {
+                if (depth >= 1) {
+                    depth--;
+                }
 
-    @Override
-    protected Tree doGetTree(Context context, CachingOptions cachingOptions, String url, int depth,
-                             ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
-        PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        // Add a leading slash if not present at the beginning of the url. This is done because although the store
-        // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
-        // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
-        if (!url.startsWith("/")) {
-            url = "/" + url;
-        }
-
-        Tree tree = new Tree(getItem(context, url, processor));
-        if (depth == ContentStoreService.UNLIMITED_TREE_DEPTH || depth >= 1) {
-            if (depth >= 1) {
-                depth--;
+                CachingAwareList<Item> treeChildren = (CachingAwareList<Item>)doFindChildren(context, cachingOptions,
+                                                                                             url, depth, filter,
+                                                                                             processor);
+                if (treeChildren != null) {
+                    tree.setChildren(treeChildren.getActualList());
+                    tree.addDependencyKeys(treeChildren.getDependencyKeys());
+                }
             }
 
-            CachingAwareList<Item> treeChildren = (CachingAwareList<Item>)doGetChildren(context, cachingOptions, url,
-                depth, filter, processor);
-
-            tree.setChildren(treeChildren.getActualList());
-            tree.addDependencyKeys(treeChildren.getDependencyKeys());
+            return tree;
+        } else {
+            return null;
         }
-
-        return tree;
     }
 
     /**
@@ -295,61 +320,62 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * <li>Retrieves the children from the underlying repository (without their descriptors).</li>
      * <li>Filters the returned list if {@link ItemFilter#runBeforeProcessing()} returns <code>true</code>.</li>
      * <li>Calls {@link #getTree(Context, String)} or {@link #getItem(Context, String)} for each item in the list
-     * (depending on
-     * whether the item is a folder or not, and if <code>depth</code> is not null),
-     * to obtain the merged and processed version
-     * of each item.</li>
-     * <li>Filters the processed list if {@link ItemFilter#runAfterProcessing()} ()} returns <code>true</code>.</li>
+     * (depending on whether the item is a folder or not, and if <code>depth</code> is not null), to obtain the
+     * merged and processed version of each item.</li>
+     * <li>Filters the processed list if {@link ItemFilter#runAfterProcessing()} returns <code>true</code>.</li>
      * <li>Returns the final list of processed items.</li>
      * </ol>
      */
-    protected List<Item> doGetChildren(Context context, CachingOptions cachingOptions, String url, Integer depth,
-                                       ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
-        PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        List<Object> dependencyKeys = new ArrayList<Object>();
-        List<Item> children = context.getStoreAdapter().getItems(context, cachingOptions, url, false);
+    protected List<Item> doFindChildren(Context context, CachingOptions cachingOptions, String url, Integer depth,
+                                        ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
+        XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
+        List<Item> children = context.getStoreAdapter().findItems(context, cachingOptions, url, false);
+        if (children != null) {
+            List<Object> dependencyKeys = new ArrayList<>();
+            dependencyKeys.add(((CachingAwareList<Item>)children).getKey());
 
-        dependencyKeys.add(((CachingAwareList<Item>)children).getKey());
+            if (filter != null && filter.runBeforeProcessing()) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Running filter " + filter + " before processing for " + url + "...");
+                }
 
-        if (filter != null && filter.runBeforeProcessing()) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Running filter " + filter + " before processing for " + url + "...");
+                children = doFilter(children, filter, true);
             }
 
-            children = doFilter(children, filter, true);
-        }
+            List<Item> processedChildren = new ArrayList<Item>(children.size());
 
-        List<Item> processedChildren = new ArrayList<Item>(children.size());
+            for (Item child : children) {
+                Item processedChild;
+                if (depth != null && child.isFolder()) {
+                    processedChild = getTree(context, cachingOptions, child.getUrl(), depth, filter, processor);
+                } else {
+                    processedChild = getItem(context, cachingOptions, child.getUrl(), processor);
+                }
 
-        for (Item child : children) {
-            Item processedChild;
-            if (depth != null && child.isFolder()) {
-                processedChild = getTree(context, child.getUrl(), depth, filter, processor);
-            } else {
-                processedChild = getItem(context, child.getUrl(), processor);
+                processedChildren.add(processedChild);
             }
 
-            processedChildren.add(processedChild);
-        }
+            if (filter != null && filter.runAfterProcessing()) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Running filter " + filter + " after processing for " + url + "...");
+                }
 
-        if (filter != null && filter.runAfterProcessing()) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Running filter " + filter + " after processing for " + url + "...");
+                processedChildren = doFilter(processedChildren, filter, false);
             }
 
-            processedChildren = doFilter(processedChildren, filter, false);
+            Collections.sort(processedChildren, CompareByItemUrlComparator.instance);
+
+            for (Item child : processedChildren) {
+                dependencyKeys.add(child.getKey());
+            }
+
+            CachingAwareList<Item> finalChildren = new CachingAwareList<Item>(processedChildren);
+            finalChildren.setDependencyKeys(dependencyKeys);
+
+            return finalChildren;
+        } else {
+            return null;
         }
-
-        Collections.sort(processedChildren, CompareByItemUrlComparator.instance);
-
-        for (Item child : processedChildren) {
-            dependencyKeys.add(child.getKey());
-        }
-
-        CachingAwareList<Item> finalChildren = new CachingAwareList<Item>(processedChildren);
-        finalChildren.setDependencyKeys(dependencyKeys);
-
-        return finalChildren;
     }
 
     /**
@@ -394,24 +420,21 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         List<Document> documentsToMerge = new ArrayList<Document>(descriptorsToMerge.size());
 
         for (MergeableDescriptor descriptorToMerge : descriptorsToMerge) {
-            try {
-                Item descriptorItem = context.getStoreAdapter().getItem(context, cachingOptions,
-                    descriptorToMerge.getUrl(), true);
+            Item descriptorItem = context.getStoreAdapter().findItem(context, cachingOptions,
+                                                                     descriptorToMerge.getUrl(), true);
+            if (descriptorItem != null) {
                 Document descriptorDom = descriptorItem.getDescriptorDom();
-
-                if (descriptorDom == null) {
-                    throw new PathNotFoundException("No descriptor file at " + item.getDescriptorUrl());
+                if (descriptorDom == null && !descriptorToMerge.isOptional()) {
+                    throw new XmlMergeException("Descriptor file " + descriptorToMerge.getUrl() + " not found and " +
+                                                "is marked as required for merging");
                 }
 
                 documentsToMerge.add(descriptorDom);
 
                 item.addDependencyKey(descriptorItem.getKey());
-            } catch (PathNotFoundException e) {
-                if (!descriptorToMerge.isOptional()) {
-                    throw new XmlMergeException("Descriptor file " + descriptorToMerge.getUrl() + " not found and is " +
-                        "marked as " +
-                        "required for merging");
-                }
+            } else if (!descriptorToMerge.isOptional()) {
+                throw new XmlMergeException("Descriptor file " + descriptorToMerge.getUrl() + " not found and " +
+                                            "is marked as required for merging");
             }
         }
 

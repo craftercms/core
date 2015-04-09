@@ -18,13 +18,13 @@ package org.craftercms.core.util.cache.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.lang.Callback;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
 import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.util.CacheUtils;
-import org.craftercms.core.util.cache.CacheCallback;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -55,13 +55,18 @@ public class DefaultCacheTemplate implements CacheTemplate {
     }
 
     @Override
-    public <T> T execute(Context context, CachingOptions cachingOptions, CacheCallback<T> callback,
-                         Object... keyElements) {
+    public <T> T getObject(Context context, Callback<T> callback, Object... keyElements) {
+        return getObject(context, CachingOptions.DEFAULT_CACHING_OPTIONS, callback, keyElements);
+    }
+
+    @Override
+    public <T> T getObject(Context context, CachingOptions cachingOptions, Callback<T> callback,
+                           Object... keyElements) {
         Object key = getKey(keyElements);
 
         T obj = doGet(context, callback, key);
         if (obj == null) {
-            obj = callback.doCacheable();
+            obj = callback.execute();
             if (obj != null) {
                 obj = doPut(context, cachingOptions, callback, key, obj);
             }
@@ -70,7 +75,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
         return obj;
     }
 
-    protected <T> T doGet(Context context, CacheCallback<T> callback, Object key) {
+    protected <T> T doGet(Context context, Callback<T> callback, Object key) {
         T obj = null;
         try {
             obj = (T)cacheService.get(context, key);
@@ -81,8 +86,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
         return obj;
     }
 
-    protected <T> T doPut(Context context, CachingOptions cachingOptions, CacheCallback<T> callback, Object key,
-                          T obj) {
+    protected <T> T doPut(Context context, CachingOptions cachingOptions, Callback<T> callback, Object key, T obj) {
         try {
             CacheLoader loader = getCacheLoader(callback, cachingOptions.getRefreshFrequency());
             cacheService.put(context, key, obj, cachingOptions, loader);
@@ -93,13 +97,13 @@ public class DefaultCacheTemplate implements CacheTemplate {
         return obj;
     }
 
-    protected <T> CacheLoader getCacheLoader(final CacheCallback<T> callback, long refreshFrequency) {
+    protected <T> CacheLoader getCacheLoader(final Callback<T> callback, long refreshFrequency) {
         if (refreshFrequency != CacheItem.NEVER_REFRESH) {
             return new CacheLoader() {
 
                 @Override
                 public Object load(Object... parameters) throws Exception {
-                    return callback.doCacheable();
+                    return callback.execute();
                 }
 
             };
@@ -108,13 +112,14 @@ public class DefaultCacheTemplate implements CacheTemplate {
         }
     }
 
-    protected void logGetFailure(Context context, CacheCallback<?> callback, Object key, Exception e) {
+    protected void logGetFailure(Context context, Callback<?> callback, Object key, Exception e) {
         logger.error("Unable to retrieve cached object: key='" + key + "', context=" + context + ", " +
-            "callback=" + callback, e);
+                     "callback=" + callback, e);
     }
 
-    protected void logPutFailure(Context context, CacheCallback<?> callback, Object key, Object obj, Exception e) {
-        logger.error("Unable to cache object: key='" + key + "', context=" + context + ", obj=" + obj + ", callback=" + callback, e);
+    protected void logPutFailure(Context context, Callback<?> callback, Object key, Object obj, Exception e) {
+        logger.error("Unable to put cache object: key='" + key + "', context=" + context + ", obj=" + obj +
+                     ", callback=" + callback, e);
     }
 
 }

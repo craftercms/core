@@ -16,23 +16,29 @@
  */
 package org.craftercms.core.util.cache.impl;
 
-import org.craftercms.core.util.cache.impl.DefaultCacheTemplate;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.craftercms.commons.lang.Callback;
+import org.craftercms.core.cache.CacheLoader;
+import org.craftercms.core.service.CacheService;
+import org.craftercms.core.service.Context;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.craftercms.core.cache.CacheLoader;
-import org.craftercms.core.service.CacheService;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.util.cache.CacheCallback;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.craftercms.core.util.CacheUtils.generateKey;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Class description goes HERE
@@ -43,12 +49,9 @@ public class DefaultCacheTemplateTest {
 
     private static final String RANDOM_KEY_ELEM = "random";
 
-    private static final long EXPIRE_AFTER = 1;
-    private static final long REFRESH_FREQUENCY = 1;
-
     private DefaultCacheTemplate cacheTemplate;
     private CacheService cache;
-    private CacheCallback<Long> cacheCallback;
+    private Callback<Long> cacheTemplateCallback;
     private Context context;
 
     @Before
@@ -61,11 +64,11 @@ public class DefaultCacheTemplateTest {
 
     @Test
     public void testTemplate() throws Exception {
-        Long time1  = cacheTemplate.execute(context, DEFAULT_CACHING_OPTIONS, cacheCallback, RANDOM_KEY_ELEM);
+        Long time1  = cacheTemplate.getObject(context, DEFAULT_CACHING_OPTIONS, cacheTemplateCallback, RANDOM_KEY_ELEM);
 
         Thread.sleep(100);
 
-        Long time2 = cacheTemplate.execute(context, DEFAULT_CACHING_OPTIONS, cacheCallback, RANDOM_KEY_ELEM);
+        Long time2 = cacheTemplate.getObject(context, DEFAULT_CACHING_OPTIONS, cacheTemplateCallback, RANDOM_KEY_ELEM);
 
         assertEquals(time1, time2);
 
@@ -103,15 +106,15 @@ public class DefaultCacheTemplateTest {
         Object key = generateKey(RANDOM_KEY_ELEM);
 
         when(this.cache.get(context, key)).thenAnswer(getFromCacheAnswer);
-        doAnswer(putInCacheAnswer).when(this.cache).put(eq(context), eq(key), anyObject(), eq(DEFAULT_CACHING_OPTIONS), any(
-                CacheLoader.class));
+        doAnswer(putInCacheAnswer).when(this.cache).put(eq(context), eq(key), anyObject(), eq(DEFAULT_CACHING_OPTIONS),
+                                                        any(CacheLoader.class));
     }
 
     private void setUpTestCacheCallback() {
-        cacheCallback = new CacheCallback<Long>() {
+        cacheTemplateCallback = new Callback<Long>() {
 
             @Override
-            public Long doCacheable() {
+            public Long execute() {
                 return System.currentTimeMillis();
             }
 

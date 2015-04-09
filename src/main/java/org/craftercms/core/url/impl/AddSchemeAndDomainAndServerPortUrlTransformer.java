@@ -16,13 +16,13 @@
  */
 package org.craftercms.core.url.impl;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.craftercms.commons.http.RequestContext;
 import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
-import org.craftercms.core.util.HttpServletUtils;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Prepends to a context relative url the schema, domain and port (if different than 80 and 443 in case of https) to
@@ -57,7 +57,7 @@ public class AddSchemeAndDomainAndServerPortUrlTransformer implements UrlTransfo
     @Override
     public String transformUrl(Context context, CachingOptions cachingOptions,
                                String url) throws UrlTransformationException {
-        HttpServletRequest currentRequest = HttpServletUtils.getCurrentRequest();
+        HttpServletRequest currentRequest = RequestContext.getCurrent().getRequest();
         String scheme = currentRequest.getScheme();
         String domain = currentRequest.getServerName();
         int serverPort = currentRequest.getServerPort();

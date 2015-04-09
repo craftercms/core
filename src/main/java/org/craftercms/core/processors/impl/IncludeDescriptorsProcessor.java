@@ -143,7 +143,7 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
     protected Item getIncludeSrcItem(Context context, CachingOptions cachingOptions,
                                      String includeSrcPath) throws ItemProcessingException {
         try {
-            return contentStoreService.getItem(context, cachingOptions, includeSrcPath);
+            return contentStoreService.getItem(context, cachingOptions, includeSrcPath, null);
         } catch (Exception e) {
             throw new ItemProcessingException("Unable to load descriptor " + includeSrcPath + " from the underlying " +
                 "repository", e);

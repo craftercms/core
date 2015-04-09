@@ -70,26 +70,30 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    protected Content doGetContent(Context context, CachingOptions cachingOptions, String path)
-        throws InvalidContextException, PathNotFoundException, StoreException {
+    protected Content doFindContent(Context context, CachingOptions cachingOptions, String path)
+        throws InvalidContextException, StoreException {
         path = normalizePath(path);
 
-        File file = getFile(context, path);
+        File file = findFile(context, path);
 
-        if (!file.isFile()) {
-            throw new StoreException("Unable to get content: " + file + " is not a file");
+        if (file != null && !file.isFile()) {
+            throw new StoreException("Unable to find content: " + file + " is not a file");
         }
 
         return file;
     }
 
     @Override
-    protected Item doGetItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
+    protected Item doFindItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
         throws InvalidContextException, PathNotFoundException,
         XmlFileParseException, StoreException {
         path = normalizePath(path);
 
-        File file = getFile(context, path);
+        File file = findFile(context, path);
+
+        if (file == null) {
+            return null;
+        }
 
         Item item = new Item();
         item.setName(file.getName());
@@ -113,13 +117,9 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
                 item.setDescriptorUrl(descriptorPath);
 
-                try {
-                    descriptorFile = getFile(context, descriptorPath);
-                    if (!descriptorFile.isFile()) {
-                        throw new StoreException("Descriptor file at " + descriptorFile + " is not really a file");
-                    }
-                } catch (PathNotFoundException e) {
-                    descriptorFile = null;
+                descriptorFile = findFile(context, descriptorPath);
+                if (descriptorFile != null && !descriptorFile.isFile()) {
+                    throw new StoreException("Descriptor file at " + descriptorFile + " is not really a file");
                 }
             }
 
@@ -147,18 +147,23 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    protected List<Item> doGetItems(Context context, CachingOptions cachingOptions, String path,
-                                    boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
+    protected List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path,
+                                     boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
         XmlFileParseException, StoreException {
         path = normalizePath(path);
 
-        File dir = getFile(context, path);
+        File dir = findFile(context, path);
+
+        if (dir == null) {
+            return null;
+        }
+
         if (!dir.isDirectory()) {
             throw new StoreException("The path " + dir + " doesn't correspond to a dir");
         }
 
         List<File> children = getChildren(context, dir);
-        CachingAwareList<Item> items = new CachingAwareList<Item>(children.size());
+        CachingAwareList<Item> items = new CachingAwareList<>(children.size());
 
         if (CollectionUtils.isNotEmpty(children)) {
             for (File child : children) {
@@ -166,10 +171,12 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
                 // items.
                 if (!child.isFile() || !child.getName().endsWith(metadataFileExtension)) {
                     String fileRelPath = path + (!path.equals("/")? "/": "") + child.getName();
-                    Item item = getItem(context, cachingOptions, fileRelPath, withDescriptor);
+                    Item item = findItem(context, cachingOptions, fileRelPath, withDescriptor);
 
-                    items.add(item);
-                    items.addDependencyKey(item.getKey());
+                    if (item != null) {
+                        items.add(item);
+                        items.addDependencyKey(item.getKey());
+                    }
                 }
             }
         }
@@ -210,19 +217,11 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     /**
      * Returns the {@link File} at the given path, returning null if not found.
      */
-    protected abstract File findFile(Context context, String path) throws InvalidContextException,
-        PathNotFoundException, StoreException;
-
-    /**
-     * Returns the {@link File} at the given path, throwing a {@link PathNotFoundException} if not found.
-     */
-    protected abstract File getFile(Context context, String path) throws InvalidContextException,
-        PathNotFoundException, StoreException;
+    protected abstract File findFile(Context context, String path) throws InvalidContextException, StoreException;
 
     /**
      * Returns the list of children of the given directory.
      */
-    protected abstract List<File> getChildren(Context context, File dir) throws InvalidContextException,
-        PathNotFoundException, StoreException;
+    protected abstract List<File> getChildren(Context context, File dir) throws InvalidContextException, StoreException;
 
 }

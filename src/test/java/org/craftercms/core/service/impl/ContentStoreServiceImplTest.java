@@ -16,8 +16,22 @@
  */
 package org.craftercms.core.service.impl;
 
+import java.util.List;
+
 import org.apache.commons.collections4.CollectionUtils;
-import org.craftercms.core.service.*;
+import org.craftercms.core.exception.PathNotFoundException;
+import org.craftercms.core.processors.impl.ItemProcessorPipeline;
+import org.craftercms.core.processors.impl.TextMetaDataCollectionExtractingProcessor;
+import org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor;
+import org.craftercms.core.service.CacheService;
+import org.craftercms.core.service.ContentStoreService;
+import org.craftercms.core.service.Context;
+import org.craftercms.core.service.Item;
+import org.craftercms.core.service.ItemFilter;
+import org.craftercms.core.service.Tree;
+import org.craftercms.core.store.impl.filesystem.FileSystemContentStoreAdapter;
+import org.craftercms.core.util.cache.CachingAwareObject;
+import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.craftercms.core.xml.mergers.impl.strategies.InheritLevelsMergeStrategyTest;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -25,24 +39,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.processors.impl.ItemProcessorPipeline;
-import org.craftercms.core.processors.impl.TextMetaDataCollectionExtractingProcessor;
-import org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor;
-
-import org.craftercms.core.store.impl.filesystem.FileSystemContentStoreAdapter;
-import org.craftercms.core.util.cache.CachingAwareObject;
-import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
+import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEPTH;
-import static org.craftercms.core.service.Context.*;
+import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
+import static org.craftercms.core.service.Context.DEFAULT_IGNORE_HIDDEN_FILES;
+import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Class description goes HERE
@@ -56,10 +67,13 @@ public class ContentStoreServiceImplTest {
     private static final String DESCRIPTOR_FILE_EXTENSION = ".xml";
     private static final String METADATA_FILE_EXTENSION = ".meta.xml";
 
-    private static final String CLASSPATH_STORE_ROOT_FOLDER_PATH = "classpath:stores/" + ContentStoreServiceImplTest.class.getSimpleName();
+    private static final String CLASSPATH_STORE_ROOT_FOLDER_PATH =
+        "classpath:stores/" + ContentStoreServiceImplTest.class.getSimpleName();
 
     private static final String ROOT_FOLDER_NAME = "";
     private static final String ROOT_FOLDER_PATH = "/";
+
+    private static final String INVALID_PATH = "no_file";
 
     private static final String BUNDLE_FOLDER_NAME = "bundle";
     private static final String BUNDLE_FOLDER_PATH = "/" + BUNDLE_FOLDER_NAME;
@@ -88,7 +102,7 @@ public class ContentStoreServiceImplTest {
 
     private static final String CONTENT_DESCRIPTOR_NAME = "descriptor.xml";
     private static final String CONTENT_DESCRIPTOR_PATH = CONTENT_FOLDER_PATH + "/" + CONTENT_DESCRIPTOR_NAME;
-    
+
     private static final String CONTENT_FR_FOLDER_NAME = "content_fr";
     private static final String CONTENT_FR_FOLDER_PATH = BUNDLE_FOLDER_PATH + "/" + CONTENT_FR_FOLDER_NAME;
     private static final String CONTENT_FR_FOLDER_META_FILE_PATH = CONTENT_FR_FOLDER_PATH + METADATA_FILE_EXTENSION;
@@ -98,20 +112,25 @@ public class ContentStoreServiceImplTest {
 
     private static final String CONTENT_FR_ES_FOLDER_NAME = "content_fr_es";
     private static final String CONTENT_FR_ES_FOLDER_PATH = BUNDLE_FOLDER_PATH + "/" + CONTENT_FR_ES_FOLDER_NAME;
-    private static final String CONTENT_FR_ES_FOLDER_META_FILE_PATH = CONTENT_FR_ES_FOLDER_PATH + METADATA_FILE_EXTENSION;
+    private static final String CONTENT_FR_ES_FOLDER_META_FILE_PATH =
+        CONTENT_FR_ES_FOLDER_PATH + METADATA_FILE_EXTENSION;
 
     private static final String CONTENT_FR_ES_DESCRIPTOR_NAME = "descriptor.xml";
-    private static final String CONTENT_FR_ES_DESCRIPTOR_PATH = CONTENT_FR_ES_FOLDER_PATH + "/" + CONTENT_FR_ES_DESCRIPTOR_NAME;
-    
-    private static final String FIRST_QUOTE_EN = "I haven't failed. I've just found 10,000 ways that won't work. -- Thomas Edison";
-    private static final String SECOND_QUOTE_EN = "Don't hate, it's too big a burden to bear. -- Martin Luther King, Jr.";
-    private static final String THIRD_QUOTE_EN = "If I have seen a little further it is by standing on the shoulders of giants. " +
-            "-- Issac Newton";
-    private static final String SECOND_QUOTE_FR = "Ne haïssez pas, c'est un fardeau trop lourd à supporter. -- Martin Luther King, Jr.";
-    private static final String THIRD_QUOTE_FR = "Si j'ai vu un peu plus loin c'est en me tenant sur ​​les épaules de géants. " +
-            "-- Issac Newton";
-    private static final String THIRD_QUOTE_ES = "Si he visto un poco más lejos es porque lo hecho parado sobre los hombros de gigantes. " +
-            "-- Issac Newton";
+    private static final String CONTENT_FR_ES_DESCRIPTOR_PATH =
+        CONTENT_FR_ES_FOLDER_PATH + "/" + CONTENT_FR_ES_DESCRIPTOR_NAME;
+
+    private static final String FIRST_QUOTE_EN = "I haven't failed. I've just found 10,000 ways that won't work. -- " +
+                                                 "Thomas Edison";
+    private static final String SECOND_QUOTE_EN = "Don't hate, it's too big a burden to bear. -- Martin Luther King, " +
+                                                  "Jr.";
+    private static final String THIRD_QUOTE_EN =
+        "If I have seen a little further it is by standing on the shoulders of giants. " + "-- Issac Newton";
+    private static final String SECOND_QUOTE_FR = "Ne haïssez pas, c'est un fardeau trop lourd à supporter. -- Martin" +
+                                                  " Luther King, Jr.";
+    private static final String THIRD_QUOTE_FR =
+        "Si j'ai vu un peu plus loin c'est en me tenant sur ​​les épaules de géants. " + "-- Issac Newton";
+    private static final String THIRD_QUOTE_ES =
+        "Si he visto un poco más lejos es porque lo hecho parado sobre los hombros de gigantes. " + "-- Issac Newton";
 
     @Autowired
     private ContentStoreService contentStoreService;
@@ -134,7 +153,8 @@ public class ContentStoreServiceImplTest {
     @Before
     public void setUp() throws Exception {
         context = contentStoreService.createContext(FileSystemContentStoreAdapter.STORE_TYPE, null, null, null,
-                CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_CACHE_ON, DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
+                                                    CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_CACHE_ON,
+                                                    DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
     }
 
     @After
@@ -144,7 +164,7 @@ public class ContentStoreServiceImplTest {
 
     @Test
     public void testGetDescriptorItem() throws Exception {
-        Item item = contentStoreService.getItem(context, CONTENT_FR_ES_DESCRIPTOR_PATH);
+        Item item = contentStoreService.findItem(context, CONTENT_FR_ES_DESCRIPTOR_PATH);
         assertContentFrEsDescriptorItem(item, false);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
@@ -153,23 +173,44 @@ public class ContentStoreServiceImplTest {
         Item cachedItem = contentStoreService.getItem(context, CONTENT_FR_ES_DESCRIPTOR_PATH);
         assertEquals(item, cachedItem);
         assertCaching(item, cachedItem);
-        
-        TextMetaDataExtractingProcessor extractor = new TextMetaDataExtractingProcessor("//first-quote", "//second-quote", "//third-quote");
 
-        item = contentStoreService.getItem(context, CONTENT_FR_ES_DESCRIPTOR_PATH, extractor);
+        item = contentStoreService.findItem(context, INVALID_PATH);
+        assertNull(item);
+
+        try {
+            contentStoreService.getItem(context, INVALID_PATH);
+            fail("Expected " + PathNotFoundException.class.getName());
+        } catch (PathNotFoundException e) {
+        }
+
+        TextMetaDataExtractingProcessor extractor = new TextMetaDataExtractingProcessor("//first-quote",
+                                                                                        "//second-quote",
+                                                                                        "//third-quote");
+
+        item = contentStoreService.findItem(context, DEFAULT_CACHING_OPTIONS, CONTENT_FR_ES_DESCRIPTOR_PATH, extractor);
         assertContentFrEsDescriptorItem(item, true);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
         Thread.sleep(100);
 
-        cachedItem = contentStoreService.getItem(context, CONTENT_FR_ES_DESCRIPTOR_PATH, extractor);
+        cachedItem = contentStoreService.getItem(context, DEFAULT_CACHING_OPTIONS, CONTENT_FR_ES_DESCRIPTOR_PATH,
+                                                 extractor);
         assertEquals(item, cachedItem);
         assertCaching(item, cachedItem);
+
+        item = contentStoreService.findItem(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, extractor);
+        assertNull(item);
+
+        try {
+            contentStoreService.getItem(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, extractor);
+            fail("Expected " + PathNotFoundException.class.getName());
+        } catch (PathNotFoundException e) {
+        }
     }
 
     @Test
     public void testGetFolderItem() throws Exception {
-        Item item = contentStoreService.getItem(context, BUNDLE_FOLDER_PATH);
+        Item item = contentStoreService.findItem(context, BUNDLE_FOLDER_PATH);
         assertBundleFolderItem(item, false);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
@@ -179,22 +220,23 @@ public class ContentStoreServiceImplTest {
         assertEquals(item, cachedItem);
         assertCaching(item, cachedItem);
 
-        TextMetaDataCollectionExtractingProcessor extractor = new TextMetaDataCollectionExtractingProcessor("//extension");
+        TextMetaDataCollectionExtractingProcessor extractor = new TextMetaDataCollectionExtractingProcessor
+            ("//extension");
 
-        item = contentStoreService.getItem(context, BUNDLE_FOLDER_PATH, extractor);
+        item = contentStoreService.findItem(context, DEFAULT_CACHING_OPTIONS, BUNDLE_FOLDER_PATH, extractor);
         assertBundleFolderItem(item, true);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
         Thread.sleep(100);
 
-        cachedItem = contentStoreService.getItem(context, BUNDLE_FOLDER_PATH, extractor);
+        cachedItem = contentStoreService.getItem(context, DEFAULT_CACHING_OPTIONS, BUNDLE_FOLDER_PATH, extractor);
         assertEquals(item, cachedItem);
         assertCaching(item, cachedItem);
     }
 
     @Test
     public void testGetStaticAssetItem() throws Exception {
-        Item item = contentStoreService.getItem(context, CRAFTER_CMS_LOGO_PATH);
+        Item item = contentStoreService.findItem(context, CRAFTER_CMS_LOGO_PATH);
         assertCrafterCMSLogoItem(item, false);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
@@ -206,71 +248,79 @@ public class ContentStoreServiceImplTest {
 
         TextMetaDataExtractingProcessor extractor = new TextMetaDataExtractingProcessor("//size");
 
-        item = contentStoreService.getItem(context, CRAFTER_CMS_LOGO_PATH, extractor);
+        item = contentStoreService.findItem(context, DEFAULT_CACHING_OPTIONS, CRAFTER_CMS_LOGO_PATH, extractor);
         assertCrafterCMSLogoItem(item, true);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
         Thread.sleep(100);
 
-        cachedItem = contentStoreService.getItem(context, CRAFTER_CMS_LOGO_PATH, extractor);
+        cachedItem = contentStoreService.getItem(context, DEFAULT_CACHING_OPTIONS, CRAFTER_CMS_LOGO_PATH, extractor);
         assertEquals(item, cachedItem);
         assertCaching(item, cachedItem);
     }
 
     @Test
     public void testGetChildren() throws Exception {
-        CachingAwareList<Item> children = (CachingAwareList<Item>) contentStoreService.getChildren(context, ROOT_FOLDER_PATH);
+        CachingAwareList<Item> children = (CachingAwareList<Item>)contentStoreService.findChildren(context,
+                                                                                                   ROOT_FOLDER_PATH);
         assertRootFolderChildren(children, false, false);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
         Thread.sleep(100);
 
-        CachingAwareList<Item> cachedChildren = (CachingAwareList<Item>) contentStoreService.getChildren(context, ROOT_FOLDER_PATH);
+        CachingAwareList<Item> cachedChildren = (CachingAwareList<Item>)contentStoreService.getChildren(
+            context, ROOT_FOLDER_PATH);
+
         assertEquals(children, cachedChildren);
         assertListCaching(children, cachedChildren);
 
-        children = (CachingAwareList<Item>) contentStoreService.getChildren(context, ROOT_FOLDER_PATH, OnlyNonDescriptorsFilter.instance);
-        assertRootFolderChildren(children, true, false);
+        children = (CachingAwareList<Item>)contentStoreService.findChildren(context, INVALID_PATH);
+        assertNull(children);
 
-        // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
-        Thread.sleep(100);
+        try {
+            contentStoreService.getChildren(context, INVALID_PATH);
+            fail("Expected " + PathNotFoundException.class.getName());
+        } catch (PathNotFoundException e) {
+        }
 
-        cachedChildren = (CachingAwareList<Item>) contentStoreService.getChildren(context, ROOT_FOLDER_PATH, OnlyNonDescriptorsFilter
-                .instance);
-        assertEquals(children, cachedChildren);
-        assertListCaching(children, cachedChildren);
-
-        List<ItemProcessor> extractors = new ArrayList<ItemProcessor>(2);
         ItemProcessorPipeline extractorPipeline = new ItemProcessorPipeline();
         extractorPipeline.addProcessor(new TextMetaDataCollectionExtractingProcessor("//extension"));
         extractorPipeline.addProcessor(new TextMetaDataExtractingProcessor("//size"));
 
-        children = (CachingAwareList<Item>) contentStoreService.getChildren(context, ROOT_FOLDER_PATH, extractorPipeline);
-        assertRootFolderChildren(children, false, true);
-
-        // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
-        Thread.sleep(100);
-
-        cachedChildren = (CachingAwareList<Item>) contentStoreService.getChildren(context, ROOT_FOLDER_PATH, extractorPipeline);
-        assertEquals(children, cachedChildren);
-        assertListCaching(children, cachedChildren);
-
-        children = (CachingAwareList<Item>) contentStoreService.getChildren(context, ROOT_FOLDER_PATH, OnlyNonDescriptorsFilter.instance,
-                extractorPipeline);
+        children = (CachingAwareList<Item>)contentStoreService.findChildren(context, DEFAULT_CACHING_OPTIONS,
+                                                                            ROOT_FOLDER_PATH,
+                                                                            OnlyNonDescriptorsFilter.instance,
+                                                                            extractorPipeline);
         assertRootFolderChildren(children, true, true);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
         Thread.sleep(100);
 
-        cachedChildren = (CachingAwareList<Item>) contentStoreService.getChildren(context, ROOT_FOLDER_PATH, OnlyNonDescriptorsFilter
-                .instance, extractorPipeline);
+        cachedChildren = (CachingAwareList<Item>)contentStoreService.getChildren(context, DEFAULT_CACHING_OPTIONS,
+                                                                                 ROOT_FOLDER_PATH,
+                                                                                 OnlyNonDescriptorsFilter.instance,
+                                                                                 extractorPipeline);
         assertEquals(children, cachedChildren);
         assertListCaching(children, cachedChildren);
+
+        children = (CachingAwareList<Item>)contentStoreService.findChildren(context, DEFAULT_CACHING_OPTIONS,
+                                                                            INVALID_PATH,
+                                                                            OnlyNonDescriptorsFilter.instance,
+                                                                            extractorPipeline);
+        assertNull(children);
+
+        try {
+            contentStoreService.getChildren(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, OnlyNonDescriptorsFilter
+                .instance, extractorPipeline);
+            assertNull(children);
+            fail("Expected " + PathNotFoundException.class.getName());
+        } catch (PathNotFoundException e) {
+        }
     }
 
     @Test
     public void testGetTree() throws Exception {
-        Tree tree = contentStoreService.getTree(context, ROOT_FOLDER_PATH);
+        Tree tree = contentStoreService.findTree(context, ROOT_FOLDER_PATH);
         assertRootFolderTree(tree, UNLIMITED_TREE_DEPTH, false, false);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
@@ -280,7 +330,16 @@ public class ContentStoreServiceImplTest {
         assertEquals(tree, cachedTree);
         assertTreeCaching(tree, cachedTree);
 
-        tree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, 1);
+        tree = contentStoreService.findTree(context, INVALID_PATH);
+        assertNull(tree);
+
+        try {
+            contentStoreService.getTree(context, INVALID_PATH);
+            fail("Expected " + PathNotFoundException.class.getName());
+        } catch (PathNotFoundException e) {
+        }
+
+        tree = contentStoreService.findTree(context, ROOT_FOLDER_PATH, 1);
         assertRootFolderTree(tree, 1, false, false);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
@@ -290,69 +349,42 @@ public class ContentStoreServiceImplTest {
         assertEquals(tree, cachedTree);
         assertTreeCaching(tree, cachedTree);
 
-        tree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, OnlyNonDescriptorsFilter.instance);
-        assertRootFolderTree(tree, UNLIMITED_TREE_DEPTH, true, false);
+        tree = contentStoreService.findTree(context, INVALID_PATH, 1);
+        assertNull(tree);
 
-        // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
-        Thread.sleep(100);
-
-        cachedTree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, OnlyNonDescriptorsFilter.instance);
-        assertEquals(tree, cachedTree);
-        assertTreeCaching(tree, cachedTree);
-
-        tree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, 1, OnlyNonDescriptorsFilter.instance);
-        assertRootFolderTree(tree, 1, true, false);
-
-        // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
-        Thread.sleep(100);
-
-        cachedTree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, 1, OnlyNonDescriptorsFilter.instance);
-        assertEquals(tree, cachedTree);
-        assertTreeCaching(tree, cachedTree);
+        try {
+            contentStoreService.getTree(context, INVALID_PATH, 1);
+            fail("Expected " + PathNotFoundException.class.getName());
+        } catch (PathNotFoundException e) {
+        }
 
         ItemProcessorPipeline extractorPipeline = new ItemProcessorPipeline();
         extractorPipeline.addProcessor(new TextMetaDataCollectionExtractingProcessor("//extension"));
-        extractorPipeline.addProcessor(new TextMetaDataExtractingProcessor("//first-quote", "//second-quote", "//third-quote", "//size"));
+        extractorPipeline.addProcessor(new TextMetaDataExtractingProcessor("//first-quote", "//second-quote",
+                                                                           "//third-quote", "//size"));
 
-        tree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, extractorPipeline);
-        assertRootFolderTree(tree, UNLIMITED_TREE_DEPTH, false, true);
-
-        // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
-        Thread.sleep(100);
-
-        cachedTree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, extractorPipeline);
-        assertEquals(tree, cachedTree);
-        assertTreeCaching(tree, cachedTree);
-
-        tree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, 1, extractorPipeline);
-        assertRootFolderTree(tree, 1, false, true);
-
-        // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
-        Thread.sleep(100);
-
-        cachedTree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, 1, extractorPipeline);
-        assertEquals(tree, cachedTree);
-        assertTreeCaching(tree, cachedTree);
-
-        tree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, OnlyNonDescriptorsFilter.instance, extractorPipeline);
-        assertRootFolderTree(tree, UNLIMITED_TREE_DEPTH, true, true);
-
-        // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
-        Thread.sleep(100);
-
-        cachedTree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, OnlyNonDescriptorsFilter.instance, extractorPipeline);
-        assertEquals(tree, cachedTree);
-        assertTreeCaching(tree, cachedTree);
-
-        tree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, 1, OnlyNonDescriptorsFilter.instance, extractorPipeline);
+        tree = contentStoreService.findTree(context, DEFAULT_CACHING_OPTIONS, ROOT_FOLDER_PATH, 1,
+                                            OnlyNonDescriptorsFilter.instance, extractorPipeline);
         assertRootFolderTree(tree, 1, true, true);
 
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
         Thread.sleep(100);
 
-        cachedTree = contentStoreService.getTree(context, ROOT_FOLDER_PATH, 1, OnlyNonDescriptorsFilter.instance, extractorPipeline);
+        cachedTree = contentStoreService.getTree(context, DEFAULT_CACHING_OPTIONS, ROOT_FOLDER_PATH, 1,
+                                                 OnlyNonDescriptorsFilter.instance, extractorPipeline);
         assertEquals(tree, cachedTree);
         assertTreeCaching(tree, cachedTree);
+
+        tree = contentStoreService.findTree(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, 1,
+                                            OnlyNonDescriptorsFilter.instance, extractorPipeline);
+        assertNull(tree);
+
+        try {
+            contentStoreService.getTree(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, 1,
+                                        OnlyNonDescriptorsFilter.instance, extractorPipeline);
+            fail("Expected " + PathNotFoundException.class.getName());
+        } catch (PathNotFoundException e) {
+        }
     }
 
     private void assertSystemInfoProperties(Item item) {
@@ -378,7 +410,7 @@ public class ContentStoreServiceImplTest {
         assertSystemInfoProperties(item);
 
         if (processorSpecified) {
-            List<String> bundleExtensions = (List<String>) item.getProperty("//extension");
+            List<String> bundleExtensions = (List<String>)item.getProperty("//extension");
             assertEquals(2, bundleExtensions.size());
             assertEquals(BUNDLE_FR_EXTENSION, bundleExtensions.get(0));
             assertEquals(BUNDLE_FR_ES_EXTENSION, bundleExtensions.get(1));
@@ -409,11 +441,13 @@ public class ContentStoreServiceImplTest {
         assertEquals(CRAFTER_CMS_LOGO_META_FILE_PATH, item.getDescriptorUrl());
         assertNotNull(item.getDescriptorDom());
         assertSystemInfoProperties(item);
-        assertEquals(CRAFTER_CMS_LOGO_RESOLUTION_WIDTH, Integer.parseInt((String) item.getProperty("//resolution/width")));
-        assertEquals(CRAFTER_CMS_LOGO_RESOLUTION_HEIGHT, Integer.parseInt((String) item.getProperty("//resolution/height")));
+        assertEquals(CRAFTER_CMS_LOGO_RESOLUTION_WIDTH, Integer.parseInt((String)item.getProperty
+            ("//resolution/width")));
+        assertEquals(CRAFTER_CMS_LOGO_RESOLUTION_HEIGHT, Integer.parseInt((String)item.getProperty
+            ("//resolution/height")));
 
         if (processorSpecified) {
-            String size = (String) item.getProperty("//size");
+            String size = (String)item.getProperty("//size");
             assertEquals(CRAFTER_CMS_LOGO_SIZE, size);
         } else {
             Node size = item.getDescriptorDom().selectSingleNode("//size");
@@ -574,7 +608,7 @@ public class ContentStoreServiceImplTest {
             assertContentDescriptorItem(children.get(0), processorSpecified);
         }
     }
-    
+
     private void assertContentFrFolderChildren(List<Item> children, boolean filterSpecified,
                                                boolean processorSpecified) {
         assertNotNull(children);
@@ -586,7 +620,7 @@ public class ContentStoreServiceImplTest {
             assertContentFrDescriptorItem(children.get(0), processorSpecified);
         }
     }
-    
+
     private void assertContentFrEsFolderChildren(List<Item> children, boolean filterSpecified,
                                                  boolean processorSpecified) {
         assertNotNull(children);
@@ -608,25 +642,25 @@ public class ContentStoreServiceImplTest {
             assertRootFolderChildren(rootFolderChildren, filterSpecified, processorSpecified);
 
             if (depth == UNLIMITED_TREE_DEPTH || depth >= 2) {
-                List<Item> bundleFolderChildren = ((Tree) rootFolderChildren.get(0)).getChildren();
+                List<Item> bundleFolderChildren = ((Tree)rootFolderChildren.get(0)).getChildren();
                 assertBundleFolderChildren(bundleFolderChildren);
 
                 if (depth == UNLIMITED_TREE_DEPTH || depth >= 3) {
-                    List<Item> contentFolderChildren = ((Tree) bundleFolderChildren.get(0)).getChildren();
+                    List<Item> contentFolderChildren = ((Tree)bundleFolderChildren.get(0)).getChildren();
                     assertContentFolderChildren(contentFolderChildren, filterSpecified, processorSpecified);
 
-                    List<Item> contentFrFolderChildren = ((Tree) bundleFolderChildren.get(1)).getChildren();
+                    List<Item> contentFrFolderChildren = ((Tree)bundleFolderChildren.get(1)).getChildren();
                     assertContentFrFolderChildren(contentFrFolderChildren, filterSpecified, processorSpecified);
 
-                    List<Item> contentFrEsFolderChildren = ((Tree) bundleFolderChildren.get(2)).getChildren();
+                    List<Item> contentFrEsFolderChildren = ((Tree)bundleFolderChildren.get(2)).getChildren();
                     assertContentFrEsFolderChildren(contentFrEsFolderChildren, filterSpecified, processorSpecified);
                 } else {
-                    assertTrue(CollectionUtils.isEmpty(((Tree) bundleFolderChildren.get(0)).getChildren()));
-                    assertTrue(CollectionUtils.isEmpty(((Tree) bundleFolderChildren.get(1)).getChildren()));
-                    assertTrue(CollectionUtils.isEmpty(((Tree) bundleFolderChildren.get(2)).getChildren()));
+                    assertTrue(CollectionUtils.isEmpty(((Tree)bundleFolderChildren.get(0)).getChildren()));
+                    assertTrue(CollectionUtils.isEmpty(((Tree)bundleFolderChildren.get(1)).getChildren()));
+                    assertTrue(CollectionUtils.isEmpty(((Tree)bundleFolderChildren.get(2)).getChildren()));
                 }
             } else {
-                assertTrue(CollectionUtils.isEmpty(((Tree) rootFolderChildren.get(0)).getChildren()));
+                assertTrue(CollectionUtils.isEmpty(((Tree)rootFolderChildren.get(0)).getChildren()));
             }
         } else {
             assertTrue(CollectionUtils.isEmpty(tree.getChildren()));
@@ -666,7 +700,7 @@ public class ContentStoreServiceImplTest {
                 Item actualChild = actualChildren.get(i);
 
                 if (expectedChild instanceof Tree) {
-                    assertTreeCaching((Tree) expectedChild, (Tree) actualChild);
+                    assertTreeCaching((Tree)expectedChild, (Tree)actualChild);
                 } else {
                     assertCaching(expectedChild, actualChild);
                 }

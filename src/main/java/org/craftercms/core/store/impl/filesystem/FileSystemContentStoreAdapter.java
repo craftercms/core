@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.store.impl.AbstractFileBasedContentStoreAdapter;
@@ -59,9 +58,9 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
             FileSystemFile rootFolder = new FileSystemFile(rootFolderResource.getFile());
 
             return new FileSystemContext(id, this, null, rootFolderPath, rootFolder, cacheOn, maxAllowedItemsInCache,
-                ignoreHiddenFiles);
+                                         ignoreHiddenFiles);
         } catch (IOException e) {
-            throw new StoreException("Unable to get a File object from the specified rootFolderPath", e);
+            throw new StoreException("Unable to get a file object from the specified rootFolderPath", e);
         }
     }
 
@@ -87,18 +86,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     }
 
     @Override
-    protected File getFile(Context context, String path) throws PathNotFoundException {
-        File file = findFile(context, path);
-
-        if (file == null) {
-            throw new PathNotFoundException("File " + path + " can't be found");
-        }
-
-        return file;
-    }
-
-    @Override
-    protected List<File> getChildren(Context context, File dir) throws PathNotFoundException {
+    protected List<File> getChildren(Context context, File dir) {
         java.io.File[] listing;
         if (context.ignoreHiddenFiles()) {
             listing = ((FileSystemFile)dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);
