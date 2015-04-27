@@ -53,15 +53,21 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     public Context createContext(String id, String storeServerUrl, String username, String password,
                                  String rootFolderPath, boolean cacheOn, int maxAllowedItemsInCache,
                                  boolean ignoreHiddenFiles) throws StoreException, AuthenticationException {
-        try {
-            Resource rootFolderResource = resourceLoader.getResource(rootFolderPath);
-            FileSystemFile rootFolder = new FileSystemFile(rootFolderResource.getFile());
+        Resource rootFolderResource = resourceLoader.getResource(rootFolderPath);
 
-            return new FileSystemContext(id, this, null, rootFolderPath, rootFolder, cacheOn, maxAllowedItemsInCache,
-                                         ignoreHiddenFiles);
-        } catch (IOException e) {
-            throw new StoreException("Unable to get a file object from the specified rootFolderPath", e);
+        if (!rootFolderResource.exists()) {
+            throw new StoreException("Root folder " + rootFolderPath + " doesn't exist");
         }
+
+        FileSystemFile rootFolder;
+        try {
+            rootFolder = new FileSystemFile(rootFolderResource.getFile());
+        } catch (IOException e) {
+            throw new StoreException("Unable to retrieve file handle for root folder " + rootFolderPath, e);
+        }
+
+        return new FileSystemContext(id, this, null, rootFolderPath, rootFolder, cacheOn, maxAllowedItemsInCache,
+                                     ignoreHiddenFiles);
     }
 
     @Override
