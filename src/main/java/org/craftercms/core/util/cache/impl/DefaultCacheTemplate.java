@@ -56,7 +56,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
 
     @Override
     public <T> T getObject(Context context, Callback<T> callback, Object... keyElements) {
-        return getObject(context, CachingOptions.DEFAULT_CACHING_OPTIONS, callback, keyElements);
+        return getObject(context, null, callback, keyElements);
     }
 
     @Override
@@ -68,6 +68,10 @@ public class DefaultCacheTemplate implements CacheTemplate {
         if (obj == null) {
             obj = callback.execute();
             if (obj != null) {
+                if (cachingOptions == null) {
+                    cachingOptions = CachingOptions.DEFAULT_CACHING_OPTIONS;
+                }
+
                 obj = doPut(context, cachingOptions, callback, key, obj);
             }
         }
