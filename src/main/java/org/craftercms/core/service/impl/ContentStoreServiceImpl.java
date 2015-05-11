@@ -147,7 +147,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                                  boolean ignoreHiddenFiles) throws InvalidStoreTypeException, StoreException,
         AuthenticationException {
         String id = createContextId(storeType, storeServerUrl, username, password, rootFolderPath, cacheOn,
-            maxAllowedItemsInCache, ignoreHiddenFiles);
+                                    maxAllowedItemsInCache, ignoreHiddenFiles);
 
         if (!contexts.containsKey(id)) {
             ContentStoreAdapter storeAdapter = storeAdapterRegistry.get(storeType);
@@ -156,7 +156,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             }
 
             Context context = storeAdapter.createContext(id, storeServerUrl, username, password, rootFolderPath,
-                cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
+                                                         cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 
             cacheTemplate.getCacheService().addScope(context);
 
