@@ -395,46 +395,49 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             logger.debug("Doing merge for " + item + "...");
         }
 
-        String descriptorUrl = item.getDescriptorUrl();
+        String mainDescriptorUrl = item.getDescriptorUrl();
+        Document mainDescriptorDom = item.getDescriptorDom();
 
-        DescriptorMergeStrategy strategy = mergeStrategyResolver.getStrategy(descriptorUrl, item.getDescriptorDom());
+        DescriptorMergeStrategy strategy = mergeStrategyResolver.getStrategy(mainDescriptorUrl, mainDescriptorDom);
         if (strategy == null) {
-            logger.warn("No merge strategy was found for " + descriptorUrl + ". Merging skipped");
+            logger.warn("No merge strategy was found for " + mainDescriptorUrl + ". Merging skipped");
 
             return item;
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Merge strategy for " + descriptorUrl + ": " + strategy);
+            logger.debug("Merge strategy for " + mainDescriptorUrl + ": " + strategy);
         }
 
-        List<MergeableDescriptor> descriptorsToMerge = strategy.getDescriptors(context, cachingOptions, descriptorUrl);
+        List<MergeableDescriptor> descriptorsToMerge = strategy.getDescriptors(context, cachingOptions,
+                                                                               mainDescriptorUrl, mainDescriptorDom);
         if (descriptorsToMerge == null) {
-            throw new XmlMergeException("There aren't any descriptors to merge for " + descriptorUrl);
+            throw new XmlMergeException("There aren't any descriptors to merge for " + mainDescriptorUrl);
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Descriptors to merge for " + descriptorUrl + ": " + descriptorsToMerge);
+            logger.debug("Descriptors to merge for " + mainDescriptorUrl + ": " + descriptorsToMerge);
         }
 
         List<Document> documentsToMerge = new ArrayList<Document>(descriptorsToMerge.size());
 
         for (MergeableDescriptor descriptorToMerge : descriptorsToMerge) {
-            Item descriptorItem = context.getStoreAdapter().findItem(context, cachingOptions,
-                                                                     descriptorToMerge.getUrl(), true);
+            String descriptorUrl = descriptorToMerge.getUrl();
+            Item descriptorItem = context.getStoreAdapter().findItem(context, cachingOptions, descriptorUrl, true);
+
             if (descriptorItem != null) {
                 Document descriptorDom = descriptorItem.getDescriptorDom();
                 if (descriptorDom == null && !descriptorToMerge.isOptional()) {
-                    throw new XmlMergeException("Descriptor file " + descriptorToMerge.getUrl() + " not found and " +
-                                                "is marked as required for merging");
+                    throw new XmlMergeException("Descriptor file " + descriptorUrl + " not found and is marked as " +
+                                                "required for merging");
                 }
 
                 documentsToMerge.add(descriptorDom);
 
                 item.addDependencyKey(descriptorItem.getKey());
             } else if (!descriptorToMerge.isOptional()) {
-                throw new XmlMergeException("Descriptor file " + descriptorToMerge.getUrl() + " not found and " +
-                                            "is marked as required for merging");
+                throw new XmlMergeException("Descriptor file " + descriptorUrl + " not found and is marked as " +
+                                            "required for merging");
             }
         }
 

@@ -19,10 +19,12 @@ package org.craftercms.core.xml.mergers.impl.strategies;
 import java.util.Arrays;
 import java.util.List;
 
+import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
+import org.dom4j.Document;
 
 /**
  * {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} that returns the same specified descriptor URL.
@@ -34,14 +36,18 @@ import org.craftercms.core.xml.mergers.MergeableDescriptor;
  */
 public class SingleFileMergeStrategy implements DescriptorMergeStrategy {
 
+    @Override
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String primaryDescriptorUrl) {
-        return getDescriptors(context, cachingOptions, primaryDescriptorUrl, false);
+                                                    String mainDescriptorUrl, Document mainDescriptorDom)
+        throws XmlMergeException {
+        return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
     }
 
+    @Override
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String primaryDescriptorUrl, boolean primaryDescriptorOptional) {
-        return Arrays.asList(new MergeableDescriptor(primaryDescriptorUrl, primaryDescriptorOptional));
+                                                    String mainDescriptorUrl, Document mainDescriptorDom,
+                                                    boolean mainDescriptorOptional) throws XmlMergeException {
+        return Arrays.asList(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
     }
 
 }

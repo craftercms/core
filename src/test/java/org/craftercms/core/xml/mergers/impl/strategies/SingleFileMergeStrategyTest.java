@@ -16,14 +16,14 @@
  */
 package org.craftercms.core.xml.mergers.impl.strategies;
 
-import org.craftercms.core.xml.mergers.impl.strategies.SingleFileMergeStrategy;
-import org.junit.Before;
-import org.junit.Test;
-import org.craftercms.core.xml.mergers.MergeableDescriptor;
-
 import java.util.List;
 
+import org.craftercms.core.xml.mergers.MergeableDescriptor;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Class description goes HERE
@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class SingleFileMergeStrategyTest {
 
-    private static final String PRIMARY_DESCRIPTOR_URL = "/folder/sub-folder/descriptor.xml";
+    private static final String MAIN_DESCRIPTOR_URL = "/folder/sub-folder/descriptor.xml";
 
     private SingleFileMergeStrategy strategy;
 
@@ -43,24 +43,14 @@ public class SingleFileMergeStrategyTest {
 
     @Test
     public void testGetDescriptors() throws Exception {
-        List<MergeableDescriptor> descriptors = strategy.getDescriptors(null, null, PRIMARY_DESCRIPTOR_URL);
-        assertDescriptors(descriptors, false);
-
-        descriptors = strategy.getDescriptors(null, null, PRIMARY_DESCRIPTOR_URL, false);
-        assertDescriptors(descriptors, false);
-
-        descriptors = strategy.getDescriptors(null, null, PRIMARY_DESCRIPTOR_URL, true);
-        assertDescriptors(descriptors, true);
+        List<MergeableDescriptor> descriptors = strategy.getDescriptors(null, null, MAIN_DESCRIPTOR_URL, null);
+        assertEquals(1, descriptors.size());
+        assertEquals(MAIN_DESCRIPTOR_URL, descriptors.get(0).getUrl());
+        assertFalse(descriptors.get(0).isOptional());
     }
 
     private void setUpTestStrategy() {
         strategy = new SingleFileMergeStrategy();
-    }
-
-    private void assertDescriptors(List<MergeableDescriptor> descriptors, boolean primaryDescriptorOptional) {
-        assertEquals(1, descriptors.size());
-        assertEquals(PRIMARY_DESCRIPTOR_URL, descriptors.get(0).getUrl());
-        assertEquals(primaryDescriptorOptional, descriptors.get(0).isOptional());
     }
 
 }

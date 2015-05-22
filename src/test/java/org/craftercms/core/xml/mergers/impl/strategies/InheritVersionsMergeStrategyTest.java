@@ -16,14 +16,15 @@
  */
 package org.craftercms.core.xml.mergers.impl.strategies;
 
-import org.craftercms.core.xml.mergers.impl.strategies.InheritVersionsMergeStrategy;
-import org.junit.Before;
-import org.junit.Test;
-import org.craftercms.core.xml.mergers.MergeableDescriptor;
-
 import java.util.List;
 
+import org.craftercms.core.xml.mergers.MergeableDescriptor;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Class description goes HERE
@@ -34,7 +35,7 @@ public class InheritVersionsMergeStrategyTest {
 
     private static final String ROOT_VERSION_DESCRIPTOR_URL = "/descriptor.xml";
     private static final String FOLDER_VERSION_DESCRIPTOR_URL = "/folder/descriptor.xml";
-    private static final String PRIMARY_DESCRIPTOR_URL = "/folder/sub-folder/descriptor.xml";
+    private static final String MAIN_DESCRIPTOR_URL = "/folder/sub-folder/descriptor.xml";
 
     private InheritVersionsMergeStrategy strategy;
 
@@ -45,28 +46,18 @@ public class InheritVersionsMergeStrategyTest {
 
     @Test
     public void testGetDescriptors() throws Exception {
-        List<MergeableDescriptor> descriptors = strategy.getDescriptors(null, null, PRIMARY_DESCRIPTOR_URL);
-        assertDescriptors(descriptors, false);
-
-        descriptors = strategy.getDescriptors(null, null, PRIMARY_DESCRIPTOR_URL, false);
-        assertDescriptors(descriptors, false);
-
-        descriptors = strategy.getDescriptors(null, null, PRIMARY_DESCRIPTOR_URL, true);
-        assertDescriptors(descriptors, true);
+        List<MergeableDescriptor> descriptors = strategy.getDescriptors(null, null, MAIN_DESCRIPTOR_URL, null);
+        assertEquals(3, descriptors.size());
+        assertEquals(ROOT_VERSION_DESCRIPTOR_URL, descriptors.get(0).getUrl());
+        assertTrue(descriptors.get(0).isOptional());
+        assertEquals(FOLDER_VERSION_DESCRIPTOR_URL, descriptors.get(1).getUrl());
+        assertTrue(descriptors.get(1).isOptional());
+        assertEquals(MAIN_DESCRIPTOR_URL, descriptors.get(2).getUrl());
+        assertFalse(descriptors.get(2).isOptional());
     }
 
     private void setUpTestStrategy() {
         strategy = new InheritVersionsMergeStrategy();
-    }
-
-    private void assertDescriptors(List<MergeableDescriptor> descriptors, boolean primaryDescriptorOptional) {
-        assertEquals(3, descriptors.size());
-        assertEquals(ROOT_VERSION_DESCRIPTOR_URL, descriptors.get(0).getUrl());
-        assertEquals(true, descriptors.get(0).isOptional());
-        assertEquals(FOLDER_VERSION_DESCRIPTOR_URL, descriptors.get(1).getUrl());
-        assertEquals(true, descriptors.get(1).isOptional());
-        assertEquals(PRIMARY_DESCRIPTOR_URL, descriptors.get(2).getUrl());
-        assertEquals(primaryDescriptorOptional, descriptors.get(2).isOptional());
     }
 
 }

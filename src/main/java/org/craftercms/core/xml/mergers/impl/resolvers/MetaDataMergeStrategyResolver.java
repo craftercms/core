@@ -66,7 +66,7 @@ public class MetaDataMergeStrategyResolver implements DescriptorMergeStrategyRes
                     return strategy;
                 } else {
                     throw new XmlException("Element value \"" + element.getText() + "\" doesn't refer to an " +
-                        "registered strategy");
+                                           "registered strategy");
                 }
             } else {
                 return null;

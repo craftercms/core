@@ -72,25 +72,28 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
         this.regularMergeStrategy = regularMergeStrategy;
     }
 
+    @Override
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String primaryDescriptorUrl) throws XmlMergeException {
-        return getDescriptors(context, cachingOptions, primaryDescriptorUrl, false);
+                                                    String mainDescriptorUrl, Document mainDescriptorDom)
+        throws XmlMergeException {
+        return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
     }
 
+    @Override
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String primaryDescriptorUrl, boolean primaryDescriptorOptional)
-        throws XmlMergeException {
+                                                    String mainDescriptorUrl, Document mainDescriptorDom,
+                                                    boolean mainDescriptorOptional) throws XmlMergeException {
         List<MergeableDescriptor> descriptors = new ArrayList<>();
         List<MergeableDescriptor> tmp;
 
-        ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(primaryDescriptorUrl);
+        ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(mainDescriptorUrl);
         String prefix = parsedUrl.getPrefix(); // prefix = folder1/
         String baseNameAndExtensionToken = parsedUrl.getBaseNameAndExtensionToken(); // baseNameAndExtensionToken =
         // folder2_es
         String suffix = parsedUrl.getSuffix(); // suffix = /file.xml
 
         // If the prefix is the same length as the initial URI, ignore, otherwise process
-        if (prefix.length() < primaryDescriptorUrl.length()) {
+        if (prefix.length() < mainDescriptorUrl.length()) {
             // Get the index of the delimiter that separates the base name from the extension token (the _ in
             // folder2_es).
             String baseName = baseNameAndExtensionToken;
@@ -118,7 +121,8 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
                         throw new XmlMergeException("No merge strategy for descriptor " + baseDescriptor);
                     }
 
-                    tmp = baseMergeStrategy.getDescriptors(context, cachingOptions, baseDescriptor, true);
+                    tmp = baseMergeStrategy.getDescriptors(context, cachingOptions, baseDescriptor,
+                                                           baseDescriptorDom, true);
 
                     descriptors.addAll(tmp);
                 } else {
@@ -127,9 +131,10 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
             }
 
             // Keep only after the prefix (folder2_es/file.xml)
-            String noPrefix = primaryDescriptorUrl.substring(prefix.length(), primaryDescriptorUrl.length());
+            String noPrefix = mainDescriptorUrl.substring(prefix.length(), mainDescriptorUrl.length());
             // Add all level descriptors after the prefix using the regular strategy (this is up to us/part of our spec)
-            tmp = regularMergeStrategy.getDescriptors(context, cachingOptions, noPrefix, primaryDescriptorOptional);
+            tmp = regularMergeStrategy.getDescriptors(context, cachingOptions, noPrefix, mainDescriptorDom,
+                                                      mainDescriptorOptional);
 
             // Add the stem back since the above won't include it and add the descriptor file to the results only
             // if it's not already in the results.
@@ -140,11 +145,11 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
                 }
             }
         } else {
-            descriptors.add(new MergeableDescriptor(primaryDescriptorUrl, primaryDescriptorOptional));
+            descriptors.add(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Final merge list for " + primaryDescriptorUrl + ": " + descriptors);
+            logger.debug("Final merge list for " + mainDescriptorUrl + ": " + descriptors);
         }
 
         return descriptors;

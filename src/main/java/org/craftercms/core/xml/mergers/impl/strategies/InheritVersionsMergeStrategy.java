@@ -22,6 +22,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
+import org.dom4j.Document;
 
 /**
  * Implementation of {@link AbstractInheritFromHierarchyMergeStrategy}. Descriptors "inherited" are versions of the
@@ -36,12 +37,12 @@ public class InheritVersionsMergeStrategy extends AbstractInheritFromHierarchyMe
     @Override
     protected void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
                                                    List<MergeableDescriptor> inheritedDescriptors, String folder,
-                                                   String primaryDescriptorUrl) {
-        String primaryDescriptorFilename = FilenameUtils.getName(primaryDescriptorUrl);
+                                                   String mainDescriptorUrl, Document mainDescriptorDom) {
+        String primaryDescriptorFilename = FilenameUtils.getName(mainDescriptorUrl);
         String inheritedDescriptorUrl = folder + '/' + primaryDescriptorFilename;
 
         // Avoid adding the primary descriptor twice.
-        if (!inheritedDescriptorUrl.equals(primaryDescriptorUrl)) {
+        if (!inheritedDescriptorUrl.equals(mainDescriptorUrl)) {
             inheritedDescriptors.add(new MergeableDescriptor(inheritedDescriptorUrl, true));
         }
     }
