@@ -29,6 +29,13 @@
         <property name="regularMergeStrategy" ref="crafter.inheritLevelsMergeStrategy"/>
     </bean>
 
+    <bean id="crafter.explicitParentMergeStrategy"
+          class="org.craftercms.core.xml.mergers.impl.strategies.ExplicitParentMergeStrategy">
+        <property name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
+        <property name="parentDescriptorElementXPathQuery"
+                  value="${crafter.core.merger.strategy.explicitParent.parentDescriptor.element.xpathQuery}"/>
+    </bean>
+
     <!-- Merge Strategy Resolvers -->
 
     <bean id="crafter.metaDataMergeStrategyResolver"
@@ -42,6 +49,8 @@
                        value-ref="crafter.inheritLevelsMergeStrategy"/>
                 <entry key="${crafter.core.merger.strategy.element.value.contentBundle}"
                        value-ref="crafter.contentBundleMergeStrategy"/>
+                <entry key="${crafter.core.merger.strategy.element.value.explicitParent}"
+                       value-ref="crafter.explicitParentMergeStrategy"/>
             </map>
         </property>
     </bean>

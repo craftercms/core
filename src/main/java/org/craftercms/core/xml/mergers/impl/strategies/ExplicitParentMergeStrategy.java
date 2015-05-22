@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Required;
  *
  * @author avasquez
  */
-public class ExplicitInheritMergeStrategy implements DescriptorMergeStrategy {
+public class ExplicitParentMergeStrategy implements DescriptorMergeStrategy {
 
     private DescriptorMergeStrategyResolver mergeStrategyResolver;
     private String parentDescriptorElementXPathQuery;

@@ -24,11 +24,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit tests for {@link ExplicitInheritMergeStrategy}.
+ * Unit tests for {@link ExplicitParentMergeStrategy}.
  *
  * @author avasquez
  */
-public class ExplicitInheritMergeStrategyTest {
+public class ExplicitParentMergeStrategyTest {
 
     private static final String LEVEL_DESCRIPTOR_URL = "/crafter-level-descriptor.level.xml";
     private static final String PARENT_DESCRIPTOR_URL = "/parent.xml";
@@ -38,7 +38,7 @@ public class ExplicitInheritMergeStrategyTest {
 
     private Context context;
     private Document descriptorDom;
-    private ExplicitInheritMergeStrategy strategy;
+    private ExplicitParentMergeStrategy strategy;
 
     @Before
     public void setUp() throws Exception {
@@ -91,7 +91,7 @@ public class ExplicitInheritMergeStrategyTest {
         when(mergeStrategyResolver.getStrategy(eq(PARENT_DESCRIPTOR_URL), any(Document.class)))
             .thenReturn(parentStrategy);
 
-        strategy = new ExplicitInheritMergeStrategy();
+        strategy = new ExplicitParentMergeStrategy();
         strategy.setMergeStrategyResolver(mergeStrategyResolver);
         strategy.setParentDescriptorElementXPathQuery(PARENT_DESCRIPTOR_ELEM_XPATH_QUERY);
     }
