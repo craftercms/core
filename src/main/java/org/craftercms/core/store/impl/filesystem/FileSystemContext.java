@@ -16,14 +16,14 @@
  */
 package org.craftercms.core.store.impl.filesystem;
 
-import org.craftercms.core.service.Context;
+import org.craftercms.core.service.ContextImpl;
 
 /**
  * Extension of context that adds properties used by the {@link FileSystemContentStoreAdapter}.
  *
  * @author Alfonso Vásquez
  */
-public class FileSystemContext extends Context {
+public class FileSystemContext extends ContextImpl {
 
     private FileSystemFile rootFolder;
 

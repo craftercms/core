@@ -363,7 +363,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                 processedChildren = doFilter(processedChildren, filter, false);
             }
 
-            Collections.sort(processedChildren, CompareByItemUrlComparator.instance);
+            Collections.sort(processedChildren, CompareByItemNameComparator.instance);
 
             for (Item child : processedChildren) {
                 dependencyKeys.add(child.getKey());
@@ -531,18 +531,18 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     }
 
     /**
-     * {@link Comparator} implementation that compares to {@link Item}s by comparing their urls.
+     * {@link Comparator} implementation that compares to {@link Item}s by comparing their names.
      */
-    private static class CompareByItemUrlComparator implements Comparator<Item> {
+    private static class CompareByItemNameComparator implements Comparator<Item> {
 
-        public static final CompareByItemUrlComparator instance = new CompareByItemUrlComparator();
+        public static final CompareByItemNameComparator instance = new CompareByItemNameComparator();
 
-        private CompareByItemUrlComparator() {
+        private CompareByItemNameComparator() {
         }
 
         @Override
         public int compare(Item item1, Item item2) {
-            return item1.getUrl().compareTo(item2.getUrl());
+            return item1.getName().compareTo(item2.getName());
         }
 
     }
