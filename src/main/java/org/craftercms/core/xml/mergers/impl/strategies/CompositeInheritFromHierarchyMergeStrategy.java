@@ -21,6 +21,7 @@ import java.util.List;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
+import org.dom4j.Document;
 
 /**
  * Implementation of {@link AbstractInheritFromHierarchyMergeStrategy} that delegates to several other
@@ -41,9 +42,10 @@ public class CompositeInheritFromHierarchyMergeStrategy extends AbstractInheritF
     @Override
     protected void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
                                                    List<MergeableDescriptor> inheritedDescriptors, String folder,
-                                                   String primaryDescriptorUrl) {
+                                                   String mainDescriptorUrl, Document mainDescriptorDom) {
         for (AbstractInheritFromHierarchyMergeStrategy strategy : strategies) {
-            strategy.addInheritedDescriptorsInFolder(context, cachingOptions, inheritedDescriptors, folder, primaryDescriptorUrl);
+            strategy.addInheritedDescriptorsInFolder(context, cachingOptions, inheritedDescriptors, folder,
+                                                     mainDescriptorUrl, mainDescriptorDom);
         }
     }
 

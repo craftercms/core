@@ -45,7 +45,6 @@ public class UrlTransformationEngineImplTest {
 
     private static final String URL = "/index.html";
     private static final String TRANSFORMED_URL = "/index.xml?" + DEFAULT_DEBUG_URL_PARAM + "=true";
-
     private static final String TRANSFORMER_NAME = "mainPipeline";
 
     @Autowired

@@ -31,11 +31,12 @@ public interface DescriptorMergeStrategyResolver {
      * Returns a {@link DescriptorMergeStrategy} for a given descriptor.
      *
      * @param descriptorUrl the URL that identifies the descriptor
-     * @param descriptorDom the XML DOM of the descriptor (optional)
+     * @param descriptorDom the XML DOM of the descriptor
+     *
      * @return the {@link DescriptorMergeStrategy} for the descriptor.
-     * @throws org.craftercms.core.exception.CrafterException
-     *          if an error occurs while resolving the strategy
+     *
+     * @throws CrafterException if an error occurs while resolving the strategy
      */
-    public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) throws CrafterException;
+    DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) throws CrafterException;
 
 }

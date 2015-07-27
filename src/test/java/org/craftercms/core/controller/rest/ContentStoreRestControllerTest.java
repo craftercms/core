@@ -25,6 +25,7 @@ import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.service.ContentStoreService;
 import org.craftercms.core.service.Context;
+import org.craftercms.core.service.ContextImpl;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.service.Tree;
 import org.craftercms.core.store.ContentStoreAdapter;
@@ -219,8 +220,8 @@ public class ContentStoreRestControllerTest {
     private void setUpTestContext() {
         ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
 
-        context = new Context("0", storeAdapter, "http://localhost:8080", "/", DEFAULT_CACHE_ON,
-                              DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
+        context = new ContextImpl("0", storeAdapter, "http://localhost:8080", "/", DEFAULT_CACHE_ON,
+                                  DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
     }
 
     private void setUpTestRequest() {

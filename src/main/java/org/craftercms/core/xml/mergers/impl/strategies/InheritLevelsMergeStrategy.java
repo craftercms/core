@@ -21,6 +21,7 @@ import java.util.List;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
+import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
@@ -42,7 +43,7 @@ public class InheritLevelsMergeStrategy extends AbstractInheritFromHierarchyMerg
     @Override
     protected void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
                                                    List<MergeableDescriptor> inheritedDescriptors, String folder,
-                                                   String primaryDescriptorUrl) {
+                                                   String mainDescriptorUrl, Document mainDescriptorDom) {
         inheritedDescriptors.add(new MergeableDescriptor(folder + '/' + levelDescriptorFileName, true));
     }
 
