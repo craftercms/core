@@ -103,7 +103,7 @@ public class AddSchemeAndDomainAndServerPortUrlTransformerTest {
     }
 
     private void setCurrentRequest(HttpServletRequest request) {
-        RequestContext.setCurrent(new RequestContext(request, null));
+        RequestContext.setCurrent(new RequestContext(request, null, null));
     }
 
     private void removeCurrentRequest() {

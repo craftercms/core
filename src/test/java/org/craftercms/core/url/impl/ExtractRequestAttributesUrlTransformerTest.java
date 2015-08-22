@@ -60,7 +60,7 @@ public class ExtractRequestAttributesUrlTransformerTest {
     }
 
     private void setUpTestRequestAttributes() {
-        RequestContext.setCurrent(new RequestContext(new MockHttpServletRequest(), null));
+        RequestContext.setCurrent(new RequestContext(new MockHttpServletRequest(), null, null));
     }
 
     private void tearDownTestRequestAttributes() {
