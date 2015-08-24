@@ -16,13 +16,13 @@
  */
 package org.craftercms.core.util;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Sumer Jabri
@@ -76,17 +76,23 @@ public class UrlUtils {
     }
 
     public static final String appendUrl(String mainUrl, String urlToAppend) {
-        StringBuilder joinedUrl = new StringBuilder(mainUrl);
+        if (StringUtils.isEmpty(mainUrl)) {
+            return urlToAppend;
+        } else if (StringUtils.isEmpty(urlToAppend)) {
+            return mainUrl;
+        } else {
+            StringBuilder joinedUrl = new StringBuilder(mainUrl);
 
-        if (mainUrl.endsWith("/") && urlToAppend.startsWith("/")) {
-            urlToAppend = StringUtils.stripStart(urlToAppend, "/");
-        } else if (!mainUrl.endsWith("/") && !urlToAppend.startsWith("/")) {
-            joinedUrl.append("/");
+            if (mainUrl.endsWith("/") && urlToAppend.startsWith("/")) {
+                urlToAppend = StringUtils.stripStart(urlToAppend, "/");
+            } else if (!mainUrl.endsWith("/") && !urlToAppend.startsWith("/")) {
+                joinedUrl.append("/");
+            }
+
+            joinedUrl.append(urlToAppend);
+
+            return joinedUrl.toString();
         }
-
-        joinedUrl.append(urlToAppend);
-
-        return joinedUrl.toString();
     }
 
 }

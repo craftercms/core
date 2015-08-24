@@ -35,6 +35,6 @@ public interface DescriptorMerger {
      * @return the result of the merging
      * @throws XmlMergeException
      */
-    public Document merge(List<Document> descriptorsToMerge) throws XmlMergeException;
+    Document merge(List<Document> descriptorsToMerge) throws XmlMergeException;
 
 }
