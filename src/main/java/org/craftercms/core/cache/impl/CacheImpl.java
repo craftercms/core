@@ -16,6 +16,11 @@
  */
 package org.craftercms.core.cache.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,11 +33,6 @@ import org.craftercms.core.util.cache.CachingAwareObject;
 import org.craftercms.core.util.generators.TimestampGenerator;
 import org.craftercms.core.util.generators.impl.IncrementalTimestampGenerator;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * {@link org.craftercms.core.cache.Cache} that implements common functionality, such as logging,
@@ -396,7 +396,7 @@ public class CacheImpl implements Cache {
                             } else {
                                 if (logger.isDebugEnabled()) {
                                     logger.debug(item + " was removed before it could be checked for " +
-                                        "expiration/refresh");
+                                                 "expiration/refresh");
                                 }
                             }
                         }

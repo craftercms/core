@@ -17,15 +17,7 @@
         <property name="storeService" ref="crafter.contentStoreService"/>
     </bean>
 
-    <bean id="crafter.coreObjectMapper" class="org.craftercms.commons.jackson.CustomSerializationObjectMapper">
-        <property name="serializers">
-            <list>
-                <bean class="org.craftercms.core.util.json.jackson.Dom4jDocumentJsonSerializer"/>
-            </list>
-        </property>
-    </bean>
-
-    <!-- Main view resolver for REST services -->
+    <!-- Main REST view resolver -->
 
     <bean id="crafter.mainViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <property name="defaultViews">
@@ -36,7 +28,15 @@
         </property>
     </bean>
 
-    <!-- JSON REST View -->
+    <!-- JSON -->
+
+    <bean id="crafter.coreObjectMapper" class="org.craftercms.commons.jackson.CustomSerializationObjectMapper">
+        <property name="serializers">
+            <list>
+                <bean class="org.craftercms.core.util.json.jackson.Dom4jDocumentJsonSerializer"/>
+            </list>
+        </property>
+    </bean>
 
     <bean id="crafter.jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
         <property name="objectMapper" ref="crafter.coreObjectMapper"/>
@@ -46,18 +46,14 @@
                   value="${crafter.core.rest.views.json.renderSingleAttributeAsRootObject}"/>
     </bean>
 
-    <!-- XML REST View -->
+    <!-- XML -->
+
+    <bean id="crafter.xmlMarshaller" class="org.craftercms.core.util.xml.marshalling.xstream.CrafterXStreamMarshaller">
+        <property name="unsupportedClasses" value="org.springframework.validation.BindingResult"/>
+    </bean>
 
     <bean id="crafter.xmlView" class="org.springframework.web.servlet.view.xml.MarshallingView">
-        <constructor-arg>
-            <bean class="org.craftercms.core.util.xml.marshalling.xstream.CrafterXStreamMarshaller">
-                <property name="unsupportedClasses">
-                    <array>
-                        <value>org.springframework.validation.BindingResult</value>
-                    </array>
-                </property>
-            </bean>
-        </constructor-arg>
+        <constructor-arg ref="crafter.xmlMarshaller"/>
     </bean>
 
 </beans>
