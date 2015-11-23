@@ -26,7 +26,7 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
 
 /**
- * Class description goes HERE
+ * {@link UrlTransformer} implementation that basically is a collection of other transformers.
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
