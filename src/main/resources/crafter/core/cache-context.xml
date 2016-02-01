@@ -31,6 +31,7 @@
     <bean id="crafter.cacheTickerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="crafter.cache"/>
         <property name="targetMethod" value="tick"/>
+        <property name="concurrent" value="false"/>
     </bean>
 
     <bean id="crafter.cacheTickerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">

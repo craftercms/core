@@ -70,7 +70,7 @@ public class CacheRefresherImpl implements CacheRefresher {
             try {
                 refreshItem(item, cache);
             } catch (Exception ex) {
-                logger.error("Refresh for " + item + " failed", ex);
+                logger.error("Refresh for " + getScopeAndKeyString(item) + " failed", ex);
             }
         }
     }
@@ -86,21 +86,25 @@ public class CacheRefresherImpl implements CacheRefresher {
         Object[] loaderParams = item.getLoaderParams();
 
         if (loader == null) {
-            throw new InternalCacheEngineException("No cache loader for " + item);
+            throw new InternalCacheEngineException("No cache loader for " + getScopeAndKeyString(item));
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Refreshing " + item);
+            logger.debug("Refreshing " + getScopeAndKeyString(item));
         }
 
         Object newValue = loader.load(loaderParams);
         if (newValue != null) {
             cache.put(item.getScope(), item.getKey(), newValue, item.getDependencyKeys(), item.getTicksToExpire(),
-                item.getTicksToRefresh(), item.getLoader(), item.getLoaderParams());
+                      item.getTicksToRefresh(), item.getLoader(), item.getLoaderParams());
         } else {
             // If newValue returned is null, remove the item from the cache
             cache.remove(item.getScope(), item.getKey());
         }
+    }
+
+    protected String getScopeAndKeyString(CacheItem item) {
+        return "[scope='" + item.getScope() + "', key=" + item.getKey() + "]";
     }
 
 }

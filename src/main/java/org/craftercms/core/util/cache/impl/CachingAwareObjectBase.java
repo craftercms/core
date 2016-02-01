@@ -16,6 +16,8 @@
  */
 package org.craftercms.core.util.cache.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,16 +52,19 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
         }
     }
 
+    @JsonIgnore
     @Override
     public String getScope() {
         return scope;
     }
 
+    @JsonIgnore
     @Override
     public void setScope(String scope) {
         this.scope = scope;
     }
 
+    @JsonIgnore
     @Override
     public Object getKey() {
         return key;
@@ -70,11 +75,13 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
         this.key = key;
     }
 
+    @JsonIgnore
     @Override
     public List<Object> getDependencyKeys() {
         return dependencyKeys;
     }
 
+    @JsonIgnore
     @Override
     public void setDependencyKeys(List<Object> dependencyKeys) {
         this.dependencyKeys = dependencyKeys;
@@ -116,11 +123,13 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
         }
     }
 
+    @JsonIgnore
     @Override
     public Long getCachingTime() {
         return cachingTime;
     }
 
+    @JsonIgnore
     @Override
     public void setCachingTime(Long cachingTime) {
         this.cachingTime = cachingTime;
