@@ -16,7 +16,7 @@
  */
 package org.craftercms.core.controller.rest;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
@@ -68,7 +68,10 @@ public class RestControllerBase {
     }
 
     protected Map<String, Object> createSingletonModel(String attributeName, Object attributeValue) {
-        return Collections.singletonMap(attributeName, attributeValue);
+        Map<String, Object> model = new HashMap<>(1);
+        model.put(attributeName, attributeValue);
+
+        return model;
     }
 
 }
