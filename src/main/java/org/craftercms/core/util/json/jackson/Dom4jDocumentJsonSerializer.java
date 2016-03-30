@@ -100,7 +100,7 @@ public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
                     }
 
                     jsonGenerator.writeEndArray();
-                } else {
+                } else if (textContent.size() == 1) {
                     jsonGenerator.writeStringField(TEXT_JSON_KEY, textContent.get(0));
                 }
             }
