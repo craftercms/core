@@ -16,20 +16,26 @@
  */
 package org.craftercms.core.xml.mergers.impl;
 
-import org.craftercms.core.xml.mergers.impl.cues.impl.*;
+import java.io.StringReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
+import org.craftercms.core.xml.mergers.impl.cues.impl.ElementMergeMatcherImpl;
+import org.craftercms.core.xml.mergers.impl.cues.impl.MergeCueResolverImpl;
+import org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCue;
+import org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest;
+import org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue;
+import org.craftercms.core.xml.mergers.impl.cues.impl.UseParentIfNotEmptyMergeCue;
+import org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.QName;
 import org.dom4j.io.SAXReader;
 import org.junit.Before;
 import org.junit.Test;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
-
-import java.io.StringReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -43,13 +49,13 @@ public class DescriptorMergerImplTest {
     
     public static final String OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME = "override-parent";
     public static final String DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME = "disallow-override";
-    public static final String USE_PARENT_IF_AVAILABLE_MERGE_CUE_ATTR_NAME = "use-parent-if-available";
+    public static final String USE_PARENT_MERGE_CUE_ATTR_NAME = "use-parent";
     public static final String MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME = "merge-with-parent";
     public static final String MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME = "merge-with-child";
 
     public static final int OVERRIDE_PARENT_MERGE_CUE_PRIORITY = 5;
     public static final int DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY = 5;
-    public static final int USE_PARENT_IF_AVAILABLE_MERGE_CUE_PRIORITY = 5;
+    public static final int USE_PARENT_MERGE_CUE_PRIORITY = 5;
     public static final int MERGE_WITH_PARENT_MERGE_CUE_PRIORITY = 5;
     public static final int MERGE_WITH_CHILD_MERGE_CUE_PRIORITY = 5;
     
@@ -58,43 +64,49 @@ public class DescriptorMergerImplTest {
 
     private static final String DESCRIPTOR1_XML =
             "<root>" +
-                    "<element id=\"1\">a</element>" +
-                    "<element id=\"2\" disallow-override=\"true\">b</element>" +
-                    "<element id=\"3\">c</element>" +
-                    "<group id=\"4\">" +
-                        "<element id=\"5\">d</element>" +
-                    "</group>" +
-                    "<group id=\"6\" merge-with-child=\"true\" merge-with-child-order=\"after\">" +
-                        "<element id=\"7\">e</element>" +
-                    "</group>" +
+                "<element id=\"1\">a</element>" +
+                "<element id=\"2\" disallow-override=\"true\">b</element>" +
+                "<element id=\"3\">c</element>" +
+                "<group id=\"4\">" +
+                    "<element id=\"5\">d</element>" +
+                "</group>" +
+                "<group id=\"6\" merge-with-child=\"true\" merge-with-child-order=\"after\">" +
+                    "<element id=\"7\">e</element>" +
+                "</group>" +
+                "<element id=\"10\">f</element>" +
+                "<element id=\"11\"/>" +
             "</root>";
 
     private static final String DESCRIPTOR2_XML =
             "<root>" +
-                    "<element id=\"1\" override-parent=\"true\">f</element>" +
-                    "<element id=\"2\">g</element>" +
-                    "<element id=\"3\" use-parent-if-available=\"true\">h</element>" +
-                    "<group id=\"4\" merge-with-parent=\"true\" merge-with-parent-order=\"before\">" +
-                        "<element id=\"8\">i</element>" +
-                    "</group>" +
-                    "<group id=\"6\">" +
-                        "<element id=\"9\">j</element>" +
-                    "</group>" +
+                "<element id=\"1\" override-parent=\"true\">f</element>" +
+                "<element id=\"2\">g</element>" +
+                "<element id=\"3\" use-parent=\"true\">h</element>" +
+                "<group id=\"4\" merge-with-parent=\"true\" merge-with-parent-order=\"before\">" +
+                    "<element id=\"8\">i</element>" +
+                "</group>" +
+                "<group id=\"6\">" +
+                    "<element id=\"9\">j</element>" +
+                "</group>" +
+                "<element id=\"10\"/>" +
+                "<element id=\"11\">g</element>" +
             "</root>";
 
     private static final String MERGED_XML =
             "<root>" +
-                    "<element id=\"1\">f</element>" +
-                    "<element id=\"2\">b</element>" +
-                    "<element id=\"3\">c</element>" +
-                    "<group id=\"4\">" +
-                        "<element id=\"8\">i</element>" +
-                        "<element id=\"5\">d</element>" +
-                    "</group>" +
-                    "<group id=\"6\">" +
-                        "<element id=\"7\">e</element>" +
-                        "<element id=\"9\">j</element>" +
-                    "</group>" +
+                "<element id=\"1\">f</element>" +
+                "<element id=\"2\">b</element>" +
+                "<element id=\"3\">c</element>" +
+                "<group id=\"4\">" +
+                    "<element id=\"8\">i</element>" +
+                    "<element id=\"5\">d</element>" +
+                "</group>" +
+                "<group id=\"6\">" +
+                    "<element id=\"7\">e</element>" +
+                    "<element id=\"9\">j</element>" +
+                "</group>" +
+                "<element id=\"10\">f</element>" +
+                "<element id=\"11\">g</element>" +
             "</root>";
 
     private DescriptorMergerImpl merger;
@@ -126,7 +138,7 @@ public class DescriptorMergerImplTest {
         disallowOverrideMergeCue.setPriority(DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY);
 
         UseParentMergeCue useParentIfAvailableMergeCue = new UseParentMergeCue();
-        useParentIfAvailableMergeCue.setPriority(USE_PARENT_IF_AVAILABLE_MERGE_CUE_PRIORITY);
+        useParentIfAvailableMergeCue.setPriority(USE_PARENT_MERGE_CUE_PRIORITY);
 
         MergeParentAndChildMergeCue mergeWithParentMergeCue = new MergeParentAndChildMergeCue();
         mergeWithParentMergeCue.setPriority(MERGE_WITH_PARENT_MERGE_CUE_PRIORITY);
@@ -142,10 +154,10 @@ public class DescriptorMergerImplTest {
         mergeWithChildMergeCue.setMergeOrderParamName(MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME);
         mergeWithChildMergeCue.setDefaultMergeOrder(MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER);
 
-        UseChildMergeCue defaultParentMergeCue = new UseChildMergeCue();
+        UseParentIfNotEmptyMergeCue defaultParentMergeCue = new UseParentIfNotEmptyMergeCue();
         defaultParentMergeCue.setPriority(DEFAULT_PARENT_MERGE_CUE_PRIORITY);
 
-        UseChildMergeCue defaultChildMergeCue = new UseChildMergeCue();
+        UseParentIfNotEmptyMergeCue defaultChildMergeCue = new UseParentIfNotEmptyMergeCue();
         defaultParentMergeCue.setPriority(DEFAULT_CHILD_MERGE_CUE_PRIORITY);
 
         Map<QName, MergeCue> parentMergeCues = new HashMap<QName, MergeCue>(2);
@@ -154,7 +166,7 @@ public class DescriptorMergerImplTest {
 
         Map<QName, MergeCue> childMergeCues = new HashMap<QName, MergeCue>(3);
         childMergeCues.put(new QName(OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME), overrideParentMergeCue);
-        childMergeCues.put(new QName(USE_PARENT_IF_AVAILABLE_MERGE_CUE_ATTR_NAME), useParentIfAvailableMergeCue);
+        childMergeCues.put(new QName(USE_PARENT_MERGE_CUE_ATTR_NAME), useParentIfAvailableMergeCue);
         childMergeCues.put(new QName(MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME), mergeWithParentMergeCue);
 
         mergeCueResolver.setParentMergeCues(parentMergeCues);

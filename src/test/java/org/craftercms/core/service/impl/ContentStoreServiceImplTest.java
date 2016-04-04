@@ -119,18 +119,18 @@ public class ContentStoreServiceImplTest {
     private static final String CONTENT_FR_ES_DESCRIPTOR_PATH =
         CONTENT_FR_ES_FOLDER_PATH + "/" + CONTENT_FR_ES_DESCRIPTOR_NAME;
 
-    private static final String FIRST_QUOTE_EN = "I haven't failed. I've just found 10,000 ways that won't work. -- " +
-                                                 "Thomas Edison";
-    private static final String SECOND_QUOTE_EN = "Don't hate, it's too big a burden to bear. -- Martin Luther King, " +
-                                                  "Jr.";
+    private static final String FIRST_QUOTE_EN =
+        "I haven't failed. I've just found 10,000 ways that won't work. -- Thomas Edison";
+    private static final String SECOND_QUOTE_EN =
+        "Don't hate, it's too big a burden to bear. -- Martin Luther King, Jr.";
     private static final String THIRD_QUOTE_EN =
-        "If I have seen a little further it is by standing on the shoulders of giants. " + "-- Issac Newton";
-    private static final String SECOND_QUOTE_FR = "Ne haïssez pas, c'est un fardeau trop lourd à supporter. -- Martin" +
-                                                  " Luther King, Jr.";
+        "If I have seen a little further it is by standing on the shoulders of giants. -- Issac Newton";
+    private static final String SECOND_QUOTE_FR =
+        "Ne haïssez pas, c'est un fardeau trop lourd à supporter. -- Martin Luther King, Jr.";
     private static final String THIRD_QUOTE_FR =
-        "Si j'ai vu un peu plus loin c'est en me tenant sur ​​les épaules de géants. " + "-- Issac Newton";
+        "Si j'ai vu un peu plus loin c'est en me tenant sur ​​les épaules de géants. -- Issac Newton";
     private static final String THIRD_QUOTE_ES =
-        "Si he visto un poco más lejos es porque lo hecho parado sobre los hombros de gigantes. " + "-- Issac Newton";
+        "Si he visto un poco más lejos es porque lo hecho parado sobre los hombros de gigantes. -- Issac Newton";
 
     @Autowired
     private ContentStoreService contentStoreService;
@@ -268,8 +268,8 @@ public class ContentStoreServiceImplTest {
         // Sleep so that we get a different caching time in the next call if the caching is being done wrong.
         Thread.sleep(100);
 
-        CachingAwareList<Item> cachedChildren = (CachingAwareList<Item>)contentStoreService.getChildren(
-            context, ROOT_FOLDER_PATH);
+        CachingAwareList<Item> cachedChildren = (CachingAwareList<Item>)contentStoreService.getChildren(context,
+                                                                                                        ROOT_FOLDER_PATH);
 
         assertEquals(children, cachedChildren);
         assertListCaching(children, cachedChildren);
@@ -304,9 +304,8 @@ public class ContentStoreServiceImplTest {
         assertListCaching(children, cachedChildren);
 
         children = (CachingAwareList<Item>)contentStoreService.findChildren(context, DEFAULT_CACHING_OPTIONS,
-                                                                            INVALID_PATH,
-                                                                            OnlyNonDescriptorsFilter.instance,
-                                                                            extractorPipeline);
+                                                                            INVALID_PATH, OnlyNonDescriptorsFilter
+                                                                                .instance, extractorPipeline);
         assertNull(children);
 
         try {
@@ -380,8 +379,8 @@ public class ContentStoreServiceImplTest {
         assertNull(tree);
 
         try {
-            contentStoreService.getTree(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, 1,
-                                        OnlyNonDescriptorsFilter.instance, extractorPipeline);
+            contentStoreService.getTree(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, 1, OnlyNonDescriptorsFilter
+                .instance, extractorPipeline);
             fail("Expected " + PathNotFoundException.class.getName());
         } catch (PathNotFoundException e) {
         }

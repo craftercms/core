@@ -131,10 +131,11 @@
         </property>
     </bean>
 
-    <bean id="useParentIfAvailableMergeCue"
+    <bean id="useParentMergeCue"
           class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
         <property name="priority">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_IF_AVAILABLE_MERGE_CUE_PRIORITY"/>
+            <util:constant
+                    static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_MERGE_CUE_PRIORITY"/>
         </property>
     </bean>
 
@@ -178,9 +179,9 @@
                 </entry>
                 <entry>
                     <key>
-                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_IF_AVAILABLE_MERGE_CUE_ATTR_NAME"/>
+                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_MERGE_CUE_ATTR_NAME"/>
                     </key>
-                    <ref local="useParentIfAvailableMergeCue"/>
+                    <ref local="useParentMergeCue"/>
                 </entry>
                 <entry>
                     <key>
@@ -191,16 +192,16 @@
             </map>
         </property>
         <property name="defaultParentMergeCue">
-            <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
+            <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentIfNotEmptyMergeCue">
                 <property name="priority">
-                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_CHILD_MERGE_CUE_PRIORITY"/>
+                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_PARENT_MERGE_CUE_PRIORITY"/>
                 </property>
             </bean>
         </property>
         <property name="defaultChildMergeCue">
-            <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
+            <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildIfNotEmptyMergeCue">
                 <property name="priority">
-                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_PARENT_MERGE_CUE_PRIORITY"/>
+                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_CHILD_MERGE_CUE_PRIORITY"/>
                 </property>
             </bean>
         </property>

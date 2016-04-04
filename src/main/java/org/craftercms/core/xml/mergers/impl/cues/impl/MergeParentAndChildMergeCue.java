@@ -16,6 +16,10 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.xml.mergers.impl.cues.ElementMergeMatcher;
@@ -24,10 +28,6 @@ import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Class description goes HERE
@@ -99,7 +99,8 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
                                 elementsMerged = true;
                             } else {
                                 throw new XmlMergeException("No merge cue was resolved for matching elements " +
-                                    parentElement + " (parent) and " + childElement + " (child)");
+                                                            parentElement + " (parent) and " + childElement +
+                                                            " (child)");
                             }
                         }
                     }
