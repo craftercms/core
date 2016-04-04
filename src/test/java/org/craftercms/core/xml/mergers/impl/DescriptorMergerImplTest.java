@@ -27,6 +27,7 @@ import org.craftercms.core.xml.mergers.impl.cues.impl.ElementMergeMatcherImpl;
 import org.craftercms.core.xml.mergers.impl.cues.impl.MergeCueResolverImpl;
 import org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCue;
 import org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest;
+import org.craftercms.core.xml.mergers.impl.cues.impl.UseChildIfNotEmptyMergeCue;
 import org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue;
 import org.craftercms.core.xml.mergers.impl.cues.impl.UseParentIfNotEmptyMergeCue;
 import org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue;
@@ -157,7 +158,7 @@ public class DescriptorMergerImplTest {
         UseParentIfNotEmptyMergeCue defaultParentMergeCue = new UseParentIfNotEmptyMergeCue();
         defaultParentMergeCue.setPriority(DEFAULT_PARENT_MERGE_CUE_PRIORITY);
 
-        UseParentIfNotEmptyMergeCue defaultChildMergeCue = new UseParentIfNotEmptyMergeCue();
+        UseChildIfNotEmptyMergeCue defaultChildMergeCue = new UseChildIfNotEmptyMergeCue();
         defaultParentMergeCue.setPriority(DEFAULT_CHILD_MERGE_CUE_PRIORITY);
 
         Map<QName, MergeCue> parentMergeCues = new HashMap<QName, MergeCue>(2);
