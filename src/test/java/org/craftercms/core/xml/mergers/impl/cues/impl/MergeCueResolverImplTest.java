@@ -16,7 +16,12 @@
  */
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
-import org.craftercms.core.xml.mergers.impl.cues.impl.MergeCueResolverImpl;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
+import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -24,14 +29,10 @@ import org.dom4j.QName;
 import org.dom4j.io.SAXReader;
 import org.junit.Before;
 import org.junit.Test;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
-import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
 
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -44,18 +45,18 @@ public class MergeCueResolverImplTest {
 
     private static final String PARENT_XML =
             "<root>" +
-                    "<element1 hi-priority-parent-merge-cue=\"true\" hi-priority-parent-merge-cue-param=\"hi-parent\"/>" +
-                    "<element2 lo-priority-parent-merge-cue=\"true\" lo-priority-parent-merge-cue-param=\"lo-parent\"/>" +
-                    "<element3 hi-priority-parent-merge-cue=\"true\"/>" +
-                    "<element4/>" +
+                "<element1 hp=\"true\" hp-param=\"hi-parent\">value</element1>" +
+                "<element2 lp=\"true\" lp-param=\"lo-parent\">value</element2>" +
+                "<element3 hp=\"true\">value</element3>" +
+                "<element4>value</element4>" +
             "</root>";
 
     private static final String CHILD_XML =
             "<root>" +
-                    "<element1 lo-priority-child-merge-cue=\"true\" lo-priority-child-merge-cue-param=\"lo-child\"/>" +
-                    "<element2 hi-priority-child-merge-cue=\"true\" hi-priority-child-merge-cue-param=\"hi-child\"/>" +
-                    "<element3/>" +
-                    "<element4 hi-priority-child-merge-cue=\"true\"/>" +
+                "<element1 lp=\"true\" lp-param=\"lo-child\">value</element1>" +
+                "<element2 hp=\"true\" hp-param=\"hi-child\">value</element2>" +
+                "<element3>value</element3>" +
+                "<element4 hp=\"true\">value</element4>" +
             "</root>";
 
     private MergeCueResolverImpl resolver;
@@ -129,8 +130,8 @@ public class MergeCueResolverImplTest {
     }
 
     private void setUpTestMergeCueParams() {
-        hiPriorityParentMergeCueParams = new HashMap<String, String>(1);
-        hiPriorityChildMergeCueParams = new HashMap<String, String>(1);
+        hiPriorityParentMergeCueParams = new HashMap<>(1);
+        hiPriorityChildMergeCueParams = new HashMap<>(1);
 
         hiPriorityParentMergeCueParams.put("param", "hi-parent");
         hiPriorityChildMergeCueParams.put("param", "hi-child");
@@ -138,12 +139,12 @@ public class MergeCueResolverImplTest {
 
     private void setUpTestResolver() {
         Map<QName, MergeCue> parentMergeCues = new HashMap<QName, MergeCue>(2);
-        parentMergeCues.put(new QName("hi-priority-parent-merge-cue"), hiPriorityParentMergeCue);
-        parentMergeCues.put(new QName("lo-priority-parent-merge-cue"), loPriorityParentMergeCue);
+        parentMergeCues.put(new QName("hp"), hiPriorityParentMergeCue);
+        parentMergeCues.put(new QName("lp"), loPriorityParentMergeCue);
 
         Map<QName, MergeCue> childMergeCues = new HashMap<QName, MergeCue>(2);
-        childMergeCues.put(new QName("hi-priority-child-merge-cue"), hiPriorityChildMergeCue);
-        childMergeCues.put(new QName("lo-priority-child-merge-cue"), loPriorityChildMergeCue);
+        childMergeCues.put(new QName("hp"), hiPriorityChildMergeCue);
+        childMergeCues.put(new QName("lp"), loPriorityChildMergeCue);
 
         resolver = new MergeCueResolverImpl();
         resolver.setParentMergeCues(parentMergeCues);

@@ -91,9 +91,9 @@
         <property name="priority" value="${crafter.core.merger.cues.parent.disallowOverride.priority}"/>
     </bean>
 
-    <bean id="crafter.useParentIfAvailableMergeCue"
+    <bean id="crafter.useParentMergeCue"
           class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
-        <property name="priority" value="${crafter.core.merger.cues.child.useParentIfAvailable.priority}"/>
+        <property name="priority" value="${crafter.core.merger.cues.child.useParent.priority}"/>
     </bean>
 
     <bean id="crafter.mergeWithParentMergeCue" parent="crafter.abstractMergeParentAndChildMergeCue">
@@ -105,12 +105,12 @@
     </bean>
     
     <bean id="crafter.defaultParentMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
+          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentIfNotEmptyMergeCue">
         <property name="priority" value="${crafter.core.merger.cues.parent.default.priority}"/>
     </bean>
 
     <bean id="crafter.defaultChildMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
+          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildIfNotEmptyMergeCue">
         <property name="priority" value="${crafter.core.merger.cues.child.default.priority}"/>
     </bean>
 
@@ -128,8 +128,8 @@
             <map>
                 <entry key="${crafter.core.merger.cues.child.overrideParent.attribute.name}"
                        value-ref="crafter.overrideParentMergeCue"/>
-                <entry key="${crafter.core.merger.cues.child.useParentIfAvailable.attribute.name}"
-                       value-ref="crafter.useParentIfAvailableMergeCue"/>
+                <entry key="${crafter.core.merger.cues.child.useParent.attribute.name}"
+                       value-ref="crafter.useParentMergeCue"/>
                 <entry key="${crafter.core.merger.cues.child.mergeWithParent.attribute.name}"
                        value-ref="crafter.mergeWithParentMergeCue"/>
             </map>
