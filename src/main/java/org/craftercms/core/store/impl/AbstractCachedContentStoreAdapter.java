@@ -32,7 +32,11 @@ import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * Class description goes HERE
+ * Abstract {@link ContentStoreAdapter} that provides caching to actual implementations. Subclasses just have to
+ * implement the {@code do*} methods to provide the cacheable objects. Caching works the following way: when an
+ * interface method is called, and there's no cached object associated to the parameter-based compound key, the do*
+ * method of the same name is called to execute the actual method code. The returned object is then cached with the
+ * compound key.
  *
  * @author Alfonso Vásquez
  */
@@ -43,20 +47,27 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
     public static final String CONST_KEY_ELEM_ITEMS = "contentStoreAdapter.items";
 
     protected CacheTemplate cacheTemplate;
+    protected CachingOptions defaultCachingOptions;
 
     @Required
     public void setCacheTemplate(CacheTemplate cacheTemplate) {
         this.cacheTemplate = cacheTemplate;
     }
 
+    public void setDefaultCachingOptions(CachingOptions defaultCachingOptions) {
+        this.defaultCachingOptions = defaultCachingOptions;
+    }
+
     @Override
-    public Content findContent(final Context context, final CachingOptions cachingOptions, final String path)
-        throws InvalidContextException, StoreException {
-        return cacheTemplate.getObject(context, cachingOptions, new Callback<Content>() {
+    public Content findContent(final Context context, final CachingOptions cachingOptions,
+                               final String path) throws InvalidContextException, StoreException {
+        final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+
+        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Content>() {
 
             @Override
             public Content execute() {
-                return doFindContent(context, cachingOptions, path);
+                return doFindContent(context, actualCachingOptions, path);
             }
 
             @Override
@@ -72,11 +83,13 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
     public Item findItem(final Context context, final CachingOptions cachingOptions, final String path,
                          final boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
         StoreException {
-        return cacheTemplate.getObject(context, cachingOptions, new Callback<Item>() {
+        final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+
+        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Item>() {
 
             @Override
             public Item execute() {
-                return doFindItem(context, cachingOptions, path, withDescriptor);
+                return doFindItem(context, actualCachingOptions, path, withDescriptor);
             }
 
             @Override
@@ -92,11 +105,13 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
     public List<Item> findItems(final Context context, final CachingOptions cachingOptions, final String path,
                                 final boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
         StoreException {
-        return cacheTemplate.getObject(context, cachingOptions, new Callback<List<Item>>() {
+        final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+
+        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<List<Item>>() {
 
             @Override
             public List<Item> execute() {
-                List<Item> items = doFindItems(context, cachingOptions, path, withDescriptor);
+                List<Item> items = doFindItems(context, actualCachingOptions, path, withDescriptor);
                 if (items != null) {
                     if (items instanceof CachingAwareList) {
                         return items;
@@ -117,15 +132,15 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
         }, context, path, withDescriptor, CONST_KEY_ELEM_ITEMS);
     }
 
-    protected abstract Content doFindContent(Context context, CachingOptions cachingOptions, String path)
-        throws InvalidContextException, StoreException;
+    protected abstract Content doFindContent(Context context, CachingOptions cachingOptions,
+                                             String path) throws InvalidContextException, StoreException;
 
     protected abstract Item doFindItem(Context context, CachingOptions cachingOptions, String path,
-                                       boolean withDescriptor)
-        throws InvalidContextException, XmlFileParseException, StoreException;
+                                       boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
+        StoreException;
 
     protected abstract List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path,
-                                              boolean withDescriptor)
-        throws InvalidContextException, XmlFileParseException, StoreException;
+                                              boolean withDescriptor) throws InvalidContextException,
+        XmlFileParseException, StoreException;
 
 }
