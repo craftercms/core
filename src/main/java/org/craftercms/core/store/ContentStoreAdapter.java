@@ -37,20 +37,20 @@ import org.craftercms.core.service.Item;
 public interface ContentStoreAdapter {
 
     Context createContext(String id, String storeServerUrl, String username, String password, String rootFolderPath,
-                          boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles)
-        throws StoreException, AuthenticationException;
+                          boolean cacheOn, int maxAllowedItemsInCache,
+                          boolean ignoreHiddenFiles) throws StoreException, AuthenticationException;
 
     void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException;
 
     boolean exists(Context context, String path) throws InvalidContextException, StoreException;
 
-    Content findContent(Context context, CachingOptions cachingOptions, String path)
-        throws InvalidContextException, StoreException;
+    Content findContent(Context context, CachingOptions cachingOptions,
+                        String path) throws InvalidContextException, StoreException;
 
-    Item findItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
-        throws InvalidContextException, XmlFileParseException, StoreException;
+    Item findItem(Context context, CachingOptions cachingOptions, String path,
+                  boolean withDescriptor) throws InvalidContextException, XmlFileParseException, StoreException;
 
-    List<Item> findItems(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
-        throws InvalidContextException, XmlFileParseException, StoreException;
+    List<Item> findItems(Context context, CachingOptions cachingOptions, String path,
+                         boolean withDescriptor) throws InvalidContextException, XmlFileParseException, StoreException;
 
 }
