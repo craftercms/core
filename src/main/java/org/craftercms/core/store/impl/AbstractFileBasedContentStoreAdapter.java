@@ -19,13 +19,14 @@ package org.craftercms.core.store.impl;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.exception.PathNotFoundException;
@@ -49,10 +50,19 @@ import org.springframework.beans.factory.annotation.Required;
  */
 public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCachedContentStoreAdapter {
 
-    private static final Log logger = LogFactory.getLog(AbstractFileBasedContentStoreAdapter.class);
+    public static final String DEFAULT_CHARSET = "UTF-8";
 
-    private String descriptorFileExtension;
-    private String metadataFileExtension;
+    protected String charset;
+    protected String descriptorFileExtension;
+    protected String metadataFileExtension;
+
+    public AbstractFileBasedContentStoreAdapter() {
+        charset = DEFAULT_CHARSET;
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
 
     @Required
     public void setDescriptorFileExtension(String descriptorFileExtension) {
@@ -126,14 +136,12 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
             if (descriptorFile != null) {
                 try {
                     InputStream fileInputStream = new BufferedInputStream(descriptorFile.getInputStream());
+                    Reader fileReader = new InputStreamReader(fileInputStream, charset);
+
                     try {
-                        item.setDescriptorDom(createXmlReader().read(fileInputStream));
+                        item.setDescriptorDom(createXmlReader().read(fileReader));
                     } finally {
-                        try {
-                            fileInputStream.close();
-                        } catch (IOException e) {
-                            logger.warn("Unable to close input stream for descriptor file at " + descriptorFile, e);
-                        }
+                        IOUtils.closeQuietly(fileReader);
                     }
                 } catch (IOException e) {
                     throw new StoreException("Unable to open input stream for descriptor file at " + descriptorFile, e);
