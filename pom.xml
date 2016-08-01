@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-core</artifactId>
-    <version>2.5.1-SNAPSHOT</version>
+    <version>2.5.1</version>
     <name>Core</name>
     <description>Core</description>
     <url>https://github.com/craftercms/core</url>
