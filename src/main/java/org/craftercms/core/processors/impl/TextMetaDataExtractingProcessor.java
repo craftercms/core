@@ -52,10 +52,10 @@ public class TextMetaDataExtractingProcessor implements ItemProcessor {
      */
     @Override
     public Item process(Context context, CachingOptions cachingOptions, Item item) {
-        for (String xPathQuery : metaDataNodesXPathQueries) {
-            String metaDataValue = item.queryDescriptorValue(xPathQuery);
+        for (String xpathQuery : metaDataNodesXPathQueries) {
+            String metaDataValue = item.queryDescriptorValue(xpathQuery);
             if (StringUtils.isNotEmpty(metaDataValue)) {
-                item.setProperty(xPathQuery, metaDataValue);
+                item.setProperty(xpathQuery, metaDataValue);
             }
         }
 
