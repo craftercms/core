@@ -31,7 +31,7 @@ import org.dom4j.VisitorSupport;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * Class description goes HERE
+ * {@link NodeScanner} implementation that scans the document to find nodes that match certain regex patterns.
  *
  * @author Alfonso Vásquez
  */
