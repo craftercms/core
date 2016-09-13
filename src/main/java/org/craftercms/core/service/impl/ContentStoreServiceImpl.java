@@ -68,23 +68,23 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     /**
      * Registry of {@link ContentStoreAdapter}s.
      */
-    private ContentStoreAdapterRegistry storeAdapterRegistry;
+    protected ContentStoreAdapterRegistry storeAdapterRegistry;
     /**
      * Resolves the {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} to use for a particular descriptor.
      */
-    private DescriptorMergeStrategyResolver mergeStrategyResolver;
+    protected DescriptorMergeStrategyResolver mergeStrategyResolver;
     /**
      * Merges a bunch of descriptors
      */
-    private DescriptorMerger merger;
+    protected DescriptorMerger merger;
     /**
      * Resolves the {@link org.craftercms.core.processors.ItemProcessor} to use for a particular {@link Item}.
      */
-    private ItemProcessorResolver processorResolver;
+    protected ItemProcessorResolver processorResolver;
     /**
      * Map of open {@link org.craftercms.core.service.Context}s
      */
-    private Map<String, Context> contexts;
+    protected Map<String, Context> contexts;
 
     /**
      * Default constructor. Creates the map of open {@link Context}s.

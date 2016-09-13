@@ -27,17 +27,17 @@ import org.dom4j.Node;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * Class description goes HERE
+ * {@link NodeScanner} implementation that scans the document by executing XPath queries.
  *
  * @author Alfonso Vásquez
  */
 public class XPathNodeScanner implements NodeScanner {
 
-    protected String[] xPathQueries;
+    protected String[] xpathQueries;
 
     @Required
-    public void setXPathQueries(String... xPathQueries) {
-        this.xPathQueries = xPathQueries;
+    public void setXPathQueries(String... xpathQueries) {
+        this.xpathQueries = xpathQueries;
     }
 
     @Override
@@ -45,8 +45,8 @@ public class XPathNodeScanner implements NodeScanner {
         try {
             List<Node> nodes = new ArrayList<Node>();
 
-            for (String xPathQuery : xPathQueries) {
-                List<Node> queryResult = document.selectNodes(xPathQuery);
+            for (String xpathQuery : xpathQueries) {
+                List<Node> queryResult = document.selectNodes(xpathQuery);
                 if (CollectionUtils.isNotEmpty(queryResult)) {
                     nodes.addAll(queryResult);
                 }
@@ -54,7 +54,7 @@ public class XPathNodeScanner implements NodeScanner {
 
             return nodes;
         } catch (Exception e) {
-            throw new XmlException(xPathQueries + " query failed", e);
+            throw new XmlException(xpathQueries + " query failed", e);
         }
     }
 
@@ -69,7 +69,7 @@ public class XPathNodeScanner implements NodeScanner {
 
         XPathNodeScanner that = (XPathNodeScanner)o;
 
-        if (!xPathQueries.equals(that.xPathQueries)) {
+        if (!xpathQueries.equals(that.xpathQueries)) {
             return false;
         }
 
@@ -78,7 +78,7 @@ public class XPathNodeScanner implements NodeScanner {
 
     @Override
     public int hashCode() {
-        return xPathQueries.hashCode();
+        return xpathQueries.hashCode();
     }
 
 }

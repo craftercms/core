@@ -19,6 +19,7 @@ package org.craftercms.core.util;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -38,13 +39,24 @@ import org.dom4j.io.XMLWriter;
  */
 public class XmlUtils {
 
-    public static final String XML_ELEMENT_TEXT_JSON_KEY = "text";
+    /**
+     * Executes an XPath query to retrieve an object. Normally, if the XPath result doesn't have a result, an
+     * empty collection is returned. This object checks that case and returns null accordingly.
+     */
+    public static Object selectObject(Node node, String xpathQuery) {
+        Object result = node.selectObject(xpathQuery);
+        if (result != null && result instanceof Collection && ((Collection) result).isEmpty()) {
+            return null;
+        } else {
+            return result;
+        }
+    }
 
     /**
      * Executes the specified XPath query as a single node query, returning the text value of the resulting single node.
      */
-    public static String selectSingleNodeValue(Node node, String xPathQuery) {
-        Node resultNode = node.selectSingleNode(xPathQuery);
+    public static String selectSingleNodeValue(Node node, String xpathQuery) {
+        Node resultNode = node.selectSingleNode(xpathQuery);
         if (resultNode != null) {
             return resultNode.getText();
         } else {
@@ -56,8 +68,8 @@ public class XmlUtils {
      * Executes the specified namespace aware XPath query as a single node query,
      * returning the text value of the resulting single node.
      */
-    public static String selectSingleNodeValue(Node node, String xPathQuery, Map<String, String> namespaceUris) {
-        Node resultNode = selectSingleNode(node, xPathQuery, namespaceUris);
+    public static String selectSingleNodeValue(Node node, String xpathQuery, Map<String, String> namespaceUris) {
+        Node resultNode = selectSingleNode(node, xpathQuery, namespaceUris);
         if (resultNode != null) {
             return resultNode.getText();
         } else {
@@ -69,18 +81,10 @@ public class XmlUtils {
      * Executes the specified XPath query as a multiple node query, returning the text values of the resulting list of
      * nodes.
      */
-    public static List<String> selectNodeValues(Node node, String xPathQuery) {
-        List<Node> resultNodes = node.selectNodes(xPathQuery);
-        if (CollectionUtils.isNotEmpty(resultNodes)) {
-            List<String> resultNodeValues = new ArrayList<String>(resultNodes.size());
-            for (Node resultNode : resultNodes) {
-                resultNodeValues.add(resultNode.getText());
-            }
+    public static List<String> selectNodeValues(Node node, String xpathQuery) {
+        List<Node> resultNodes = node.selectNodes(xpathQuery);
 
-            return resultNodeValues;
-        } else {
-            return Collections.emptyList();
-        }
+        return extractNodeValues(resultNodes);
     }
 
     /**
@@ -88,38 +92,30 @@ public class XmlUtils {
      * returning the text values of the resulting list of
      * nodes.
      */
-    public static List<String> selectNodeValues(Node node, String xPathQuery, Map<String, String> namespaceUris) {
-        List<Node> resultNodes = selectNodes(node, xPathQuery, namespaceUris);
-        if (CollectionUtils.isNotEmpty(resultNodes)) {
-            List<String> resultNodeValues = new ArrayList<String>(resultNodes.size());
-            for (Node resultNode : resultNodes) {
-                resultNodeValues.add(resultNode.getText());
-            }
+    public static List<String> selectNodeValues(Node node, String xpathQuery, Map<String, String> namespaceUris) {
+        List<Node> resultNodes = selectNodes(node, xpathQuery, namespaceUris);
 
-            return resultNodeValues;
-        } else {
-            return Collections.emptyList();
-        }
+        return extractNodeValues(resultNodes);
     }
 
     /**
      * Executes the specified namespace aware XPath query as a single node query, returning the resulting single node.
      */
-    public static Node selectSingleNode(Node node, String xPathQuery, Map<String, String> namespaceUris) {
-        XPath xPath = DocumentHelper.createXPath(xPathQuery);
-        xPath.setNamespaceURIs(namespaceUris);
+    public static Node selectSingleNode(Node node, String xpathQuery, Map<String, String> namespaceUris) {
+        XPath xpath = DocumentHelper.createXPath(xpathQuery);
+        xpath.setNamespaceURIs(namespaceUris);
 
-        return xPath.selectSingleNode(node);
+        return xpath.selectSingleNode(node);
     }
 
     /**
      * Executes the specified namespace aware XPath query as a multiple node query, returning the resulting list of nodes.
      */
-    public static List<Node> selectNodes(Node node, String xPathQuery, Map<String, String> namespaceUris) {
-        XPath xPath = DocumentHelper.createXPath(xPathQuery);
-        xPath.setNamespaceURIs(namespaceUris);
+    public static List<Node> selectNodes(Node node, String xpathQuery, Map<String, String> namespaceUris) {
+        XPath xpath = DocumentHelper.createXPath(xpathQuery);
+        xpath.setNamespaceURIs(namespaceUris);
 
-        return xPath.selectNodes(node);
+        return xpath.selectNodes(node);
     }
 
     /**
@@ -140,6 +136,19 @@ public class XmlUtils {
         }
 
         return stringWriter.toString();
+    }
+
+    private static List<String> extractNodeValues(List<Node> nodes) {
+        if (CollectionUtils.isNotEmpty(nodes)) {
+            List<String> nodeValues = new ArrayList<String>(nodes.size());
+            for (Node resultNode : nodes) {
+                nodeValues.add(resultNode.getText());
+            }
+
+            return nodeValues;
+        } else {
+            return Collections.emptyList();
+        }
     }
 
 }
