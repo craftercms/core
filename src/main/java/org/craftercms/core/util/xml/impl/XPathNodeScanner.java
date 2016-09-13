@@ -27,7 +27,7 @@ import org.dom4j.Node;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * Class description goes HERE
+ * {@link NodeScanner} implementation that scans the document by executing XPath queries.
  *
  * @author Alfonso Vásquez
  */
