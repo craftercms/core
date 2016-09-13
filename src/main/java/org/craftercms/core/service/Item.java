@@ -208,11 +208,11 @@ public class Item extends CachingAwareObjectBase {
      * Queries a single descriptor node text value. First looks in the properties, if not found it executes the XPath
      * query.
      */
-    public String queryDescriptorValue(String xPathQuery) {
+    public String queryDescriptorValue(String xpathQuery) {
         if (descriptorDom != null) {
-            String value = (String)getProperty(xPathQuery);
+            String value = (String)getProperty(xpathQuery);
             if (value == null) {
-                value = XmlUtils.selectSingleNodeValue(descriptorDom, xPathQuery);
+                value = XmlUtils.selectSingleNodeValue(descriptorDom, xpathQuery);
             }
 
             return value;
@@ -225,11 +225,11 @@ public class Item extends CachingAwareObjectBase {
      * Queries multiple descriptor node text values. First looks in the properties, if not found it executes the XPath
      * query.
      */
-    public List<String> queryDescriptorValues(String xPathQuery) {
+    public List<String> queryDescriptorValues(String xpathQuery) {
         if (descriptorDom != null) {
-            List<String> value = (List<String>)getProperty(xPathQuery);
+            List<String> value = (List<String>)getProperty(xpathQuery);
             if (CollectionUtils.isEmpty(value)) {
-                value = XmlUtils.selectNodeValues(descriptorDom, xPathQuery);
+                value = XmlUtils.selectNodeValues(descriptorDom, xpathQuery);
             }
 
             return value;
