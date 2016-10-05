@@ -64,6 +64,13 @@ public class ItemProcessorPipeline implements ItemProcessor {
     }
 
     /**
+     * Sets the list of processors.
+     */
+    public void setProcessors(List<ItemProcessor> processors) {
+        this.processors = processors;
+    }
+
+    /**
      * Adds a processor to the pipeline of processors.
      */
     public void addProcessor(ItemProcessor processor) {
