@@ -61,6 +61,13 @@ public class CompositeItemFilter implements ItemFilter {
     }
 
     /**
+     * Sets the list of filters.
+     */
+    public void setFilters(List<ItemFilter> filters) {
+        this.filters = filters;
+    }
+
+    /**
      * Adds the specified {@link ItemFilter} to the filter list, creating the list if necessary.
      */
     public void addFilter(final ItemFilter filter) {
