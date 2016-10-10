@@ -725,7 +725,8 @@ public class ContentStoreServiceImplTest {
         }
 
         @Override
-        public boolean accepts(Item item, boolean runningBeforeProcessing) {
+        public boolean accepts(Item item, List<Item> acceptedItems, List<Item> rejectedItems,
+                               boolean runningBeforeProcessing) {
             return !item.getName().endsWith(DESCRIPTOR_FILE_EXTENSION);
         }
 
