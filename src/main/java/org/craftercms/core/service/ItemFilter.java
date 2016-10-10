@@ -16,6 +16,8 @@
  */
 package org.craftercms.core.service;
 
+import java.util.List;
+
 /**
  * Interface for item filters. Used by {@link ContentStoreService}s to filter the items returned to the user of
  * the API.
@@ -40,9 +42,11 @@ public interface ItemFilter {
     /**
      * Return true if the given item is accepted by the filter.
      *
-     * @param item                    the item to accept or reject
-     * @param runningBeforeProcessing if the filter is running before processing (true) or after processing (false)
+     * @param item                      the item to accept or reject
+     * @param acceptedItems             the list of the currently accepted items
+     * @param rejectedItems             the list of the currently rejected items
+     * @param runningBeforeProcessing   if the filter is running before processing (true) or after processing (false)
      */
-    boolean accepts(Item item, boolean runningBeforeProcessing);
+    boolean accepts(Item item, List<Item> acceptedItems, List<Item> rejectedItems, boolean runningBeforeProcessing);
 
 }
