@@ -49,7 +49,7 @@ import org.springframework.beans.factory.annotation.Required;
  * @see org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler
  * @see <a href="http://freemarker.sourceforge.net/">FreeMarker</a>
  * @see <a href="http://static.springsource.org/spring/docs/3.0.x/reference/expressions.html>Spring Expression
- *      Language (SpEL)</a>
+ * Language (SpEL)</a>
  */
 public class TemplateProcessor implements ItemProcessor {
 
@@ -105,30 +105,33 @@ public class TemplateProcessor implements ItemProcessor {
         String descriptorUrl = item.getDescriptorUrl();
         Document descriptorDom = item.getDescriptorDom();
 
-        List<Node> templateNodes = templateNodeScanner.scan(descriptorDom);
-        if (CollectionUtils.isNotEmpty(templateNodes)) {
-            for (Node templateNode : templateNodes) {
-                String templateNodePath = templateNode.getUniquePath();
+        if (descriptorDom != null) {
+            List<Node> templateNodes = templateNodeScanner.scan(descriptorDom);
+            if (CollectionUtils.isNotEmpty(templateNodes)) {
+                for (Node templateNode : templateNodes) {
+                    String templateNodePath = templateNode.getUniquePath();
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Template found in " + descriptorUrl + " at " + templateNodePath);
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Template found in " + descriptorUrl + " at " + templateNodePath);
+                    }
+
+                    String templateId = templateNodePath + "@" + descriptorUrl;
+                    String template = templateNode.getText();
+                    IdentifiableStringTemplateSource templateSource = new IdentifiableStringTemplateSource(templateId,
+                                                                                                           template);
+
+                    Object model = modelFactory.getModel(item, templateNode, template);
+                    StringWriter output = new StringWriter();
+
+                    try {
+                        CompiledTemplate compiledTemplate = templateCompiler.compile(templateSource);
+                        compiledTemplate.process(model, output);
+                    } catch (TemplateException e) {
+                        throw new ItemProcessingException("Unable to process the template " + templateId, e);
+                    }
+
+                    templateNode.setText(output.toString());
                 }
-
-                String templateId = templateNodePath + "@" + descriptorUrl;
-                String template = templateNode.getText();
-                IdentifiableStringTemplateSource templateSource = new IdentifiableStringTemplateSource(templateId,
-                    template);
-                Object model = modelFactory.getModel(item, templateNode, template);
-                StringWriter output = new StringWriter();
-
-                try {
-                    CompiledTemplate compiledTemplate = templateCompiler.compile(templateSource);
-                    compiledTemplate.process(model, output);
-                } catch (TemplateException e) {
-                    throw new ItemProcessingException("Unable to process the template " + templateId, e);
-                }
-
-                templateNode.setText(output.toString());
             }
         }
 
@@ -179,10 +182,10 @@ public class TemplateProcessor implements ItemProcessor {
     @Override
     public String toString() {
         return "TemplateProcessor[" +
-            "modelFactory=" + modelFactory +
-            ", templateNodeScanner=" + templateNodeScanner +
-            ", templateCompiler=" + templateCompiler +
-            ']';
+               "modelFactory=" + modelFactory +
+               ", templateNodeScanner=" + templateNodeScanner +
+               ", templateCompiler=" + templateCompiler +
+               ']';
     }
 
 }

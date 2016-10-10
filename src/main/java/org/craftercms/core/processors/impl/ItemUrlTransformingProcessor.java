@@ -53,7 +53,7 @@ public class ItemUrlTransformingProcessor implements ItemProcessor {
 
     @Override
     public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
-        final String transformedUrl = urlTransformationEngine.transformUrl(context, transformerName, item.getUrl());
+        String transformedUrl = urlTransformationEngine.transformUrl(context, transformerName, item.getUrl());
         item.setProperty(transformedUrlPropName, transformedUrl);
 
         return item;
