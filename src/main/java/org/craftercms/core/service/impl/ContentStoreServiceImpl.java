@@ -255,9 +255,10 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                 item = doMerging(context, cachingOptions, item);
                 item = doProcessing(context, cachingOptions, item, processor);
             } else {
-                // Since there was no processing, add the original key (from the store adapter item) as dependency key.
-                // The store
-                // service item key will be set later.
+                item = doProcessing(context, cachingOptions, item, processor);
+
+                // Since there was no merging, add the original key (from the store adapter item) as dependency key.
+                // The store service item key will be set later.
                 item.addDependencyKey(item.getKey());
             }
         }
@@ -456,7 +457,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * Executes processing for the specified {@link Item}:
      * <p/>
      * <ol>
-     * <li>Gets the main {@link ItemProcessor} for the item fro the {@link ItemProcessorResolver}.</li>
+     * <li>Gets the main {@link ItemProcessor} for the item from the {@link ItemProcessorResolver}.</li>
      * <li>Calls the main processor's <code>process</code> method to process the item.</li>
      * <li>If an additional processor was passed to this method, the additional processor is also called.</li>
      * <li>Returns the processed item.</li>
@@ -487,8 +488,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
         if (logger.isDebugEnabled()) {
             logger.debug("Processed item: " + item);
-            logger.debug("Processed descriptor DOM for " + item + ":\n" + XmlUtils.documentToPrettyString(item
-                .getDescriptorDom()));
+            logger.debug("Processed descriptor DOM for " + item + ":\n" +
+                         XmlUtils.documentToPrettyString(item.getDescriptorDom()));
         }
 
         return item;
@@ -496,23 +497,25 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
     /**
      * Filters the given list of items by using the specified filter. The <code>runningBeforeProcessing</code> flag
-     * is passed to
-     * indicated the filter in which phase it is being executed (after or before processing).
+     * is passed to indicated the filter in which phase it is being executed (after or before processing).
      */
     protected List<Item> doFilter(List<Item> items, ItemFilter filter, boolean runningBeforeProcessing) {
-        List<Item> filteredItems = new ArrayList<Item>();
+        List<Item> acceptedItems = new ArrayList<>();
+        List<Item> rejectedItems = new ArrayList<>();
 
         for (Item item : items) {
-            if (filter.accepts(item, runningBeforeProcessing)) {
-                filteredItems.add(item);
+            if (filter.accepts(item, acceptedItems, rejectedItems, runningBeforeProcessing)) {
+                acceptedItems.add(item);
+            } else {
+                rejectedItems.add(item);
             }
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Items filtered from " + items + " by " + filter + ": " + filteredItems);
+            logger.debug("Items filtered from " + items + " by " + filter + ": " + acceptedItems);
         }
 
-        return filteredItems;
+        return acceptedItems;
     }
 
     protected String createContextId(String storeType, String storeServerUrl, String username, String password,

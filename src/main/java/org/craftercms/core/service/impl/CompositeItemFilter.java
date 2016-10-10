@@ -61,6 +61,13 @@ public class CompositeItemFilter implements ItemFilter {
     }
 
     /**
+     * Sets the list of filters.
+     */
+    public void setFilters(List<ItemFilter> filters) {
+        this.filters = filters;
+    }
+
+    /**
      * Adds the specified {@link ItemFilter} to the filter list, creating the list if necessary.
      */
     public void addFilter(final ItemFilter filter) {
@@ -104,16 +111,17 @@ public class CompositeItemFilter implements ItemFilter {
      * one of them rejects the item.
      */
     @Override
-    public boolean accepts(final Item item, final boolean runningBeforeProcessing) {
+    public boolean accepts(Item item, List<Item> acceptedItems, List<Item> rejectedItems,
+                           boolean runningBeforeProcessing) {
         boolean accepted = true;
 
         if (CollectionUtils.isNotEmpty(filters)) {
             for (Iterator<ItemFilter> filterIter = filters.iterator(); accepted && filterIter.hasNext();) {
                 ItemFilter filter = filterIter.next();
                 if (runningBeforeProcessing && filter.runBeforeProcessing()) {
-                    accepted = filter.accepts(item, runningBeforeProcessing);
+                    accepted = filter.accepts(item, acceptedItems, rejectedItems, runningBeforeProcessing);
                 } else if (!runningBeforeProcessing && filter.runAfterProcessing()) {
-                    accepted = filter.accepts(item, runningBeforeProcessing);
+                    accepted = filter.accepts(item, acceptedItems, rejectedItems, runningBeforeProcessing);
                 }
             }
         }
