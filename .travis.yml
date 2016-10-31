@@ -2,8 +2,18 @@ language: java
 notifications:
   email:
     - dev@craftercms.org
+    - sumer@craftercms.org
+    - sjabri@rivetlogic.com
   irc:
     channels:
       - "chat.freenode.net#craftercms"
     use_notice: true
   slack: craftersoftware:7YiSb41ZG5rfMgiAY7Qgprc7
+addons:
+  sonarqube: true
+env:
+  global:
+    - secure: cad8c6bb099445ea56ef6363325ef215d5fa7784
+script:
+  # other script steps might be done before running the actual SonarQube analysis
+  - sonar-scanner -Dsonar.login=$SONAR_TOKEN
