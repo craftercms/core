@@ -2,3 +2,8 @@ language: java
 notifications:
   email:
     - dev@craftercms.org
+  irc:
+    channels:
+      - "chat.freenode.net#craftercms"
+    use_notice: true
+  slack: craftersoftware:7YiSb41ZG5rfMgiAY7Qgprc7
