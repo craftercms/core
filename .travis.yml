@@ -1,2 +1,4 @@
 language: java
-
+notifications:
+  email:
+    - dev@craftersoftware.com
