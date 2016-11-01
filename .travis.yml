@@ -3,7 +3,6 @@ notifications:
   email:
     - dev@craftercms.org
     - sumer@craftercms.org
-    - sjabri@rivetlogic.com
   irc:
     channels:
       - "chat.freenode.net#craftercms"
