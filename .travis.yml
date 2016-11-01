@@ -1,8 +1,5 @@
 language: java
 notifications:
-  email:
-    - dev@craftercms.org
-    - sumer@craftercms.org
   irc:
     channels:
       - "chat.freenode.net#craftercms"
