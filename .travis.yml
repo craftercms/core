@@ -12,7 +12,7 @@ addons:
   sonarqube: true
 env:
   global:
-    - secure: cad8c6bb099445ea56ef6363325ef215d5fa7784
+    - secure: SONAR_TOKEN=cad8c6bb099445ea56ef6363325ef215d5fa7784
 script:
   # other script steps might be done before running the actual SonarQube analysis
     - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN
