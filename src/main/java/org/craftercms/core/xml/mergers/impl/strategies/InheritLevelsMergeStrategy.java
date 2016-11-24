@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Required;
  */
 public class InheritLevelsMergeStrategy extends AbstractInheritFromHierarchyMergeStrategy {
 
-    private String levelDescriptorFileName;
+    protected String levelDescriptorFileName;
 
     @Required
     public void setLevelDescriptorFileName(String levelDescriptorFileName) {
