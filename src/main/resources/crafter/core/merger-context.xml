@@ -29,8 +29,7 @@
         <property name="regularMergeStrategy" ref="crafter.inheritLevelsMergeStrategy"/>
     </bean>
 
-    <bean id="crafter.explicitParentMergeStrategy"
-          class="org.craftercms.core.xml.mergers.impl.strategies.ExplicitParentMergeStrategy">
+    <bean id="crafter.explicitParentMergeStrategy" class="org.craftercms.core.xml.mergers.impl.strategies.ExplicitParentMergeStrategy">
         <property name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
         <property name="parentDescriptorElementXPathQuery"
                   value="${crafter.core.merger.strategy.explicitParent.parentDescriptor.element.xpathQuery}"/>
@@ -38,8 +37,7 @@
 
     <!-- Merge Strategy Resolvers -->
 
-    <bean id="crafter.metaDataMergeStrategyResolver"
-          class="org.craftercms.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolver">
+    <bean id="crafter.metaDataMergeStrategyResolver" class="org.craftercms.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolver">
         <property name="mergeStrategyElementXPathQuery" value="${crafter.core.merger.strategy.element.xpathQuery}"/>
         <property name="elementValueToStrategyMappings">
             <map>
@@ -55,8 +53,7 @@
         </property>
     </bean>
 
-    <bean id="crafter.mergeStrategyResolverChain"
-          class="org.craftercms.core.xml.mergers.impl.resolvers.DescriptorMergeStrategyResolverChain">
+    <bean id="crafter.mergeStrategyResolverChain" class="org.craftercms.core.xml.mergers.impl.resolvers.DescriptorMergeStrategyResolverChain">
         <property name="defaultStrategy" ref="crafter.singleFileMergeStrategy"/>
         <property name="resolvers">
             <list>
@@ -67,13 +64,11 @@
 
     <!-- Merger -->
 
-    <bean id="crafter.elementMergeMatcher"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.ElementMergeMatcherImpl">
+    <bean id="crafter.elementMergeMatcher" class="org.craftercms.core.xml.mergers.impl.cues.impl.ElementMergeMatcherImpl">
         <property name="idAttributeName" value="${crafter.core.merger.cues.matcher.id.attributeName}"/>
     </bean>
 
-    <bean id="crafter.abstractMergeParentAndChildMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCue"
+    <bean id="crafter.abstractMergeParentAndChildMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCue"
           abstract="true">
         <property name="elementMergeMatcher" ref="crafter.elementMergeMatcher"/>
         <property name="mergeCueResolver" ref="crafter.mergeCueResolver"/>
@@ -81,18 +76,15 @@
         <property name="defaultMergeOrder" value="${crafter.core.merger.cues.mergeParentAndChild.order.value.default}"/>
     </bean>
 
-    <bean id="crafter.overrideParentMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
+    <bean id="crafter.overrideParentMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
         <property name="priority" value="${crafter.core.merger.cues.child.overrideParent.priority}"/>
     </bean>
 
-    <bean id="crafter.disallowOverrideMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
+    <bean id="crafter.disallowOverrideMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
         <property name="priority" value="${crafter.core.merger.cues.parent.disallowOverride.priority}"/>
     </bean>
 
-    <bean id="crafter.useParentMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
+    <bean id="crafter.useParentMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
         <property name="priority" value="${crafter.core.merger.cues.child.useParent.priority}"/>
     </bean>
 
@@ -104,18 +96,15 @@
         <property name="priority" value="${crafter.core.merger.cues.parent.mergeWithChild.priority}"/>
     </bean>
     
-    <bean id="crafter.defaultParentMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentIfNotEmptyMergeCue">
+    <bean id="crafter.defaultParentMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentIfNotEmptyMergeCue">
         <property name="priority" value="${crafter.core.merger.cues.parent.default.priority}"/>
     </bean>
 
-    <bean id="crafter.defaultChildMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildIfNotEmptyMergeCue">
+    <bean id="crafter.defaultChildMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildIfNotEmptyMergeCue">
         <property name="priority" value="${crafter.core.merger.cues.child.default.priority}"/>
     </bean>
 
-    <bean id="crafter.mergeCueResolver"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeCueResolverImpl">
+    <bean id="crafter.mergeCueResolver" class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeCueResolverImpl">
         <property name="parentMergeCues">
             <map>
                 <entry key="${crafter.core.merger.cues.parent.disallowOverride.attribute.name}"

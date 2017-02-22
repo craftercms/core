@@ -172,8 +172,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public void destroyContext(Context context) throws InvalidContextException, StoreException,
-        AuthenticationException {
+    public void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
         if (contexts.containsKey(context.getId())) {
             context.getStoreAdapter().destroyContext(context);
 
@@ -488,8 +487,9 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
         if (logger.isDebugEnabled()) {
             logger.debug("Processed item: " + item);
-            logger.debug("Processed descriptor DOM for " + item + ":\n" +
-                         XmlUtils.documentToPrettyString(item.getDescriptorDom()));
+            if (item.getDescriptorDom() != null) {
+                logger.debug("Processed descriptor DOM for " + item + ":\n" + XmlUtils.documentToPrettyString(item.getDescriptorDom()));
+            }
         }
 
         return item;
