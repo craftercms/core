@@ -19,19 +19,21 @@ package org.craftercms.core.util.spring;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
- * Picks up any bean of a specific type defined in the Spring application context, and puts it in a registry,
- * with the key or
- * ID as the name of the context bean except the a prefix, e.g. if a bean is named "crafter.contentStoreAdapter
- * .filesystem", and the
- * prefix is "crafter.contentStoreAdapter", the ID of the bean in the registry would be "filesystem.
+ * Picks up any bean of a specific type defined in the Spring application context, and puts it in a registry, with the key or ID as the
+ * name of the context bean except the a prefix, e.g. if a bean is named "crafter.contentStoreAdapter.filesystem", and the prefix is
+ * "crafter.contentStoreAdapter", the ID of the bean in the registry would be "filesystem".
  *
  * @author Alfonso Vásquez
  */
 public abstract class AbstractBeanIdBasedRegistry<T> implements BeanPostProcessor {
+
+    private static final Log logger = LogFactory.getLog(AbstractBeanIdBasedRegistry.class);
 
     private Map<String, T> registry;
 
@@ -50,8 +52,11 @@ public abstract class AbstractBeanIdBasedRegistry<T> implements BeanPostProcesso
         if (getRegistryType().isAssignableFrom(bean.getClass())) {
             if (beanName.startsWith(getBeanNameIdPrefix())) {
                 String id = beanName.substring(getBeanNameIdPrefix().length());
-
                 register(id, (T)bean);
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Bean '" + id + "' of type " + getRegistryType().getName() + " added to registry");
+                }
             }
         }
 
