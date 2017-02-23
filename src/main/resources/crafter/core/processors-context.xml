@@ -5,11 +5,6 @@
 
     <!-- Processors -->
 
-    <!--bean id="crafter.includeDescriptorsProcessor" class="IncludeDescriptorsProcessor">
-        <property name="includeElementXPathQuery" value="${crafter.core.processors.include.element.xpathQuery}"/>
-        <property name="contentStoreService" ref="crafter.contentStoreService"/>
-    </bean-->
-
     <bean id="crafter.templateNodeScanner" class="org.craftercms.core.util.xml.impl.RegexNodeScanner">
         <property name="patterns" value="\#\{"/>
         <property name="matchEntireNodeText" value="false"/>
@@ -28,7 +23,6 @@
     <bean id="crafter.defaultProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
         <constructor-arg>
             <list>
-                <!--ref bean="crafter.includeDescriptorsProcessor"/-->
                 <!--ref bean="crafter.templateProcessor"/-->
             </list>
         </constructor-arg>

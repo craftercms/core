@@ -16,13 +16,8 @@
  */
 package org.craftercms.core.util;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Sumer Jabri
@@ -53,45 +48,6 @@ public class UrlUtils {
             return matcher.group(shortNameRegexGroup);
         } else {
             return longName;
-        }
-    }
-
-    public static String resolveRelative(String baseUrl, String relativeUrl) throws URISyntaxException {
-        if (!relativeUrl.startsWith("/")) {
-            baseUrl = FilenameUtils.getFullPath(baseUrl);
-
-            if (!baseUrl.startsWith("/")) {
-                baseUrl = "/" + baseUrl;
-            }
-            if (!baseUrl.endsWith("/")) {
-                baseUrl += "/";
-            }
-
-            URI base = new URI(baseUrl);
-
-            return base.resolve(relativeUrl).toString();
-        } else {
-            return relativeUrl;
-        }
-    }
-
-    public static final String appendUrl(String mainUrl, String urlToAppend) {
-        if (StringUtils.isEmpty(mainUrl)) {
-            return urlToAppend;
-        } else if (StringUtils.isEmpty(urlToAppend)) {
-            return mainUrl;
-        } else {
-            StringBuilder joinedUrl = new StringBuilder(mainUrl);
-
-            if (mainUrl.endsWith("/") && urlToAppend.startsWith("/")) {
-                urlToAppend = StringUtils.stripStart(urlToAppend, "/");
-            } else if (!mainUrl.endsWith("/") && !urlToAppend.startsWith("/")) {
-                joinedUrl.append("/");
-            }
-
-            joinedUrl.append(urlToAppend);
-
-            return joinedUrl.toString();
         }
     }
 

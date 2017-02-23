@@ -18,6 +18,7 @@ package org.craftercms.core.processors.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,10 +29,9 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 
 /**
- * Pipeline of {@link org.craftercms.core.processors.ItemProcessor}s. The output of each processor's {@link org
- * .craftercms.core.processors.ItemProcessor#process(org.craftercms.core.service.Context,
- * org.craftercms.core.service.CachingOptions, Item)}
- * call is passed as input to the next processor.
+ * Pipeline of {@link org.craftercms.core.processors.ItemProcessor}s. The output of each processor's
+ * {@link org.craftercms.core.processors.ItemProcessor#process(org.craftercms.core.service.Context,
+ * org.craftercms.core.service.CachingOptions, Item)} call is passed as input to the next processor.
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
@@ -75,10 +75,21 @@ public class ItemProcessorPipeline implements ItemProcessor {
      */
     public void addProcessor(ItemProcessor processor) {
         if (processors == null) {
-            processors = new ArrayList<ItemProcessor>();
+            processors = new ArrayList<>();
         }
 
         processors.add(processor);
+    }
+
+    /**
+     * Adds several processors to the pipeline of processors.
+     */
+    public void addProcessors(Collection<ItemProcessor> processors) {
+        if (processors == null) {
+            processors = new ArrayList<>();
+        }
+
+        processors.addAll(processors);
     }
 
     /**
