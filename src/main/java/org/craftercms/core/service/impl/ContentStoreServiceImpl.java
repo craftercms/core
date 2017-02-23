@@ -144,8 +144,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     @Override
     public Context createContext(String storeType, String storeServerUrl, String username, String password,
                                  String rootFolderPath, boolean cacheOn, int maxAllowedItemsInCache,
-                                 boolean ignoreHiddenFiles) throws InvalidStoreTypeException, StoreException,
-        AuthenticationException {
+                                 boolean ignoreHiddenFiles) throws InvalidStoreTypeException, StoreException, AuthenticationException {
         String id = createContextId(storeType, storeServerUrl, username, password, rootFolderPath, cacheOn,
                                     maxAllowedItemsInCache, ignoreHiddenFiles);
 
@@ -172,8 +171,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public void destroyContext(Context context) throws InvalidContextException, StoreException,
-        AuthenticationException {
+    public void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
         if (contexts.containsKey(context.getId())) {
             context.getStoreAdapter().destroyContext(context);
 
@@ -186,8 +184,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     }
 
     @Override
-    public boolean exists(Context context, String url) throws InvalidContextException, PathNotFoundException,
-        StoreException {
+    public boolean exists(Context context, String url) throws InvalidContextException, PathNotFoundException, StoreException {
         if (!url.startsWith("/")) {
             url = "/" + url;
         }
@@ -210,8 +207,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public Content getContent(Context context, String url) throws InvalidScopeException, PathNotFoundException,
-        StoreException {
+    public Content getContent(Context context, String url) throws InvalidScopeException, PathNotFoundException, StoreException {
         return getContent(context, CachingOptions.DEFAULT_CACHING_OPTIONS, url);
     }
 
@@ -219,8 +215,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public Content getContent(Context context, CachingOptions cachingOptions, String url) throws InvalidScopeException,
-        PathNotFoundException, StoreException {
+    public Content getContent(Context context, CachingOptions cachingOptions, String url) throws InvalidScopeException, PathNotFoundException, StoreException {
         Content content = findContent(context, cachingOptions, url);
         if (content != null) {
             return content;
@@ -238,8 +233,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     @Override
     protected Item doFindItem(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor)
-        throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException,
-        StoreException {
+        throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         // Add a leading slash if not present at the beginning of the url. This is done because although the store
         // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
         // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
@@ -268,8 +262,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
     @Override
     protected List<Item> doFindChildren(Context context, CachingOptions cachingOptions, String url, ItemFilter filter,
-                                        ItemProcessor processor) throws InvalidContextException,
-        XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
+                                        ItemProcessor processor) throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         // Add a leading slash if not present at the beginning of the url. This is done because although the store
         // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
         // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
@@ -282,8 +275,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
     @Override
     protected Tree doFindTree(Context context, CachingOptions cachingOptions, String url, int depth, ItemFilter filter,
-                              ItemProcessor processor) throws InvalidContextException, XmlFileParseException,
-        XmlMergeException, ItemProcessingException, StoreException {
+                              ItemProcessor processor) throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         // Add a leading slash if not present at the beginning of the url. This is done because although the store
         // adapter normally ignores a leading slash, the merge strategies don't, and they need it to return the
         // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
@@ -328,8 +320,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * </ol>
      */
     protected List<Item> doFindChildren(Context context, CachingOptions cachingOptions, String url, Integer depth,
-                                        ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
-        XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
+                                        ItemFilter filter, ItemProcessor processor) throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         List<Item> children = context.getStoreAdapter().findItems(context, cachingOptions, url, false);
         if (children != null) {
             List<Object> dependencyKeys = new ArrayList<>();
@@ -488,8 +479,9 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
         if (logger.isDebugEnabled()) {
             logger.debug("Processed item: " + item);
-            logger.debug("Processed descriptor DOM for " + item + ":\n" +
-                         XmlUtils.documentToPrettyString(item.getDescriptorDom()));
+            if (item.getDescriptorDom() != null) {
+                logger.debug("Processed descriptor DOM for " + item + ":\n" + XmlUtils.documentToPrettyString(item.getDescriptorDom()));
+            }
         }
 
         return item;
@@ -522,13 +514,13 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                                      String rootFolderPath, boolean cacheOn, int maxAllowedItemsInCache,
                                      boolean ignoreHiddenFiles) {
         String unHashedId = "storeType='" + storeType + '\'' +
-            ", storeServerUrl='" + storeServerUrl + '\'' +
-            ", username='" + username + '\'' +
-            ", password='" + password + '\'' +
-            ", rootFolderPath='" + rootFolderPath + '\'' +
-            ", cacheOn=" + cacheOn +
-            ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
-            ", ignoreHiddenFiles=" + ignoreHiddenFiles;
+                            ", storeServerUrl='" + storeServerUrl + '\'' +
+                            ", username='" + username + '\'' +
+                            ", password='" + password + '\'' +
+                            ", rootFolderPath='" + rootFolderPath + '\'' +
+                            ", cacheOn=" + cacheOn +
+                            ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
+                            ", ignoreHiddenFiles=" + ignoreHiddenFiles;
 
         return DigestUtils.md5Hex(unHashedId);
     }
