@@ -219,6 +219,9 @@
         <property name="includeElementXPathQuery">
             <util:constant static-field="org.craftercms.core.processors.impl.IncludeDescriptorsProcessorTest.INCLUDE_ELEM_XPATH_QUERY"/>
         </property>
+        <property name="disabledIncludeNodeXPathQuery">
+            <util:constant static-field="org.craftercms.core.processors.impl.IncludeDescriptorsProcessorTest.DISABLED_INCLUDE_NODE_XPATH_QUERY"/>
+        </property>
         <property name="contentStoreService" ref="contentStoreService"/>
     </bean>
 

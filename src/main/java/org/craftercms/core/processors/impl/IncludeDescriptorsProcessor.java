@@ -18,8 +18,10 @@ package org.craftercms.core.processors.impl;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Stack;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,14 +48,24 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
 
     private static final Log logger = LogFactory.getLog(IncludeDescriptorsProcessor.class);
 
+    protected static final ThreadLocal<Stack<String>> includedItemsStack = ThreadLocal.withInitial(Stack::new);
+
     /**
      * XPath query for the include element.
      */
     protected String includeElementXPathQuery;
     /**
+     * XPath query relative to include elements for nodes tha specify if the include is disabled or not.
+     */
+    protected String disabledIncludeNodeXPathQuery;
+    /**
      * The content store service, used to retrieve the descriptors to include.
      */
     protected ContentStoreService contentStoreService;
+    /**
+     * Processor to use for included items.
+     */
+    protected ItemProcessor includedItemsProcessor;
 
     /**
      * Sets the XPath query used to retrieve the include elements.
@@ -64,11 +76,26 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
     }
 
     /**
+     * Sets the XPath query relative to include elements for nodes tha specify if the include is disabled or not.
+     */
+    @Required
+    public void setDisabledIncludeNodeXPathQuery(String disabledIncludeNodeXPathQuery) {
+        this.disabledIncludeNodeXPathQuery = disabledIncludeNodeXPathQuery;
+    }
+
+    /**
      * Sets the content store service, used to retrieve the descriptors to include.
      */
     @Required
     public void setContentStoreService(ContentStoreService contentStoreService) {
         this.contentStoreService = contentStoreService;
+    }
+
+    /**
+     * Sets the processor to use for included items.
+     */
+    public void setIncludedItemsProcessor(ItemProcessor includedItemsProcessor) {
+        this.includedItemsProcessor = includedItemsProcessor;
     }
 
     /**
@@ -88,85 +115,87 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
         return item;
     }
 
-    /**
-     * Does the actual include:
-     * <p/>
-     * <ol>
-     * <li>Queries for all the include elements in the item's descriptor.</li>
-     * <li>Retrieves the descriptors to include by the url attribute.</li>
-     * <li>Includes the descriptor into the current item's descriptor</li>
-     * <li>Adds those descriptors' items as dependencies of the current item.</li>
-     * </ol>
-     *
-     * @throws ItemProcessingException
-     */
-    protected void includeDescriptors(Context context, CachingOptions cachingOptions,
-                                      Item item) throws ItemProcessingException {
+    @SuppressWarnings("unchecked")
+    protected void includeDescriptors(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
         String descriptorUrl = item.getDescriptorUrl();
-        Document descriptorDom = item.getDescriptorDom();
 
-        List<Element> includeElements = descriptorDom.selectNodes(includeElementXPathQuery);
-        if (CollectionUtils.isEmpty(includeElements)) {
-            return;
-        }
+        includedItemsStack.get().push(descriptorUrl);
+        try {
+            Document descriptorDom = item.getDescriptorDom();
+            List<Element> includeElements = descriptorDom.selectNodes(includeElementXPathQuery);
 
-        for (Element includeElement : includeElements) {
-            String includeSrcPath = includeElement.getTextTrim();
-            if (StringUtils.isEmpty(includeSrcPath)) {
-                throw new ItemProcessingException("No path provided in the <" + includeElement.getName() + "> element");
+            if (CollectionUtils.isEmpty(includeElements)) {
+                return;
             }
-
-            includeSrcPath = fromRelativeToAbsoluteUrl(descriptorUrl, includeSrcPath);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("Include found in " + descriptorUrl + ": " + includeSrcPath);
+                logger.debug("Processing includes of item @ " + descriptorUrl);
             }
 
-            Item includeSrcItem = getIncludeSrcItem(context, cachingOptions, includeSrcPath);
-            doInclude(includeElement, includeSrcPath, includeSrcItem.getDescriptorDom());
+            for (Element includeElement : includeElements) {
+                String itemToIncludePath = includeElement.getTextTrim();
 
-            item.addDependencyKey(includeSrcItem.getKey());
+                if (StringUtils.isEmpty(itemToIncludePath)) {
+                    continue;
+                }
+
+                if (!isIncludeDisabled(includeElement)) {
+                    if (!includedItemsStack.get().contains(itemToIncludePath)) {
+                        Item itemToInclude = getItemToInclude(context, cachingOptions, itemToIncludePath);
+                        if (itemToInclude != null && itemToInclude.getDescriptorDom() != null) {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Include found in " + descriptorUrl + ": " + itemToIncludePath);
+                            }
+
+                            doInclude(item, includeElement, itemToInclude);
+                        } else {
+                            logger.warn("No descriptor item found @ " + itemToIncludePath);
+                        }
+                    } else {
+                        logger.warn("Circular inclusion detected. Item " + itemToIncludePath + " already included");
+                    }
+                } else {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Ignoring include " + itemToIncludePath + ". It's currently disabled");
+                    }
+                }
+            }
+        } finally {
+            includedItemsStack.get().pop();
         }
     }
 
-    /**
-     * If path is relative, makes it absolute (resolves references to '.' and '..).
-     */
-    protected String fromRelativeToAbsoluteUrl(String descriptorUrl,
-                                               String includeSrcPath) throws ItemProcessingException {
-        try {
-            return UrlUtils.resolveRelative(descriptorUrl, includeSrcPath);
-        } catch (URISyntaxException e) {
-            throw new ItemProcessingException("Invalid relative URL " + includeSrcPath, e);
-        }
+    protected boolean isIncludeDisabled(Element includeElement) {
+        Node disabledIncludeNode = includeElement.selectSingleNode(disabledIncludeNodeXPathQuery);
+
+        return disabledIncludeNode != null && BooleanUtils.toBoolean(disabledIncludeNode.getText());
     }
 
-    protected Item getIncludeSrcItem(Context context, CachingOptions cachingOptions,
-                                     String includeSrcPath) throws ItemProcessingException {
+    protected Item getItemToInclude(Context context, CachingOptions cachingOptions, String includeSrcPath) throws ItemProcessingException {
         try {
-            return contentStoreService.getItem(context, cachingOptions, includeSrcPath, null);
+            return contentStoreService.findItem(context, cachingOptions, includeSrcPath, includedItemsProcessor);
         } catch (Exception e) {
-            throw new ItemProcessingException("Unable to load descriptor " + includeSrcPath + " from the underlying " +
-                                              "repository", e);
+            throw new ItemProcessingException("Unable to retrieve descriptor " + includeSrcPath + " from the underlying repository", e);
         }
     }
 
-    /**
-     * Replaces the specified {@code includeElement} with the root of the {@code includeSrc} document
-     *
-     * @throws ItemProcessingException
-     */
-    protected void doInclude(Element includeElement, String includeSrcPath,
-                             Document includeSrc) throws ItemProcessingException {
+    @SuppressWarnings("unchecked")
+    protected void doInclude(Item item, Element includeElement, Item itemToInclude) throws ItemProcessingException {
         List<Node> includeElementParentChildren = includeElement.getParent().content();
         int includeElementIdx = includeElementParentChildren.indexOf(includeElement);
-        Element includeSrcRootElement = includeSrc.getRootElement().createCopy();
+        Element itemToIncludeRootElement = itemToInclude.getDescriptorDom().getRootElement().createCopy();
 
         // Remove the <include> element
         includeElementParentChildren.remove(includeElementIdx);
+        // Add the item's root element
+        includeElementParentChildren.add(includeElementIdx, itemToIncludeRootElement);
 
-        // Add the src root element
-        includeElementParentChildren.add(includeElementIdx, includeSrcRootElement);
+        // Add dependency key
+        item.addDependencyKey(itemToInclude.getKey());
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Item " + itemToInclude.getDescriptorUrl() + " included into " + item.getDescriptorUrl());
+        }
     }
 
     /**
