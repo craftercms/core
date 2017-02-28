@@ -56,43 +56,4 @@ public class UrlUtils {
         }
     }
 
-    public static String resolveRelative(String baseUrl, String relativeUrl) throws URISyntaxException {
-        if (!relativeUrl.startsWith("/")) {
-            baseUrl = FilenameUtils.getFullPath(baseUrl);
-
-            if (!baseUrl.startsWith("/")) {
-                baseUrl = "/" + baseUrl;
-            }
-            if (!baseUrl.endsWith("/")) {
-                baseUrl += "/";
-            }
-
-            URI base = new URI(baseUrl);
-
-            return base.resolve(relativeUrl).toString();
-        } else {
-            return relativeUrl;
-        }
-    }
-
-    public static final String appendUrl(String mainUrl, String urlToAppend) {
-        if (StringUtils.isEmpty(mainUrl)) {
-            return urlToAppend;
-        } else if (StringUtils.isEmpty(urlToAppend)) {
-            return mainUrl;
-        } else {
-            StringBuilder joinedUrl = new StringBuilder(mainUrl);
-
-            if (mainUrl.endsWith("/") && urlToAppend.startsWith("/")) {
-                urlToAppend = StringUtils.stripStart(urlToAppend, "/");
-            } else if (!mainUrl.endsWith("/") && !urlToAppend.startsWith("/")) {
-                joinedUrl.append("/");
-            }
-
-            joinedUrl.append(urlToAppend);
-
-            return joinedUrl.toString();
-        }
-    }
-
 }
