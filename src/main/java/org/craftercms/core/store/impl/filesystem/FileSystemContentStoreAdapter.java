@@ -56,7 +56,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
         Resource rootFolderResource = resourceLoader.getResource(rootFolderPath);
 
         if (!rootFolderResource.exists()) {
-            throw new StoreException("Root folder " + rootFolderPath + " not found (make sure that it has valid URL prefix (e.g. file:))");
+            throw new StoreException("Root folder " + rootFolderPath + " not found (make sure that it has a valid URL prefix (e.g. file:))");
         }
 
         FileSystemFile rootFolder;
@@ -66,8 +66,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
             throw new StoreException("Unable to retrieve file handle for root folder " + rootFolderPath, e);
         }
 
-        return new FileSystemContext(id, this, null, rootFolderPath, rootFolder, cacheOn, maxAllowedItemsInCache,
-                                     ignoreHiddenFiles);
+        return new FileSystemContext(id, this, null, rootFolderPath, rootFolder, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
     }
 
     @Override
