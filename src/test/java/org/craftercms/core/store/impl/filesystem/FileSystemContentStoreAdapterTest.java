@@ -144,7 +144,6 @@ public class FileSystemContentStoreAdapterTest {
          * Maven does no keep  windows file attributes (like hidden) when copy resources so this test
          * will always fail on windows, until this if fix on maven
          */
-        if(!System.getProperty('os.name').toLowerCase().contains('windows')) {
             Context context = createTestContext(true);
 
             List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
@@ -166,7 +165,6 @@ public class FileSystemContentStoreAdapterTest {
 
             }));
         }
-    }
 
     private Context createTestContext(boolean ignoreHiddenFiles) {
         return storeAdapter.createContext("0", null, null, null, CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_CACHE_ON,
