@@ -140,27 +140,31 @@ public class FileSystemContentStoreAdapterTest {
 
     @Test
     public void testIgnoreHidden() throws Exception {
-        Context context = createTestContext(true);
+        /**
+         * Maven does no keep  windows file attributes (like hidden) when copy resources so this test
+         * will always fail on windows, until this if fix on maven
+         */
+            Context context = createTestContext(true);
 
-        List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
-        assertNotNull(items);
-        assertEquals(2, items.size());
+            List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
+            assertNotNull(items);
+            assertEquals(2, items.size());
 
-        context = createTestContext(false);
+            context = createTestContext(false);
 
-        items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
+            items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, false);
 
-        assertNotNull(items);
-        assertEquals(3, items.size());
-        assertTrue(CollectionUtils.exists(items, new Predicate<Item>() {
+            assertNotNull(items);
+            assertEquals(3, items.size());
+            assertTrue(CollectionUtils.exists(items, new Predicate<Item>() {
 
-            @Override
-            public boolean evaluate(Item item) {
-                return HIDDEN_FILE_NAME.equals(item.getName());
-            }
+                @Override
+                public boolean evaluate(Item item) {
+                    return HIDDEN_FILE_NAME.equals(item.getName());
+                }
 
-        }));
-    }
+            }));
+        }
 
     private Context createTestContext(boolean ignoreHiddenFiles) {
         return storeAdapter.createContext("0", null, null, null, CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_CACHE_ON,
