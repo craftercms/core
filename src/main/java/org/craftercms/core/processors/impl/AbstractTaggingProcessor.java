@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 
 /**
- * Base {@link ItemProcessor} to add a new field to indexed documents.
+ * Base {@link ItemProcessor} to add a new field to documents.
  * @author joseross
  */
 public abstract class AbstractTaggingProcessor implements ItemProcessor {
