@@ -16,9 +16,9 @@ import java.util.Map;
  * {@link ItemProcessor} that adds a new field based on the document path.
  * @author joseross
  */
-public class PathFieldAddingProcessor implements ItemProcessor {
+public class ByPathFieldAddingProcessor implements ItemProcessor {
 
-    private static final Log logger = LogFactory.getLog(PathFieldAddingProcessor.class);
+    private static final Log logger = LogFactory.getLog(ByPathFieldAddingProcessor.class);
 
     /**
      * The name of the new field to add.
@@ -73,7 +73,7 @@ public class PathFieldAddingProcessor implements ItemProcessor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PathFieldAddingProcessor that = (PathFieldAddingProcessor) o;
+        ByPathFieldAddingProcessor that = (ByPathFieldAddingProcessor) o;
 
         if (fieldName != null ? !fieldName.equals(that.fieldName) : that.fieldName != null) return false;
         return pathMapping != null ? pathMapping.equals(that.pathMapping) : that.pathMapping == null;
@@ -88,7 +88,7 @@ public class PathFieldAddingProcessor implements ItemProcessor {
 
     @Override
     public String toString() {
-        return "PathFieldAddingProcessor{" +
+        return "ByPathFieldAddingProcessor{" +
             "fieldName='" + fieldName + '\'' +
             ", pathMapping=" + pathMapping +
             '}';
