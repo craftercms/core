@@ -1,5 +1,6 @@
 package org.craftercms.core.processors.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.ItemProcessingException;
@@ -7,6 +8,7 @@ import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
+import org.craftercms.core.util.XmlUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -15,27 +17,15 @@ import org.springframework.beans.factory.annotation.Required;
 import java.util.Map;
 
 /**
- * {@link ItemProcessor} to add a new field with values mapped from an existing one. Can be used to label documents.
+ * {@link ItemProcessor} that adds a new tag or field to items that have a certain tag/field and value.
  * @author joseross
  */
-public class MappedFieldAddingProcessor implements ItemProcessor {
-
-    private static final Log logger = LogFactory.getLog(MappedFieldAddingProcessor.class);
+public class TaggingByFieldValueProcessor extends AbstractTaggingProcessor {
 
     /**
      * The name of the existing field to query.
      */
     protected String sourceField;
-
-    /**
-     * The name of the new field to add.
-     */
-    protected String mappedField;
-
-    /**
-     * The default value to use.
-     */
-    protected String defaultValue;
 
     /**
      * Map of values, the keys can be regular expressions.
@@ -48,11 +38,6 @@ public class MappedFieldAddingProcessor implements ItemProcessor {
     }
 
     @Required
-    public void setMappedField(String mappedField) {
-        this.mappedField = mappedField;
-    }
-
-    @Required
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
@@ -62,39 +47,22 @@ public class MappedFieldAddingProcessor implements ItemProcessor {
         this.valueMapping = valueMapping;
     }
 
-    protected void addMappedField(Document document, String mappedValue) {
-        Element root = document.getRootElement();
-        Element mappedElement = root.addElement(mappedField);
-        mappedElement.setText(mappedValue);
-    }
-
-    public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
+    @Override
+    protected String getTagValues(Item item) {
+        String value = defaultValue;
         Document document = item.getDescriptorDom();
-        if(document != null) {
-            if(logger.isDebugEnabled()) {
-                logger.debug("Processing item " + item);
-            }
-            Node sourceNode = document.selectSingleNode(sourceField);
-            if(sourceNode != null) {
-                String originalValue = sourceNode.getStringValue();
-                String mappedValue = defaultValue;
-                if(logger.isDebugEnabled()) {
-                    logger.debug("Found field " + sourceField + " with value " + originalValue);
-                }
-                for(String key : valueMapping.keySet()) {
-                    if(originalValue.matches(key)) {
-                        mappedValue = valueMapping.get(key);
+        if (document != null) {
+            String sourceValue = XmlUtils.selectSingleNodeValue(document.getRootElement(), sourceField);
+            if (StringUtils.isNotEmpty(sourceValue)) {
+                for (Map.Entry<String, String> entry : valueMapping.entrySet()) {
+                    if (sourceValue.matches(entry.getKey())) {
+                        value = entry.getValue();
                         break;
                     }
                 }
-                if(logger.isDebugEnabled()) {
-                    logger.debug("Adding field " + mappedField + " with value " + mappedValue);
-                }
-                addMappedField(document, mappedValue);
             }
         }
-
-        return item;
+        return value;
     }
 
     @Override
@@ -102,10 +70,10 @@ public class MappedFieldAddingProcessor implements ItemProcessor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MappedFieldAddingProcessor that = (MappedFieldAddingProcessor) o;
+        TaggingByFieldValueProcessor that = (TaggingByFieldValueProcessor) o;
 
         if (sourceField != null ? !sourceField.equals(that.sourceField) : that.sourceField != null) return false;
-        if (mappedField != null ? !mappedField.equals(that.mappedField) : that.mappedField != null) return false;
+        if (newField != null ? !newField.equals(that.newField) : that.newField != null) return false;
         if (defaultValue != null ? !defaultValue.equals(that.defaultValue) : that.defaultValue != null) return false;
         return valueMapping != null ? valueMapping.equals(that.valueMapping) : that.valueMapping == null;
 
@@ -114,7 +82,7 @@ public class MappedFieldAddingProcessor implements ItemProcessor {
     @Override
     public int hashCode() {
         int result = sourceField != null ? sourceField.hashCode() : 0;
-        result = 31 * result + (mappedField != null ? mappedField.hashCode() : 0);
+        result = 31 * result + (newField != null ? newField.hashCode() : 0);
         result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
         result = 31 * result + (valueMapping != null ? valueMapping.hashCode() : 0);
         return result;
@@ -122,9 +90,9 @@ public class MappedFieldAddingProcessor implements ItemProcessor {
 
     @Override
     public String toString() {
-        return "MappedFieldAddingProcessor{" +
+        return "TaggingByFieldValueProcessor{" +
             "sourceField='" + sourceField + '\'' +
-            ", mappedField='" + mappedField + '\'' +
+            ", newField='" + newField + '\'' +
             ", defaultValue='" + defaultValue + '\'' +
             ", valueMapping=" + valueMapping +
             '}';
