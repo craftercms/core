@@ -72,10 +72,9 @@ public interface ContentStoreService {
      * new cache scope
      * associated to the context. If a context with the same params was already created, an exception is thrown.
      */
-    Context createContext(String storeType, String storeServerUrl, String username, String password,
-                          String rootFolderPath, boolean cacheOn, int maxAllowedItemsInCache,
-                          boolean ignoreHiddenFiles) throws InvalidStoreTypeException, StoreException,
-        AuthenticationException;
+    Context createContext(String storeType, String storeServerUrl, String username, String password, String rootFolderPath,
+                          boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
+                          boolean ignoreHiddenFiles) throws InvalidStoreTypeException, StoreException, AuthenticationException;
 
     /**
      * Destroys the specified context, login out of any remote repository (if a login was issued) and destroying the

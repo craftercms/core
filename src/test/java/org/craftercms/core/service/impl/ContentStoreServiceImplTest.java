@@ -48,6 +48,7 @@ import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEP
 import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
 import static org.craftercms.core.service.Context.DEFAULT_IGNORE_HIDDEN_FILES;
 import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
+import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -153,7 +154,7 @@ public class ContentStoreServiceImplTest {
     @Before
     public void setUp() throws Exception {
         context = contentStoreService.createContext(FileSystemContentStoreAdapter.STORE_TYPE, null, null, null,
-                                                    CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_CACHE_ON,
+                                                    CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
                                                     DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
     }
 

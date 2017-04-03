@@ -149,10 +149,10 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
 
                             doInclude(item, includeElement, itemToInclude);
                         } else {
-                            logger.warn("No descriptor item found @ " + itemToIncludePath);
+                            logger.debug("No descriptor item found @ " + itemToIncludePath);
                         }
                     } else {
-                        logger.warn("Circular inclusion detected. Item " + itemToIncludePath + " already included");
+                        logger.debug("Circular inclusion detected. Item " + itemToIncludePath + " already included");
                     }
                 } else {
                     if (logger.isDebugEnabled()) {
