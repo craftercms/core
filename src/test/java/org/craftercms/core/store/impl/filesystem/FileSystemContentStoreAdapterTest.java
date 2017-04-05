@@ -39,6 +39,7 @@ import org.springframework.core.io.ResourceLoader;
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
 import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
+import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -167,7 +168,7 @@ public class FileSystemContentStoreAdapterTest {
         }
 
     private Context createTestContext(boolean ignoreHiddenFiles) {
-        return storeAdapter.createContext("0", null, null, null, CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_CACHE_ON,
+        return storeAdapter.createContext("0", null, null, null, CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
                 DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, ignoreHiddenFiles);
     }
 

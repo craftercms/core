@@ -30,16 +30,18 @@ public class ContextImpl implements Context {
     protected ContentStoreAdapter storeAdapter;
     protected String storeServerUrl;
     protected String rootFolderPath;
+    protected boolean mergingOn;
     protected boolean cacheOn;
     protected int maxAllowedItemsInCache;
     protected boolean ignoreHiddenFiles;
 
     public ContextImpl(String id, ContentStoreAdapter storeAdapter, String storeServerUrl, String rootFolderPath,
-                       boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
+                       boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
         this.id = id;
         this.storeAdapter = storeAdapter;
         this.storeServerUrl = storeServerUrl;
         this.rootFolderPath = rootFolderPath;
+        this.mergingOn = mergingOn;
         this.cacheOn = cacheOn;
         this.maxAllowedItemsInCache = maxAllowedItemsInCache;
         this.ignoreHiddenFiles = ignoreHiddenFiles;
@@ -63,6 +65,11 @@ public class ContextImpl implements Context {
     @Override
     public String getRootFolderPath() {
         return rootFolderPath;
+    }
+
+    @Override
+    public boolean isMergingOn() {
+        return mergingOn;
     }
 
     @Override

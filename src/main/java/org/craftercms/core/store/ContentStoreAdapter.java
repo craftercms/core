@@ -37,7 +37,7 @@ import org.craftercms.core.service.Item;
 public interface ContentStoreAdapter {
 
     Context createContext(String id, String storeServerUrl, String username, String password, String rootFolderPath,
-                          boolean cacheOn, int maxAllowedItemsInCache,
+                          boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
                           boolean ignoreHiddenFiles) throws StoreException, AuthenticationException;
 
     void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException;

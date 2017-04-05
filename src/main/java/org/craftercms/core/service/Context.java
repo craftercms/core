@@ -10,6 +10,7 @@ import org.craftercms.core.store.ContentStoreAdapter;
  */
 public interface Context {
 
+    boolean DEFAULT_MERGING_ON = true;
     boolean DEFAULT_CACHE_ON = true;
     int DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE = 0;
     boolean DEFAULT_IGNORE_HIDDEN_FILES = true;
@@ -21,6 +22,8 @@ public interface Context {
     String getStoreServerUrl();
 
     String getRootFolderPath();
+
+    boolean isMergingOn();
 
     boolean isCacheOn();
 

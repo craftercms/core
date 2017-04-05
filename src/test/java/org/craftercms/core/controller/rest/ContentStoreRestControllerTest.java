@@ -48,6 +48,7 @@ import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEP
 import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
 import static org.craftercms.core.service.Context.DEFAULT_IGNORE_HIDDEN_FILES;
 import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
+import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -220,7 +221,7 @@ public class ContentStoreRestControllerTest {
     private void setUpTestContext() {
         ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
 
-        context = new ContextImpl("0", storeAdapter, "http://localhost:8080", "/", DEFAULT_CACHE_ON,
+        context = new ContextImpl("0", storeAdapter, "http://localhost:8080", "/", DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
                                   DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
     }
 
