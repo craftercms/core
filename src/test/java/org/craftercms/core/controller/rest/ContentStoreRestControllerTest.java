@@ -208,7 +208,8 @@ public class ContentStoreRestControllerTest {
         Map<String, Object> model = callback.executeMethod();
         assertEquals(cachingAwareObject, model.get(modelAttributeName));
         assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-        assertEquals(cachingAwareObject.getCachingTime(), new Long(response.getHeader(LAST_MODIFIED_HEADER_NAME)));
+        //Remove the nano precession,
+        assertEquals(new Long(cachingAwareObject.getCachingTime()/1000), new Long(response.getDateHeader(LAST_MODIFIED_HEADER_NAME)/1000));
         assertEquals(MUST_REVALIDATE_HEADER_VALUE, response.getHeader(CACHE_CONTROL_HEADER_NAME));
     }
 
