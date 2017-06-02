@@ -11,8 +11,6 @@ notifications:
     use_notice: true
     skip_join: true
   slack: craftersoftware:7YiSb41ZG5rfMgiAY7Qgprc7
-addons:
-  sonarqube: true
 env:
   global:
     - secure: xmXyyHpDFZtEW4+oQeb8E1lUQzbxAUcqUP8o8dUOVs3VW1QRRUZ9MC8tIRfh4Sbu19eqGCNP9bbeNELl3Aet+DTuJ4n0wHq4bushv4ai7OB42B/huWth1nooekE7vSjuBybx9kk+XiKJhPbTJi4KzsTqGONVPn7AzNckdxLlcE0=
