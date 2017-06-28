@@ -27,6 +27,7 @@ import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
@@ -43,24 +44,28 @@ public class RestControllerBase {
 
     @ExceptionHandler(InvalidContextException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
     public Map<String, Object> handleInvalidContextException(HttpServletRequest request, InvalidContextException e) {
         return handleException(request, e);
     }
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
     public Map<String, Object>  handleAuthenticationException(HttpServletRequest request, AuthenticationException e) {
         return handleException(request, e);
     }
 
     @ExceptionHandler(PathNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
     public Map<String, Object>  handlePathNotFoundException(HttpServletRequest request, PathNotFoundException e) {
         return handleException(request, e);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
     public Map<String, Object> handleException(HttpServletRequest request, Exception e) {
         logger.error("Request for " + request.getRequestURI() + " failed", e);
 
