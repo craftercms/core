@@ -33,6 +33,7 @@ import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.exception.InvalidStoreTypeException;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.exception.PathNotFoundException;
+import org.craftercms.core.exception.RootFolderNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.exception.XmlMergeException;
@@ -144,7 +145,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     @Override
     public Context createContext(String storeType, String storeServerUrl, String username, String password, String rootFolderPath,
                                  boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
-                                 boolean ignoreHiddenFiles) throws InvalidStoreTypeException, StoreException,
+                                 boolean ignoreHiddenFiles) throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException,
         AuthenticationException {
         String id = createContextId(storeType, storeServerUrl, username, password, rootFolderPath, cacheOn,
                                     maxAllowedItemsInCache, ignoreHiddenFiles);

@@ -23,6 +23,7 @@ import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.InvalidStoreTypeException;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.exception.PathNotFoundException;
+import org.craftercms.core.exception.RootFolderNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.exception.XmlMergeException;
@@ -74,7 +75,8 @@ public interface ContentStoreService {
      */
     Context createContext(String storeType, String storeServerUrl, String username, String password, String rootFolderPath,
                           boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
-                          boolean ignoreHiddenFiles) throws InvalidStoreTypeException, StoreException, AuthenticationException;
+                          boolean ignoreHiddenFiles)
+        throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException;
 
     /**
      * Destroys the specified context, login out of any remote repository (if a login was issued) and destroying the
