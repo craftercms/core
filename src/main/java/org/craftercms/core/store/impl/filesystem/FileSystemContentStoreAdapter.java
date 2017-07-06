@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
+import org.craftercms.core.exception.RootFolderNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.store.impl.AbstractFileBasedContentStoreAdapter;
@@ -52,11 +53,12 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     @Override
     public Context createContext(String id, String storeServerUrl, String username, String password, String rootFolderPath,
                                  boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
-                                 boolean ignoreHiddenFiles) throws StoreException, AuthenticationException {
+                                 boolean ignoreHiddenFiles) throws RootFolderNotFoundException, StoreException, AuthenticationException {
         Resource rootFolderResource = resourceLoader.getResource(rootFolderPath);
 
         if (!rootFolderResource.exists()) {
-            throw new StoreException("Root folder " + rootFolderPath + " not found (make sure that it has a valid URL prefix (e.g. file:))");
+            throw new RootFolderNotFoundException("Root folder " + rootFolderPath + " not found (make sure that it has a valid URL " +
+                                                  "prefix (e.g. file:))");
         }
 
         FileSystemFile rootFolder;

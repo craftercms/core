@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
+import org.craftercms.core.exception.RootFolderNotFoundException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.service.CachingOptions;
@@ -38,7 +39,7 @@ public interface ContentStoreAdapter {
 
     Context createContext(String id, String storeServerUrl, String username, String password, String rootFolderPath,
                           boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
-                          boolean ignoreHiddenFiles) throws StoreException, AuthenticationException;
+                          boolean ignoreHiddenFiles) throws RootFolderNotFoundException, StoreException, AuthenticationException;
 
     void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException;
 
