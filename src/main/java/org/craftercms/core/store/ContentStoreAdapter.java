@@ -41,7 +41,9 @@ public interface ContentStoreAdapter {
                           boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
                           boolean ignoreHiddenFiles) throws RootFolderNotFoundException, StoreException, AuthenticationException;
 
-    void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException;
+    boolean validate(Context context) throws StoreException, AuthenticationException;
+
+    void destroyContext(Context context) throws StoreException, AuthenticationException;
 
     boolean exists(Context context, String path) throws InvalidContextException, StoreException;
 

@@ -169,19 +169,26 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         }
     }
 
+    @Override
+    public boolean validate(Context context) throws StoreException, AuthenticationException {
+        return context.getStoreAdapter().validate(context);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
+    public boolean destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
         if (contexts.containsKey(context.getId())) {
             context.getStoreAdapter().destroyContext(context);
 
             cacheTemplate.getCacheService().removeScope(context);
 
             contexts.remove(context.getId());
+
+            return true;
         } else {
-            throw new InvalidContextException("Context " + context + " is not valid");
+            return false;
         }
     }
 
