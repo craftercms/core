@@ -75,15 +75,13 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     @Override
     public boolean validate(Context context) throws InvalidContextException, StoreException, AuthenticationException {
         FileSystemFile rootFolder = ((FileSystemContext)context).getRootFolder();
-        if (rootFolder.getFile().exists()) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return rootFolder.getFile().exists();
     }
 
     @Override
     public void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
+        // Nothing to destroy
     }
 
     @Override
