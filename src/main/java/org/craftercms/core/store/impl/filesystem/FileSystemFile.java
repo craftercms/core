@@ -29,7 +29,7 @@ import org.craftercms.core.store.impl.File;
  *
  * @author Alfonso Vásquez
  */
-public class FileSystemFile implements File, Content {
+public class FileSystemFile implements File {
 
     private java.io.File file;
 
