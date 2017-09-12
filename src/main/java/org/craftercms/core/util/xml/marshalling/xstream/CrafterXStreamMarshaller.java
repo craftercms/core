@@ -86,6 +86,7 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
      * Also returns true if there aren't any unsupported or supported classes.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean supports(Class clazz) {
         if (ArrayUtils.isNotEmpty(unsupportedClasses)) {
             for (Class unsupportedClass : unsupportedClasses) {

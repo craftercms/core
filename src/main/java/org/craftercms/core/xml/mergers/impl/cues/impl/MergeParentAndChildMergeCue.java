@@ -62,6 +62,7 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException {
         Element merged = DocumentHelper.createElement(child.getQName());
         org.craftercms.core.util.CollectionUtils.move(child.attributes(), merged.attributes());

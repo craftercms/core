@@ -24,8 +24,8 @@ import org.craftercms.core.service.Item;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * {@link org.craftercms.core.processors.ItemProcessorResolver} that returns certain {@link org.craftercms.core
- * .processors.ItemProcessor}s for certain url patterns.
+ * {@link org.craftercms.core.processors.ItemProcessorResolver} that returns certain
+ * {@link org.craftercms.core.processors.ItemProcessor}s for certain url patterns.
  *
  * @author Alfonso Vásquez
  */

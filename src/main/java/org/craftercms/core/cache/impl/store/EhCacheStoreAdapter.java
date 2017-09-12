@@ -126,6 +126,7 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Collection<Object> getKeys(String scope) throws Exception {
         return getScopeCache(scope).getKeys();
     }

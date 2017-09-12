@@ -81,6 +81,7 @@ public class XmlUtils {
      * Executes the specified XPath query as a multiple node query, returning the text values of the resulting list of
      * nodes.
      */
+    @SuppressWarnings("unchecked")
     public static List<String> selectNodeValues(Node node, String xpathQuery) {
         List<Node> resultNodes = node.selectNodes(xpathQuery);
 
@@ -111,6 +112,7 @@ public class XmlUtils {
     /**
      * Executes the specified namespace aware XPath query as a multiple node query, returning the resulting list of nodes.
      */
+    @SuppressWarnings("unchecked")
     public static List<Node> selectNodes(Node node, String xpathQuery, Map<String, String> namespaceUris) {
         XPath xpath = DocumentHelper.createXPath(xpathQuery);
         xpath.setNamespaceURIs(namespaceUris);

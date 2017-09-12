@@ -17,7 +17,6 @@
 package org.craftercms.core.util.template.impl.freemarker;
 
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
 import org.craftercms.core.exception.TemplateException;
 import org.craftercms.core.util.template.CompiledTemplate;
 import org.craftercms.core.util.template.TemplateCompiler;
@@ -38,11 +37,10 @@ public class FreeMarkerStringTemplateCompiler implements TemplateCompiler<Identi
     public FreeMarkerStringTemplateCompiler() {
         templateLoader = new ConcurrentStringTemplateLoader();
 
-        templateConfiguration = new Configuration();
+        templateConfiguration = new Configuration(Configuration.VERSION_2_3_23);
         templateConfiguration.setTemplateLoader(templateLoader);
         // Don't wait to check whether a template was updated
-        templateConfiguration.setTemplateUpdateDelay(0);
-        templateConfiguration.setObjectWrapper(new DefaultObjectWrapper());
+        templateConfiguration.setTemplateUpdateDelayMilliseconds(0);
     }
 
     @Required

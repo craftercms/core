@@ -44,7 +44,7 @@ public abstract class AbstractTaggingProcessor implements ItemProcessor {
     /**
      * If this method returns null or an empty string the item will not be tagged.
      * @param item
-     * @return
+     * @return values to use for tagging the item
      */
     protected abstract String getTagValues(Item item);
 

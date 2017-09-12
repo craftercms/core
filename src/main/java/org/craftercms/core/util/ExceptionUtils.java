@@ -23,6 +23,7 @@ package org.craftercms.core.util;
  */
 public class ExceptionUtils  {
 
+    @SuppressWarnings("unchecked")
     public static final <T> T getThrowableOfType(Throwable throwable, Class<T> type) {
         if (throwable == null || type == null) {
             return null;
