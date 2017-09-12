@@ -62,7 +62,8 @@ public class Tree extends Item {
     }
 
     /**
-     * Copy constructor that takes another tree. Performs a deep copy (calls {@link #Item(Item, boolean)} with true).
+     * Copy constructor that takes another tree. Performs a deep copy (calls {@link Item#Item(Item, boolean)} with
+     * true).
      */
     public Tree(Tree tree) {
         this(tree, true);

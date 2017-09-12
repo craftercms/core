@@ -198,7 +198,7 @@ public class Item extends CachingAwareObjectBase {
      */
     public void setProperty(String key, Object value) {
         if (properties == null) {
-            properties = new HashMap<String, Object>();
+            properties = new HashMap<>();
         }
 
         properties.put(key, value);
@@ -225,6 +225,7 @@ public class Item extends CachingAwareObjectBase {
      * Queries multiple descriptor node text values. First looks in the properties, if not found it executes the XPath
      * query.
      */
+    @SuppressWarnings("unchecked")
     public List<String> queryDescriptorValues(String xpathQuery) {
         if (descriptorDom != null) {
             List<String> value = (List<String>)getProperty(xpathQuery);

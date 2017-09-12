@@ -48,6 +48,7 @@ public abstract class AbstractBeanIdBasedRegistry<T> implements BeanPostProcesso
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (getRegistryType().isAssignableFrom(bean.getClass())) {
             if (beanName.startsWith(getBeanNameIdPrefix())) {

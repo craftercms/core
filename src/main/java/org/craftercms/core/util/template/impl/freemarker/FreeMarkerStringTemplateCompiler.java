@@ -38,11 +38,10 @@ public class FreeMarkerStringTemplateCompiler implements TemplateCompiler<Identi
     public FreeMarkerStringTemplateCompiler() {
         templateLoader = new ConcurrentStringTemplateLoader();
 
-        templateConfiguration = new Configuration();
+        templateConfiguration = new Configuration(Configuration.VERSION_2_3_23);
         templateConfiguration.setTemplateLoader(templateLoader);
         // Don't wait to check whether a template was updated
-        templateConfiguration.setTemplateUpdateDelay(0);
-        templateConfiguration.setObjectWrapper(new DefaultObjectWrapper());
+        templateConfiguration.setTemplateUpdateDelayMilliseconds(0);
     }
 
     @Required

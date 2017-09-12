@@ -43,7 +43,7 @@ public class UrlUtils {
      * @param shortNameRegexGroup    the index of the captured group that represents the short name (see the Pattern
      *                               class javadoc)
      * @return the short name, or the long name if there was no short name match
-     * @see {@link Pattern}
+     * @see Pattern
      */
     public static String getShortName(String longName, String containsShortNameRegex, int shortNameRegexGroup) {
         Pattern pattern = Pattern.compile(containsShortNameRegex);

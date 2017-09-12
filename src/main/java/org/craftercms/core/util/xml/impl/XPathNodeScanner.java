@@ -41,6 +41,7 @@ public class XPathNodeScanner implements NodeScanner {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Node> scan(Document document) throws XmlException {
         try {
             List<Node> nodes = new ArrayList<Node>();

@@ -57,6 +57,7 @@ public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
         return Document.class;
     }
 
+    @SuppressWarnings("unchecked")
     private void elementToJson(Element element, JsonGenerator jsonGenerator) throws IOException {
         boolean objectStarted = false;
 
@@ -128,6 +129,7 @@ public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private List<String> getTextContentFromMixedContent(Element element) {
         List<Node> content = element.content();
         List<String> textContent = new ArrayList<String>();
@@ -144,6 +146,7 @@ public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
         return textContent;
     }
 
+    @SuppressWarnings("unchecked")
     private Map<String, List<Element>> getChildren(Element element) {
         Map<String, List<Element>> groupedChildren = new LinkedHashMap<>();
         List<Element> children = element.elements();

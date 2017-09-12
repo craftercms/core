@@ -79,6 +79,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
         return obj;
     }
 
+    @SuppressWarnings("unchecked")
     protected <T> T doGet(Context context, Callback<T> callback, Object key) {
         T obj = null;
         try {

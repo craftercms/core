@@ -105,6 +105,7 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         return new MergeCueContext(chosenMergeCue, parent, child, mergeCueParams);
     }
 
+    @SuppressWarnings("unchecked")
     protected Attribute getMergeCueAttribute(Element element, Map<QName, MergeCue> mergeCues) {
         List<Attribute> attributes = element.attributes();
         for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
@@ -119,6 +120,7 @@ public class MergeCueResolverImpl implements MergeCueResolver {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     protected Map<String, String> getMergeCueParams(Element element, Attribute mergeCueAttribute) {
         Map<String, String> params = new HashMap<String, String>();
         String paramsPrefix = mergeCueAttribute.getQualifiedName() + "-";
