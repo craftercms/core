@@ -17,7 +17,6 @@
 package org.craftercms.core.util.template.impl.freemarker;
 
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
 import org.craftercms.core.exception.TemplateException;
 import org.craftercms.core.util.template.CompiledTemplate;
 import org.craftercms.core.util.template.TemplateCompiler;
