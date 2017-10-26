@@ -148,9 +148,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     protected void validatePath(String path) throws StoreException {
         ValidationResult result = new ValidationResult();
 
-        pathValidator.validate(path, result);
-
-        if (result.hasErrors()) {
+        if (!pathValidator.validate(path, result)) {
             throw new StoreException("Validation of path " + path + " failed. Errors: " + result.getErrors());
         }
     }
