@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
 import org.craftercms.commons.lang.Callback;
+import org.craftercms.commons.validation.validators.impl.SecurePathValidator;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.util.cache.CacheTemplate;
@@ -166,6 +167,7 @@ public class FileSystemContentStoreAdapterTest {
         storeAdapter.setResourceLoader(resourceLoader);
         storeAdapter.setDescriptorFileExtension(DESCRIPTOR_FILE_EXTENSION);
         storeAdapter.setMetadataFileExtension(METADATA_FILE_EXTENSION);
+        storeAdapter.setPathValidator(new SecurePathValidator("path"));
     }
 
     private void assertCrafterCMSLogoItem(Item item) {
