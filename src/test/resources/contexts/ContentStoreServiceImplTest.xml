@@ -39,6 +39,11 @@
         <property name="cacheTemplate" ref="cacheTemplate"/>
         <property name="metadataFileExtension" value=".meta.xml"/>
         <property name="descriptorFileExtension" value=".xml"/>
+        <property name="pathValidator">
+            <bean class="org.craftercms.commons.validation.validators.impl.SecurePathValidator">
+                <constructor-arg value="path"/>
+            </bean>
+        </property>
     </bean>
 
     <!-- ////////////////////////////////////////////////// -->
