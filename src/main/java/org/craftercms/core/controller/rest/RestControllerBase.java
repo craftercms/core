@@ -44,7 +44,6 @@ public class RestControllerBase {
 
     public static final String REST_BASE_URI = "${crafter.core.rest.base.uri}";
     public static final String MESSAGE_MODEL_ATTRIBUTE_NAME = "message";
-    public static final String VALIDATION_ERRORS_MODEL_ATTRIBUTE_NAME = "validation_errors";
 
     @ExceptionHandler(InvalidContextException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
