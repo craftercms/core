@@ -42,7 +42,7 @@ public class RestControllerBase {
 
     private static final Log logger = LogFactory.getLog(RestControllerBase.class);
 
-    public static final String REST_BASE_URI = "${crafter.core.rest.base.uri}";
+    public static final String REST_BASE_URI = "/api/1";
     public static final String MESSAGE_MODEL_ATTRIBUTE_NAME = "message";
 
     @ExceptionHandler(InvalidContextException.class)
