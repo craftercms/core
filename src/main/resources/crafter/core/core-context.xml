@@ -24,6 +24,9 @@
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 
+	<!-- Commons Validation context -->
+	<import resource="classpath:crafter/commons/validation/validation-context.xml"/>
+
     <!-- Main contexts -->
 
     <!-- Cache Engine -->
