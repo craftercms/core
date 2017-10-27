@@ -25,6 +25,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
 import org.craftercms.commons.lang.Callback;
 import org.craftercms.commons.validation.validators.impl.SecurePathValidator;
+import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.util.cache.CacheTemplate;
@@ -131,7 +132,7 @@ public class FileSystemContentStoreAdapterTest {
     @Test(expected = XmlFileParseException.class)
     public void testGetUnsecuredItems() throws Exception {
         Context context = createTestContext(true);
-        List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, UNSECURE_FOLDER_PATH, true);
+        storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, UNSECURE_FOLDER_PATH, true);
     }
 
     @Test
