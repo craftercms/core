@@ -22,19 +22,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.validation.ValidationResult;
+import org.craftercms.commons.validation.validators.Validator;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.store.impl.AbstractFileBasedContentStoreAdapter;
 import org.craftercms.core.store.impl.File;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
- * Implementation of {@link org.craftercms.core.store.ContentStoreAdapter} that enables access to a store in the
- * filesystem.
+ * Implementation of {@link org.craftercms.core.store.ContentStoreAdapter} that enables access to a store in the filesystem.
  *
  * @author Alfonso Vásquez
  */
@@ -43,10 +45,16 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     public static final String STORE_TYPE = "filesystem";
 
     private ResourceLoader resourceLoader;
+    private Validator<String> pathValidator;
 
     @Override
     public void setResourceLoader(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
+    }
+
+    @Required
+    public void setPathValidator(Validator<String> pathValidator) {
+        this.pathValidator = pathValidator;
     }
 
     @Override
@@ -77,6 +85,8 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
 
     @Override
     protected File findFile(Context context, String path) {
+        validatePath(path);
+
         FileSystemFile rootFolder = ((FileSystemContext)context).getRootFolder();
 
         if (StringUtils.isNotEmpty(path)) {
@@ -124,6 +134,14 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
             return !pathname.isHidden();
         }
 
+    }
+
+    protected void validatePath(String path) throws StoreException {
+        ValidationResult result = new ValidationResult();
+
+        if (!pathValidator.validate(path, result)) {
+            throw new StoreException("Validation of path " + path + " failed. Errors: " + result.getErrors());
+        }
     }
 
 }

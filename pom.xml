@@ -274,6 +274,11 @@
             <artifactId>crafter-commons-utilities</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.craftercms</groupId>
+            <artifactId>crafter-commons-validation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>

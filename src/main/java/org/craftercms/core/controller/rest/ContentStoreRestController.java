@@ -97,7 +97,7 @@ public class ContentStoreRestController extends RestControllerBase {
         if (item.getCachingTime() != null && checkNotModified(item.getCachingTime(), request, response)) {
             return null;
         } else {
-            return createSingletonModel(MODEL_ATTR_ITEM, item);
+            return createMessageModel(MODEL_ATTR_ITEM, item);
         }
     }
 
@@ -117,7 +117,7 @@ public class ContentStoreRestController extends RestControllerBase {
         if (children.getCachingTime() != null && checkNotModified(children.getCachingTime(), request, response)) {
             return null;
         } else {
-            return createSingletonModel(MODEL_ATTR_CHILDREN, new ArrayList<Item>(children));
+            return createMessageModel(MODEL_ATTR_CHILDREN, new ArrayList<Item>(children));
         }
     }
 
@@ -142,7 +142,7 @@ public class ContentStoreRestController extends RestControllerBase {
         if (tree.getCachingTime() != null && checkNotModified(tree.getCachingTime(), request, response)) {
             return null;
         } else {
-            return createSingletonModel(MODEL_ATTR_TREE, tree);
+            return createMessageModel(MODEL_ATTR_TREE, tree);
         }
     }
 
