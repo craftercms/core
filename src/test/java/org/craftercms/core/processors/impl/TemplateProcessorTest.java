@@ -27,6 +27,7 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.util.template.impl.freemarker.FreeMarkerStringTemplateCompiler;
 import org.craftercms.core.util.xml.impl.XPathNodeScanner;
+import org.xml.sax.SAXException;
 
 import java.io.StringReader;
 import java.util.HashMap;
@@ -77,8 +78,12 @@ public class TemplateProcessorTest {
         assertEquals(BODY_MODEL_VALUE, body.getText());
     }
 
-    private void setUpTestItem() throws DocumentException {
+    private void setUpTestItem() throws DocumentException, SAXException {
         SAXReader reader = new SAXReader();
+
+        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
         item = new Item();
         item.setDescriptorUrl(DESCRIPTOR_URL);

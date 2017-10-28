@@ -25,6 +25,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
 import org.craftercms.commons.lang.Callback;
 import org.craftercms.commons.validation.validators.impl.SecurePathValidator;
+import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.util.cache.CacheTemplate;
@@ -63,7 +64,9 @@ public class FileSystemContentStoreAdapterTest {
         .class.getSimpleName();
 
     private static final String FOLDER_NAME = "folder";
+    private static final String UNSECURE_FOLDER_NAME = "unsecure";
     private static final String FOLDER_PATH = "/" + FOLDER_NAME;
+    private static final String UNSECURE_FOLDER_PATH = "/" + UNSECURE_FOLDER_NAME;
     private static final String FOLDER_METADATA_FILE_PATH = FOLDER_PATH + METADATA_FILE_EXTENSION;
 
     private static final String DESCRIPTOR_NAME = "descriptor.xml";
@@ -124,6 +127,12 @@ public class FileSystemContentStoreAdapterTest {
 
         Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, CRAFTER_CMS_LOGO_PATH, true);
         assertCrafterCMSLogoItem(item);
+    }
+
+    @Test(expected = XmlFileParseException.class)
+    public void testGetUnsecuredItems() throws Exception {
+        Context context = createTestContext(true);
+        storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, UNSECURE_FOLDER_PATH, true);
     }
 
     @Test
