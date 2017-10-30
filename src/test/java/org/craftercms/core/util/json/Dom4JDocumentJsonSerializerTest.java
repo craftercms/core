@@ -29,6 +29,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -82,8 +83,13 @@ public class Dom4JDocumentJsonSerializerTest {
         assertEquals(XML_AS_JSON, json.toString());
     }
 
-    private void setUpTestDocument() {
+    private void setUpTestDocument() throws SAXException {
         SAXReader reader = new SAXReader();
+
+        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
         try {
             document = reader.read(new StringReader(XML));
         } catch (DocumentException e) {

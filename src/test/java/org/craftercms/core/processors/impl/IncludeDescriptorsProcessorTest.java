@@ -26,6 +26,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.junit.Assert.assertEquals;
@@ -111,8 +112,12 @@ public class IncludeDescriptorsProcessorTest {
         context = mock(Context.class);
     }
 
-    private void setUpTestDescriptorDoms() throws DocumentException {
+    private void setUpTestDescriptorDoms() throws DocumentException, SAXException {
         SAXReader reader = new SAXReader();
+
+        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
         descriptorDom1 = reader.read(new StringReader(DESCRIPTOR1_XML));
         descriptorDom2 = reader.read(new StringReader(DESCRIPTOR2_XML));

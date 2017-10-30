@@ -28,6 +28,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -75,8 +76,12 @@ public class AttributeAddingProcessorTest {
         processor.setAttributeMappings(Collections.singletonMap("//date", attributes));
     }
 
-    private Document readInputXml() throws DocumentException {
+    private Document readInputXml() throws DocumentException, SAXException {
         SAXReader reader = new SAXReader();
+
+        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
         return reader.read(new StringReader(INPUT_XML));
     }
