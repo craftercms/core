@@ -222,6 +222,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
         xmlReader.setMergeAdjacentText(true);
         xmlReader.setStripWhitespaceText(true);
         xmlReader.setIgnoreComments(true);
+
         try {
             xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
@@ -229,13 +230,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
         }catch (SAXException ex){
             LOGGER.error("Unable to turn off external entity loading, This could be a security risk.", ex);
         }
-        try {
-            xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-        }catch (SAXException ex){
-            LOGGER.error("Unable to turn off external entity loading, This could be a security risk.", ex);
-        }
+
         return xmlReader;
     }
 
