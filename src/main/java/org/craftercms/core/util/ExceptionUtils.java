@@ -21,14 +21,14 @@ package org.craftercms.core.util;
  *
  * @author Alfonso Vásquez
  */
-public class ExceptionUtils  {
+public class ExceptionUtils extends org.apache.commons.lang3.exception.ExceptionUtils {
 
-    public static final <T> T getThrowableOfType(Throwable throwable, Class<T> type) {
+    public static <T> T getThrowableOfType(Throwable throwable, Class<T> type) {
         if (throwable == null || type == null) {
             return null;
         }
 
-        Throwable[] throwables = org.apache.commons.lang3.exception.ExceptionUtils.getThrowables(throwable);
+        Throwable[] throwables = getThrowables(throwable);
         for (Throwable throwableInChain : throwables) {
             if (type.isAssignableFrom(throwableInChain.getClass())) {
                 return (T)throwableInChain;
