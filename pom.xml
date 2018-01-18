@@ -1,516 +1,516 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.craftercms</groupId>
-    <artifactId>crafter-core</artifactId>
-    <version>2.5.14</version>     
-    <name>Crafter Core</name>
-    <description>Crafter Core Library</description>
-    <url>https://github.com/craftercms/core</url>
-    <organization>
-        <name>CrafterCMS</name>
-        <url>http://craftercms.org</url>
-    </organization>
+        <project>
+            <modelVersion>4.0.0</modelVersion>
+            <groupId>org.craftercms</groupId>
+            <artifactId>crafter-core</artifactId>
+            <version>2.5.15-SNAPSHOT</version>
+            <name>Crafter Core</name>
+            <description>Crafter Core Library</description>
+            <url>https://github.com/craftercms/core</url>
+            <organization>
+                <name>CrafterCMS</name>
+                <url>http://craftercms.org</url>
+            </organization>
 
-    <licenses>
-        <license>
-            <name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
-            <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+            <licenses>
+                <license>
+                    <name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
+                    <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+                    <distribution>repo</distribution>
+                </license>
+            </licenses>
 
-    <developers>
-        <developer>
-            <id>sumerjabri</id>
-            <name>Sumer Jabri</name>
-            <email>sumer.jabri@craftercms.org</email>
-        </developer>
-        <developer>
-            <id>avasquez</id>
-            <name>Alfonso Vásquez</name>
-            <email>alfonso.vasquez@craftersoftware.com</email>
-        </developer>
-    </developers>
+            <developers>
+                <developer>
+                    <id>sumerjabri</id>
+                    <name>Sumer Jabri</name>
+                    <email>sumer.jabri@craftercms.org</email>
+                </developer>
+                <developer>
+                    <id>avasquez</id>
+                    <name>Alfonso Vásquez</name>
+                    <email>alfonso.vasquez@craftersoftware.com</email>
+                </developer>
+            </developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/craftercms/core</connection>
-        <developerConnection>scm:git:git://github.com/craftercms/core</developerConnection>
-        <url>scm:git:git://github.com/craftercms/core</url>
-    </scm>
+            <scm>
+                <connection>scm:git:git://github.com/craftercms/core</connection>
+                <developerConnection>scm:git:git://github.com/craftercms/core</developerConnection>
+                <url>scm:git:git://github.com/craftercms/core</url>
+            </scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- Makes build site faster -->
-        <dependency.locations.enabled>false</dependency.locations.enabled>
+            <properties>
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+                <!-- Makes build site faster -->
+                <dependency.locations.enabled>false</dependency.locations.enabled>
 
-        <!-- Dependency Version Numbers -->
-        <servlet.api.version>3.0.1</servlet.api.version>
-        <junit.version>4.11</junit.version>
-        <mockito.version>1.9.5</mockito.version>
-        <quartz.version>2.2.1</quartz.version>
-        <commons.lang.version>3.3.2</commons.lang.version>
-        <commons.collections.version>4.0</commons.collections.version>
-        <commons.io.version>2.4</commons.io.version>
-        <commons.codec.version>1.9</commons.codec.version>
-        <slf4j.version>1.7.7</slf4j.version>
-        <log4j.version>1.2.17</log4j.version>
-        <spring.version>4.0.3.RELEASE</spring.version>
-        <ehcache.version>2.8.1</ehcache.version>
-        <jackson.version>2.3.3</jackson.version>
-        <xstream.version>1.4.7</xstream.version>
-        <freemarker.version>2.3.20</freemarker.version>
-        <aspectj.version>1.8.0</aspectj.version>
-        <dom4j.version>1.6.1</dom4j.version>
-        <jaxen.version>1.1.4</jaxen.version>
-        <gson.version>2.2.4</gson.version>
-        <jta.version>1.1</jta.version>
+                <!-- Dependency Version Numbers -->
+                <servlet.api.version>3.0.1</servlet.api.version>
+                <junit.version>4.11</junit.version>
+                <mockito.version>1.9.5</mockito.version>
+                <quartz.version>2.2.1</quartz.version>
+                <commons.lang.version>3.3.2</commons.lang.version>
+                <commons.collections.version>4.0</commons.collections.version>
+                <commons.io.version>2.4</commons.io.version>
+                <commons.codec.version>1.9</commons.codec.version>
+                <slf4j.version>1.7.7</slf4j.version>
+                <log4j.version>1.2.17</log4j.version>
+                <spring.version>4.0.3.RELEASE</spring.version>
+                <ehcache.version>2.8.1</ehcache.version>
+                <jackson.version>2.3.3</jackson.version>
+                <xstream.version>1.4.7</xstream.version>
+                <freemarker.version>2.3.20</freemarker.version>
+                <aspectj.version>1.8.0</aspectj.version>
+                <dom4j.version>1.6.1</dom4j.version>
+                <jaxen.version>1.1.4</jaxen.version>
+                <gson.version>2.2.4</gson.version>
+                <jta.version>1.1</jta.version>
 
-        <!-- Sonar -->
-        <sonar.language>java</sonar.language>
-        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>${basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.jacoco.itReportPath>${basedir}/../target/itjacoco.exec</sonar.jacoco.itReportPath>
-    </properties>
+                <!-- Sonar -->
+                <sonar.language>java</sonar.language>
+                <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+                <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+                <sonar.jacoco.reportPath>${basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
+                <sonar.jacoco.itReportPath>${basedir}/../target/itjacoco.exec</sonar.jacoco.itReportPath>
+            </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.2</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>create</goal>
-                            <goal>create-timestamp</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <doCheck>false</doCheck>
-                    <doUpdate>false</doUpdate>
-                    <revisionOnScmFailure>unknown</revisionOnScmFailure>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Implementation-Build>${buildNumber}</Implementation-Build>
-                            <Build-On>${timestamp}</Build-On>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>coverage</id>
-            <activation>
-                <property>
-                    <name>coverage</name>
-                </property>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.1</version>
                         <configuration>
-                            <destFile>${sonar.jacoco.reportPath}</destFile>
-                            <dataFile>${sonar.jacoco.reportPath}</dataFile>
-                            <propertyName>jacoco.agent.arg</propertyName>
+                            <source>1.7</source>
+                            <target>1.7</target>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
                         <executions>
                             <execution>
-                                <id>pre-junit-test</id>
+                                <id>validate</id>
                                 <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>post-test</id>
-                                <goals>
-                                    <goal>report</goal>
+                                    <goal>jar</goal>
                                 </goals>
                             </execution>
                         </executions>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <argLine>${jacoco.agent.arg}</argLine>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <argLine>${jacoco.agent.arg}</argLine>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>release-sign-artifacts</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-deploy-plugin</artifactId>
-                        <version>2.7</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.4</version>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9</version>
                         <executions>
                             <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
+                                <id>attach-javadocs</id>
                                 <goals>
-                                    <goal>sign</goal>
+                                    <goal>jar</goal>
                                 </goals>
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>buildnumber-maven-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>create</goal>
+                                    <goal>create-timestamp</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <doCheck>false</doCheck>
+                            <doUpdate>false</doUpdate>
+                            <revisionOnScmFailure>unknown</revisionOnScmFailure>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.4</version>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                                <manifestEntries>
+                                    <Implementation-Build>${buildNumber}</Implementation-Build>
+                                    <Build-On>${timestamp}</Build-On>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
-          <id>JDK8</id>
-          <activation>
-              <jdk>[1.8,)</jdk>
-          </activation>
-          <build>
-              <plugins>
-                  <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-javadoc-plugin</artifactId>
-                      <version>2.10.4</version>
-                      <executions>
-                          <execution>
-                              <id>attach-javadocs</id>
-                              <goals>
-                                  <goal>jar</goal>
-                              </goals>
-                              <configuration>
-                                  <additionalparam>-Xdoclint:none</additionalparam>
-                              </configuration>
-                          </execution>
-                      </executions>
-                  </plugin>
-              </plugins>
-          </build>
-      </profile>
-    </profiles>
 
-    <dependencies>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet.api.version}</version>
-            <scope>provided</scope>
-        </dependency>
+            <profiles>
+                <profile>
+                    <id>coverage</id>
+                    <activation>
+                        <property>
+                            <name>coverage</name>
+                        </property>
+                    </activation>
+                    <build>
+                        <plugins>
+                            <plugin>
+                                <groupId>org.jacoco</groupId>
+                                <artifactId>jacoco-maven-plugin</artifactId>
+                                <configuration>
+                                    <destFile>${sonar.jacoco.reportPath}</destFile>
+                                    <dataFile>${sonar.jacoco.reportPath}</dataFile>
+                                    <propertyName>jacoco.agent.arg</propertyName>
+                                </configuration>
+                                <executions>
+                                    <execution>
+                                        <id>pre-junit-test</id>
+                                        <goals>
+                                            <goal>prepare-agent</goal>
+                                        </goals>
+                                    </execution>
+                                    <execution>
+                                        <id>post-test</id>
+                                        <goals>
+                                            <goal>report</goal>
+                                        </goals>
+                                    </execution>
+                                </executions>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-surefire-plugin</artifactId>
+                                <configuration>
+                                    <argLine>${jacoco.agent.arg}</argLine>
+                                </configuration>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-failsafe-plugin</artifactId>
+                                <configuration>
+                                    <argLine>${jacoco.agent.arg}</argLine>
+                                </configuration>
+                            </plugin>
+                        </plugins>
+                    </build>
+                </profile>
 
-        <!-- Crafter -->
-        <dependency>
-            <groupId>org.craftercms</groupId>
-            <artifactId>crafter-commons-utilities</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.craftercms</groupId>
-            <artifactId>crafter-commons-validation</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+                <profile>
+                    <id>release-sign-artifacts</id>
+                    <activation>
+                        <property>
+                            <name>performRelease</name>
+                            <value>true</value>
+                        </property>
+                    </activation>
+                    <build>
+                        <plugins>
+                            <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-deploy-plugin</artifactId>
+                                <version>2.7</version>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-gpg-plugin</artifactId>
+                                <version>1.4</version>
+                                <executions>
+                                    <execution>
+                                        <id>sign-artifacts</id>
+                                        <phase>verify</phase>
+                                        <goals>
+                                            <goal>sign</goal>
+                                        </goals>
+                                    </execution>
+                                </executions>
+                            </plugin>
+                        </plugins>
+                    </build>
+                </profile>
+                <profile>
+                <id>JDK8</id>
+                <activation>
+                    <jdk>[1.8,)</jdk>
+                </activation>
+                <build>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>2.10.4</version>
+                            <executions>
+                                <execution>
+                                    <id>attach-javadocs</id>
+                                    <goals>
+                                        <goal>jar</goal>
+                                    </goals>
+                                    <configuration>
+                                        <additionalparam>-Xdoclint:none</additionalparam>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </build>
+            </profile>
+            </profiles>
 
-        <!-- Testing -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>javax.servlet-api</artifactId>
+                    <version>${servlet.api.version}</version>
+                    <scope>provided</scope>
+                </dependency>
 
-        <!-- Quartz -->
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-            <version>${quartz.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+                <!-- Crafter -->
+                <dependency>
+                    <groupId>org.craftercms</groupId>
+                    <artifactId>crafter-commons-utilities</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.craftercms</groupId>
+                    <artifactId>crafter-commons-validation</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
 
-        <!-- Commons start -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons.lang.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>${commons.collections.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons.io.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons.codec.version}</version>
-        </dependency>
+                <!-- Testing -->
+                <dependency>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                    <version>${junit.version}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-all</artifactId>
+                    <version>${mockito.version}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-test</artifactId>
+                    <version>${spring.version}</version>
+                    <scope>test</scope>
+                </dependency>
 
-        <!-- Logging start -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
+                <!-- Quartz -->
+                <dependency>
+                    <groupId>org.quartz-scheduler</groupId>
+                    <artifactId>quartz</artifactId>
+                    <version>${quartz.version}</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>commons-logging</groupId>
+                            <artifactId>commons-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
 
-        <!-- Spring start -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-            <exclusions>
-                <!-- Exclude Commons Logging in favor of SLF4j -->
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-            <exclusions>
-                <!-- Exclude Commons Logging in favor of SLF4j -->
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
-            <exclusions>
-                <!-- Exclude Commons Logging in favor of SLF4j -->
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-oxm</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
+                <!-- Commons start -->
+                <dependency>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                    <version>${commons.lang.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-collections4</artifactId>
+                    <version>${commons.collections.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                    <version>${commons.io.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                    <version>${commons.codec.version}</version>
+                </dependency>
 
-        <!-- EhCache -->
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>${ehcache.version}</version>
-        </dependency>
+                <!-- Logging start -->
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                    <version>${slf4j.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                    <version>${slf4j.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <version>${slf4j.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                    <version>${log4j.version}</version>
+                </dependency>
 
-        <!-- Jackson -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
+                <!-- Spring start -->
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                    <version>${spring.version}</version>
+                    <exclusions>
+                        <!-- Exclude Commons Logging in favor of SLF4j -->
+                        <exclusion>
+                            <groupId>commons-logging</groupId>
+                            <artifactId>commons-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                    <version>${spring.version}</version>
+                    <exclusions>
+                        <!-- Exclude Commons Logging in favor of SLF4j -->
+                        <exclusion>
+                            <groupId>commons-logging</groupId>
+                            <artifactId>commons-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context-support</artifactId>
+                    <version>${spring.version}</version>
+                    <exclusions>
+                        <!-- Exclude Commons Logging in favor of SLF4j -->
+                        <exclusion>
+                            <groupId>commons-logging</groupId>
+                            <artifactId>commons-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                    <version>${spring.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-expression</artifactId>
+                    <version>${spring.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                    <version>${spring.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-webmvc</artifactId>
+                    <version>${spring.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-tx</artifactId>
+                    <version>${spring.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-oxm</artifactId>
+                    <version>${spring.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-aop</artifactId>
+                    <version>${spring.version}</version>
+                </dependency>
 
-        <!-- XStream -->
-        <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>${xstream.version}</version>
-        </dependency>
+                <!-- EhCache -->
+                <dependency>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
+                    <version>${ehcache.version}</version>
+                </dependency>
 
-        <!-- FreeMarker -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>${freemarker.version}</version>
-        </dependency>
+                <!-- Jackson -->
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                    <version>${jackson.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                    <version>${jackson.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                    <version>${jackson.version}</version>
+                </dependency>
 
-        <!-- AspectJ -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectj.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectj.version}</version>
-        </dependency>
+                <!-- XStream -->
+                <dependency>
+                    <groupId>com.thoughtworks.xstream</groupId>
+                    <artifactId>xstream</artifactId>
+                    <version>${xstream.version}</version>
+                </dependency>
 
-        <!-- Dom4j -->
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>${dom4j.version}</version>
-            <!-- TODO: look into XOM 1.2.6 -->
-        </dependency>
-        <dependency>
-            <!-- Needed by Dom4j -->
-            <groupId>jaxen</groupId>
-            <artifactId>jaxen</artifactId>
-            <version>${jaxen.version}</version>
-        </dependency>
+                <!-- FreeMarker -->
+                <dependency>
+                    <groupId>org.freemarker</groupId>
+                    <artifactId>freemarker</artifactId>
+                    <version>${freemarker.version}</version>
+                </dependency>
 
-        <!-- Transaction (needed for EhCache) -->
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>jta</artifactId>
-            <version>${jta.version}</version>
-        </dependency>
-    </dependencies>
+                <!-- AspectJ -->
+                <dependency>
+                    <groupId>org.aspectj</groupId>
+                    <artifactId>aspectjrt</artifactId>
+                    <version>${aspectj.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.aspectj</groupId>
+                    <artifactId>aspectjweaver</artifactId>
+                    <version>${aspectj.version}</version>
+                </dependency>
 
-    <distributionManagement>
-  <snapshotRepository>
-    <id>sonatype-nexus-snapshots</id>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-  </snapshotRepository>
-  <repository>
-    <id>sonatype-nexus-staging</id>
-    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-  </repository>
-</distributionManagement>
+                <!-- Dom4j -->
+                <dependency>
+                    <groupId>dom4j</groupId>
+                    <artifactId>dom4j</artifactId>
+                    <version>${dom4j.version}</version>
+                    <!-- TODO: look into XOM 1.2.6 -->
+                </dependency>
+                <dependency>
+                    <!-- Needed by Dom4j -->
+                    <groupId>jaxen</groupId>
+                    <artifactId>jaxen</artifactId>
+                    <version>${jaxen.version}</version>
+                </dependency>
 
-</project>
+                <!-- Transaction (needed for EhCache) -->
+                <dependency>
+                    <groupId>javax.transaction</groupId>
+                    <artifactId>jta</artifactId>
+                    <version>${jta.version}</version>
+                </dependency>
+            </dependencies>
+
+            <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        </distributionManagement>
+
+        </project>
