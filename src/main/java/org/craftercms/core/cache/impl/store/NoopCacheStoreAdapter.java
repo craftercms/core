@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.craftercms.core.cache.CacheItem;
+import org.craftercms.core.cache.CacheStatistics;
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
 
 /**
@@ -77,4 +78,7 @@ public class NoopCacheStoreAdapter implements CacheStoreAdapter {
     public void clearScope(String scope) {
     }
 
+    public CacheStatistics getStatistics(String scope) {
+        return CacheStatistics.EMPTY;
+    }
 }

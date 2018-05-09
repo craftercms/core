@@ -22,7 +22,9 @@ import net.sf.ehcache.Element;
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ConfigurationFactory;
+import net.sf.ehcache.statistics.FlatStatistics;
 import org.craftercms.core.cache.CacheItem;
+import org.craftercms.core.cache.CacheStatistics;
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
 import org.craftercms.core.exception.InvalidScopeException;
 
@@ -182,6 +184,20 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
     @Override
     public void clearScope(String scope) throws Exception {
         getScopeCache(scope).removeAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CacheStatistics getStatistics(String scope) {
+        Cache scopeCache = scopeManager.getCache(scope);
+        if(scopeCache == null) {
+            throw new InvalidScopeException("The scope " + scope + " doesn't exist");
+        }
+        FlatStatistics scopeStats = scopeCache.getStatistics();
+        EhCacheStatistics stats = new EhCacheStatistics(scopeStats);
+
+        return stats;
     }
 
     /**

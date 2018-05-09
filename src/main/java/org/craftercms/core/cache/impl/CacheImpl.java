@@ -27,6 +27,7 @@ import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
+import org.craftercms.core.cache.CacheStatistics;
 import org.craftercms.core.exception.InternalCacheEngineException;
 import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.util.cache.CachingAwareObject;
@@ -364,6 +365,14 @@ public class CacheImpl implements Cache {
         } catch (Exception ex) {
             throw new InternalCacheEngineException("Exception while clearing all items from scope " + scope, ex);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CacheStatistics getStatistics(String scope) {
+        return cacheStoreAdapter.getStatistics(scope);
     }
 
     /**
