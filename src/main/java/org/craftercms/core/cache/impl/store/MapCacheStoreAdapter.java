@@ -152,7 +152,7 @@ public class MapCacheStoreAdapter implements CacheStoreAdapter {
      * {@inheritDoc}
      */
     public CacheStatistics getStatistics(String scope) {
-        return CacheStatistics.EMPTY;
+        return new CacheStatistics(getScopeCache(scope).size());
     }
 
     /**

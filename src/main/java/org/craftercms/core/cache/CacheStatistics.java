@@ -27,6 +27,13 @@ public class CacheStatistics {
 
     protected long size;
 
+    public CacheStatistics() {
+    }
+
+    public CacheStatistics(final long size) {
+        this.size = size;
+    }
+
     public long getSize() {
         return size;
     }

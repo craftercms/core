@@ -116,7 +116,7 @@ public interface CacheService {
     void clearScope(Context context) throws InvalidContextException, InternalCacheEngineException;
 
     /**
-     * Returns the statistics for all scopes of the given context.
+     * Returns the statistics for the scope of the given context.
      */
     CacheStatistics getStatistics(Context context);
 
