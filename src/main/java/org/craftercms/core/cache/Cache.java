@@ -228,4 +228,11 @@ public interface Cache {
      */
     void clearScope(String scope) throws InvalidScopeException, InternalCacheEngineException;
 
+    /**
+     * Returns the statistics of the specified scope in the cache.
+     * @param scope scope to inspect
+     * @return the statistics
+     */
+    CacheStatistics getStatistics(String scope);
+
 }

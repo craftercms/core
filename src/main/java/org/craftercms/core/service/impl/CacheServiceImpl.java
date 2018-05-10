@@ -23,6 +23,7 @@ import java.util.List;
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
+import org.craftercms.core.cache.CacheStatistics;
 import org.craftercms.core.exception.InternalCacheEngineException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.InvalidScopeException;
@@ -232,6 +233,15 @@ public class CacheServiceImpl implements CacheService {
             } catch (InvalidScopeException e) {
                 throw new InvalidContextException("No scope associated to context " + context);
             }
+        }
+    }
+
+    @Override
+    public CacheStatistics getStatistics(final Context context) {
+        if(context.isCacheOn()) {
+            return cache.getStatistics(context.getId());
+        } else {
+            return CacheStatistics.EMPTY;
         }
     }
 

@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.craftercms.core.cache.CacheItem;
+import org.craftercms.core.cache.CacheStatistics;
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
 import org.craftercms.core.exception.InvalidScopeException;
 
@@ -145,6 +146,13 @@ public class MapCacheStoreAdapter implements CacheStoreAdapter {
      */
     public void clearScope(String scope) throws Exception {
         getScopeCache(scope).clear();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CacheStatistics getStatistics(String scope) {
+        return new CacheStatistics(getScopeCache(scope).size());
     }
 
     /**

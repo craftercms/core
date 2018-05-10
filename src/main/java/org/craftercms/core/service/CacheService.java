@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
+import org.craftercms.core.cache.CacheStatistics;
 import org.craftercms.core.exception.InternalCacheEngineException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.InvalidScopeException;
@@ -113,5 +114,10 @@ public interface CacheService {
      * Clears the contents of the scope of the given context.
      */
     void clearScope(Context context) throws InvalidContextException, InternalCacheEngineException;
+
+    /**
+     * Returns the statistics for the scope of the given context.
+     */
+    CacheStatistics getStatistics(Context context);
 
 }

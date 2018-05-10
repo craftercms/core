@@ -19,6 +19,7 @@ package org.craftercms.core.cache.impl;
 import java.util.Collection;
 
 import org.craftercms.core.cache.CacheItem;
+import org.craftercms.core.cache.CacheStatistics;
 
 /**
  * Adapter to the real data structure used to store the items of a cache.
@@ -125,5 +126,12 @@ public interface CacheStoreAdapter {
      * @throws Exception
      */
     void clearScope(String scope) throws Exception;
+
+    /**
+     * Returns the statistics of the specified scope from the underlying store.
+     * @param scope scope to inspect
+     * @return the statistics
+     */
+    CacheStatistics getStatistics(String scope);
 
 }
