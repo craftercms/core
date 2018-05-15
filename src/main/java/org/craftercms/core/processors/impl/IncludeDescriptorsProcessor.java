@@ -38,8 +38,8 @@ import org.dom4j.Node;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * {@link org.craftercms.core.processors.ItemProcessor} that replaces special "include" tags found in a descriptor
- * document with the document tree of descriptors specified in these "include" tags.
+ * {@link org.craftercms.core.processors.ItemProcessor} that finds special "include" tags found in a descriptor
+ * document and inserts there the document tree of descriptors specified in these "include" tags.
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
@@ -54,6 +54,10 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      * XPath query for the include element.
      */
     protected String includeElementXPathQuery;
+    /**
+     * Flag to indicate if the include element should be removed (false by default).
+     */
+    protected boolean removeIncludeElement;
     /**
      * XPath query relative to include elements for nodes tha specify if the include is disabled or not.
      */
@@ -73,6 +77,13 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
     @Required
     public void setIncludeElementXPathQuery(String includeElementXPathQuery) {
         this.includeElementXPathQuery = includeElementXPathQuery;
+    }
+
+    /**
+     * Sets the flag to indicate if the include element should be removed (false by default).
+     */
+    public void setRemoveIncludeElement(boolean removeIncludeElement) {
+        this.removeIncludeElement = removeIncludeElement;
     }
 
     /**
@@ -185,10 +196,15 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
         int includeElementIdx = includeElementParentChildren.indexOf(includeElement);
         Element itemToIncludeRootElement = itemToInclude.getDescriptorDom().getRootElement().createCopy();
 
-        // Remove the <include> element
-        includeElementParentChildren.remove(includeElementIdx);
-        // Add the item's root element
-        includeElementParentChildren.add(includeElementIdx, itemToIncludeRootElement);
+        if (removeIncludeElement) {
+            // Remove the <include> element
+            includeElementParentChildren.remove(includeElementIdx);
+            // Add the item's root element
+            includeElementParentChildren.add(includeElementIdx, itemToIncludeRootElement);
+        } else {
+            // Add the item's root element
+            includeElementParentChildren.add(includeElementIdx + 1, itemToIncludeRootElement);
+        }
 
         // Add dependency key
         item.addDependencyKey(itemToInclude.getKey());

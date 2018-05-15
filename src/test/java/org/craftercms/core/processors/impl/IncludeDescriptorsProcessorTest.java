@@ -69,8 +69,10 @@ public class IncludeDescriptorsProcessorTest {
 
     private static final String EXPECTED_XML =      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                                                     "<page>" +
+                                                        "<include>" + DESCRIPTOR2_URL + "</include>" +
                                                         "<component>" +
                                                             "<element>a</element>" +
+                                                            "<include>" + DESCRIPTOR3_URL + "</include>" +
                                                             "<component>" +
                                                                 "<element>b</element>" +
                                                                 "<include>" + DESCRIPTOR1_URL + "</include>" +
