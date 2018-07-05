@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Attribute;
@@ -42,6 +43,7 @@ import org.dom4j.Node;
 public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
 
     public static final String ITEM_LIST_ATTRIBUTE_NAME = "item-list";
+    public static final String[] IGNORABLE_ATTRIBUTES = { ITEM_LIST_ATTRIBUTE_NAME };
 
     public static final String TEXT_JSON_KEY = "text";
 
@@ -72,7 +74,9 @@ public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
             objectStarted = true;
 
             for (Attribute attribute : attributes) {
-                jsonGenerator.writeStringField(attribute.getName(), attribute.getValue());
+                if (!ArrayUtils.contains(IGNORABLE_ATTRIBUTES, attribute.getName())) {
+                    jsonGenerator.writeStringField(attribute.getName(), attribute.getValue());
+                }
             }
         }
 
