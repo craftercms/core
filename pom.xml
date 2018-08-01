@@ -51,7 +51,7 @@
         <mockito.version>1.9.5</mockito.version>
         <quartz.version>2.2.1</quartz.version>
         <commons.lang.version>3.3.2</commons.lang.version>
-        <commons.collections.version>4.0</commons.collections.version>
+        <commons.collections.version>4.1</commons.collections.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.codec.version>1.9</commons.codec.version>
         <slf4j.version>1.7.7</slf4j.version>
