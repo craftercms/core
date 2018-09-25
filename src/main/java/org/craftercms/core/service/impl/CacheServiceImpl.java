@@ -133,7 +133,7 @@ public class CacheServiceImpl implements CacheService {
     public CacheItem getItem(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
         if (context.isCacheOn()) {
             try {
-                return cache.getWithDependencyCheck(context.getId(), key);
+                return cache.get(context.getId(), key);
             } catch (InvalidScopeException e) {
                 throw new InvalidContextException("No scope associated to context " + context);
             }
@@ -146,7 +146,7 @@ public class CacheServiceImpl implements CacheService {
     public Object get(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
         if (context.isCacheOn()) {
             try {
-                CacheItem item = cache.getWithDependencyCheck(context.getId(), key);
+                CacheItem item = cache.get(context.getId(), key);
                 if (item != null) {
                     return item.getValue();
                 } else {
@@ -173,37 +173,11 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public void put(Context context, Object key, Object value, List<Object> dependencyKeys) throws
-        InvalidScopeException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                cache.put(context.getId(), key, value, dependencyKeys);
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        }
-    }
-
-    @Override
     public void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
                     Object... loaderParams) throws InvalidContextException, InternalCacheEngineException {
         if (context.isCacheOn() && cachingOptions.doCaching()) {
             try {
                 cache.put(context.getId(), key, value, cachingOptions.getExpireAfter(),
-                    cachingOptions.getRefreshFrequency(), loader, loaderParams);
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        }
-    }
-
-    @Override
-    public void put(Context context, Object key, Object value, List<Object> dependencyKeys,
-                    CachingOptions cachingOptions, CacheLoader loader, Object... loaderParams) throws
-        InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn() && cachingOptions.doCaching()) {
-            try {
-                cache.put(context.getId(), key, value, dependencyKeys, cachingOptions.getExpireAfter(),
                     cachingOptions.getRefreshFrequency(), loader, loaderParams);
             } catch (InvalidScopeException e) {
                 throw new InvalidContextException("No scope associated to context " + context);

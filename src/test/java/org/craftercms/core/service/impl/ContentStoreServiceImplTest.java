@@ -670,7 +670,6 @@ public class ContentStoreServiceImplTest {
     private void assertCaching(CachingAwareObject expected, CachingAwareObject actual) {
         assertEquals(expected.getScope(), actual.getScope());
         assertEquals(expected.getKey(), actual.getKey());
-        assertEquals(expected.getDependencyKeys(), actual.getDependencyKeys());
         assertEquals(expected.getCachingTime(), actual.getCachingTime());
 
         assertTrue(cache.hasKey(context, actual.getKey()));

@@ -29,11 +29,11 @@ public interface CacheItem {
     /**
      * Indicates that an item should never expire.
      */
-    public static final long NEVER_EXPIRE = 0;
+    long NEVER_EXPIRE = 0;
     /**
      * Indicates that an item should never refresh.
      */
-    public static final long NEVER_REFRESH = 0;
+    long NEVER_REFRESH = 0;
 
     /**
      * Returns the item's scope.
@@ -54,16 +54,6 @@ public interface CacheItem {
      * Returns the number of ticks that had passed at the moment the item was created.
      */
     long getTicksAtCreation();
-
-    /**
-     * Returns the item's timestamp, used to check the item's and dependencies' states.
-     */
-    long getTimestamp();
-
-    /**
-     * Returns a list with the keys of the item's dependencies.
-     */
-    List<Object> getDependencyKeys();
 
     /**
      * Returns the number of ticks that are required for the item to expire.

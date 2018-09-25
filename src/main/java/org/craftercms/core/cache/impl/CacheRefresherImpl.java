@@ -26,8 +26,7 @@ import org.craftercms.core.cache.CacheLoader;
 import org.craftercms.core.exception.InternalCacheEngineException;
 
 /**
- * Default implementation of {@link CacheRefresher}. Uses a {@link TopologicalCacheItemSorter} to sort the items
- * by their dependency relationships, before refreshing any one of them.
+ * Default implementation of {@link CacheRefresher}.
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
@@ -37,35 +36,9 @@ public class CacheRefresherImpl implements CacheRefresher {
     private static final Log logger = LogFactory.getLog(CacheRefresherImpl.class);
 
     /**
-     * Sorter to sort the items by their dependency relationships. This means, any item that depends on another item
-     * will be refreshed after the later one has be refreshed.
-     */
-    protected TopologicalCacheItemSorter sorter;
-
-    /**
-     * Default constructor. Set the {@link TopologicalCacheItemSorter} to the default implementation.
-     */
-    public CacheRefresherImpl() {
-        sorter = new TopologicalCacheItemSorterImpl();
-    }
-
-    /**
-     * Sets the {@link TopologicalCacheItemSorter}, which sorts the items by their dependency relationships before
-     * they're refreshed.
-     */
-    public void setSorter(TopologicalCacheItemSorter sorter) {
-        this.sorter = sorter;
-    }
-
-    /**
-     * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s. Before the items are refreshed
-     * one by one, the
-     * {@link TopologicalCacheItemSorter} is called to sort the items by their relationships, so that items with
-     * dependencies will always be refreshed after their dependencies have been refreshed.
+     * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s.
      */
     public void refreshItems(List<CacheItem> itemsToRefresh, Cache cache) {
-        itemsToRefresh = sorter.sortTopologically(itemsToRefresh, cache);
-
         for (CacheItem item : itemsToRefresh) {
             try {
                 refreshItem(item, cache);
@@ -95,8 +68,8 @@ public class CacheRefresherImpl implements CacheRefresher {
 
         Object newValue = loader.load(loaderParams);
         if (newValue != null) {
-            cache.put(item.getScope(), item.getKey(), newValue, item.getDependencyKeys(), item.getTicksToExpire(),
-                item.getTicksToRefresh(), item.getLoader(), item.getLoaderParams());
+            cache.put(item.getScope(), item.getKey(), newValue, item.getTicksToExpire(), item.getTicksToRefresh(),
+                      item.getLoader(), item.getLoaderParams());
         } else {
             // If newValue returned is null, remove the item from the cache
             cache.remove(item.getScope(), item.getKey());

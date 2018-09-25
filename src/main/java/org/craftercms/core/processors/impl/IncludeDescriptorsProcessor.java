@@ -123,8 +123,6 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
 
             Item includeSrcItem = getIncludeSrcItem(context, cachingOptions, includeSrcPath);
             doInclude(includeElement, includeSrcPath, includeSrcItem.getDescriptorDom());
-
-            item.addDependencyKey(includeSrcItem.getKey());
         }
     }
 

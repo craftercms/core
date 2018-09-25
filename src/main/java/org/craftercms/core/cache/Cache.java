@@ -104,18 +104,6 @@ public interface Cache {
     CacheItem get(String scope, Object key) throws InvalidScopeException, InternalCacheEngineException;
 
     /**
-     * Retrieves an item from a scope, checking before for the state of it's dependencies.
-     *
-     * @param scope scope to get the item from
-     * @param key   unique key for the item within this scope
-     * @return the requested item if found, null if not or if the item's dependencies have changed
-     * @throws InvalidScopeException        if the specified scope isn't a registered one
-     * @throws InternalCacheEngineException if an error occurred in the underlying cache implementation
-     */
-    public CacheItem getWithDependencyCheck(String scope, Object key) throws InvalidScopeException,
-        InternalCacheEngineException;
-
-    /**
      * Puts an item in a scope.
      *
      * @param scope scope to add the item to
@@ -155,51 +143,6 @@ public interface Cache {
      */
     void put(String scope, Object key, Object value, long expireAfter, long refreshFrequency, CacheLoader loader,
              Object... loaderParams) throws InvalidScopeException, InternalCacheEngineException;
-
-    /**
-     * Puts an item in a scope.
-     *
-     * @param scope          scope to add the item to
-     * @param key            unique key for the item within this scope
-     * @param value          value to store in the cache
-     * @param dependencyKeys the keys of the dependencies defined for this item
-     * @throws InvalidScopeException        if the specified scope isn't a registered one
-     * @throws InternalCacheEngineException if an error occurred in the underlying cache implementation
-     */
-    void put(String scope, Object key, Object value, List<Object> dependencyKeys) throws InvalidScopeException,
-        InternalCacheEngineException;
-
-    /**
-     * Puts an item in a scope.
-     *
-     * @param scope            scope to add the item to
-     * @param key              unique key for the item within this scope
-     * @param value            value to store in the cache
-     * @param dependencyKeys   the keys of the dependencies defined for this item
-     * @param expireAfter      the amount of time (in ticks, where the tick time span is defined at runtime) before
-     *                         the item can be
-     *                         removed from cache. Use {@link CacheItem#NEVER_EXPIRE} to indicate that there's no
-     *                         expiration time.
-     * @param refreshFrequency the amount of time (in ticks, where the tick time span is defined at runtime) before
-     *                         items are reloaded
-     *                         into the cache. Use {@link CacheItem#NEVER_REFRESH} to indicate that there's no need
-     *                         for the item to
-     *                         be refreshed. Note that when refreshing, there's almost always an old value for the
-     *                         item in the cache
-     *                         before the new value is loaded into the cache. The {@code loader} param is also
-     *                         required in order for
-     *                         the item to be refreshed.
-     * @param loader           the cache loader used to load a new value when the item needs to be refreshed. If not
-     *                         specified and
-     *                         the {@code refreshFrequency} is not {@link CacheItem#NEVER_REFRESH},
-     *                         the cache will use a default one.
-     * @param loaderParams     additional parameters the loader could need
-     * @throws InvalidScopeException        if the specified scope isn't a registered one
-     * @throws InternalCacheEngineException if an error occurred in the underlying cache implementation
-     */
-    void put(String scope, Object key, Object value, List<Object> dependencyKeys, long expireAfter,
-             long refreshFrequency, CacheLoader loader, Object... loaderParams) throws InvalidScopeException,
-        InternalCacheEngineException;
 
     /**
      * Removes an item from a scope.
