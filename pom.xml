@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-core</artifactId>
-    <version>2.5.1-RC2</version>
+    <version>2.5.1-RC2.1</version>
     <name>Core</name>
     <description>Core</description>
     <url>https://github.com/craftercms/core</url>
@@ -53,6 +53,7 @@
         <dependency.locations.enabled>false</dependency.locations.enabled>
 
         <!-- Dependency Version Numbers -->
+        <crafter.commons.version>2.5.1-RC2</crafter.commons.version>
         <servlet.api.version>3.0.1</servlet.api.version>
         <junit.version>4.11</junit.version>
         <mockito.version>1.9.5</mockito.version>
@@ -195,7 +196,7 @@
         <dependency>
             <groupId>org.craftercms</groupId>
             <artifactId>crafter-commons-utilities</artifactId>
-            <version>${project.version}</version>
+            <version>${crafter.commons.version}</version>
         </dependency>
 
         <!-- Testing -->
