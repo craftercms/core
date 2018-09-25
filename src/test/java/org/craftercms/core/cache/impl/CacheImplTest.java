@@ -47,19 +47,11 @@ public class CacheImplTest {
     private static final String ITEM_VALUE2 = "Test value #2";
     private static final int ITEM_KEY3 =      3;
     private static final String ITEM_VALUE3 = "Test value #3";
-    private static final int ITEM_KEY4 =      4;
-    private static final String ITEM_VALUE4 = "Test value #4";
-    private static final int ITEM_KEY5 =      5;
-    private static final String ITEM_VALUE5 = "Test value #5";
 
     private static final long EXPIRATION_VALUE1 = 2;
 
     private static final long REFRESH_FREQUENCY_VALUE1 = 1;
     private static final long REFRESH_FREQUENCY_VALUE2 = 2;
-
-    private static final Object[] DEPENDENCY_KEYS_ITEM3 = { ITEM_KEY1 };
-    private static final Object[] DEPENDENCY_KEYS_ITEM4 = { ITEM_KEY2, ITEM_KEY3 };
-    private static final Object[] DEPENDENCY_KEYS_ITEM5 = { ITEM_KEY2 };
 
     private EhCacheStoreAdapter cacheStore;
     private CacheImpl cache;
@@ -110,45 +102,6 @@ public class CacheImplTest {
         assertEquals(ITEM_VALUE2.toUpperCase(), item.getValue());
 
         item = cache.get(SCOPE, ITEM_KEY3);
-        assertNull(item);
-    }
-
-    @Test
-    public void testDependencyManagement() throws InternalCacheEngineException, InvalidScopeException {
-        cache.put(SCOPE, ITEM_KEY1, ITEM_VALUE1);
-        cache.put(SCOPE, ITEM_KEY2, ITEM_VALUE2);
-        cache.put(SCOPE, ITEM_KEY3, ITEM_VALUE3, Arrays.asList(DEPENDENCY_KEYS_ITEM3));
-        cache.put(SCOPE, ITEM_KEY4, ITEM_VALUE4, Arrays.asList(DEPENDENCY_KEYS_ITEM4));
-        cache.put(SCOPE, ITEM_KEY5, ITEM_VALUE5, Arrays.asList(DEPENDENCY_KEYS_ITEM5));
-
-        // Items haven't changed, the get should work.
-        CacheItem item = cache.getWithDependencyCheck(SCOPE, ITEM_KEY4);
-        assertEquals(ITEM_VALUE4, item.getValue());
-
-        // Remove item #2 from cache. If #4 and #5 are requested, they should be removed from cache.
-        cache.remove(SCOPE, ITEM_KEY2);
-
-        item = cache.getWithDependencyCheck(SCOPE, ITEM_KEY4);
-        assertNull(item);
-
-        item = cache.getWithDependencyCheck(SCOPE, ITEM_KEY5);
-        assertNull(item);
-
-        cache.put(SCOPE, ITEM_KEY2, ITEM_VALUE2);
-        cache.put(SCOPE, ITEM_KEY4, ITEM_VALUE4, Arrays.asList(DEPENDENCY_KEYS_ITEM4));
-
-        // Since item #4 has just been re-added, a get should work.
-        item = cache.getWithDependencyCheck(SCOPE, ITEM_KEY4);
-        assertEquals(ITEM_VALUE4, item.getValue());
-
-        // Update item #1. If #3 and #4 are requested, they should be removed from cache.
-        cache.put(SCOPE, ITEM_KEY1, ITEM_VALUE1);
-
-        // Request item #4 first so that dependencies are checked recursively.
-        item = cache.getWithDependencyCheck(SCOPE, ITEM_KEY4);
-        assertNull(item);
-
-        item = cache.getWithDependencyCheck(SCOPE, ITEM_KEY3);
         assertNull(item);
     }
 

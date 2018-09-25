@@ -39,9 +39,6 @@ public class CacheItemImpl implements CacheItem {
     protected final long ticksToExpire;
     protected final long ticksToRefresh;
 
-    protected final long timestamp;
-    protected final List<Object> dependencyKeys;
-
     protected final CacheLoader loader;
     protected final Object[] loaderParams;
 
@@ -49,8 +46,8 @@ public class CacheItemImpl implements CacheItem {
      * Value constructor.
      */
     public CacheItemImpl(final String scope, final long ticksAtCreation, final Object key, final Object value,
-                         final long ticksToExpire, final long ticksToRefresh, final long timestamp,
-                         final List<Object> dependencyKeys, final CacheLoader loader, final Object[] loaderParams) {
+                         final long ticksToExpire, final long ticksToRefresh, final CacheLoader loader,
+                         final Object[] loaderParams) {
         this.scope = scope;
         this.ticksAtCreation = ticksAtCreation;
 
@@ -59,9 +56,6 @@ public class CacheItemImpl implements CacheItem {
 
         this.ticksToExpire = ticksToExpire;
         this.ticksToRefresh = ticksToRefresh;
-
-        this.timestamp = timestamp;
-        this.dependencyKeys = dependencyKeys;
 
         this.loader = loader;
         this.loaderParams = loaderParams;
@@ -135,22 +129,6 @@ public class CacheItemImpl implements CacheItem {
      * {@inheritDoc}
      */
     @Override
-    public long getTimestamp() {
-        return this.timestamp;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Object> getDependencyKeys() {
-        return this.dependencyKeys;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean isExpired(long currentTicks) {
         return this.ticksToExpire != NEVER_EXPIRE && currentTicks >= (this.ticksAtCreation + this.ticksToExpire);
     }
@@ -203,8 +181,6 @@ public class CacheItemImpl implements CacheItem {
             ", value=" + this.value +
             ", ticksToExpire=" + this.ticksToExpire +
             ", ticksToRefresh=" + this.ticksToRefresh +
-            ", timestamp=" + this.timestamp +
-            ", dependencyKeys=" + this.dependencyKeys +
             ", loader=" + this.loader +
             ", loaderParams=" + (this.loaderParams == null? null: Arrays.asList(this.loaderParams)) +
             ']';
