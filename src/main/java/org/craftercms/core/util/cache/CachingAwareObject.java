@@ -16,11 +16,9 @@
  */
 package org.craftercms.core.util.cache;
 
-import java.util.Collection;
-import java.util.List;
-
 /**
- * Class description goes HERE
+ * Objects that are generally cached implement this method so that they can provide information about their caching
+ * to methods higher in the stack trace.
  *
  * @author Alfonso Vásquez
  */
@@ -33,18 +31,6 @@ public interface CachingAwareObject {
     Object getKey();
 
     void setKey(Object key);
-
-    List<Object> getDependencyKeys();
-
-    void setDependencyKeys(List<Object> dependencyKeys);
-
-    void addDependencyKeys(Collection<Object> dependencyKeys);
-
-    void addDependencyKey(Object dependencyKey);
-
-    boolean removeDependencyKeys(Collection<Object> dependencyKeys);
-
-    boolean removeDependencyKey(Object dependencyKey);
 
     Long getCachingTime();
 

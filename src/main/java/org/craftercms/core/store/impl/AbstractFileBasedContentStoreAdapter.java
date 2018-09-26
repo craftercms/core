@@ -187,7 +187,6 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
                     if (item != null) {
                         items.add(item);
-                        items.addDependencyKey(item.getKey());
                     }
                 }
             }

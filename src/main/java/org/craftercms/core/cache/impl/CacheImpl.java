@@ -16,11 +16,6 @@
  */
 package org.craftercms.core.cache.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,14 +26,16 @@ import org.craftercms.core.cache.CacheStatistics;
 import org.craftercms.core.exception.InternalCacheEngineException;
 import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.util.cache.CachingAwareObject;
-import org.craftercms.core.util.generators.TimestampGenerator;
-import org.craftercms.core.util.generators.impl.IncrementalTimestampGenerator;
 import org.springframework.beans.factory.annotation.Required;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
- * {@link org.craftercms.core.cache.Cache} that implements common functionality, such as logging,
- * expiration/refresh check every tick and
- * dependency management, and uses and underlying {@link CacheStoreAdapter} to store the items.
+ * {@link org.craftercms.core.cache.Cache} that implements common functionality, such as logging and
+ * expiration/refresh check every tick, and uses and underlying {@link CacheStoreAdapter} to store the items.
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
@@ -58,10 +55,6 @@ public class CacheImpl implements Cache {
      * Used to refresh a list of items.
      */
     protected CacheRefresher cacheRefresher;
-    /**
-     * The timestamp generator. Timestamps are used to check when dependencies have changed.
-     */
-    protected TimestampGenerator timestampGenerator;
 
     /**
      * Default constructor. Sets <code>timestampGenerator</code> to {@link org.craftercms.core.util.generators.impl
@@ -69,7 +62,6 @@ public class CacheImpl implements Cache {
      */
     public CacheImpl() {
         ticks = new AtomicInteger(0);
-        timestampGenerator = new IncrementalTimestampGenerator();
     }
 
     /**
@@ -87,13 +79,6 @@ public class CacheImpl implements Cache {
      */
     public void setCacheRefresher(CacheRefresher cacheRefresher) {
         this.cacheRefresher = cacheRefresher;
-    }
-
-    /**
-     * Sets the timestamp generator. Timestamps are used to check when dependencies have changed.
-     */
-    public void setTimestampGenerator(TimestampGenerator timestampGenerator) {
-        this.timestampGenerator = timestampGenerator;
     }
 
     /**
@@ -216,47 +201,8 @@ public class CacheImpl implements Cache {
      * {@inheritDoc}
      */
     @Override
-    public CacheItem getWithDependencyCheck(String scope, Object key) throws InvalidScopeException,
-        InternalCacheEngineException {
-        try {
-            CacheItem item = cacheStoreAdapter.get(scope, key);
-            if (item != null) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Cache hit: found " + item);
-                }
-
-                if (haveDependenciesChanged(item)) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Dependencies have changed for " + item + ". Removing it from the cache.");
-                    }
-
-                    cacheStoreAdapter.remove(scope, key);
-
-                    return null;
-                } else {
-                    return item;
-                }
-            } else {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Cache miss: item with key " + key + " not found in scope " + scope);
-                }
-
-                return null;
-            }
-        } catch (InvalidScopeException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new InternalCacheEngineException("Exception while getting item with key " + key + " from scope " +
-                scope, ex);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void put(String scope, Object key, Object value) throws InvalidScopeException, InternalCacheEngineException {
-        put(scope, key, value, null, CacheItem.NEVER_EXPIRE, CacheItem.NEVER_REFRESH, null);
+        put(scope, key, value, CacheItem.NEVER_EXPIRE, CacheItem.NEVER_REFRESH, null);
     }
 
     /**
@@ -265,25 +211,6 @@ public class CacheImpl implements Cache {
     @Override
     public void put(String scope, Object key, Object value, long expireAfter, long refreshFrequency,
                     CacheLoader loader, Object... loaderParams) throws InvalidScopeException,
-        InternalCacheEngineException {
-        put(scope, key, value, null, expireAfter, refreshFrequency, loader, loaderParams);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void put(String scope, Object key, Object value, List<Object> dependencyKeys) throws
-        InvalidScopeException, InternalCacheEngineException {
-        put(scope, key, value, dependencyKeys, CacheItem.NEVER_EXPIRE, CacheItem.NEVER_REFRESH, null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void put(String scope, Object key, Object value, List<Object> dependencyKeys, long expireAfter,
-                    long refreshFrequency, CacheLoader loader, Object... loaderParams) throws InvalidScopeException,
         InternalCacheEngineException {
         if (expireAfter < 0) {
             throw new IllegalArgumentException("The expireAfter argument should be 0 or positive");
@@ -295,11 +222,6 @@ public class CacheImpl implements Cache {
 
         if (value instanceof CachingAwareObject) {
             CachingAwareObject cachingAwareObj = (CachingAwareObject)value;
-
-            if (CollectionUtils.isEmpty(dependencyKeys)) {
-                dependencyKeys = cachingAwareObj.getDependencyKeys();
-            }
-
             cachingAwareObj.setCachingTime(System.currentTimeMillis());
             cachingAwareObj.setScope(scope);
             cachingAwareObj.setKey(key);
@@ -307,7 +229,7 @@ public class CacheImpl implements Cache {
 
         try {
             CacheItem item = new CacheItemImpl(scope, ticks.get(), key, value, expireAfter, refreshFrequency,
-                timestampGenerator.generate(), dependencyKeys, loader, loaderParams);
+                                               loader, loaderParams);
 
             cacheStoreAdapter.put(item);
 
@@ -318,7 +240,7 @@ public class CacheImpl implements Cache {
             throw ex;
         } catch (Exception ex) {
             throw new InternalCacheEngineException("Exception while putting item with key " + key +
-                " into scope " + scope, ex);
+                                                   " into scope " + scope, ex);
         }
     }
 
@@ -483,31 +405,6 @@ public class CacheImpl implements Cache {
         } else {
             return false;
         }
-    }
-
-    /**
-     * Checks if some of the dependencies of the given {@link CacheItem} have changed, that means, they're no longer
-     * in the cache, their timestamp is greater than the item's timestamp (which means that they were put in the
-     * cache after the item was put) or their own dependencies have changed (recursive). If the dependencies have
-     * changed, the item needs to be taken out of the cache.
-     *
-     * @return true if some of the dependencies have changed, false if none of them have changed.
-     * @throws Exception
-     */
-    protected boolean haveDependenciesChanged(CacheItem item) throws Exception {
-        List<Object> dependencyKeys = item.getDependencyKeys();
-        if (CollectionUtils.isNotEmpty(dependencyKeys)) {
-            for (Object dependencyKey : dependencyKeys) {
-                CacheItem dependency = cacheStoreAdapter.get(item.getScope(), dependencyKey);
-                if (dependency == null ||
-                    item.getTimestamp() < dependency.getTimestamp() ||
-                    haveDependenciesChanged(dependency)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
 }

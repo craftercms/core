@@ -263,10 +263,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                 item = doProcessing(context, cachingOptions, item, processor);
             } else {
                 item = doProcessing(context, cachingOptions, item, processor);
-
-                // Since there was no merging, add the original key (from the store adapter item) as dependency key.
-                // The store service item key will be set later.
-                item.addDependencyKey(item.getKey());
             }
         }
 
@@ -311,7 +307,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                                                                                              processor);
                 if (treeChildren != null) {
                     tree.setChildren(treeChildren.getActualList());
-                    tree.addDependencyKeys(treeChildren.getDependencyKeys());
                 }
             }
 
@@ -339,9 +334,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
         List<Item> children = context.getStoreAdapter().findItems(context, cachingOptions, url, false);
         if (children != null) {
-            List<Object> dependencyKeys = new ArrayList<>();
-            dependencyKeys.add(((CachingAwareList<Item>)children).getKey());
-
             if (filter != null && filter.runBeforeProcessing()) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Running filter " + filter + " before processing for " + url + "...");
@@ -350,7 +342,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                 children = doFilter(children, filter, true);
             }
 
-            List<Item> processedChildren = new ArrayList<Item>(children.size());
+            List<Item> processedChildren = new ArrayList<>(children.size());
 
             for (Item child : children) {
                 Item processedChild;
@@ -371,16 +363,9 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                 processedChildren = doFilter(processedChildren, filter, false);
             }
 
-            Collections.sort(processedChildren, CompareByItemNameComparator.instance);
+            processedChildren.sort(CompareByItemNameComparator.instance);
 
-            for (Item child : processedChildren) {
-                dependencyKeys.add(child.getKey());
-            }
-
-            CachingAwareList<Item> finalChildren = new CachingAwareList<Item>(processedChildren);
-            finalChildren.setDependencyKeys(dependencyKeys);
-
-            return finalChildren;
+            return new CachingAwareList<>(processedChildren);
         } else {
             return null;
         }
@@ -429,7 +414,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                 logger.debug("Descriptors to merge for " + mainDescriptorUrl + ": " + descriptorsToMerge);
             }
 
-            List<Document> documentsToMerge = new ArrayList<Document>(descriptorsToMerge.size());
+            List<Document> documentsToMerge = new ArrayList<>(descriptorsToMerge.size());
 
             for (MergeableDescriptor descriptorToMerge : descriptorsToMerge) {
                 String descriptorUrl = descriptorToMerge.getUrl();
@@ -443,8 +428,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                     }
 
                     documentsToMerge.add(descriptorDom);
-
-                    item.addDependencyKey(descriptorItem.getKey());
                 } else if (!descriptorToMerge.isOptional()) {
                     throw new XmlMergeException("Descriptor file " + descriptorUrl + " not found and is marked as required for merging");
                 }
