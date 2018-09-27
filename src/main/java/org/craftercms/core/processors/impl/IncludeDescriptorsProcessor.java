@@ -206,9 +206,6 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
             includeElementParentChildren.add(includeElementIdx + 1, itemToIncludeRootElement);
         }
 
-        // Add dependency key
-        item.addDependencyKey(itemToInclude.getKey());
-
         if (logger.isDebugEnabled()) {
             logger.debug("Item " + itemToInclude.getDescriptorUrl() + " included into " + item.getDescriptorUrl());
         }
