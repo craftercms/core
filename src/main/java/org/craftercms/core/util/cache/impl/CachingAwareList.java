@@ -27,7 +27,7 @@ import java.util.ListIterator;
  *
  * @author Alfonso Vásquez
  */
-public class CachingAwareList<T> extends CachingAwareObjectBase implements List<T> {
+public class CachingAwareList<T> extends AbstractCachingAwareObject implements List<T> {
 
     private List<T> actualList;
 

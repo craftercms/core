@@ -18,7 +18,7 @@ package org.craftercms.core.service;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.util.XmlUtils;
-import org.craftercms.core.util.cache.impl.CachingAwareObjectBase;
+import org.craftercms.core.util.cache.impl.AbstractCachingAwareObject;
 import org.dom4j.Document;
 
 import java.util.Collections;
@@ -48,7 +48,7 @@ import java.util.Map;
  * @author Sumer Jabri
  * @author Alfonso Vásquez
  */
-public class Item extends CachingAwareObjectBase {
+public class Item extends AbstractCachingAwareObject {
 
     /**
      * The name of the item (basically the file name).
@@ -94,7 +94,7 @@ public class Item extends CachingAwareObjectBase {
      * {@code descriptorDom} and {@code properties} are cloned.
      */
     public Item(Item item, boolean deepCopy) {
-        super(item, deepCopy);
+        super(item);
 
         name = item.name;
         url = item.url;
@@ -103,7 +103,7 @@ public class Item extends CachingAwareObjectBase {
 
         if (deepCopy) {
             descriptorDom = item.descriptorDom != null? (Document)item.descriptorDom.clone(): null;
-            properties = item.properties != null? new HashMap<String, Object>(item.properties): null;
+            properties = item.properties != null? new HashMap<>(item.properties): null;
         } else {
             descriptorDom = item.descriptorDom;
             properties = item.properties;

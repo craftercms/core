@@ -25,31 +25,23 @@ import java.util.List;
 import org.craftercms.core.util.cache.CachingAwareObject;
 
 /**
- * Class description goes HERE
+ * Base abstract implementation of {@link CachingAwareObject}
  *
  * @author Alfonso Vásquez
  */
-public abstract class CachingAwareObjectBase implements CachingAwareObject {
+public abstract class AbstractCachingAwareObject implements CachingAwareObject {
 
     protected transient String scope;
     protected transient Object key;
-    protected transient List<Object> dependencyKeys;
     protected transient Long cachingTime;
 
-    protected CachingAwareObjectBase() {
+    protected AbstractCachingAwareObject() {
     }
 
-    protected CachingAwareObjectBase(CachingAwareObject cachingAwareObject, boolean deepCopy) {
+    protected AbstractCachingAwareObject(CachingAwareObject cachingAwareObject) {
         this.scope = cachingAwareObject.getScope();
         this.key = cachingAwareObject.getKey();
         this.cachingTime = cachingAwareObject.getCachingTime();
-
-        if (deepCopy) {
-            this.dependencyKeys = cachingAwareObject.getDependencyKeys() != null? new ArrayList<Object>
-                (cachingAwareObject.getDependencyKeys()): null;
-        } else {
-            this.dependencyKeys = cachingAwareObject.getDependencyKeys();
-        }
     }
 
     @JsonIgnore
@@ -73,54 +65,6 @@ public abstract class CachingAwareObjectBase implements CachingAwareObject {
     @Override
     public void setKey(Object key) {
         this.key = key;
-    }
-
-    @JsonIgnore
-    @Override
-    public List<Object> getDependencyKeys() {
-        return dependencyKeys;
-    }
-
-    @JsonIgnore
-    @Override
-    public void setDependencyKeys(List<Object> dependencyKeys) {
-        this.dependencyKeys = dependencyKeys;
-    }
-
-    @Override
-    public void addDependencyKeys(Collection<Object> dependencyKeys) {
-        if (this.dependencyKeys == null) {
-            this.dependencyKeys = new ArrayList<Object>();
-        }
-
-        this.dependencyKeys.addAll(dependencyKeys);
-    }
-
-    @Override
-    public void addDependencyKey(Object dependencyKey) {
-        if (dependencyKeys == null) {
-            dependencyKeys = new ArrayList<Object>();
-        }
-
-        dependencyKeys.add(dependencyKey);
-    }
-
-    @Override
-    public boolean removeDependencyKeys(Collection<Object> dependencyKeys) {
-        if (this.dependencyKeys != null) {
-            return this.dependencyKeys.removeAll(dependencyKeys);
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean removeDependencyKey(Object dependencyKey) {
-        if (dependencyKeys != null) {
-            return dependencyKeys.remove(dependencyKey);
-        } else {
-            return false;
-        }
     }
 
     @JsonIgnore
