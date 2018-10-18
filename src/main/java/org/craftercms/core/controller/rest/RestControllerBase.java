@@ -26,6 +26,7 @@ import org.craftercms.commons.validation.ValidationException;
 import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationRuntimeException;
 import org.craftercms.core.exception.AuthenticationException;
+import org.craftercms.core.exception.ForbiddenPathException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -63,6 +64,13 @@ public class RestControllerBase {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public Map<String, Object> handlePathNotFoundException(HttpServletRequest request, PathNotFoundException e) {
+        return handleException(request, e);
+    }
+
+    @ExceptionHandler(ForbiddenPathException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public Map<String, Object> handleForbiddenPathException(HttpServletRequest request, ForbiddenPathException e) {
         return handleException(request, e);
     }
 
