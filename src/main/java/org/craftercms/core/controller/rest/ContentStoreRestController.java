@@ -17,11 +17,13 @@
 package org.craftercms.core.controller.rest;
 
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.craftercms.commons.lang.RegexUtils;
 import org.craftercms.core.exception.*;
-import org.craftercms.core.service.ContentStoreService;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.service.Tree;
+import org.craftercms.core.service.*;
+import org.craftercms.core.service.impl.CompositeItemFilter;
+import org.craftercms.core.service.impl.ExcludeByUrlItemFilter;
+import org.craftercms.core.service.impl.IncludeByUrlItemFilter;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
@@ -30,8 +32,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -59,18 +63,39 @@ public class ContentStoreRestController extends RestControllerBase {
     public static final String MODEL_ATTR_TREE = "tree";
 
     private ContentStoreService storeService;
+    private String[] allowedUrlPatterns;
+    private String[] forbiddenUrlPatterns;
+
+    private ItemFilter itemFilter;
 
     @Required
     public void setStoreService(ContentStoreService storeService) {
         this.storeService = storeService;
     }
 
+    public void setAllowedUrlPatterns(String[] allowedUrlPatterns) {
+        this.allowedUrlPatterns = allowedUrlPatterns;
+    }
+
+    public void setForbiddenUrlPatterns(String[] forbiddenUrlPatterns) {
+        this.forbiddenUrlPatterns = forbiddenUrlPatterns;
+    }
+
+    @PostConstruct
+    public void init() {
+        CompositeItemFilter compositeItemFilter = new CompositeItemFilter();
+        compositeItemFilter.setFilters(Arrays.asList(new IncludeByUrlItemFilter(allowedUrlPatterns),
+                                                     new ExcludeByUrlItemFilter(forbiddenUrlPatterns)));
+
+        itemFilter = compositeItemFilter;
+    }
+
     @RequestMapping(value = URL_DESCRIPTOR, method = RequestMethod.GET)
     public Map<String, Object> getDescriptor(WebRequest request, HttpServletResponse response,
                                              @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
                                              @RequestParam(REQUEST_PARAM_URL) String url)
-            throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException,
-            XmlMergeException, XmlFileParseException {
+            throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
+                   ItemProcessingException, XmlMergeException, XmlFileParseException {
         Map<String, Object> model = getItem(request, response, contextId, url);
 
         if (MapUtils.isNotEmpty(model)) {
@@ -85,8 +110,10 @@ public class ContentStoreRestController extends RestControllerBase {
     public Map<String, Object> getItem(WebRequest request, HttpServletResponse response,
                                        @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
                                        @RequestParam(REQUEST_PARAM_URL) String url)
-            throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException,
-            XmlMergeException, XmlFileParseException {
+            throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
+                   ItemProcessingException, XmlMergeException, XmlFileParseException {
+        checkIfUrlAllowed(url);
+
         Context context = storeService.getContext(contextId);
         if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
@@ -105,14 +132,17 @@ public class ContentStoreRestController extends RestControllerBase {
     public Map<String, Object> getChildren(WebRequest request, HttpServletResponse response,
                                            @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
                                            @RequestParam(REQUEST_PARAM_URL) String url)
-            throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException,
-            XmlMergeException, XmlFileParseException {
+            throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
+                   ItemProcessingException, XmlMergeException, XmlFileParseException {
+        checkIfUrlAllowed(url);
+
         Context context = storeService.getContext(contextId);
         if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
         }
 
-        CachingAwareList<Item> children = (CachingAwareList<Item>) storeService.getChildren(context, url);
+        CachingAwareList<Item> children =
+                (CachingAwareList<Item>) storeService.getChildren(context, null, url, itemFilter, null);
 
         if (children.getCachingTime() != null && checkNotModified(children.getCachingTime(), request, response)) {
             return null;
@@ -126,8 +156,10 @@ public class ContentStoreRestController extends RestControllerBase {
                                        @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
                                        @RequestParam(REQUEST_PARAM_URL) String url,
                                        @RequestParam(value = REQUEST_PARAM_TREE_DEPTH, required = false) Integer depth)
-            throws InvalidContextException, StoreException, PathNotFoundException, ItemProcessingException,
-            XmlMergeException, XmlFileParseException {
+            throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
+                   ItemProcessingException, XmlMergeException, XmlFileParseException {
+        checkIfUrlAllowed(url);
+
         Context context = storeService.getContext(contextId);
         if (context == null) {
             throw new IllegalArgumentException("No context found for ID " + contextId);
@@ -137,7 +169,7 @@ public class ContentStoreRestController extends RestControllerBase {
             depth = ContentStoreService.UNLIMITED_TREE_DEPTH;
         }
 
-        Tree tree = storeService.getTree(context, url, depth);
+        Tree tree = storeService.getTree(context, null, url, depth, itemFilter, null);
 
         if (tree.getCachingTime() != null && checkNotModified(tree.getCachingTime(), request, response)) {
             return null;
@@ -150,6 +182,17 @@ public class ContentStoreRestController extends RestControllerBase {
         response.setHeader(CACHE_CONTROL_HEADER_NAME, MUST_REVALIDATE_HEADER_VALUE);
 
         return request.checkNotModified(lastModifiedTimestamp);
+    }
+
+    private boolean isUrlAllowed(String url) {
+        return (ArrayUtils.isEmpty(allowedUrlPatterns) || RegexUtils.matchesAny(url, allowedUrlPatterns)) &&
+               (ArrayUtils.isEmpty(forbiddenUrlPatterns) || !RegexUtils.matchesAny(url, forbiddenUrlPatterns));
+    }
+
+    private void checkIfUrlAllowed(String url) throws ForbiddenPathException {
+        if (!isUrlAllowed(url)) {
+            throw new ForbiddenPathException("Access denied to URL " + url);
+        }
     }
 
 }
