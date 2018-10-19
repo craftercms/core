@@ -204,7 +204,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
     @Override
     public Content findContent(Context context, String url) throws InvalidContextException, StoreException {
-        return findContent(context, CachingOptions.DEFAULT_CACHING_OPTIONS, url);
+        return findContent(context, null, url);
     }
 
     @Override
@@ -219,7 +219,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     @Override
     public Content getContent(Context context, String url) throws InvalidScopeException, PathNotFoundException,
         StoreException {
-        return getContent(context, CachingOptions.DEFAULT_CACHING_OPTIONS, url);
+        return getContent(context, null, url);
     }
 
     /**
