@@ -22,12 +22,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.MapUtils;
 import org.craftercms.core.exception.AuthenticationException;
+import org.craftercms.core.exception.ForbiddenPathException;
 import org.craftercms.core.exception.PathNotFoundException;
-import org.craftercms.core.service.ContentStoreService;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.ContextImpl;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.service.Tree;
+import org.craftercms.core.processors.ItemProcessor;
+import org.craftercms.core.service.*;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.util.cache.CachingAwareObject;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
@@ -51,6 +49,10 @@ import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_C
 import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -67,6 +69,7 @@ public class ContentStoreRestControllerTest {
 
     private static final String FOLDER_URL = "/folder";
     private static final String ITEM_URL = FOLDER_URL + "/item";
+    private static final String PROTECTED_URL = "/protected/folder";
 
     private ContentStoreRestController storeRestController;
     private ContentStoreService storeService;
@@ -91,80 +94,89 @@ public class ContentStoreRestControllerTest {
 
     @Test
     public void testGetItemNotModified() throws Exception {
-        testNotModified(item, new RestMethodCallback() {
-            @Override
-            public Map<String, Object> executeMethod() throws Exception {
-                return storeRestController.getItem(webRequest, response, context.getId(), ITEM_URL);
-            }
-        });
+        testNotModified(item, () -> storeRestController.getItem(webRequest, response, context.getId(), ITEM_URL));
 
         verify(storeService).getItem(context, ITEM_URL);
     }
 
     @Test
     public void testGetItemModified() throws Exception {
-        testModified(item, MODEL_ATTR_ITEM, new RestMethodCallback() {
-            @Override
-            public Map<String, Object> executeMethod() throws Exception {
-                return storeRestController.getItem(webRequest, response, context.getId(), ITEM_URL);
-            }
-        });
+        testModified(item, MODEL_ATTR_ITEM, () -> storeRestController.getItem(webRequest, response, context.getId(),
+                                                                              ITEM_URL));
 
         verify(storeService).getItem(context, ITEM_URL);
     }
 
+    @Test(expected = ForbiddenPathException.class)
+    public void testGetItemProtected() {
+        storeRestController.getItem(webRequest, response, context.getId(), PROTECTED_URL);
+        fail("Expected " + ForbiddenPathException.class.getName() + " exception");
+    }
+
     @Test
     public void testGetChildrenNotModified() throws Exception {
-        testNotModified(children, new RestMethodCallback() {
-            @Override
-            public Map<String, Object> executeMethod() throws Exception {
-                return storeRestController.getChildren(webRequest, response, context.getId(), FOLDER_URL);
-            }
-        });
+        testNotModified(children, () -> storeRestController.getChildren(webRequest, response, context.getId(),
+                                                                        FOLDER_URL));
 
-        verify(storeService).getChildren(context, FOLDER_URL);
+        verify(storeService).getChildren(eq(context),
+                                         isNull(CachingOptions.class),
+                                         eq(FOLDER_URL),
+                                         any(ItemFilter.class),
+                                         isNull(ItemProcessor.class));
+    }
+
+    @Test(expected = ForbiddenPathException.class)
+    public void testGetChildrenProtected() {
+        storeRestController.getChildren(webRequest, response, context.getId(), PROTECTED_URL);
+        fail("Expected " + ForbiddenPathException.class.getName() + " exception");
     }
 
     @Test
     public void testGetChildrenModified() throws Exception {
-        testModified(children, MODEL_ATTR_CHILDREN, new RestMethodCallback() {
-            @Override
-            public Map<String, Object> executeMethod() throws Exception {
-                return storeRestController.getChildren(webRequest, response, context.getId(), FOLDER_URL);
-            }
-        });
+        testModified(children, MODEL_ATTR_CHILDREN, () -> storeRestController.getChildren(webRequest, response,
+                                                                                          context.getId(), FOLDER_URL));
 
-        verify(storeService).getChildren(context, FOLDER_URL);
+        verify(storeService).getChildren(eq(context),
+                                         isNull(CachingOptions.class),
+                                         eq(FOLDER_URL),
+                                         any(ItemFilter.class),
+                                         isNull(ItemProcessor.class));
     }
 
     @Test
     public void testGetTreeNotModified() throws Exception {
-        testNotModified(tree, new RestMethodCallback() {
-            @Override
-            public Map<String, Object> executeMethod() throws Exception {
-                return storeRestController.getTree(webRequest, response, context.getId(), FOLDER_URL,
-                        UNLIMITED_TREE_DEPTH);
-            }
-        });
+        testNotModified(tree, () -> storeRestController.getTree(webRequest, response, context.getId(), FOLDER_URL,
+                                                                UNLIMITED_TREE_DEPTH));
 
-        verify(storeService).getTree(context, FOLDER_URL, UNLIMITED_TREE_DEPTH);
+        verify(storeService).getTree(eq(context),
+                                     isNull(CachingOptions.class),
+                                     eq(FOLDER_URL),
+                                     eq(UNLIMITED_TREE_DEPTH),
+                                     any(ItemFilter.class),
+                                     isNull(ItemProcessor.class));
     }
 
     @Test
     public void testGetTreeModified() throws Exception {
-        testModified(tree, MODEL_ATTR_TREE, new RestMethodCallback() {
-            @Override
-            public Map<String, Object> executeMethod() throws Exception {
-                return storeRestController.getTree(webRequest, response, context.getId(), FOLDER_URL,
-                                                   UNLIMITED_TREE_DEPTH);
-            }
-        });
+        testModified(tree, MODEL_ATTR_TREE, () -> storeRestController.getTree(webRequest, response, context.getId(),
+                                                                              FOLDER_URL, UNLIMITED_TREE_DEPTH));
 
-        verify(storeService).getTree(context, FOLDER_URL, UNLIMITED_TREE_DEPTH);
+        verify(storeService).getTree(eq(context),
+                                     isNull(CachingOptions.class),
+                                     eq(FOLDER_URL),
+                                     eq(UNLIMITED_TREE_DEPTH),
+                                     any(ItemFilter.class),
+                                     isNull(ItemProcessor.class));
+    }
+
+    @Test(expected = ForbiddenPathException.class)
+    public void testGetTreeProtected() {
+        storeRestController.getTree(webRequest, response, context.getId(), PROTECTED_URL, UNLIMITED_TREE_DEPTH);
+        fail("Expected " + ForbiddenPathException.class.getName() + " exception");
     }
 
     @Test
-    public void testHandleAuthenticationException() throws Exception {
+    public void testHandleAuthenticationException() {
         AuthenticationException ex = new AuthenticationException("This is a test");
 
         Map<String, Object> model = storeRestController.handleAuthenticationException(request, ex);
@@ -172,7 +184,7 @@ public class ContentStoreRestControllerTest {
     }
 
     @Test
-    public void testHandlePathNotFoundException() throws Exception {
+    public void testHandlePathNotFoundException()  {
         PathNotFoundException ex = new PathNotFoundException("This is a test");
 
         Map<String, Object> model = storeRestController.handlePathNotFoundException(request, ex);
@@ -180,7 +192,7 @@ public class ContentStoreRestControllerTest {
     }
 
     @Test
-    public void testHandleException() throws Exception {
+    public void testHandleException() {
         Exception ex = new Exception("This is a test");
 
         Map<String, Object> model = storeRestController.handleException(request, ex);
@@ -209,13 +221,14 @@ public class ContentStoreRestControllerTest {
         assertEquals(cachingAwareObject, model.get(modelAttributeName));
         assertEquals(HttpServletResponse.SC_OK, response.getStatus());
         //Remove the nano precession,
-        assertEquals(new Long(cachingAwareObject.getCachingTime()/1000), new Long(response.getDateHeader(LAST_MODIFIED_HEADER_NAME)/1000));
+        assertEquals(new Long(cachingAwareObject.getCachingTime()/1000),
+                     new Long(response.getDateHeader(LAST_MODIFIED_HEADER_NAME)/1000));
         assertEquals(MUST_REVALIDATE_HEADER_VALUE, response.getHeader(CACHE_CONTROL_HEADER_NAME));
     }
 
     private void setUpTestItems() {
         item = new Item();
-        children = new CachingAwareList<Item>(new ArrayList<Item>());
+        children = new CachingAwareList<>(new ArrayList<>());
         tree = new Tree();
     }
 
@@ -244,8 +257,19 @@ public class ContentStoreRestControllerTest {
         try {
             when(storeService.getContext(context.getId())).thenReturn(context);
             when(storeService.getItem(context, ITEM_URL)).thenReturn(item);
-            when(storeService.getChildren(context, FOLDER_URL)).thenReturn(children);
-            when(storeService.getTree(context, FOLDER_URL, UNLIMITED_TREE_DEPTH)).thenReturn(tree);
+            when(storeService.getChildren(eq(context),
+                                          isNull(CachingOptions.class),
+                                          eq(FOLDER_URL),
+                                          any(ItemFilter.class),
+                                          isNull(ItemProcessor.class)))
+                    .thenReturn(children);
+            when(storeService.getTree(eq(context),
+                                      isNull(CachingOptions.class),
+                                      eq(FOLDER_URL),
+                                      eq(UNLIMITED_TREE_DEPTH),
+                                      any(ItemFilter.class),
+                                      isNull(ItemProcessor.class)))
+                    .thenReturn(tree);
         } catch (Exception e) {
         }
     }
@@ -253,6 +277,8 @@ public class ContentStoreRestControllerTest {
     private void setUpTestStoreRestController() {
         storeRestController = new ContentStoreRestController();
         storeRestController.setStoreService(storeService);
+        storeRestController.setForbiddenUrlPatterns(new String[] {"^/?protected(/.+)?$"});
+        storeRestController.init();
     }
 
     private interface RestMethodCallback {
