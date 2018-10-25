@@ -17,7 +17,6 @@
 package org.craftercms.core.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -192,14 +191,18 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         }
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean exists(Context context, String url) throws InvalidContextException, PathNotFoundException,
-        StoreException {
+    public boolean doExists(Context context, CachingOptions cachingOptions, String url)
+        throws InvalidContextException, PathNotFoundException, StoreException {
         if (!url.startsWith("/")) {
             url = "/" + url;
         }
 
-        return context.getStoreAdapter().exists(context, url);
+        return context.getStoreAdapter().exists(context, cachingOptions, url);
     }
 
     @Override

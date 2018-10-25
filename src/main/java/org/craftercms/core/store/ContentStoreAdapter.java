@@ -45,7 +45,8 @@ public interface ContentStoreAdapter {
 
     void destroyContext(Context context) throws StoreException, AuthenticationException;
 
-    boolean exists(Context context, String path) throws InvalidContextException, StoreException;
+    boolean exists(Context context, CachingOptions cachingOptions, String path)
+        throws InvalidContextException, StoreException;
 
     Content findContent(Context context, CachingOptions cachingOptions,
                         String path) throws InvalidContextException, StoreException;

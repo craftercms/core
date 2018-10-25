@@ -94,13 +94,29 @@ public interface ContentStoreService {
      * Returns true if the file or folder at the specified URL exists
      *
      * @param context the context with the store configuration (required)
+     * @param cachingOptions the caching options for any caching operation done inside this service call (optional)
      * @param url     the url of the file (required)
      * @return true if the file or folder exists, false otherwise
      * @throws InvalidContextException if the context is invalid
      * @throws PathNotFoundException   if the file the url points to can't be found
      * @throws StoreException          if an error occurred while accessing the content store
      */
-    boolean exists(Context context, String url) throws InvalidContextException, PathNotFoundException, StoreException;
+    boolean exists(Context context, CachingOptions cachingOptions, String url)
+        throws InvalidContextException, PathNotFoundException, StoreException;
+
+
+    /**
+     * Returns true if the file or folder at the specified URL exists
+     *
+     * @param context the context with the store configuration (required)
+     * @param url     the url of the file (required)
+     * @return true if the file or folder exists, false otherwise
+     * @throws InvalidContextException if the context is invalid
+     * @throws PathNotFoundException   if the file the url points to can't be found
+     * @throws StoreException          if an error occurred while accessing the content store
+     */
+    boolean exists(Context context, String url)
+        throws InvalidContextException, PathNotFoundException, StoreException;
 
     /**
      * Returns the content of the file for the given url, returning null if not found.
