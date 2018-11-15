@@ -79,7 +79,8 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    public boolean exists(Context context, String path) throws InvalidScopeException, StoreException {
+    public boolean doExists(Context context, CachingOptions cachingOptions, String path)
+        throws InvalidScopeException, StoreException {
         return findFile(context, path) != null;
     }
 
