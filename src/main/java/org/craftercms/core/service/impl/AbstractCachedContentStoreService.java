@@ -61,6 +61,11 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
     public static final String CONST_KEY_ELEM_TREE = "contentStoreService.tree";
 
     /**
+     * A constant added to all {@code exists()} cache keys.
+     */
+    public static final String CONST_KEY_ELEM_EXISTS = "contentStoreService.exists";
+
+    /**
      * Helper that uses an array of key elements (as the compound key) an a callback (when no cache object is found)
      * for caching.
      */
@@ -83,6 +88,33 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
      */
     public void setDefaultCachingOptions(CachingOptions defaultCachingOptions) {
         this.defaultCachingOptions = defaultCachingOptions;
+    }
+
+    @Override
+    public boolean exists(final Context context, final String url)
+        throws InvalidContextException, PathNotFoundException, StoreException {
+        return exists(context, null, url);
+    }
+
+    @Override
+    public boolean exists(final Context context, final CachingOptions cachingOptions, final String url)
+        throws InvalidContextException, PathNotFoundException, StoreException {
+        final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+
+        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Boolean>() {
+
+            @Override
+            public Boolean execute() {
+                return doExists(context, actualCachingOptions, url);
+            }
+
+            @Override
+            public String toString() {
+                return String.format(AbstractCachedContentStoreService.this.getClass().getName() + ".exists(%s, %s)",
+                    context, url);
+            }
+
+        }, context, url, CONST_KEY_ELEM_EXISTS);
     }
 
     @Override
@@ -253,6 +285,9 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
             throw new PathNotFoundException("No folder found at " + url);
         }
     }
+
+    protected abstract boolean doExists(Context context, CachingOptions cachingOptions, String url)
+        throws InvalidContextException, PathNotFoundException, StoreException;
 
     protected abstract Item doFindItem(Context context, CachingOptions cachingOptions, String url,
                                        ItemProcessor processor) throws InvalidContextException,

@@ -45,6 +45,7 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
     public static final String CONST_KEY_ELEM_CONTENT = "contentStoreAdapter.content";
     public static final String CONST_KEY_ELEM_ITEM = "contentStoreAdapter.item";
     public static final String CONST_KEY_ELEM_ITEMS = "contentStoreAdapter.items";
+    public static final String CONST_KEY_ELEM_EXISTS = "contentStoreAdapter.exists";
 
     protected CacheTemplate cacheTemplate;
     protected CachingOptions defaultCachingOptions;
@@ -56,6 +57,27 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
 
     public void setDefaultCachingOptions(CachingOptions defaultCachingOptions) {
         this.defaultCachingOptions = defaultCachingOptions;
+    }
+
+    @Override
+    public boolean exists(final Context context, final CachingOptions cachingOptions, final String path)
+        throws InvalidContextException, StoreException {
+        final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+
+        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Boolean>() {
+
+            @Override
+            public Boolean execute() {
+                return doExists(context, actualCachingOptions, path);
+            }
+
+            @Override
+            public String toString() {
+                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() + ".exists(%s, %s)",
+                    context, path);
+            }
+
+        }, context, path, CONST_KEY_ELEM_EXISTS);
     }
 
     @Override
@@ -131,6 +153,9 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
 
         }, context, path, withDescriptor, CONST_KEY_ELEM_ITEMS);
     }
+
+    protected abstract boolean doExists(Context context, CachingOptions cachingOptions, String path)
+        throws InvalidContextException, StoreException;
 
     protected abstract Content doFindContent(Context context, CachingOptions cachingOptions,
                                              String path) throws InvalidContextException, StoreException;

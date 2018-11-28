@@ -17,13 +17,13 @@
 package org.craftercms.core.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.core.exception.AuthenticationException;
@@ -192,14 +192,14 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         }
     }
 
-    @Override
-    public boolean exists(Context context, String url) throws InvalidContextException, PathNotFoundException,
-        StoreException {
-        if (!url.startsWith("/")) {
-            url = "/" + url;
-        }
 
-        return context.getStoreAdapter().exists(context, url);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean doExists(Context context, CachingOptions cachingOptions, String url)
+        throws InvalidContextException, PathNotFoundException, StoreException {
+        return context.getStoreAdapter().exists(context, cachingOptions, StringUtils.prependIfMissing(url, "/"));
     }
 
     @Override
