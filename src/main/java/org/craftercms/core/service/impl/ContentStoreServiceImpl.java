@@ -143,12 +143,13 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
+    @Deprecated
     public Context createContext(String storeType, String storeServerUrl, String username, String password, String rootFolderPath,
                                  boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
                                  boolean ignoreHiddenFiles) throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException,
         AuthenticationException {
-        String id = createContextId(storeType, storeServerUrl, username, password, rootFolderPath, cacheOn,
-                                    maxAllowedItemsInCache, ignoreHiddenFiles);
+        String id = createContextId(null, storeType, rootFolderPath, cacheOn, maxAllowedItemsInCache,
+            ignoreHiddenFiles);
 
         if (!contexts.containsKey(id)) {
             ContentStoreAdapter storeAdapter = storeAdapterRegistry.get(storeType);
@@ -157,7 +158,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             }
 
             Context context = storeAdapter.createContext(id, storeServerUrl, username, password, rootFolderPath,
-                                                         mergingOn, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
+                mergingOn, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 
             cacheTemplate.getCacheService().addScope(context);
 
@@ -166,6 +167,36 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             return context;
         } else {
             throw new StoreException("A context for id '" + id + "' already exists");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Context getContext(final String ownerId, final String storeType, final String rootFolderPath,
+                              final boolean mergingOn, final boolean cacheOn, final int maxAllowedItemsInCache,
+                              final boolean ignoreHiddenFiles)
+        throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException {
+        String id =
+            createContextId(ownerId, storeType, rootFolderPath, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
+
+        if (!contexts.containsKey(id)) {
+            ContentStoreAdapter storeAdapter = storeAdapterRegistry.get(storeType);
+            if (storeAdapter == null) {
+                throw new InvalidStoreTypeException("No registered content store adapter for store type " + storeType);
+            }
+
+            Context context = storeAdapter.createContext(id, null, null, null, rootFolderPath,
+                mergingOn, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
+
+            cacheTemplate.getCacheService().addScope(context);
+
+            contexts.put(id, context);
+
+            return context;
+        } else {
+            return contexts.get(id);
         }
     }
 
@@ -511,13 +542,10 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         return acceptedItems;
     }
 
-    protected String createContextId(String storeType, String storeServerUrl, String username, String password,
-                                     String rootFolderPath, boolean cacheOn, int maxAllowedItemsInCache,
-                                     boolean ignoreHiddenFiles) {
-        String unHashedId = "storeType='" + storeType + '\'' +
-            ", storeServerUrl='" + storeServerUrl + '\'' +
-            ", username='" + username + '\'' +
-            ", password='" + password + '\'' +
+    protected String createContextId(String ownerId, String storeType, String rootFolderPath, boolean cacheOn,
+                                     int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
+        String unHashedId = "ownerId='" + ownerId + "'" +
+            ", storeType='" + storeType + '\'' +
             ", rootFolderPath='" + rootFolderPath + '\'' +
             ", cacheOn=" + cacheOn +
             ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
