@@ -72,10 +72,14 @@ public interface ContentStoreService {
      * Returns a new context with the specified params, login in to a remote repository (if needed) and creating a
      * new cache scope associated to the context. If a context with the same params was already created, an exception is thrown.
      */
+    @Deprecated
     Context createContext(String storeType, String storeServerUrl, String username, String password,
                           String rootFolderPath, boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
                           boolean ignoreHiddenFiles) throws InvalidStoreTypeException, RootFolderNotFoundException,
                                                             StoreException, AuthenticationException;
+
+    Context createContext(String ownerId, String storeType, String rootFolderPath, boolean mergingOn, boolean cacheOn,
+                          int maxAllowedItemsInCache, boolean ignoreHiddenFiles);
 
     /**
      * Returns true if the specified context is still valid and usable.
