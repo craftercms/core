@@ -78,8 +78,24 @@ public interface ContentStoreService {
                           boolean ignoreHiddenFiles) throws InvalidStoreTypeException, RootFolderNotFoundException,
                                                             StoreException, AuthenticationException;
 
-    Context createContext(String ownerId, String storeType, String rootFolderPath, boolean mergingOn, boolean cacheOn,
-                          int maxAllowedItemsInCache, boolean ignoreHiddenFiles);
+    /**
+     * Returns a context with the specified parameters, if the context doesn't exist it will be created.
+     * @param ownerId a unique id to differentiate the object requesting the context
+     * @param storeType the type of content store to use
+     * @param rootFolderPath the root folder path for the context
+     * @param mergingOn indicates if content merging should be enabled
+     * @param cacheOn indicates if content caching should be enabled
+     * @param maxAllowedItemsInCache the maximum number of items to hold in the cache
+     * @param ignoreHiddenFiles indicates if hidden files should be ignored
+     * @return the {@link Context} object
+     * @throws InvalidStoreTypeException if the provided store type is invalid
+     * @throws RootFolderNotFoundException if the provided root folder path doesn't exist
+     * @throws StoreException if there is any unexpected error during the creation the context
+     * @throws AuthenticationException if there is any authentication error during the creation of the context
+     */
+    Context getContext(String ownerId, String storeType, String rootFolderPath, boolean mergingOn, boolean cacheOn,
+                       int maxAllowedItemsInCache, boolean ignoreHiddenFiles)
+        throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException;
 
     /**
      * Returns true if the specified context is still valid and usable.

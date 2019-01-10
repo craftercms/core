@@ -148,14 +148,17 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                                  String rootFolderPath, boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
                                  boolean ignoreHiddenFiles)
         throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException {
-        return createContext(null, storeType, rootFolderPath, mergingOn, cacheOn, maxAllowedItemsInCache,
+        return getContext(null, storeType, rootFolderPath, mergingOn, cacheOn, maxAllowedItemsInCache,
             ignoreHiddenFiles);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Context createContext(final String ownerId, final String storeType, final String rootFolderPath,
-                                 final boolean mergingOn, final boolean cacheOn, final int maxAllowedItemsInCache,
-                                 final boolean ignoreHiddenFiles)
+    public Context getContext(final String ownerId, final String storeType, final String rootFolderPath,
+                              final boolean mergingOn, final boolean cacheOn, final int maxAllowedItemsInCache,
+                              final boolean ignoreHiddenFiles)
         throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException {
         String id =
             createContextId(ownerId, storeType, rootFolderPath, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
