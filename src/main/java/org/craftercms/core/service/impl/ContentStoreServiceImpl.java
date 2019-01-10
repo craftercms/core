@@ -144,12 +144,30 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     @Override
     @Deprecated
-    public Context createContext(String storeType, String storeServerUrl, String username, String password,
-                                 String rootFolderPath, boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
-                                 boolean ignoreHiddenFiles)
-        throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException {
-        return getContext(null, storeType, rootFolderPath, mergingOn, cacheOn, maxAllowedItemsInCache,
+    public Context createContext(String storeType, String storeServerUrl, String username, String password, String rootFolderPath,
+                                 boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
+                                 boolean ignoreHiddenFiles) throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException,
+        AuthenticationException {
+        String id = createContextId(null, storeType, rootFolderPath, cacheOn, maxAllowedItemsInCache,
             ignoreHiddenFiles);
+
+        if (!contexts.containsKey(id)) {
+            ContentStoreAdapter storeAdapter = storeAdapterRegistry.get(storeType);
+            if (storeAdapter == null) {
+                throw new InvalidStoreTypeException("No registered content store adapter for store type " + storeType);
+            }
+
+            Context context = storeAdapter.createContext(id, storeServerUrl, username, password, rootFolderPath,
+                mergingOn, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
+
+            cacheTemplate.getCacheService().addScope(context);
+
+            contexts.put(id, context);
+
+            return context;
+        } else {
+            throw new StoreException("A context for id '" + id + "' already exists");
+        }
     }
 
     /**
