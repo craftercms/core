@@ -72,7 +72,6 @@
         <commons.io.version>2.4</commons.io.version>
         <commons.codec.version>1.9</commons.codec.version>
         <slf4j.version>1.7.7</slf4j.version>
-        <log4j.version>2.11.2</log4j.version>
         <spring.version>4.3.18.RELEASE</spring.version>
         <ehcache.version>2.8.1</ehcache.version>
         <jackson.version>2.9.8</jackson.version>
@@ -317,6 +316,12 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Quartz -->
         <dependency>
@@ -363,21 +368,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
         </dependency>
 
         <!-- Spring start -->
