@@ -27,6 +27,7 @@ import org.craftercms.core.cache.CacheItem;
 public class CachingOptions {
 
     public static final CachingOptions DEFAULT_CACHING_OPTIONS = new CachingOptions();
+    public static final CachingOptions CACHE_OFF_CACHING_OPTIONS = new CachingOptions(false, 0, 0);
 
     private boolean doCaching;
     private long expireAfter;
@@ -36,6 +37,12 @@ public class CachingOptions {
         doCaching = true;
         expireAfter = CacheItem.NEVER_EXPIRE;
         refreshFrequency = CacheItem.NEVER_REFRESH;
+    }
+
+    public CachingOptions(boolean doCaching, long expireAfter, long refreshFrequency) {
+        this.doCaching = doCaching;
+        this.expireAfter = expireAfter;
+        this.refreshFrequency = refreshFrequency;
     }
 
     public boolean doCaching() {
