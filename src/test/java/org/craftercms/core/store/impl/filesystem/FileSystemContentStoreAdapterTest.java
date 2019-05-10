@@ -150,7 +150,7 @@ public class FileSystemContentStoreAdapterTest {
     }
 
     private Context createTestContext(boolean ignoreHiddenFiles) {
-        return storeAdapter.createContext("0", null, null, null, CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
+        return storeAdapter.createContext("0", CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
                 DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, ignoreHiddenFiles);
     }
 
