@@ -235,7 +235,7 @@ public class ContentStoreRestControllerTest {
     private void setUpTestContext() {
         ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
 
-        context = new ContextImpl("0", storeAdapter, "http://localhost:8080", "/", DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
+        context = new ContextImpl("0", storeAdapter, "/", DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
                                   DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES);
     }
 

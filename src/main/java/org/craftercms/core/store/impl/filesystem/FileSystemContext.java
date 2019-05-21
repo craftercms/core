@@ -27,10 +27,10 @@ public class FileSystemContext extends ContextImpl {
 
     private FileSystemFile rootFolder;
 
-    public FileSystemContext(String id, FileSystemContentStoreAdapter storeAdapter, String storeServerUrl, String rootFolderPath,
+    public FileSystemContext(String id, FileSystemContentStoreAdapter storeAdapter, String rootFolderPath,
                              FileSystemFile rootFolder, boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
                              boolean ignoreHiddenFiles) {
-        super(id, storeAdapter, storeServerUrl, rootFolderPath, mergingOn, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
+        super(id, storeAdapter, rootFolderPath, mergingOn, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 
         this.rootFolder = rootFolder;
     }
@@ -44,7 +44,6 @@ public class FileSystemContext extends ContextImpl {
         return "FileSystemContext[" +
             "id='" + id + '\'' +
             ", storeAdapter='" + storeAdapter + '\'' +
-            ", storeServerUrl='" + storeServerUrl + '\'' +
             ", rootFolderPath='" + rootFolderPath + '\'' +
             ", rootFolder=" + rootFolder +
             ", mergingOn=" + mergingOn +

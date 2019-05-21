@@ -36,10 +36,6 @@ public interface Context {
 
     ContentStoreAdapter getStoreAdapter();
 
-    String getStoreServerUrl();
-
-    String getRootFolderPath();
-
     boolean isMergingOn();
 
     boolean isCacheOn();
