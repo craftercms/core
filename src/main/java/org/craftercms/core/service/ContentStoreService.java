@@ -69,18 +69,8 @@ public interface ContentStoreService {
     Context getContext(String contextId);
 
     /**
-     * Returns a new context with the specified params, login in to a remote repository (if needed) and creating a
-     * new cache scope associated to the context. If a context with the same params was already created, an exception is thrown.
-     */
-    @Deprecated
-    Context createContext(String storeType, String storeServerUrl, String username, String password,
-                          String rootFolderPath, boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
-                          boolean ignoreHiddenFiles) throws InvalidStoreTypeException, RootFolderNotFoundException,
-                                                            StoreException, AuthenticationException;
-
-    /**
      * Returns a context with the specified parameters, if the context doesn't exist it will be created.
-     * @param ownerId a unique id to differentiate the object requesting the context
+     * @param tag a tag that's used when creating the ID to differentiate this context
      * @param storeType the type of content store to use
      * @param rootFolderPath the root folder path for the context
      * @param mergingOn indicates if content merging should be enabled
@@ -93,7 +83,7 @@ public interface ContentStoreService {
      * @throws StoreException if there is any unexpected error during the creation the context
      * @throws AuthenticationException if there is any authentication error during the creation of the context
      */
-    Context getContext(String ownerId, String storeType, String rootFolderPath, boolean mergingOn, boolean cacheOn,
+    Context getContext(String tag, String storeType, String rootFolderPath, boolean mergingOn, boolean cacheOn,
                        int maxAllowedItemsInCache, boolean ignoreHiddenFiles)
         throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException;
 
