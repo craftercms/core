@@ -38,12 +38,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * REST service that provides several methods to handle Crafter's cache engine.
  *
- * @author Alfonso Vásquez
+ * @author avasquez
  * @author hyanghee
  */
 @Controller
 @RequestMapping(RestControllerBase.REST_BASE_URI + CacheRestController.URL_ROOT)
-public class CacheRestController extends RestControllerBase {
+public class CacheRestController extends RestControllerBaseWithExceptionHandlers {
 
     private static final Log logger = LogFactory.getLog(CacheRestController.class);
 
@@ -55,9 +55,6 @@ public class CacheRestController extends RestControllerBase {
     public static final String URL_CLEAR_SCOPE = "/clear";
 
     public static final String REQUEST_PARAM_CONTEXT_ID = "contextId";
-    public static final String REQUEST_PARAM_URL = "url";
-
-    public static final String MODEL_ATTRIBUTE_MESSAGE = "message";
 
     private CacheTemplate cacheTemplate;
     private ContentStoreService storeService;
@@ -74,18 +71,18 @@ public class CacheRestController extends RestControllerBase {
 
     @RequestMapping(value = URL_CLEAR_ALL_SCOPES, method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, String> clearAllScopes() throws CacheException {
+    public Map<String, Object> clearAllScopes() throws CacheException {
         cacheTemplate.getCacheService().clearAll();
         if (logger.isInfoEnabled()) {
             logger.info("[CACHE] All scopes have been cleared");
         }
 
-        return Collections.singletonMap(MODEL_ATTRIBUTE_MESSAGE, "All cache scopes have been cleared");
+        return createResponseMessage("All cache scopes have been cleared");
     }
 
     @RequestMapping(value = URL_CLEAR_SCOPE, method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, String> clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId)
+    public Map<String, Object> clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId)
         throws InvalidContextException, CacheException {
         Context context = storeService.getContext(contextId);
         if (context == null) {
@@ -97,8 +94,7 @@ public class CacheRestController extends RestControllerBase {
             logger.info("[CACHE] Scope for context " + context + " has been cleared");
         }
 
-        return Collections.singletonMap(MODEL_ATTRIBUTE_MESSAGE, "Cache scope for context '" + contextId +
-                                                                 "' has been cleared");
+        return createResponseMessage("Cache scope for context '" + contextId + "' has been cleared");
     }
 
 }
