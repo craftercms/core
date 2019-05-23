@@ -41,11 +41,11 @@ import java.util.Map;
 /**
  * REST service that provides several methods to access the Crafter content store.
  *
- * @author Alfonso Vásquez
+ * @author avasquez
  */
 @Controller
 @RequestMapping(RestControllerBase.REST_BASE_URI + ContentStoreRestController.URL_ROOT)
-public class ContentStoreRestController extends RestControllerBase {
+public class ContentStoreRestController extends RestControllerBaseWithExceptionHandlers {
 
     public static final String URL_ROOT = "/content_store";
     public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
@@ -124,7 +124,7 @@ public class ContentStoreRestController extends RestControllerBase {
         if (item.getCachingTime() != null && checkNotModified(item.getCachingTime(), request, response)) {
             return null;
         } else {
-            return createMessageModel(MODEL_ATTR_ITEM, item);
+            return createSingletonModifiableMap(MODEL_ATTR_ITEM, item);
         }
     }
 
@@ -147,7 +147,7 @@ public class ContentStoreRestController extends RestControllerBase {
         if (children.getCachingTime() != null && checkNotModified(children.getCachingTime(), request, response)) {
             return null;
         } else {
-            return createMessageModel(MODEL_ATTR_CHILDREN, new ArrayList<Item>(children));
+            return createSingletonModifiableMap(MODEL_ATTR_CHILDREN, new ArrayList<Item>(children));
         }
     }
 
@@ -174,7 +174,7 @@ public class ContentStoreRestController extends RestControllerBase {
         if (tree.getCachingTime() != null && checkNotModified(tree.getCachingTime(), request, response)) {
             return null;
         } else {
-            return createMessageModel(MODEL_ATTR_TREE, tree);
+            return createSingletonModifiableMap(MODEL_ATTR_TREE, tree);
         }
     }
 
