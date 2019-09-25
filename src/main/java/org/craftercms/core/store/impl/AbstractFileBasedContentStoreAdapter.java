@@ -45,9 +45,8 @@ import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.SAXException;
 
 /**
- * File-based content store adapter. Takes away common stuff from actual implementations,
- * like handling metadata files and
- * loading descriptor DOMs.
+ * File-based content store adapter. Takes away common stuff from actual implementations, like handling metadata files
+ * and loading descriptor DOMs.
  *
  * @author Alfonso Vásquez
  */

@@ -17,6 +17,7 @@
 package org.craftercms.core.service;
 
 import org.craftercms.core.store.ContentStoreAdapter;
+import org.craftercms.core.util.CacheUtils;
 
 /**
  * Default {@link Context} implementation.
@@ -26,11 +27,14 @@ import org.craftercms.core.store.ContentStoreAdapter;
  */
 public class ContextImpl implements Context {
 
+    protected static final String CACHE_SCOPE_FORMAT = "%s-v%s";
+
     protected String id;
     protected ContentStoreAdapter storeAdapter;
     protected String rootFolderPath;
     protected boolean mergingOn;
     protected boolean cacheOn;
+    protected long cacheVersion;
     protected int maxAllowedItemsInCache;
     protected boolean ignoreHiddenFiles;
 
@@ -41,6 +45,7 @@ public class ContextImpl implements Context {
         this.rootFolderPath = rootFolderPath;
         this.mergingOn = mergingOn;
         this.cacheOn = cacheOn;
+        this.cacheVersion = System.nanoTime();
         this.maxAllowedItemsInCache = maxAllowedItemsInCache;
         this.ignoreHiddenFiles = ignoreHiddenFiles;
     }
@@ -48,6 +53,21 @@ public class ContextImpl implements Context {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public long getCacheVersion() {
+        return cacheVersion;
+    }
+
+    @Override
+    public void setCacheVersion(long cacheVersion) {
+        this.cacheVersion = cacheVersion;
+    }
+
+    @Override
+    public String getCacheScope() {
+        return String.format(CACHE_SCOPE_FORMAT, id, cacheVersion);
     }
 
     @Override
@@ -73,6 +93,16 @@ public class ContextImpl implements Context {
     @Override
     public boolean ignoreHiddenFiles() {
         return ignoreHiddenFiles;
+    }
+
+    @Override
+    public Context clone() {
+        try {
+            return (Context) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // Shouldn't happen
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean equals(Object o) {
