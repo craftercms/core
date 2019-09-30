@@ -19,8 +19,6 @@ package org.craftercms.core.service;
 
 import org.craftercms.core.store.ContentStoreAdapter;
 
-import java.util.Map;
-
 /**
  * Contains information of the content store used by a particular tenant.
  *
