@@ -51,10 +51,10 @@ public interface ContentStoreAdapter {
     Content findContent(Context context, CachingOptions cachingOptions, String path)
             throws InvalidContextException, StoreException;
 
-    Item findItem(Context context, CachingOptions cachingOptions, String path, boolean withContent)
+    Item findItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
             throws InvalidContextException, XmlFileParseException, StoreException;
 
-    List<Item> findItems(Context context, CachingOptions cachingOptions, String path, boolean withContent)
+    List<Item> findItems(Context context, CachingOptions cachingOptions, String path)
             throws InvalidContextException, XmlFileParseException, StoreException;
 
 }

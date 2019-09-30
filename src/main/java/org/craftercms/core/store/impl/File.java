@@ -23,7 +23,7 @@ import org.craftercms.core.service.Content;
  *
  * @author Alfonso Vásquez
  */
-public interface File extends Content {
+public interface File {
 
     String getName();
 

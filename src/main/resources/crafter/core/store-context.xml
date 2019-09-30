@@ -20,11 +20,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- Content Store Adapter Registry -->
-    <!-- Pick ups any content store adapter defined in the Spring context -->
-
-    <bean id="crafter.contentStoreAdapterRegistry" class="org.craftercms.core.store.ContentStoreAdapterRegistry" />
-
     <!-- Content Store Adapter -->
 
     <bean id="crafter.contentStoreAdapter.filesystem" class="org.craftercms.core.store.impl.filesystem.FileSystemContentStoreAdapter">
@@ -35,6 +30,16 @@
             <bean class="org.craftercms.commons.validation.validators.impl.SecurePathValidator">
                 <constructor-arg value="path"/>
             </bean>
+        </property>
+    </bean>
+
+    <!-- Content Store Adapter Registry -->
+
+    <bean id="crafter.contentStoreAdapterRegistry" class="org.craftercms.core.store.impl.ContentStoreAdapterRegistryImpl" >
+        <property name="adapters">
+            <map>
+                <entry key="filesystem" value-ref="crafter.contentStoreAdapter.filesystem"/>
+            </map>
         </property>
     </bean>
 

@@ -21,8 +21,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.Predicate;
 import org.craftercms.commons.lang.Callback;
 import org.craftercms.commons.validation.validators.impl.SecurePathValidator;
 import org.craftercms.core.exception.XmlFileParseException;
@@ -42,10 +40,7 @@ import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS
 import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
 import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
 import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyVararg;
 import static org.mockito.Mockito.eq;
@@ -64,9 +59,7 @@ public class FileSystemContentStoreAdapterTest {
         .class.getSimpleName();
 
     private static final String FOLDER_NAME = "folder";
-    private static final String UNSECURE_FOLDER_NAME = "unsecure";
     private static final String FOLDER_PATH = "/" + FOLDER_NAME;
-    private static final String UNSECURE_FOLDER_PATH = "/" + UNSECURE_FOLDER_NAME;
     private static final String FOLDER_METADATA_FILE_PATH = FOLDER_PATH + METADATA_FILE_EXTENSION;
 
     private static final String DESCRIPTOR_NAME = "descriptor.xml";
@@ -129,24 +122,30 @@ public class FileSystemContentStoreAdapterTest {
         assertCrafterCMSLogoItem(item);
     }
 
-    @Test(expected = XmlFileParseException.class)
-    public void testGetUnsecuredItems() throws Exception {
-        Context context = createTestContext(true);
-        storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, UNSECURE_FOLDER_PATH, true);
-    }
-
     @Test
     public void testGetItems() throws Exception {
         Context context = createTestContext(true);
 
-        List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
+        List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH);
         assertNotNull(items);
 
         Collections.sort(items, ItemComparator.INSTANCE);
 
         assertEquals(2, items.size());
-        assertCrafterCMSLogoItem(items.get(0));
-        assertDescriptorItem(items.get(1));
+
+        assertNotNull(items.get(0));
+
+        assertEquals(CRAFTER_CMS_LOGIC_NAME, items.get(0).getName());
+        assertEquals(CRAFTER_CMS_LOGO_PATH, items.get(0).getUrl());
+        assertFalse(items.get(0).isFolder());
+        assertNull(items.get(0).getDescriptorUrl());
+        assertNull(items.get(0).getDescriptorDom());
+
+        assertEquals(DESCRIPTOR_NAME, items.get(1).getName());
+        assertEquals(DESCRIPTOR_PATH, items.get(1).getUrl());
+        assertFalse(items.get(1).isFolder());
+        assertNull(items.get(1).getDescriptorUrl());
+        assertNull(items.get(1).getDescriptorDom());
     }
 
     private Context createTestContext(boolean ignoreHiddenFiles) {

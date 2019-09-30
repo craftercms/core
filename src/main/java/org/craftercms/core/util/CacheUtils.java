@@ -16,6 +16,8 @@
  */
 package org.craftercms.core.util;
 
+import org.craftercms.core.service.Context;
+
 import java.util.Arrays;
 
 /**

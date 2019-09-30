@@ -19,6 +19,9 @@ package org.craftercms.core.service;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.util.CacheUtils;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Default {@link Context} implementation.
  *
@@ -34,7 +37,7 @@ public class ContextImpl implements Context {
     protected String rootFolderPath;
     protected boolean mergingOn;
     protected boolean cacheOn;
-    protected long cacheVersion;
+    protected volatile long cacheVersion;
     protected int maxAllowedItemsInCache;
     protected boolean ignoreHiddenFiles;
 
@@ -128,14 +131,10 @@ public class ContextImpl implements Context {
 
     @Override
     public String toString() {
-        return "ContextImpl[" +
-            "id='" + id + '\'' +
-            ", storeAdapter='" + storeAdapter + '\'' +
-            ", rootFolderPath='" + rootFolderPath + '\'' +
-            ", cacheOn=" + cacheOn +
-            ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
-            ", ignoreHiddenFiles=" + ignoreHiddenFiles +
-            ']';
+        return getClass().getSimpleName() + "{" +
+               "id='" + id + '\'' +
+               ", rootFolderPath='" + rootFolderPath + '\'' +
+               '}';
     }
 
 }

@@ -14,44 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package org.craftercms.core.service;
+package org.craftercms.core.store.impl;
 
 import org.craftercms.core.store.ContentStoreAdapter;
+import org.craftercms.core.store.ContentStoreAdapterRegistry;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Map;
 
 /**
- * Contains information of the content store used by a particular tenant.
+ * Default implementation of {@link ContentStoreAdapterRegistry}.
  *
- * @author Sumer Jabri
- * @author Alfonso Vásquez
+ * @author avasque
  */
-public interface Context extends Cloneable {
+public class ContentStoreAdapterRegistryImpl implements ContentStoreAdapterRegistry {
 
-    boolean DEFAULT_MERGING_ON = true;
-    boolean DEFAULT_CACHE_ON = true;
-    int DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE = 0;
-    boolean DEFAULT_IGNORE_HIDDEN_FILES = true;
+    private Map<String, ContentStoreAdapter> adapters;
 
-    String getId();
+    @Required
+    public void setAdapters(Map<String, ContentStoreAdapter> adapters) {
+        this.adapters = adapters;
+    }
 
-    long getCacheVersion();
-
-    void setCacheVersion(long cacheVersion);
-
-    String getCacheScope();
-
-    ContentStoreAdapter getStoreAdapter();
-
-    boolean isMergingOn();
-
-    boolean isCacheOn();
-
-    int getMaxAllowedItemsInCache();
-
-    boolean ignoreHiddenFiles();
-
-    Context clone();
+    @Override
+    public ContentStoreAdapter get(String storeType) {
+        return adapters.get(storeType);
+    }
 
 }
