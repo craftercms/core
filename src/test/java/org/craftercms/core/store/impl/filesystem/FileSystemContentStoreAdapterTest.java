@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.craftercms.commons.lang.Callback;
 import org.craftercms.commons.validation.validators.impl.SecurePathValidator;
-import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.util.cache.CacheTemplate;
@@ -65,8 +64,8 @@ public class FileSystemContentStoreAdapterTest {
     private static final String DESCRIPTOR_NAME = "descriptor.xml";
     private static final String DESCRIPTOR_PATH = FOLDER_PATH + "/" + DESCRIPTOR_NAME;
 
-    private static final String CRAFTER_CMS_LOGIC_NAME = "craftercms_logo.png";
-    private static final String CRAFTER_CMS_LOGO_PATH = FOLDER_PATH + "/" + CRAFTER_CMS_LOGIC_NAME;
+    private static final String CRAFTER_CMS_LOGO_NAME = "craftercms_logo.png";
+    private static final String CRAFTER_CMS_LOGO_PATH = FOLDER_PATH + "/" + CRAFTER_CMS_LOGO_NAME;
     private static final String CRAFTER_CMS_LOGO_METADATA_FILE_PATH = FOLDER_PATH + "/craftercms_logo" +
                                                                       METADATA_FILE_EXTENSION;
 
@@ -135,7 +134,7 @@ public class FileSystemContentStoreAdapterTest {
 
         assertNotNull(items.get(0));
 
-        assertEquals(CRAFTER_CMS_LOGIC_NAME, items.get(0).getName());
+        assertEquals(CRAFTER_CMS_LOGO_NAME, items.get(0).getName());
         assertEquals(CRAFTER_CMS_LOGO_PATH, items.get(0).getUrl());
         assertFalse(items.get(0).isFolder());
         assertNull(items.get(0).getDescriptorUrl());
@@ -180,7 +179,7 @@ public class FileSystemContentStoreAdapterTest {
 
     private void assertCrafterCMSLogoItem(Item item) {
         assertNotNull(item);
-        assertEquals(CRAFTER_CMS_LOGIC_NAME, item.getName());
+        assertEquals(CRAFTER_CMS_LOGO_NAME, item.getName());
         assertEquals(CRAFTER_CMS_LOGO_PATH, item.getUrl());
         assertFalse(item.isFolder());
         assertEquals(CRAFTER_CMS_LOGO_METADATA_FILE_PATH, item.getDescriptorUrl());
