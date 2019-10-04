@@ -16,7 +16,6 @@
  */
 package org.craftercms.core.store.impl;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,7 +25,8 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.validation.ValidationResult;
+import org.craftercms.commons.validation.validators.Validator;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.exception.PathNotFoundException;
@@ -36,6 +36,7 @@ import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
+import org.craftercms.core.util.ContentStoreUtils;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
@@ -45,9 +46,8 @@ import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.SAXException;
 
 /**
- * File-based content store adapter. Takes away common stuff from actual implementations,
- * like handling metadata files and
- * loading descriptor DOMs.
+ * File-based content store adapter. Takes away common stuff from actual implementations, like handling metadata files
+ * and loading descriptor DOMs.
  *
  * @author Alfonso Vásquez
  */
@@ -55,6 +55,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
     public static final String DEFAULT_CHARSET = "UTF-8";
 
+    protected Validator<String> pathValidator;
     protected String charset;
     protected String descriptorFileExtension;
     protected String metadataFileExtension;
@@ -66,6 +67,11 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
     public void setCharset(String charset) {
         this.charset = charset;
+    }
+
+    @Required
+    public void setPathValidator(Validator<String> pathValidator) {
+        this.pathValidator = pathValidator;
     }
 
     @Required
@@ -87,22 +93,29 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     @Override
     protected Content doFindContent(Context context, CachingOptions cachingOptions, String path)
         throws InvalidContextException, StoreException {
-        path = normalizePath(path);
+        validatePath(path);
+
+        path = ContentStoreUtils.normalizePath(path);
 
         File file = findFile(context, path);
 
-        if (file != null && !file.isFile()) {
-            throw new StoreException("Unable to find content: " + file + " is not a file");
+        if (file != null) {
+            if (file.isFile()) {
+                return getContent(context, file);
+            } else {
+                throw new StoreException("Unable to find content: " + file + " is not a file");
+            }
+        } else {
+            return null;
         }
-
-        return file;
     }
 
     @Override
     protected Item doFindItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
-        throws InvalidContextException, PathNotFoundException,
-        XmlFileParseException, StoreException {
-        path = normalizePath(path);
+        throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException {
+        validatePath(path);
+
+        path = ContentStoreUtils.normalizePath(path);
 
         File file = findFile(context, path);
 
@@ -140,7 +153,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
             if (descriptorFile != null) {
                 try {
-                    InputStream fileInputStream = new BufferedInputStream(descriptorFile.getInputStream());
+                    InputStream fileInputStream = getContent(context, descriptorFile).getInputStream();
                     Reader fileReader = new InputStreamReader(fileInputStream, charset);
 
                     try {
@@ -160,10 +173,12 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Override
-    protected List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path,
-                                     boolean withDescriptor) throws InvalidContextException, PathNotFoundException,
+    protected List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path)
+            throws InvalidContextException, PathNotFoundException,
         XmlFileParseException, StoreException {
-        path = normalizePath(path);
+        validatePath(path);
+
+        path = ContentStoreUtils.normalizePath(path);
 
         File dir = findFile(context, path);
 
@@ -184,7 +199,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
                 // items.
                 if (!child.isFile() || !child.getName().endsWith(metadataFileExtension)) {
                     String fileRelPath = path + (!path.equals("/")? "/": "") + child.getName();
-                    Item item = findItem(context, cachingOptions, fileRelPath, withDescriptor);
+                    Item item = findItem(context, cachingOptions, fileRelPath, false);
 
                     if (item != null) {
                         items.add(item);
@@ -194,24 +209,6 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
         }
 
         return items;
-    }
-
-    /**
-     * Normalize the path: this means, append a leading '/' at the beginning and remove any trailing '/' (unless
-     * the path is root). This is done for consistency in handling paths.
-     *
-     * @param path
-     * @return the normalized path (with a leading '/' and without a trailing '/')
-     */
-    protected String normalizePath(String path) {
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-        if (!path.equals("/")) {
-            path = StringUtils.stripEnd(path, "/");
-        }
-
-        return path;
     }
 
     /**
@@ -233,6 +230,19 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
         return xmlReader;
     }
+
+    protected void validatePath(String path) throws StoreException {
+        ValidationResult result = new ValidationResult();
+
+        if (!pathValidator.validate(path, result)) {
+            throw new StoreException("Validation of path " + path + " failed. Errors: " + result.getErrors());
+        }
+    }
+
+    /**
+     * Returns the {@link Content} for the given file.
+     */
+    protected abstract Content getContent(Context context, File file) throws InvalidContextException, StoreException;
 
     /**
      * Returns the {@link File} at the given path, returning null if not found.

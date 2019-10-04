@@ -43,6 +43,16 @@ public interface CacheTemplate {
     Object getKey(Object... keyElements);
 
     /**
+     * Returns true if the cache contains an object for the specified key elements
+     *
+     * @param context       the context (needed by the cache service)
+     * @param keyElements   the key elements, used to create the final cache key
+     *
+     * @return true if the cache contains an object for the specified key elements
+     */
+    boolean hasObject(Context context, Object... keyElements);
+
+    /**
      * Executes the template, using the specified callback to load the object to cache, if it's not already in the
      * cache. Works like {@link #getObject(org.craftercms.core.service.Context,
      * org.craftercms.core.service.CachingOptions, org.craftercms.commons.lang.Callback, Object...)}, but with

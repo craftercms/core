@@ -39,6 +39,6 @@ public interface Content {
     /**
      * Returns a {@link InputStream} for the data.
      */
-    public InputStream getInputStream() throws IOException;
+    InputStream getInputStream() throws IOException;
 
 }

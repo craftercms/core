@@ -70,21 +70,6 @@ public class FileSystemFile implements File {
     }
 
     @Override
-    public long getLastModified() {
-        return file.lastModified();
-    }
-
-    @Override
-    public long getLength() {
-        return file.length();
-    }
-
-    @Override
-    public InputStream getInputStream() throws FileNotFoundException {
-        return new BufferedInputStream(new FileInputStream(file));
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

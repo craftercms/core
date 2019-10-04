@@ -77,6 +77,7 @@ public class UrlTransformationEngineImplTest {
     private void setUpTestContext() {
         context = mock(Context.class);
         when(context.getId()).thenReturn("0");
+        when(context.getCacheScope()).thenReturn("0");
         when(context.getMaxAllowedItemsInCache()).thenReturn(DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE);
         when(context.isCacheOn()).thenReturn(DEFAULT_CACHE_ON);
 

@@ -39,18 +39,5 @@ public class FileSystemContext extends ContextImpl {
         return rootFolder;
     }
 
-    @Override
-    public String toString() {
-        return "FileSystemContext[" +
-            "id='" + id + '\'' +
-            ", storeAdapter='" + storeAdapter + '\'' +
-            ", rootFolderPath='" + rootFolderPath + '\'' +
-            ", rootFolder=" + rootFolder +
-            ", mergingOn=" + mergingOn +
-            ", cacheOn=" + cacheOn +
-            ", maxAllowedItemsInCache=" + maxAllowedItemsInCache +
-            ", ignoreHiddenFiles=" + ignoreHiddenFiles +
-            ']';
-    }
 
 }

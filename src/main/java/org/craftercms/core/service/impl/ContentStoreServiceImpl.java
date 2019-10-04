@@ -330,7 +330,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     protected List<Item> doFindChildren(Context context, CachingOptions cachingOptions, String url, Integer depth,
                                         ItemFilter filter, ItemProcessor processor) throws InvalidContextException,
         XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        List<Item> children = context.getStoreAdapter().findItems(context, cachingOptions, url, false);
+        List<Item> children = context.getStoreAdapter().findItems(context, cachingOptions, url);
         if (children != null) {
             if (filter != null && filter.runBeforeProcessing()) {
                 if (logger.isDebugEnabled()) {

@@ -25,7 +25,7 @@ import org.craftercms.core.store.ContentStoreAdapter;
  * @author Sumer Jabri
  * @author Alfonso Vásquez
  */
-public interface Context {
+public interface Context extends Cloneable {
 
     boolean DEFAULT_MERGING_ON = true;
     boolean DEFAULT_CACHE_ON = true;
@@ -33,6 +33,12 @@ public interface Context {
     boolean DEFAULT_IGNORE_HIDDEN_FILES = true;
 
     String getId();
+
+    long getCacheVersion();
+
+    void setCacheVersion(long cacheVersion);
+
+    String getCacheScope();
 
     ContentStoreAdapter getStoreAdapter();
 
@@ -43,5 +49,7 @@ public interface Context {
     int getMaxAllowedItemsInCache();
 
     boolean ignoreHiddenFiles();
+
+    Context clone();
 
 }
