@@ -34,9 +34,9 @@ public class CachingOptions {
     private long refreshFrequency;
 
     public CachingOptions() {
-        doCaching = true;
-        expireAfter = CacheItem.NEVER_EXPIRE;
-        refreshFrequency = CacheItem.NEVER_REFRESH;
+        this.doCaching = true;
+        this.expireAfter = CacheItem.NEVER_EXPIRE;
+        this.refreshFrequency = CacheItem.NEVER_REFRESH;
     }
 
     public CachingOptions(boolean doCaching, long expireAfter, long refreshFrequency) {

@@ -49,8 +49,6 @@
     <!-- ////////////// CONTENT STORE ADAPTER ///////////// -->
     <!-- ////////////////////////////////////////////////// -->
 
-    <bean id="contentStoreAdapterRegistry" class="org.craftercms.core.store.ContentStoreAdapterRegistry"/>
-
     <bean id="crafter.contentStoreAdapter.filesystem"
           class="org.craftercms.core.store.impl.filesystem.FileSystemContentStoreAdapter">
         <property name="cacheTemplate" ref="cacheTemplate"/>
@@ -60,6 +58,14 @@
             <bean class="org.craftercms.commons.validation.validators.impl.SecurePathValidator">
                 <constructor-arg value="path"/>
             </bean>
+        </property>
+    </bean>
+
+    <bean id="contentStoreAdapterRegistry" class="org.craftercms.core.store.impl.ContentStoreAdapterRegistryImpl" >
+        <property name="adapters">
+            <map>
+                <entry key="filesystem" value-ref="crafter.contentStoreAdapter.filesystem"/>
+            </map>
         </property>
     </bean>
 

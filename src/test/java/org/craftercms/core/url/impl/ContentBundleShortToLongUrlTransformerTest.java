@@ -77,12 +77,12 @@ public class ContentBundleShortToLongUrlTransformerTest {
         Item indexItem = new Item();
         indexItem.setName("002_index.html");
 
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/", false)).thenReturn(
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/")).thenReturn(
             Arrays.asList(folderItem));
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName(), false)).thenReturn(
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName())).thenReturn(
             Arrays.asList(baseItem, baseFrItem, baseFrEsItem));
         when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS,
-                                    "/" + folderItem.getName() + "/" + baseItem.getName(), false))
+                                    "/" + folderItem.getName() + "/" + baseItem.getName()))
                 .thenReturn(Arrays.asList(indexItem));
 
         when(context.getStoreAdapter()).thenReturn(storeAdapter);

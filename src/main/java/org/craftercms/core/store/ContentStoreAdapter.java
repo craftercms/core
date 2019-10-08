@@ -48,13 +48,13 @@ public interface ContentStoreAdapter {
     boolean exists(Context context, CachingOptions cachingOptions, String path)
         throws InvalidContextException, StoreException;
 
-    Content findContent(Context context, CachingOptions cachingOptions,
-                        String path) throws InvalidContextException, StoreException;
+    Content findContent(Context context, CachingOptions cachingOptions, String path)
+            throws InvalidContextException, StoreException;
 
-    Item findItem(Context context, CachingOptions cachingOptions, String path,
-                  boolean withDescriptor) throws InvalidContextException, XmlFileParseException, StoreException;
+    Item findItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
+            throws InvalidContextException, XmlFileParseException, StoreException;
 
-    List<Item> findItems(Context context, CachingOptions cachingOptions, String path,
-                         boolean withDescriptor) throws InvalidContextException, XmlFileParseException, StoreException;
+    List<Item> findItems(Context context, CachingOptions cachingOptions, String path)
+            throws InvalidContextException, XmlFileParseException, StoreException;
 
 }
