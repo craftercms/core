@@ -19,9 +19,11 @@ package org.craftercms.core.xml.mergers.impl.strategies;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
+import org.craftercms.core.util.ContentStoreUtils;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.dom4j.Document;
@@ -34,6 +36,16 @@ import org.dom4j.Document;
  * @author Alfonso Vásquez
  */
 public abstract class AbstractInheritFromHierarchyMergeStrategy implements DescriptorMergeStrategy {
+
+    protected String[] baseFolders;
+
+    public void setBaseFolders(String[] baseFolders) {
+        for (int i = 0; i < baseFolders.length; i++) {
+            baseFolders[i] = ContentStoreUtils.normalizePath(baseFolders[i]);
+        }
+
+        this.baseFolders = baseFolders;
+    }
 
     @Override
     public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
@@ -48,11 +60,19 @@ public abstract class AbstractInheritFromHierarchyMergeStrategy implements Descr
                                                     boolean mainDescriptorOptional) throws XmlMergeException {
         List<MergeableDescriptor> descriptors = new ArrayList<>();
 
-        // If the url is absolute (starts with '/'), the descriptors included will start from root (i.e. if url is
-        // /folder/file.xml, first ones will start at '/'). If it's relative (doesn't start with '/), the descriptors
-        // included start from the first folder in the url (i.e., if url is folder/file.xml, first ones will start at
-        // folder/).
-        int k = mainDescriptorUrl.indexOf('/');
+        int k;
+
+        if (ArrayUtils.isNotEmpty(baseFolders)) {
+            // If base folders are specified, start looking for descriptors after the base folders.
+            k = getIndexAfterBaseFolder(mainDescriptorUrl);
+        } else {
+            // If the url is absolute (starts with '/'), the descriptors included will start from root (i.e. if url is
+            // /folder/file.xml, first ones will start at '/'). If it's relative (doesn't start with '/), the descriptors
+            // included start from the first folder in the url (i.e., if url is folder/file.xml, first ones will start at
+            // folder/).
+            k = mainDescriptorUrl.indexOf('/');
+        }
+
         while (k >= 0) {
             String folder = mainDescriptorUrl.substring(0, k);
 
@@ -65,6 +85,16 @@ public abstract class AbstractInheritFromHierarchyMergeStrategy implements Descr
         descriptors.add(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
 
         return descriptors;
+    }
+
+    protected int getIndexAfterBaseFolder(String url) {
+        for (String baseFolder : baseFolders) {
+            if (url.startsWith(baseFolder)) {
+                return baseFolder.length();
+            }
+        }
+
+        return -1;
     }
 
     protected abstract void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
