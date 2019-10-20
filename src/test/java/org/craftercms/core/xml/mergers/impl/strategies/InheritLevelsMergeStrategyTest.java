@@ -63,6 +63,20 @@ public class InheritLevelsMergeStrategyTest {
         assertFalse(descriptors.get(3).isOptional());
     }
 
+    @Test
+    public void testGetDescriptorsWithBaseFolders() throws Exception {
+        strategy.setBaseFolders(new String[] { "/folder" });
+
+        List<MergeableDescriptor> descriptors = strategy.getDescriptors(context, null, MAIN_DESCRIPTOR_URL, null);
+        assertEquals(3, descriptors.size());
+        assertEquals(FOLDER_LEVEL_DESCRIPTOR_URL, descriptors.get(0).getUrl());
+        assertTrue(descriptors.get(0).isOptional());
+        assertEquals(SUB_FOLDER_LEVEL_DESCRIPTOR_URL, descriptors.get(1).getUrl());
+        assertTrue(descriptors.get(1).isOptional());
+        assertEquals(MAIN_DESCRIPTOR_URL, descriptors.get(2).getUrl());
+        assertFalse(descriptors.get(2).isOptional());
+    }
+
     private void setUpTestContext() {
         context = mock(Context.class);
     }
