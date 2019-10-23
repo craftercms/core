@@ -28,6 +28,7 @@ import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.RootFolderNotFoundException;
 import org.craftercms.core.exception.StoreException;
+import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.store.impl.AbstractFileBasedContentStoreAdapter;
@@ -88,12 +89,13 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     }
 
     @Override
-    protected Content getContent(Context context, File file) throws InvalidContextException, StoreException {
+    protected Content getContent(Context context, CachingOptions cachingOptions,
+                                 File file) throws InvalidContextException, StoreException {
         return new FileSystemContent(((FileSystemFile)file).getFile());
     }
 
     @Override
-    protected File findFile(Context context, String path) {
+    protected File findFile(Context context, CachingOptions cachingOptions, String path) {
         FileSystemFile rootFolder = ((FileSystemContext)context).getRootFolder();
 
         if (StringUtils.isNotEmpty(path)) {
@@ -109,7 +111,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     }
 
     @Override
-    protected List<File> getChildren(Context context, File dir) {
+    protected List<File> getChildren(Context context, CachingOptions cachingOptions, File dir) {
         java.io.File[] listing;
         if (context.ignoreHiddenFiles()) {
             listing = ((FileSystemFile)dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);

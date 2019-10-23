@@ -87,7 +87,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     @Override
     public boolean doExists(Context context, CachingOptions cachingOptions, String path)
         throws InvalidScopeException, StoreException {
-        return findFile(context, path) != null;
+        return findFile(context, cachingOptions, path) != null;
     }
 
     @Override
@@ -97,11 +97,11 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
         path = ContentStoreUtils.normalizePath(path);
 
-        File file = findFile(context, path);
+        File file = findFile(context, cachingOptions, path);
 
         if (file != null) {
             if (file.isFile()) {
-                return getContent(context, file);
+                return getContent(context, cachingOptions, file);
             } else {
                 throw new StoreException("Unable to find content: " + file + " is not a file");
             }
@@ -117,7 +117,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
         path = ContentStoreUtils.normalizePath(path);
 
-        File file = findFile(context, path);
+        File file = findFile(context, cachingOptions, path);
 
         if (file == null) {
             return null;
@@ -145,7 +145,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
                 item.setDescriptorUrl(descriptorPath);
 
-                descriptorFile = findFile(context, descriptorPath);
+                descriptorFile = findFile(context, cachingOptions, descriptorPath);
                 if (descriptorFile != null && !descriptorFile.isFile()) {
                     throw new StoreException("Descriptor file at " + descriptorFile + " is not really a file");
                 }
@@ -153,7 +153,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
             if (descriptorFile != null) {
                 try {
-                    InputStream fileInputStream = getContent(context, descriptorFile).getInputStream();
+                    InputStream fileInputStream = getContent(context, cachingOptions, descriptorFile).getInputStream();
                     Reader fileReader = new InputStreamReader(fileInputStream, charset);
 
                     try {
@@ -180,7 +180,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
         path = ContentStoreUtils.normalizePath(path);
 
-        File dir = findFile(context, path);
+        File dir = findFile(context, cachingOptions, path);
 
         if (dir == null) {
             return null;
@@ -190,7 +190,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
             throw new StoreException("The path " + dir + " doesn't correspond to a dir");
         }
 
-        List<File> children = getChildren(context, dir);
+        List<File> children = getChildren(context, cachingOptions, dir);
         CachingAwareList<Item> items = new CachingAwareList<>(children.size());
 
         if (CollectionUtils.isNotEmpty(children)) {
@@ -242,16 +242,19 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     /**
      * Returns the {@link Content} for the given file.
      */
-    protected abstract Content getContent(Context context, File file) throws InvalidContextException, StoreException;
+    protected abstract Content getContent(Context context, CachingOptions cachingOptions,
+                                          File file) throws InvalidContextException, StoreException;
 
     /**
      * Returns the {@link File} at the given path, returning null if not found.
      */
-    protected abstract File findFile(Context context, String path) throws InvalidContextException, StoreException;
+    protected abstract File findFile(Context context, CachingOptions cachingOptions,
+                                     String path) throws InvalidContextException, StoreException;
 
     /**
      * Returns the list of children of the given directory.
      */
-    protected abstract List<File> getChildren(Context context, File dir) throws InvalidContextException, StoreException;
+    protected abstract List<File> getChildren(Context context, CachingOptions cachingOptions,
+                                              File dir) throws InvalidContextException, StoreException;
 
 }
