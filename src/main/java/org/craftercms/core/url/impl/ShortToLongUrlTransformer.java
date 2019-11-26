@@ -71,7 +71,7 @@ public class ShortToLongUrlTransformer implements UrlTransformer {
     protected String getLongName(Context context, CachingOptions cachingOptions, String folderPath,
                                  String shortName) throws UrlTransformationException {
         try {
-            List<Item> items = context.getStoreAdapter().findItems(context, cachingOptions, folderPath, false);
+            List<Item> items = context.getStoreAdapter().findItems(context, cachingOptions, folderPath);
             if (CollectionUtils.isNotEmpty(items)) {
                 for (Item item : items) {
                     String itemName = item.getName();

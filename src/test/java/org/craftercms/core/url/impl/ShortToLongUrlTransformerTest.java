@@ -68,12 +68,12 @@ public class ShortToLongUrlTransformerTest {
         Item indexItem = new Item();
         indexItem.setName("003_index.html");
 
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/", false)).thenReturn(
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/")).thenReturn(
             Arrays.asList(folderItem));
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName(), false)).thenReturn(
+        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName())).thenReturn(
             Arrays.asList(subFolderItem));
         when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS,
-                                    "/" + folderItem.getName() + "/" + subFolderItem.getName(), false))
+                                    "/" + folderItem.getName() + "/" + subFolderItem.getName()))
                 .thenReturn(Arrays.asList(indexItem));
 
         when(context.getStoreAdapter()).thenReturn(storeAdapter);

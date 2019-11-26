@@ -19,13 +19,11 @@ package org.craftercms.core.store.impl;
 import org.craftercms.core.service.Content;
 
 /**
- * Abstraction of a file in a content store. Used by adapters to have direct access to a file,
- * whether it's local or remote. Also,
- * returned as {@link Content} when the content shouldn't be cached.
+ * Abstraction of a file in a content store.
  *
  * @author Alfonso Vásquez
  */
-public interface File extends Content {
+public interface File {
 
     String getName();
 

@@ -104,7 +104,7 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
     @Override
     public Item findItem(final Context context, final CachingOptions cachingOptions, final String path,
                          final boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
-        StoreException {
+                                                              StoreException {
         final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
 
         return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Item>() {
@@ -124,16 +124,15 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
     }
 
     @Override
-    public List<Item> findItems(final Context context, final CachingOptions cachingOptions, final String path,
-                                final boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
-        StoreException {
+    public List<Item> findItems(final Context context, final CachingOptions cachingOptions, final String path)
+            throws InvalidContextException, XmlFileParseException, StoreException {
         final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
 
         return cacheTemplate.getObject(context, actualCachingOptions, new Callback<List<Item>>() {
 
             @Override
             public List<Item> execute() {
-                List<Item> items = doFindItems(context, actualCachingOptions, path, withDescriptor);
+                List<Item> items = doFindItems(context, actualCachingOptions, path);
                 if (items != null) {
                     if (items instanceof CachingAwareList) {
                         return items;
@@ -148,10 +147,10 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
             @Override
             public String toString() {
                 return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
-                                     ".findItems(%s, %s, %s)", context, path, withDescriptor);
+                                     ".findItems(%s, %s, %s)", context, path);
             }
 
-        }, context, path, withDescriptor, CONST_KEY_ELEM_ITEMS);
+        }, context, path, CONST_KEY_ELEM_ITEMS);
     }
 
     protected abstract boolean doExists(Context context, CachingOptions cachingOptions, String path)
@@ -164,8 +163,7 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
                                        boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
         StoreException;
 
-    protected abstract List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path,
-                                              boolean withDescriptor) throws InvalidContextException,
-        XmlFileParseException, StoreException;
+    protected abstract List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path)
+            throws InvalidContextException, XmlFileParseException, StoreException;
 
 }

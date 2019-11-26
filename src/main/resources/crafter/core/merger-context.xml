@@ -36,6 +36,7 @@
     <bean id="crafter.inheritLevelsMergeStrategy"
           class="org.craftercms.core.xml.mergers.impl.strategies.InheritLevelsMergeStrategy">
         <property name="levelDescriptorFileName" value="${crafter.core.merger.strategy.inheritLevels.levelDescriptor.name}"/>
+        <property name="baseFolders" value="${crafter.core.merger.strategy.inheritLevels.baseFolders}"/>
     </bean>
 
     <bean id="crafter.contentBundleMergeStrategy"
