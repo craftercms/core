@@ -28,9 +28,6 @@ import org.craftercms.core.util.CacheUtils;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * Class description goes HERE
  *
@@ -41,11 +38,6 @@ public class DefaultCacheTemplate implements CacheTemplate {
     private static final Log logger = LogFactory.getLog(DefaultCacheTemplate.class);
 
     private CacheService cacheService;
-    private Lock lock;
-
-    public DefaultCacheTemplate() {
-        this.lock = new ReentrantLock();
-    }
 
     @Override
     public CacheService getCacheService() {
@@ -79,22 +71,13 @@ public class DefaultCacheTemplate implements CacheTemplate {
 
         T obj = doGet(context, callback, key);
         if (obj == null) {
-            lock.lock();
-            try {
-                // Check again if another concurrent thread has already put the item in the cache
-                obj = doGet(context, callback, key);
-                if (obj == null) {
-                    obj = callback.execute();
-                    if (obj != null) {
-                        if (cachingOptions == null) {
-                            cachingOptions = CachingOptions.DEFAULT_CACHING_OPTIONS;
-                        }
-
-                        obj = doPut(context, cachingOptions, callback, key, obj);
-                    }
+            obj = callback.execute();
+            if (obj != null) {
+                if (cachingOptions == null) {
+                    cachingOptions = CachingOptions.DEFAULT_CACHING_OPTIONS;
                 }
-            } finally {
-                lock.unlock();
+
+                obj = doPut(context, cachingOptions, callback, key, obj);
             }
         }
 
