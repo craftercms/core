@@ -64,7 +64,7 @@ public class UrlTransformationEngineImplTest {
     public void testTransformationEngine() throws Exception {
         String transformedUrl = transformationEngine.transformUrl(context, TRANSFORMER_NAME, URL);
         assertEquals(TRANSFORMED_URL, transformedUrl);
-        assertTrue(cacheService.hasKey(context, cacheTemplate.getKey(context, TRANSFORMER_NAME, URL, TRANSFORMED_URL_CONST_KEY_ELEM)));
+        assertTrue(cacheService.hasKey(context, cacheTemplate.getKey(TRANSFORMER_NAME, URL, TRANSFORMED_URL_CONST_KEY_ELEM)));
 
         try {
             transformationEngine.transformUrl(context, "invalidPipeline", URL);

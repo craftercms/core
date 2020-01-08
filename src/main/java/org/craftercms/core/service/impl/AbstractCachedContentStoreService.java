@@ -114,7 +114,7 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                     context, url);
             }
 
-        }, context, url, CONST_KEY_ELEM_EXISTS);
+        }, url, CONST_KEY_ELEM_EXISTS);
     }
 
     @Override
@@ -143,7 +143,7 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                                      ".getItem(%s, %s, %s)", context, url, processor);
             }
 
-        }, context, url, processor, CONST_KEY_ELEM_ITEM);
+        }, url, processor, CONST_KEY_ELEM_ITEM);
     }
 
     @Override
@@ -201,7 +201,7 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                                      ".getChildren(%s, %s, %s, %s)", context, url, filter, processor);
             }
 
-        }, context, url, filter, processor, CONST_KEY_ELEM_CHILDREN);
+        }, url, filter, processor, CONST_KEY_ELEM_CHILDREN);
     }
 
     @Override
@@ -257,7 +257,7 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                                      ".getTree(%s, %s, %d, %s, %s)", context, url, depth, filter, processor);
             }
 
-        }, context, url, depth, filter, processor, CONST_KEY_ELEM_TREE);
+        }, url, depth, filter, processor, CONST_KEY_ELEM_TREE);
     }
 
     @Override

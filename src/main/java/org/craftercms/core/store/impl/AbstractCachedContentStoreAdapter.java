@@ -77,7 +77,7 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
                     context, path);
             }
 
-        }, context, path, CONST_KEY_ELEM_EXISTS);
+        }, path, CONST_KEY_ELEM_EXISTS);
     }
 
     @Override
@@ -98,7 +98,7 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
                                      ".findContent(%s, %s)", context, path);
             }
 
-        }, context, path, CONST_KEY_ELEM_CONTENT);
+        }, path, CONST_KEY_ELEM_CONTENT);
     }
 
     @Override
@@ -120,7 +120,7 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
                                      ".findItem(%s, %s, %s)", context, path, withDescriptor);
             }
 
-        }, context, path, withDescriptor, CONST_KEY_ELEM_ITEM);
+        }, path, withDescriptor, CONST_KEY_ELEM_ITEM);
     }
 
     @Override
@@ -150,7 +150,7 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
                                      ".findItems(%s, %s, %s)", context, path);
             }
 
-        }, context, path, CONST_KEY_ELEM_ITEMS);
+        }, path, CONST_KEY_ELEM_ITEMS);
     }
 
     protected abstract boolean doExists(Context context, CachingOptions cachingOptions, String path)

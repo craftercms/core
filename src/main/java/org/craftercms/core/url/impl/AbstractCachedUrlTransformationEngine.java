@@ -61,7 +61,7 @@ public abstract class AbstractCachedUrlTransformationEngine implements UrlTransf
                                      ".transformUrl(%s, %s, %s)", context, transformerName, url);
             }
 
-        }, context, transformerName, url, TRANSFORMED_URL_CONST_KEY_ELEM);
+        }, transformerName, url, TRANSFORMED_URL_CONST_KEY_ELEM);
     }
 
     protected abstract String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName,

@@ -179,7 +179,7 @@ public class CacheServiceImpl implements CacheService {
         if (context.isCacheOn() && cachingOptions.doCaching()) {
             try {
                 cache.put(context.getCacheScope(), key, value, cachingOptions.getExpireAfter(),
-                    cachingOptions.getRefreshFrequency(), loader, loaderParams);
+                          cachingOptions.getRefreshFrequency(), loader, loaderParams);
             } catch (InvalidScopeException e) {
                 throw new InvalidContextException("No scope associated to context " + context);
             }

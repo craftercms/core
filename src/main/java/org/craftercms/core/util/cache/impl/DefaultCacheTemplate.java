@@ -18,6 +18,8 @@ package org.craftercms.core.util.cache.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.concurrent.locks.KeyBasedLockFactory;
+import org.craftercms.commons.concurrent.locks.WeakKeyBasedReentrantLockFactory;
 import org.craftercms.commons.lang.Callback;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
@@ -27,6 +29,9 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.util.CacheUtils;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.springframework.beans.factory.annotation.Required;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class description goes HERE
@@ -38,6 +43,11 @@ public class DefaultCacheTemplate implements CacheTemplate {
     private static final Log logger = LogFactory.getLog(DefaultCacheTemplate.class);
 
     private CacheService cacheService;
+    private KeyBasedLockFactory<ReentrantLock> lockFactory;
+
+    public DefaultCacheTemplate() {
+        lockFactory = new WeakKeyBasedReentrantLockFactory();
+    }
 
     @Override
     public CacheService getCacheService() {
@@ -71,14 +81,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
 
         T obj = doGet(context, callback, key);
         if (obj == null) {
-            obj = callback.execute();
-            if (obj != null) {
-                if (cachingOptions == null) {
-                    cachingOptions = CachingOptions.DEFAULT_CACHING_OPTIONS;
-                }
-
-                obj = doPut(context, cachingOptions, callback, key, obj);
-            }
+            obj = loadAndPutInCache(context, cachingOptions, callback, key);
         }
 
         return obj;
@@ -94,6 +97,30 @@ public class DefaultCacheTemplate implements CacheTemplate {
         }
 
         return obj;
+    }
+
+    protected <T> T loadAndPutInCache(Context context, CachingOptions cachingOptions, Callback<T> callback, Object key) {
+        // Use the context's cache scope + the cache key as the lock key
+        Lock lock = lockFactory.getLock(context.getCacheScope() + ":" + key);
+        lock.lock();
+        try {
+            // Check if another thread already has put the item in cache
+            T obj = doGet(context, callback, key);
+            if (obj == null) {
+                obj = callback.execute();
+                if (obj != null) {
+                    if (cachingOptions == null) {
+                        cachingOptions = CachingOptions.DEFAULT_CACHING_OPTIONS;
+                    }
+
+                    obj = doPut(context, cachingOptions, callback, key, obj);
+                }
+            }
+
+            return obj;
+        } finally {
+            lock.unlock();
+        }
     }
 
     protected <T> T doPut(Context context, CachingOptions cachingOptions, Callback<T> callback, Object key, T obj) {
