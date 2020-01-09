@@ -16,17 +16,16 @@
  */
 package org.craftercms.core.controller.rest;
 
-import java.util.Collections;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.exceptions.InvalidManagementTokenException;
 import org.craftercms.core.exception.CacheException;
 import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.ContentStoreService;
 import org.craftercms.core.service.Context;
-import org.craftercms.core.store.impl.AbstractCachedContentStoreAdapter;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
@@ -59,6 +58,8 @@ public class CacheRestController extends RestControllerBaseWithExceptionHandlers
     private CacheTemplate cacheTemplate;
     private ContentStoreService storeService;
 
+    private String authorizationToken;
+
     @Required
     public void setCacheTemplate(CacheTemplate cacheTemplate) {
         this.cacheTemplate = cacheTemplate;
@@ -69,9 +70,16 @@ public class CacheRestController extends RestControllerBaseWithExceptionHandlers
         this.storeService = storeService;
     }
 
+    @Required
+    public void setAuthorizationToken(final String authorizationToken) {
+        this.authorizationToken = authorizationToken;
+    }
+
     @RequestMapping(value = URL_CLEAR_ALL_SCOPES, method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> clearAllScopes() throws CacheException {
+    public Map<String, Object> clearAllScopes(@RequestParam String token)
+        throws CacheException, InvalidManagementTokenException {
+        validateToken(token);
         cacheTemplate.getCacheService().clearAll();
         if (logger.isInfoEnabled()) {
             logger.info("[CACHE] All scopes have been cleared");
@@ -82,8 +90,10 @@ public class CacheRestController extends RestControllerBaseWithExceptionHandlers
 
     @RequestMapping(value = URL_CLEAR_SCOPE, method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId)
-        throws InvalidContextException, CacheException {
+    public Map<String, Object> clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+                                          @RequestParam String token)
+        throws InvalidContextException, CacheException, InvalidManagementTokenException {
+        validateToken(token);
         Context context = storeService.getContext(contextId);
         if (context == null) {
             throw new InvalidContextException("No context found for ID " + contextId);
@@ -95,6 +105,12 @@ public class CacheRestController extends RestControllerBaseWithExceptionHandlers
         }
 
         return createResponseMessage("Cache scope for context '" + contextId + "' has been cleared");
+    }
+
+    protected void validateToken(String token) throws InvalidManagementTokenException {
+        if (!StringUtils.equals(token, authorizationToken)) {
+            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
+        }
     }
 
 }

@@ -28,6 +28,7 @@
     <bean id="crafter.cacheRestController" class="org.craftercms.core.controller.rest.CacheRestController">
         <property name="cacheTemplate" ref="crafter.cacheTemplate"/>
         <property name="storeService" ref="crafter.contentStoreService"/>
+        <property name="authorizationToken" value="${crafter.core.rest.management.token}"/>
     </bean>
 
     <bean id="crafter.contentStoreRestController" class="org.craftercms.core.controller.rest.ContentStoreRestController">
