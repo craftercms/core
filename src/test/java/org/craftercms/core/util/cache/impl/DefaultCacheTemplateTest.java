@@ -31,14 +31,7 @@ import org.mockito.stubbing.Answer;
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.craftercms.core.util.CacheUtils.generateKey;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyObject;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Class description goes HERE
@@ -74,7 +67,7 @@ public class DefaultCacheTemplateTest {
 
         Object key = generateKey(RANDOM_KEY_ELEM);
 
-        verify(cache, times(2)).get(context, key);
+        verify(cache, atLeast(2)).get(context, key);
         verify(cache).put(eq(context), eq(key), eq(time1), eq(DEFAULT_CACHING_OPTIONS), any(CacheLoader.class));
     }
 
