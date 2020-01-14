@@ -14,10 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.craftercms.core.controller.rest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+
+import org.craftercms.commons.exceptions.InvalidManagementTokenException;
 import org.craftercms.commons.validation.ValidationException;
 import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationRuntimeException;
@@ -25,22 +28,44 @@ import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.ForbiddenPathException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.exception.PathNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import static org.craftercms.core.controller.rest.RestControllerBase.createResponseMessage;
 
 /**
- * Base class for Crafter REST services that also adds exception handlers for the service methods.
- *
+ * Global exception handlers for Crafter REST services.
  * @author avasquez
  */
-public class RestControllerBaseWithExceptionHandlers extends RestControllerBase {
+@Order
+@ControllerAdvice(annotations = RestController.class)
+public class ExceptionHandlers {
 
-    private static final Log logger = LogFactory.getLog(RestControllerBase.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlers.class);
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Map<String, Object> handleInvalidContextException(HttpServletRequest request,
+                                                             MissingServletRequestParameterException e) {
+        return handleException(request, e);
+    }
+
+    @ExceptionHandler(InvalidManagementTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public Map<String, Object> handleInvalidContextException(HttpServletRequest request,
+                                                             InvalidManagementTokenException e) {
+        return handleException(request, e);
+    }
 
     @ExceptionHandler(InvalidContextException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
