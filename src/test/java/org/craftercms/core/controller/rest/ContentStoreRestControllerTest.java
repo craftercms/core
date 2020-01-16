@@ -175,30 +175,6 @@ public class ContentStoreRestControllerTest {
         fail("Expected " + ForbiddenPathException.class.getName() + " exception");
     }
 
-    @Test
-    public void testHandleAuthenticationException() {
-        AuthenticationException ex = new AuthenticationException("This is a test");
-
-        Map<String, Object> model = storeRestController.handleAuthenticationException(request, ex);
-        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
-    }
-
-    @Test
-    public void testHandlePathNotFoundException()  {
-        PathNotFoundException ex = new PathNotFoundException("This is a test");
-
-        Map<String, Object> model = storeRestController.handlePathNotFoundException(request, ex);
-        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
-    }
-
-    @Test
-    public void testHandleException() {
-        Exception ex = new Exception("This is a test");
-
-        Map<String, Object> model = storeRestController.handleException(request, ex);
-        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
-    }
-
     private void testNotModified(CachingAwareObject cachingAwareObject, RestMethodCallback callback) throws Exception {
         cachingAwareObject.setCachingTime(System.currentTimeMillis());
         request.addHeader(IF_MODIFIED_SINCE_HEADER_NAME, cachingAwareObject.getCachingTime());

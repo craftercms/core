@@ -45,7 +45,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(RestControllerBase.REST_BASE_URI + ContentStoreRestController.URL_ROOT)
-public class ContentStoreRestController extends RestControllerBaseWithExceptionHandlers {
+public class ContentStoreRestController extends RestControllerBase {
 
     public static final String URL_ROOT = "/content_store";
     public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";

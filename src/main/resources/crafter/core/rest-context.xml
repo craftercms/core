@@ -37,6 +37,8 @@
         <property name="forbiddenUrlPatterns" value="${crafter.core.rest.content.store.url.forbiddenPatterns}"/>
     </bean>
 
+    <bean class="org.craftercms.core.controller.rest.ExceptionHandlers"/>
+
     <!-- Main REST view resolver -->
 
     <bean id="crafter.mainViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">

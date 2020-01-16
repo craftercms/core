@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping(RestControllerBase.REST_BASE_URI + CacheRestController.URL_ROOT)
-public class CacheRestController extends RestControllerBaseWithExceptionHandlers {
+public class CacheRestController extends RestControllerBase {
 
     private static final Log logger = LogFactory.getLog(CacheRestController.class);
 
