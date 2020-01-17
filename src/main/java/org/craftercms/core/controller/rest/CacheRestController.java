@@ -28,11 +28,10 @@ import org.craftercms.core.service.ContentStoreService;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST service that provides several methods to handle Crafter's cache engine.
@@ -40,7 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author avasquez
  * @author hyanghee
  */
-@Controller
+@RestController
 @RequestMapping(RestControllerBase.REST_BASE_URI + CacheRestController.URL_ROOT)
 public class CacheRestController extends RestControllerBase {
 
@@ -76,7 +75,6 @@ public class CacheRestController extends RestControllerBase {
     }
 
     @RequestMapping(value = URL_CLEAR_ALL_SCOPES, method = RequestMethod.GET)
-    @ResponseBody
     public Map<String, Object> clearAllScopes(@RequestParam String token)
         throws CacheException, InvalidManagementTokenException {
         validateToken(token);
@@ -89,7 +87,6 @@ public class CacheRestController extends RestControllerBase {
     }
 
     @RequestMapping(value = URL_CLEAR_SCOPE, method = RequestMethod.GET)
-    @ResponseBody
     public Map<String, Object> clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
                                           @RequestParam String token)
         throws InvalidContextException, CacheException, InvalidManagementTokenException {
