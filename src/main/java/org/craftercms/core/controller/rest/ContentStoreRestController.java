@@ -26,10 +26,10 @@ import org.craftercms.core.service.impl.ExcludeByUrlItemFilter;
 import org.craftercms.core.service.impl.IncludeByUrlItemFilter;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.annotation.PostConstruct;
@@ -43,7 +43,7 @@ import java.util.Map;
  *
  * @author avasquez
  */
-@Controller
+@RestController
 @RequestMapping(RestControllerBase.REST_BASE_URI + ContentStoreRestController.URL_ROOT)
 public class ContentStoreRestController extends RestControllerBase {
 
