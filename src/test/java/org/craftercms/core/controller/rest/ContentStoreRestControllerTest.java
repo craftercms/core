@@ -17,13 +17,10 @@
 package org.craftercms.core.controller.rest;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.function.Supplier;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections4.MapUtils;
-import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.ForbiddenPathException;
-import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.*;
 import org.craftercms.core.store.ContentStoreAdapter;
@@ -37,10 +34,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 import static org.craftercms.core.controller.rest.ContentStoreRestController.CACHE_CONTROL_HEADER_NAME;
-import static org.craftercms.core.controller.rest.ContentStoreRestController.MESSAGE_MODEL_ATTRIBUTE_NAME;
-import static org.craftercms.core.controller.rest.ContentStoreRestController.MODEL_ATTR_CHILDREN;
-import static org.craftercms.core.controller.rest.ContentStoreRestController.MODEL_ATTR_ITEM;
-import static org.craftercms.core.controller.rest.ContentStoreRestController.MODEL_ATTR_TREE;
 import static org.craftercms.core.controller.rest.ContentStoreRestController.MUST_REVALIDATE_HEADER_VALUE;
 import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEPTH;
 import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
@@ -48,7 +41,7 @@ import static org.craftercms.core.service.Context.DEFAULT_IGNORE_HIDDEN_FILES;
 import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
 import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -101,8 +94,7 @@ public class ContentStoreRestControllerTest {
 
     @Test
     public void testGetItemModified() throws Exception {
-        testModified(item, MODEL_ATTR_ITEM, () -> storeRestController.getItem(webRequest, response, context.getId(),
-                                                                              ITEM_URL));
+        testModified(item, () -> storeRestController.getItem(webRequest, response, context.getId(), ITEM_URL));
 
         verify(storeService).getItem(context, ITEM_URL);
     }
@@ -133,8 +125,8 @@ public class ContentStoreRestControllerTest {
 
     @Test
     public void testGetChildrenModified() throws Exception {
-        testModified(children, MODEL_ATTR_CHILDREN, () -> storeRestController.getChildren(webRequest, response,
-                                                                                          context.getId(), FOLDER_URL));
+        testModified(children, () -> storeRestController.getChildren(webRequest, response, context.getId(),
+            FOLDER_URL));
 
         verify(storeService).getChildren(eq(context),
                                          isNull(CachingOptions.class),
@@ -158,8 +150,8 @@ public class ContentStoreRestControllerTest {
 
     @Test
     public void testGetTreeModified() throws Exception {
-        testModified(tree, MODEL_ATTR_TREE, () -> storeRestController.getTree(webRequest, response, context.getId(),
-                                                                              FOLDER_URL, UNLIMITED_TREE_DEPTH));
+        testModified(tree, () -> storeRestController.getTree(webRequest, response, context.getId(), FOLDER_URL,
+            UNLIMITED_TREE_DEPTH));
 
         verify(storeService).getTree(eq(context),
                                      isNull(CachingOptions.class),
@@ -175,50 +167,25 @@ public class ContentStoreRestControllerTest {
         fail("Expected " + ForbiddenPathException.class.getName() + " exception");
     }
 
-    @Test
-    public void testHandleAuthenticationException() {
-        AuthenticationException ex = new AuthenticationException("This is a test");
-
-        Map<String, Object> model = storeRestController.handleAuthenticationException(request, ex);
-        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
-    }
-
-    @Test
-    public void testHandlePathNotFoundException()  {
-        PathNotFoundException ex = new PathNotFoundException("This is a test");
-
-        Map<String, Object> model = storeRestController.handlePathNotFoundException(request, ex);
-        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
-    }
-
-    @Test
-    public void testHandleException() {
-        Exception ex = new Exception("This is a test");
-
-        Map<String, Object> model = storeRestController.handleException(request, ex);
-        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
-    }
-
-    private void testNotModified(CachingAwareObject cachingAwareObject, RestMethodCallback callback) throws Exception {
+    private void testNotModified(CachingAwareObject cachingAwareObject, Supplier<Object> supplier) {
         cachingAwareObject.setCachingTime(System.currentTimeMillis());
         request.addHeader(IF_MODIFIED_SINCE_HEADER_NAME, cachingAwareObject.getCachingTime());
 
-        Map<String, Object> model = callback.executeMethod();
-        assertTrue(MapUtils.isEmpty(model));
+        Object object = supplier.get();
+        assertNull(object);
         assertEquals(HttpServletResponse.SC_NOT_MODIFIED, response.getStatus());
         assertEquals(MUST_REVALIDATE_HEADER_VALUE, response.getHeader(CACHE_CONTROL_HEADER_NAME));
     }
 
-    private void testModified(CachingAwareObject cachingAwareObject, String modelAttributeName,
-                              RestMethodCallback callback) throws Exception {
+    private void testModified(CachingAwareObject cachingAwareObject, Supplier<Object> supplier) throws Exception {
         request.addHeader(IF_MODIFIED_SINCE_HEADER_NAME, System.currentTimeMillis());
 
         Thread.sleep(1000);
 
         cachingAwareObject.setCachingTime(System.currentTimeMillis());
 
-        Map<String, Object> model = callback.executeMethod();
-        assertEquals(cachingAwareObject, model.get(modelAttributeName));
+        Object object = supplier.get();
+        assertEquals(cachingAwareObject, object);
         assertEquals(HttpServletResponse.SC_OK, response.getStatus());
         //Remove the nano precession,
         assertEquals(new Long(cachingAwareObject.getCachingTime()/1000),
@@ -279,12 +246,6 @@ public class ContentStoreRestControllerTest {
         storeRestController.setStoreService(storeService);
         storeRestController.setForbiddenUrlPatterns(new String[] {"^/?protected(/.+)?$"});
         storeRestController.init();
-    }
-
-    private interface RestMethodCallback {
-
-        Map<String, Object> executeMethod() throws Exception;
-
     }
 
 }
