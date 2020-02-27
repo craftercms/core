@@ -16,7 +16,6 @@
  */
 package org.craftercms.core.controller.rest;
 
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.craftercms.commons.lang.RegexUtils;
 import org.craftercms.core.exception.*;
@@ -25,27 +24,28 @@ import org.craftercms.core.service.impl.CompositeItemFilter;
 import org.craftercms.core.service.impl.ExcludeByUrlItemFilter;
 import org.craftercms.core.service.impl.IncludeByUrlItemFilter;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
+import org.dom4j.Document;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
 /**
  * REST service that provides several methods to access the Crafter content store.
  *
  * @author avasquez
  */
-@Controller
+@RestController
 @RequestMapping(RestControllerBase.REST_BASE_URI + ContentStoreRestController.URL_ROOT)
-public class ContentStoreRestController extends RestControllerBaseWithExceptionHandlers {
+public class ContentStoreRestController extends RestControllerBase {
 
     public static final String URL_ROOT = "/content_store";
     public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
@@ -57,10 +57,6 @@ public class ContentStoreRestController extends RestControllerBaseWithExceptionH
     public static final String URL_ITEM = "/item";
     public static final String URL_CHILDREN = "/children";
     public static final String URL_TREE = "/tree";
-    public static final String MODEL_ATTR_DESCRIPTOR = "descriptor";
-    public static final String MODEL_ATTR_ITEM = "item";
-    public static final String MODEL_ATTR_CHILDREN = "children";
-    public static final String MODEL_ATTR_TREE = "tree";
 
     private ContentStoreService storeService;
     private String[] allowedUrlPatterns;
@@ -91,23 +87,22 @@ public class ContentStoreRestController extends RestControllerBaseWithExceptionH
     }
 
     @RequestMapping(value = URL_DESCRIPTOR, method = RequestMethod.GET)
-    public Map<String, Object> getDescriptor(WebRequest request, HttpServletResponse response,
-                                             @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                                             @RequestParam(REQUEST_PARAM_URL) String url)
+    public Document getDescriptor(WebRequest request, HttpServletResponse response,
+                                  @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+                                  @RequestParam(REQUEST_PARAM_URL) String url)
             throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
                    ItemProcessingException, XmlMergeException, XmlFileParseException {
-        Map<String, Object> model = getItem(request, response, contextId, url);
+        Item item = getItem(request, response, contextId, url);
 
-        if (MapUtils.isNotEmpty(model)) {
-            Item item = (Item) model.remove(MODEL_ATTR_ITEM);
-            model.put(MODEL_ATTR_DESCRIPTOR, item.getDescriptorDom());
+        if (item != null) {
+            return item.getDescriptorDom();
         }
 
-        return model;
+        return null;
     }
 
     @RequestMapping(value = URL_ITEM, method = RequestMethod.GET)
-    public Map<String, Object> getItem(WebRequest request, HttpServletResponse response,
+    public Item getItem(WebRequest request, HttpServletResponse response,
                                        @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
                                        @RequestParam(REQUEST_PARAM_URL) String url)
             throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
@@ -124,14 +119,14 @@ public class ContentStoreRestController extends RestControllerBaseWithExceptionH
         if (item.getCachingTime() != null && checkNotModified(item.getCachingTime(), request, response)) {
             return null;
         } else {
-            return createSingletonModifiableMap(MODEL_ATTR_ITEM, item);
+            return item;
         }
     }
 
     @RequestMapping(value = URL_CHILDREN, method = RequestMethod.GET)
-    public Map<String, Object> getChildren(WebRequest request, HttpServletResponse response,
-                                           @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                                           @RequestParam(REQUEST_PARAM_URL) String url)
+    public List<Item> getChildren(WebRequest request, HttpServletResponse response,
+                                  @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+                                  @RequestParam(REQUEST_PARAM_URL) String url)
             throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
                    ItemProcessingException, XmlMergeException, XmlFileParseException {
         checkIfUrlAllowed(url);
@@ -147,12 +142,12 @@ public class ContentStoreRestController extends RestControllerBaseWithExceptionH
         if (children.getCachingTime() != null && checkNotModified(children.getCachingTime(), request, response)) {
             return null;
         } else {
-            return createSingletonModifiableMap(MODEL_ATTR_CHILDREN, new ArrayList<Item>(children));
+            return new ArrayList<>(children);
         }
     }
 
     @RequestMapping(value = URL_TREE, method = RequestMethod.GET)
-    public Map<String, Object> getTree(WebRequest request, HttpServletResponse response,
+    public Tree getTree(WebRequest request, HttpServletResponse response,
                                        @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
                                        @RequestParam(REQUEST_PARAM_URL) String url,
                                        @RequestParam(value = REQUEST_PARAM_TREE_DEPTH, required = false) Integer depth)
@@ -174,7 +169,7 @@ public class ContentStoreRestController extends RestControllerBaseWithExceptionH
         if (tree.getCachingTime() != null && checkNotModified(tree.getCachingTime(), request, response)) {
             return null;
         } else {
-            return createSingletonModifiableMap(MODEL_ATTR_TREE, tree);
+            return tree;
         }
     }
 
