@@ -154,14 +154,8 @@ public class FileSystemContentStoreAdapterTest {
 
     private void setUpTestCacheTemplate() {
         cacheTemplate = mock(CacheTemplate.class);
-        when(cacheTemplate.getObject(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), any(Callback.class),
-                                     anyVararg())).thenAnswer(
-                new Answer<Object>() {
-                    @Override
-                    public Object answer(InvocationOnMock invocation) throws Throwable {
-                        return ((Callback<?>) invocation.getArguments()[2]).execute();
-                    }
-                });
+        when(cacheTemplate.getObject(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), any(Callback.class), anyVararg()))
+                .thenAnswer(invocation -> ((Callback<?>) invocation.getArguments()[2]).execute());
     }
 
     private void setUpTestStoreAdapter() throws IOException {
