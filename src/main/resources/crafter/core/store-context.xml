@@ -50,6 +50,9 @@
         <property name="processorResolver" ref="crafter.procesorResolverChain"/>
         <property name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
         <property name="storeAdapterRegistry" ref="crafter.contentStoreAdapterRegistry"/>
+
+        <property name="blobUrlResolver" ref="crafter.blobUrlResolver"/>
+        <property name="blobStoreResolver" ref="crafter.blobStoreResolver"/>
     </bean>
 
 </beans>

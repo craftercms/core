@@ -57,6 +57,9 @@
     <!-- Content Store -->
     <import resource="classpath:crafter/core/store-context.xml"/>
 
+    <!-- Blob Store -->
+    <import resource="classpath:crafter/core/blob-context.xml"/>
+
     <!-- RESTful API
         Make sure you add the following line to your extensions if you want to enable REST API (uncommented of course).
         Make sure you're running in a in a servlet container or app server.
