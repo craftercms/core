@@ -31,6 +31,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.file.blob.BlobStore;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
 import org.craftercms.commons.file.blob.Blob;
@@ -247,7 +248,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                     };
                     BlobStore store = blobStoreResolver.getById(configGetter, blob.getStoreId());
                     return new ResourceBasedContent(store.getResource(blob));
-                } catch (IOException e) {
+                } catch (IOException | ConfigurationException e) {
                     throw new StoreException("Error reading blob file at " + blobUrl, e);
                 }
             }
