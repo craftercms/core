@@ -234,9 +234,9 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             return context.getStoreAdapter().findContent(context, cachingOptions, url);
         } else {
             String blobUrl = blobUrlResolver.getBlobUrl(url);
-            if(context.getStoreAdapter().exists(context, cachingOptions, blobUrl)) {
+            if (context.getStoreAdapter().exists(context, cachingOptions, blobUrl)) {
                 Content content = context.getStoreAdapter().findContent(context, cachingOptions, blobUrl);
-                try(InputStream is = content.getInputStream()) {
+                try (InputStream is = content.getInputStream()) {
                     Blob blob = mapper.readValue(is, Blob.class);
                     Function<String, InputStream> configGetter = path -> {
                         try {
