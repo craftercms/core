@@ -15,16 +15,27 @@
  */
 package org.craftercms.core.service.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.config.ConfigurationException;
+import org.craftercms.commons.file.blob.BlobStore;
+import org.craftercms.commons.file.blob.BlobStoreResolver;
+import org.craftercms.commons.file.blob.Blob;
+import org.craftercms.commons.file.blob.BlobUrlResolver;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.CrafterException;
 import org.craftercms.core.exception.InvalidContextException;
@@ -86,6 +97,12 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     protected Map<String, Context> contexts;
 
+    protected BlobUrlResolver blobUrlResolver;
+
+    protected BlobStoreResolver blobStoreResolver;
+
+    protected ObjectMapper mapper = new XmlMapper();
+
     /**
      * Default constructor. Creates the map of open {@link Context}s.
      */
@@ -128,6 +145,14 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     @Required
     public void setProcessorResolver(ItemProcessorResolver processorResolver) {
         this.processorResolver = processorResolver;
+    }
+
+    public void setBlobUrlResolver(BlobUrlResolver blobUrlResolver) {
+        this.blobUrlResolver = blobUrlResolver;
+    }
+
+    public void setBlobStoreResolver(BlobStoreResolver blobStoreResolver) {
+        this.blobStoreResolver = blobStoreResolver;
     }
 
     /**
@@ -189,7 +214,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -207,7 +231,29 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     @Override
     public Content findContent(Context context, CachingOptions cachingOptions, String url)
         throws InvalidContextException, StoreException {
-        return context.getStoreAdapter().findContent(context, cachingOptions, url);
+        if (context.getStoreAdapter().exists(context, cachingOptions, url)) {
+            return context.getStoreAdapter().findContent(context, cachingOptions, url);
+        } else {
+            String blobUrl = blobUrlResolver.getBlobUrl(url);
+            if (context.getStoreAdapter().exists(context, cachingOptions, blobUrl)) {
+                Content content = context.getStoreAdapter().findContent(context, cachingOptions, blobUrl);
+                try (InputStream is = content.getInputStream()) {
+                    Blob blob = mapper.readValue(is, Blob.class);
+                    Function<String, InputStream> configGetter = path -> {
+                        try {
+                            return findContent(context, cachingOptions, path).getInputStream();
+                        } catch (Exception e) {
+                            return null;
+                        }
+                    };
+                    BlobStore store = blobStoreResolver.getById(configGetter, blob.getStoreId());
+                    return new ResourceBasedContent(store.getResource(blob));
+                } catch (IOException | ConfigurationException e) {
+                    throw new StoreException("Error reading blob file at " + blobUrl, e);
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -249,6 +295,17 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
         if (!url.startsWith("/")) {
             url = "/" + url;
+        }
+
+        if (!context.getStoreAdapter().exists(context, cachingOptions, url)) {
+            String blobUrl = blobUrlResolver.getBlobUrl(url);
+            if (context.getStoreAdapter().exists(context, cachingOptions, blobUrl)) {
+                Item item = new Item();
+                item.setName(FilenameUtils.getName(url));
+                item.setUrl(url);
+                item.setFolder(false);
+                return item;
+            }
         }
 
         Item item = context.getStoreAdapter().findItem(context, cachingOptions, url, true);
