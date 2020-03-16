@@ -334,6 +334,14 @@
     </bean>
 
     <!-- ////////////////////////////////////////////////// -->
+    <!-- //////////////////// BLOB STORE ////////////////// -->
+    <!-- ////////////////////////////////////////////////// -->
+
+    <bean id="blobUrlResolver" class="org.craftercms.commons.file.blob.impl.BlobUrlResolverImpl">
+        <constructor-arg value="blob"/>
+    </bean>
+
+    <!-- ////////////////////////////////////////////////// -->
     <!-- ////////////// CONTENT STORE SERVICE ///////////// -->
     <!-- ////////////////////////////////////////////////// -->
 
@@ -343,6 +351,8 @@
         <property name="merger" ref="merger"/>
         <property name="processorResolver" ref="procesorResolverChain"/>
         <property name="mergeStrategyResolver" ref="mergeStrategyResolverChain"/>
+
+        <property name="blobUrlResolver" ref="blobUrlResolver"/>
     </bean>
 
 </beans>
