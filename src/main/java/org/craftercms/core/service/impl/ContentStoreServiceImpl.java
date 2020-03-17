@@ -247,7 +247,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                         }
                     };
                     BlobStore store = blobStoreResolver.getById(configGetter, blob.getStoreId());
-                    return new ResourceBasedContent(store.getResource(blob));
+                    return new ResourceBasedContent(store.getResource(url, blob));
                 } catch (IOException | ConfigurationException e) {
                     throw new StoreException("Error reading blob file at " + blobUrl, e);
                 }
