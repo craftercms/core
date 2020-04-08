@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -32,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.commons.config.ConfigurationException;
+import org.craftercms.commons.config.ConfigurationProvider;
 import org.craftercms.commons.file.blob.BlobStore;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
 import org.craftercms.commons.file.blob.Blob;
@@ -239,14 +239,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                 Content content = context.getStoreAdapter().findContent(context, cachingOptions, blobUrl);
                 try (InputStream is = content.getInputStream()) {
                     Blob blob = mapper.readValue(is, Blob.class);
-                    Function<String, InputStream> configGetter = path -> {
-                        try {
-                            return findContent(context, cachingOptions, path).getInputStream();
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    };
-                    BlobStore store = blobStoreResolver.getById(configGetter, blob.getStoreId());
+                    BlobStore store = blobStoreResolver.getById(
+                            new ConfigurationProviderImpl(cachingOptions, context), blob.getStoreId());
                     return new ResourceBasedContent(store.getResource(url, blob));
                 } catch (IOException | ConfigurationException e) {
                     throw new StoreException("Error reading blob file at " + blobUrl, e);
@@ -592,6 +586,30 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             return item1.getName().compareTo(item2.getName());
         }
 
+    }
+
+    /**
+     * Internal class to provide access to configuration files
+     */
+    private class ConfigurationProviderImpl implements ConfigurationProvider {
+
+        private CachingOptions cachingOptions;
+        private Context context;
+
+        public ConfigurationProviderImpl(CachingOptions cachingOptions, Context context) {
+            this.cachingOptions = cachingOptions;
+            this.context = context;
+        }
+
+        @Override
+        public boolean configExists(String path) {
+            return ContentStoreServiceImpl.this.exists(context, cachingOptions, path);
+        }
+
+        @Override
+        public InputStream getConfig(String path) throws IOException {
+            return ContentStoreServiceImpl.this.getContent(context, cachingOptions, path).getInputStream();
+        }
     }
 
 }
