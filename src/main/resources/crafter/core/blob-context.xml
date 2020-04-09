@@ -26,8 +26,9 @@
     </bean>
 
     <bean id="crafter.blobStoreResolver" class="org.craftercms.commons.file.blob.impl.BlobStoreResolverImpl">
-        <property name="configurationPath" value="${crafter.blob.configuration}"/>
-        <property name="configurationReader" ref="crafter.configurationReader"/>
+		<property name="configModule" value="${crafter.blob.configuration.module}"/>
+        <property name="configPath" value="${crafter.blob.configuration.path}"/>
+        <property name="configurationResolver" ref="crafter.configurationResolver"/>
     </bean>
 
     <!-- S3 -->
@@ -35,7 +36,7 @@
     <bean id="crafter.s3ClientFactory" class="org.craftercms.commons.aws.S3ClientCachingFactory"/>
 
     <bean id="crafter.s3ProfileMapper" class="org.craftercms.commons.config.profiles.aws.S3ProfileMapper">
-        <constructor-arg ref="crafter.configurationReader"/>
+        <constructor-arg ref="crafter.configurationResolver"/>
     </bean>
 
     <bean id="s3BlobStore" class="org.craftercms.commons.file.blob.impl.s3.AwsS3BlobStore" scope="prototype">
