@@ -41,7 +41,7 @@
 
     <bean id="s3BlobStore" class="org.craftercms.commons.file.blob.impl.s3.AwsS3BlobStore" scope="prototype">
         <property name="clientFactory" ref="crafter.s3ClientFactory"/>
-        <property name="environmentResolver" ref="crafter.environmentResolver"/>
+        <property name="publishingTargetResolver" ref="crafter.publishingTargetResolver"/>
         <property name="profileMapper" ref="crafter.s3ProfileMapper"/>
     </bean>
 
