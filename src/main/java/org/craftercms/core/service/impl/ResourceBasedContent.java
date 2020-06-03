@@ -13,39 +13,52 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.core.store.impl.filesystem;
+package org.craftercms.core.service.impl;
 
 import org.craftercms.core.service.Content;
+import org.springframework.core.io.Resource;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
- * Gives access to the content of a file in the local filesystem
+ * Implementation of {@link Content} that relies on a {@link Resource}
  *
- * @author avasquez
- * @since 3.1.4
+ * @author joseross
+ * @since 3.1.6
  */
-public class FileSystemContent implements Content {
+public class ResourceBasedContent implements Content {
 
-    private java.io.File file;
+    /**
+     * The resource
+     */
+    protected Resource resource;
 
-    public FileSystemContent(File file) {
-        this.file = file;
+    public ResourceBasedContent(Resource resource) {
+        this.resource = resource;
     }
 
     @Override
     public long getLastModified() {
-        return file.lastModified();
+        try {
+            return resource.lastModified();
+        } catch (IOException e) {
+            return -1;
+        }
     }
 
     @Override
     public long getLength() {
-        return file.length();
+        try {
+            return resource.contentLength();
+        } catch (IOException e) {
+            return 0;
+        }
     }
 
     @Override
-    public InputStream getInputStream() throws FileNotFoundException {
-        return new BufferedInputStream(new FileInputStream(file));
+    public InputStream getInputStream() throws IOException {
+        return resource.getInputStream();
     }
 
 }

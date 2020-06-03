@@ -1,10 +1,9 @@
 /*
- * Copyright (C) 2007-2019 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as published by
+ * the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -179,7 +178,7 @@ public class CacheServiceImpl implements CacheService {
         if (context.isCacheOn() && cachingOptions.doCaching()) {
             try {
                 cache.put(context.getCacheScope(), key, value, cachingOptions.getExpireAfter(),
-                    cachingOptions.getRefreshFrequency(), loader, loaderParams);
+                          cachingOptions.getRefreshFrequency(), loader, loaderParams);
             } catch (InvalidScopeException e) {
                 throw new InvalidContextException("No scope associated to context " + context);
             }

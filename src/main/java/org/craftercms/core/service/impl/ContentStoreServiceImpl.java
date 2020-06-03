@@ -1,10 +1,9 @@
 /*
- * Copyright (C) 2007-2019 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as published by
+ * the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,16 +15,27 @@
  */
 package org.craftercms.core.service.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.config.ConfigurationException;
+import org.craftercms.commons.config.ConfigurationProvider;
+import org.craftercms.commons.file.blob.BlobStore;
+import org.craftercms.commons.file.blob.BlobStoreResolver;
+import org.craftercms.commons.file.blob.Blob;
+import org.craftercms.commons.file.blob.BlobUrlResolver;
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.CrafterException;
 import org.craftercms.core.exception.InvalidContextException;
@@ -87,6 +97,12 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     protected Map<String, Context> contexts;
 
+    protected BlobUrlResolver blobUrlResolver;
+
+    protected BlobStoreResolver blobStoreResolver;
+
+    protected ObjectMapper mapper = new XmlMapper();
+
     /**
      * Default constructor. Creates the map of open {@link Context}s.
      */
@@ -129,6 +145,14 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     @Required
     public void setProcessorResolver(ItemProcessorResolver processorResolver) {
         this.processorResolver = processorResolver;
+    }
+
+    public void setBlobUrlResolver(BlobUrlResolver blobUrlResolver) {
+        this.blobUrlResolver = blobUrlResolver;
+    }
+
+    public void setBlobStoreResolver(BlobStoreResolver blobStoreResolver) {
+        this.blobStoreResolver = blobStoreResolver;
     }
 
     /**
@@ -190,7 +214,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -208,7 +231,23 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     @Override
     public Content findContent(Context context, CachingOptions cachingOptions, String url)
         throws InvalidContextException, StoreException {
-        return context.getStoreAdapter().findContent(context, cachingOptions, url);
+        if (context.getStoreAdapter().exists(context, cachingOptions, url)) {
+            return context.getStoreAdapter().findContent(context, cachingOptions, url);
+        } else {
+            String blobUrl = blobUrlResolver.getBlobUrl(url);
+            if (context.getStoreAdapter().exists(context, cachingOptions, blobUrl)) {
+                Content content = context.getStoreAdapter().findContent(context, cachingOptions, blobUrl);
+                try (InputStream is = content.getInputStream()) {
+                    Blob blob = mapper.readValue(is, Blob.class);
+                    BlobStore store = blobStoreResolver.getById(
+                            new ConfigurationProviderImpl(cachingOptions, context), blob.getStoreId());
+                    return new ResourceBasedContent(store.getResource(url, blob));
+                } catch (IOException | ConfigurationException e) {
+                    throw new StoreException("Error reading blob file at " + blobUrl, e);
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -250,6 +289,17 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         // correct set of descriptor files to merge (like all the impl of AbstractInheritFromHierarchyMergeStrategy).
         if (!url.startsWith("/")) {
             url = "/" + url;
+        }
+
+        if (!context.getStoreAdapter().exists(context, cachingOptions, url)) {
+            String blobUrl = blobUrlResolver.getBlobUrl(url);
+            if (context.getStoreAdapter().exists(context, cachingOptions, blobUrl)) {
+                Item item = new Item();
+                item.setName(FilenameUtils.getName(url));
+                item.setUrl(url);
+                item.setFolder(false);
+                return item;
+            }
         }
 
         Item item = context.getStoreAdapter().findItem(context, cachingOptions, url, true);
@@ -536,6 +586,30 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             return item1.getName().compareTo(item2.getName());
         }
 
+    }
+
+    /**
+     * Internal class to provide access to configuration files
+     */
+    private class ConfigurationProviderImpl implements ConfigurationProvider {
+
+        private CachingOptions cachingOptions;
+        private Context context;
+
+        public ConfigurationProviderImpl(CachingOptions cachingOptions, Context context) {
+            this.cachingOptions = cachingOptions;
+            this.context = context;
+        }
+
+        @Override
+        public boolean configExists(String path) {
+            return ContentStoreServiceImpl.this.exists(context, cachingOptions, path);
+        }
+
+        @Override
+        public InputStream getConfig(String path) throws IOException {
+            return ContentStoreServiceImpl.this.getContent(context, cachingOptions, path).getInputStream();
+        }
     }
 
 }

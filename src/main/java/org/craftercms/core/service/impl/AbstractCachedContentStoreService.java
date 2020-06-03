@@ -1,10 +1,9 @@
 /*
- * Copyright (C) 2007-2019 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as published by
+ * the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -114,7 +113,7 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                     context, url);
             }
 
-        }, context, url, CONST_KEY_ELEM_EXISTS);
+        }, url, CONST_KEY_ELEM_EXISTS);
     }
 
     @Override
@@ -143,7 +142,7 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                                      ".getItem(%s, %s, %s)", context, url, processor);
             }
 
-        }, context, url, processor, CONST_KEY_ELEM_ITEM);
+        }, url, processor, CONST_KEY_ELEM_ITEM);
     }
 
     @Override
@@ -201,7 +200,7 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                                      ".getChildren(%s, %s, %s, %s)", context, url, filter, processor);
             }
 
-        }, context, url, filter, processor, CONST_KEY_ELEM_CHILDREN);
+        }, url, filter, processor, CONST_KEY_ELEM_CHILDREN);
     }
 
     @Override
@@ -257,7 +256,7 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
                                      ".getTree(%s, %s, %d, %s, %s)", context, url, depth, filter, processor);
             }
 
-        }, context, url, depth, filter, processor, CONST_KEY_ELEM_TREE);
+        }, url, depth, filter, processor, CONST_KEY_ELEM_TREE);
     }
 
     @Override
