@@ -298,12 +298,5 @@
                 <checksumPolicy>warn</checksumPolicy>
             </releases>
         </repository>
-        <repository>
-            <id>jgit-snapshot-repository</id>
-            <url>https://repo.eclipse.org/content/groups/jgit/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 </project>
