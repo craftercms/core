@@ -17,7 +17,6 @@ package org.craftercms.core.util.template.impl.spel;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.annotation.PostConstruct;
 
 import org.craftercms.core.exception.TemplateException;
 import org.craftercms.core.util.template.CompiledTemplate;
@@ -39,6 +38,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeConverter;
 import org.springframework.expression.spel.support.StandardTypeLocator;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  * Class description goes HERE
@@ -46,7 +46,7 @@ import org.springframework.expression.spel.support.StandardTypeLocator;
  * @author Alfonso Vásquez
  */
 public class SpELStringTemplateCompiler implements TemplateCompiler<IdentifiableStringTemplateSource>,
-    BeanFactoryAware {
+    BeanFactoryAware, InitializingBean {
 
     private ExpressionParser parser;
     private ParserContext parserContext;
@@ -78,8 +78,7 @@ public class SpELStringTemplateCompiler implements TemplateCompiler<Identifiable
         this.beanFactory = (ConfigurableBeanFactory)beanFactory;
     }
 
-    @PostConstruct
-    public void init() {
+    public void afterPropertiesSet() {
         if (evalContext == null) {
             evalContext = new StandardEvaluationContext();
         }

@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.beans.factory.InitializingBean;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(RestControllerBase.REST_BASE_URI + ContentStoreRestController.URL_ROOT)
-public class ContentStoreRestController extends RestControllerBase {
+public class ContentStoreRestController extends RestControllerBase implements InitializingBean {
 
     public static final String URL_ROOT = "/content_store";
     public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
@@ -76,8 +76,7 @@ public class ContentStoreRestController extends RestControllerBase {
         this.forbiddenUrlPatterns = forbiddenUrlPatterns;
     }
 
-    @PostConstruct
-    public void init() {
+    public void afterPropertiesSet() {
         CompositeItemFilter compositeItemFilter = new CompositeItemFilter();
         compositeItemFilter.setFilters(Arrays.asList(new IncludeByUrlItemFilter(allowedUrlPatterns),
                                                      new ExcludeByUrlItemFilter(forbiddenUrlPatterns)));

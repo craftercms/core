@@ -26,8 +26,8 @@ import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheStatistics;
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
 import org.craftercms.core.exception.InvalidScopeException;
+import org.springframework.beans.factory.DisposableBean;
 
-import javax.annotation.PreDestroy;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +38,7 @@ import java.util.List;
  * @author Sumer Jabri
  * @author Alfonso Vásquez
  */
-public class EhCacheStoreAdapter implements CacheStoreAdapter {
+public class EhCacheStoreAdapter implements CacheStoreAdapter, DisposableBean {
 
     public static final String SCOPE_MANAGER_NAME = "crafter.scopeManager";
 
@@ -75,7 +75,6 @@ public class EhCacheStoreAdapter implements CacheStoreAdapter {
     /**
      * Destroy method, called by the Spring container. Calls {@link CacheManager#shutdown()}.
      */
-    @PreDestroy
     public void destroy() {
         scopeManager.shutdown();
     }
