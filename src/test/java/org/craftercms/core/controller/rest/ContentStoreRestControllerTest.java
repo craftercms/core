@@ -244,7 +244,7 @@ public class ContentStoreRestControllerTest {
         storeRestController = new ContentStoreRestController();
         storeRestController.setStoreService(storeService);
         storeRestController.setForbiddenUrlPatterns(new String[] {"^/?protected(/.+)?$"});
-        storeRestController.init();
+        storeRestController.afterPropertiesSet();
     }
 
 }

@@ -118,7 +118,7 @@
         <property name="defaultStrategy" ref="singleFileMergeStrategy"/>
         <property name="resolvers">
             <list>
-                <ref local="metaDataMergeStrategyResolver"/>
+                <ref bean="metaDataMergeStrategyResolver"/>
             </list>
         </property>
     </bean>
@@ -186,13 +186,13 @@
                     <key>
                         <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME"/>
                     </key>
-                    <ref local="disallowOverrideMergeCue"/>
+                    <ref bean="disallowOverrideMergeCue"/>
                 </entry>
                 <entry>
                     <key>
                         <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME"/>
                     </key>
-                    <ref local="mergeWithChildMergeCue"/>
+                    <ref bean="mergeWithChildMergeCue"/>
                 </entry>
             </map>
         </property>
@@ -202,19 +202,19 @@
                     <key>
                         <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME"/>
                     </key>
-                    <ref local="overrideParentMergeCue"/>
+                    <ref bean="overrideParentMergeCue"/>
                 </entry>
                 <entry>
                     <key>
                         <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_MERGE_CUE_ATTR_NAME"/>
                     </key>
-                    <ref local="useParentMergeCue"/>
+                    <ref bean="useParentMergeCue"/>
                 </entry>
                 <entry>
                     <key>
                         <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME"/>
                     </key>
-                    <ref local="mergeWithParentMergeCue"/>
+                    <ref bean="mergeWithParentMergeCue"/>
                 </entry>
             </map>
         </property>
@@ -294,9 +294,9 @@
     <bean id="defaultProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
         <constructor-arg>
             <list>
-                <ref local="includeDescriptorsProcessor"/>
-                <ref local="templateProcessor"/>
-                <ref local="systemInfoMetaDataExtractingProcessor"/>
+                <ref bean="includeDescriptorsProcessor"/>
+                <ref bean="templateProcessor"/>
+                <ref bean="systemInfoMetaDataExtractingProcessor"/>
             </list>
         </constructor-arg>
     </bean>
@@ -304,9 +304,9 @@
     <bean id="imageProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
         <constructor-arg>
             <list>
-                <ref local="includeDescriptorsProcessor"/>
-                <ref local="templateProcessor"/>
-                <ref local="imageResolutionMetaDataExtractingProcessor"/>
+                <ref bean="includeDescriptorsProcessor"/>
+                <ref bean="templateProcessor"/>
+                <ref bean="imageResolutionMetaDataExtractingProcessor"/>
             </list>
         </constructor-arg>
     </bean>
@@ -328,7 +328,7 @@
         <property name="defaultProcessor" ref="defaultProcessorPipeline"/>
         <property name="resolvers">
             <list>
-                <ref local="procesorResolver"/>
+                <ref bean="procesorResolver"/>
             </list>
         </property>
     </bean>

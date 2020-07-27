@@ -103,7 +103,7 @@ public class Dom4JDocumentJsonSerializerTest {
 
         objectMapper = new CustomSerializationObjectMapper();
         objectMapper.setSerializers(serializers);
-        objectMapper.init();
+        objectMapper.afterPropertiesSet();
     }
 
 }
