@@ -2,8 +2,10 @@ language: java
 jdk:
   - openjdk11
 branches:
-  except:
-    - travis
+  only:
+  - develop
+  - support/.*
+  - master
 notifications:
   irc:
     channels:
@@ -11,11 +13,11 @@ notifications:
     use_notice: true
     skip_join: true
   slack: craftersoftware:7YiSb41ZG5rfMgiAY7Qgprc7
+script:
+- if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then bash -c  "mvn deploy --settings
+  .travis-settings.xml";  fi
+- if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then bash -c "mvn clean install" ;fi
 env:
   global:
-    - secure: xmXyyHpDFZtEW4+oQeb8E1lUQzbxAUcqUP8o8dUOVs3VW1QRRUZ9MC8tIRfh4Sbu19eqGCNP9bbeNELl3Aet+DTuJ4n0wHq4bushv4ai7OB42B/huWth1nooekE7vSjuBybx9kk+XiKJhPbTJi4KzsTqGONVPn7AzNckdxLlcE0=
-    - secure: Z0iBsLQfoi4DFbB482Ak2GRcMSBmUiTmPN3Yd+VEGJdnZRF61ktgO9yWNhcmhnZnvEAa1X3UpGLA7Nrd+djD9+Qexvbt6b32Co7J94RU0qxr9bPn4LgVfAyrTuQ4vLUorwnQ74SMVC0vVJk2wkJjhrniI+0IFzcpjA2071ZPOfY=
-    - secure: jpEeZMzjENrvVxCNd7eW0x06z7YyaZvAtFPfoKG3VQ48E/mSWw1uMicl/peZPLhl8x0C8at2XHR9oYNL6h5NjSgSEYKYieN07o46KN16/m5r/8pyAPYp1Gy/VjyNMRKnBWvBfYctrkDYa8xSQz2qEycSoOpZenDcaCyqSuT9zRE=
-script:
-  - 'if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then bash -c  "mvn deploy --settings .travis-settings.xml";  fi'
-  - 'if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then bash -c "mvn clean install" ;fi'
+  - secure: WP1lZ0xD2Ldq+6+8hwuAnl74OuJNk3oLgXT3Vj9woQRW5PoSO7gxvK5s65sPbFsSm89cue1nqGkuFgP6pZ6SU8JwAE3LYGbx0BciveJ+WQvsSWTupRGGMBHuNwxjUuF11gWM+tm8L2u8HyFJc2QHvr+E5VaSUs5F9vgdaB0u3MlldQfAv0sCPCGV+JkRuRIbCPfSmS9aXtVwr6QCHqtOibYDahUPPO/yQXN7F+v2/wwTe2dmNoQYo7JgeHSgkbAu4z5+Ovpa+p80rF/a4COg/zjGCVgjjbbuABk5Sp2vCgqswSH3cAW7azvS2K5Ep62hRePIC++j3dYrhxNGR6mn9fLdE9tw21KZU1UYL6j+vQ/zFaGonIXJg3do4Z3f2fMPNXn4V4039huWN6hy33NC9V0NYCBIfIsa6KLrQEctc+X30bG6aqJ41SJ9VSr1EwoTK2n5Z2+juGLQymokDTa79HfwQDKFm/AYqcAmpu/zLrOxfs/bdWwqGLbWzwMwLUFvaH3FBvYl2M1N3dRM0CK4jfLaRmZf1YFhoReysqG3S/q9nUzrqVVtZwb+S/MFvwlRq3h9QWpBiWurBrHk59M54c+cPDmYUfpSOZkFWSbxVA4QcJJO9LCLGH0Y1TtmQ5ClK9jtQYk28AP3hFM/KfxImiEifnsyGD/dQZbKW5MCnRM=
+  - secure: fJLJkTHDP/qXgVbtHEe3ZnBDD3StXcw9VWluLzTWzlYcbL5Cc9/CoPQc1e5yRbbi+COVjIt1SPjKD/gjS6362XVaIdqYCBSWrUpHX8ryE0Pt8PYXDHjogtDW/MmPa4El1GujVfhfqmCSXezGNPUA4I9TtO+zmhUxnZhS8H6168r6aKdj4C9LR6lDAKIV/kpO44SRGBdLwdWvSqQdptHuo+Y37IK3WJ/8gBYGFkD/yYsUFJrjDWr+yDB6fY7XMv2FH48gHMeEqzNb6GIpdRyzv2nEXj71VN42D5PC0e+jUtsKAhfEOAOIKPK5ujfqtf+Xo9uK6qBs1Rt5xW4ewMqKYvzzHwqlwOqLG1wywq+Bm8AmyqC4Ts6MXIv7I4PacUVwNOCp9t7/C/BWia47IyZFZvcOBjCifGIYtSdu6Ku/9J5iSG+PvfeCi7n3LS6IACgPnevT40AvOSHL65BicJrtp0ItRfsqGnlWypanvHAZ8aAYtUIPim+0OUtUIFDJJ98v0cwtEPFs0pE8V/aUR6J4ElIAqt1Vot2yj67gRxjdWDb53ynQCikbyctJmzyka5H98rKV64Hp0yM5jXzZ3BfdN3MN7co5QwMbWevmHrGbsiDEwROV9JMomCoNyLZD4+mBDqssre9+I/3roosUUCiaj9Rj4bsMF6oNz8bB0Wjl3CU=
