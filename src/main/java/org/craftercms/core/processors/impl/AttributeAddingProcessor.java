@@ -68,7 +68,7 @@ public class AttributeAddingProcessor implements ItemProcessor {
                     if (CollectionUtils.isNotEmpty(nodes)) {
                         for (Node node : nodes) {
                             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                                Element element = (Element)node;
+                                Element element = (Element) node;
                                 for (Map.Entry<String, String> attribute : attributes.entrySet()) {
                                     addAttribute(attribute, element);
                                 }

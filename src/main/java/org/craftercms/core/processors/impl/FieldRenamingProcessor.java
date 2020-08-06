@@ -65,7 +65,7 @@ public class FieldRenamingProcessor implements ItemProcessor {
 
                     for (Node node: nodes) {
                         if (node.getNodeType() == Node.ELEMENT_NODE) {
-                            Element element = (Element)node;
+                            Element element = (Element) node;
                             if (logger.isDebugEnabled()) {
                                 logger.debug("Renaming element " + element.getUniquePath() + " to ");
                             }
