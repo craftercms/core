@@ -267,10 +267,8 @@
 
         <!-- Dom4j -->
         <dependency>
-            <groupId>dom4j</groupId>
+            <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>${dom4j.version}</version>
-            <!-- TODO: look into XOM 1.2.6 -->
         </dependency>
         <dependency>
             <!-- Needed by Dom4j -->

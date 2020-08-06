@@ -132,9 +132,9 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
         includedItemsStack.get().push(descriptorUrl);
         try {
             Document descriptorDom = item.getDescriptorDom();
-            List<Element> includeElements = descriptorDom.selectNodes(includeElementXPathQuery);
+            List<Node> includeNodes = descriptorDom.selectNodes(includeElementXPathQuery);
 
-            if (CollectionUtils.isEmpty(includeElements)) {
+            if (CollectionUtils.isEmpty(includeNodes)) {
                 return;
             }
 
@@ -142,32 +142,37 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
                 logger.debug("Processing includes of item @ " + descriptorUrl);
             }
 
-            for (Element includeElement : includeElements) {
-                String itemToIncludePath = includeElement.getTextTrim();
+            for (Node node : includeNodes) {
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element includeElement = (Element) node;
+                    String itemToIncludePath = includeElement.getTextTrim();
 
-                if (StringUtils.isEmpty(itemToIncludePath)) {
-                    continue;
-                }
+                    if (StringUtils.isEmpty(itemToIncludePath)) {
+                        continue;
+                    }
 
-                if (!isIncludeDisabled(includeElement)) {
-                    if (!includedItemsStack.get().contains(itemToIncludePath)) {
-                        Item itemToInclude = getItemToInclude(context, cachingOptions, itemToIncludePath);
-                        if (itemToInclude != null && itemToInclude.getDescriptorDom() != null) {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("Include found in " + descriptorUrl + ": " + itemToIncludePath);
+                    if (!isIncludeDisabled(includeElement)) {
+                        if (!includedItemsStack.get().contains(itemToIncludePath)) {
+                            Item itemToInclude = getItemToInclude(context, cachingOptions, itemToIncludePath);
+                            if (itemToInclude != null && itemToInclude.getDescriptorDom() != null) {
+                                if (logger.isDebugEnabled()) {
+                                    logger.debug("Include found in " + descriptorUrl + ": " + itemToIncludePath);
+                                }
+
+                                doInclude(item, includeElement, itemToInclude);
+                            } else {
+                                logger.debug("No descriptor item found @ " + itemToIncludePath);
                             }
-
-                            doInclude(item, includeElement, itemToInclude);
                         } else {
-                            logger.debug("No descriptor item found @ " + itemToIncludePath);
+                            logger.debug("Circular inclusion detected. Item " + itemToIncludePath + " already included");
                         }
                     } else {
-                        logger.debug("Circular inclusion detected. Item " + itemToIncludePath + " already included");
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Ignoring include " + itemToIncludePath + ". It's currently disabled");
+                        }
                     }
                 } else {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Ignoring include " + itemToIncludePath + ". It's currently disabled");
-                    }
+                    logger.info("Unable to execute against a non-XML-element: " + node.getUniquePath());
                 }
             }
         } finally {

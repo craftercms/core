@@ -30,6 +30,7 @@ import org.craftercms.core.service.Item;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 
 /**
  * Created by alfonso on 2/21/17.
@@ -54,20 +55,25 @@ public class AttributeAddingProcessor implements ItemProcessor {
                 Map<String, String> attributes = mapping.getValue();
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Adding attributes " + attributes + " to elements that match " + xpath + " for descriptor of " + item);
+                    logger.debug("Adding attributes " + attributes + " to nodes that match " + xpath + " for descriptor of " + item);
                 }
 
                 if (MapUtils.isNotEmpty(attributes)) {
-                    List<Element> elements = document.selectNodes(xpath);
+                    List<Node> nodes = document.selectNodes(xpath);
 
                     if (logger.isDebugEnabled()) {
-                        logger.debug("Number of matching elements: " + elements.size());
+                        logger.debug("Number of matching nodes: " + nodes.size());
                     }
 
-                    if (CollectionUtils.isNotEmpty(elements)) {
-                        for (Element element : elements) {
-                            for (Map.Entry<String, String> attribute : attributes.entrySet()) {
-                                addAttribute(attribute, element);
+                    if (CollectionUtils.isNotEmpty(nodes)) {
+                        for (Node node : nodes) {
+                            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                                Element element = (Element)node;
+                                for (Map.Entry<String, String> attribute : attributes.entrySet()) {
+                                    addAttribute(attribute, element);
+                                }
+                            } else {
+                                logger.info("Unable to execute against a non-XML-element: " + node.getUniquePath());
                             }
                         }
                     }
@@ -88,5 +94,4 @@ public class AttributeAddingProcessor implements ItemProcessor {
 
         element.add(DocumentHelper.createAttribute(element, name, value));
     }
-
 }

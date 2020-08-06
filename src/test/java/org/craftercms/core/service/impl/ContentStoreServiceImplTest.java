@@ -415,7 +415,7 @@ public class ContentStoreServiceImplTest {
             assertEquals(BUNDLE_FR_EXTENSION, bundleExtensions.get(0));
             assertEquals(BUNDLE_FR_ES_EXTENSION, bundleExtensions.get(1));
         } else {
-            List<Element> bundleExtensions = item.getDescriptorDom().selectNodes("//extension");
+            List<Node> bundleExtensions = item.getDescriptorDom().selectNodes("//extension");
             assertNotNull(bundleExtensions);
             assertEquals(2, bundleExtensions.size());
             assertEquals(BUNDLE_FR_EXTENSION, bundleExtensions.get(0).getText());
