@@ -15,26 +15,28 @@
  */
 package org.craftercms.core.processors.impl;
 
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Stack;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.locale.LocaleUtils;
 import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.ContentStoreService;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
-import org.craftercms.core.util.UrlUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.springframework.beans.factory.annotation.Required;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Stack;
+
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * {@link org.craftercms.core.processors.ItemProcessor} that finds special "include" tags found in a descriptor
@@ -69,6 +71,11 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      * Processor to use for included items.
      */
     protected ItemProcessor includedItemsProcessor;
+
+    /**
+     * XPath query for the locale code element
+     */
+    protected String localeCodeXPathQuery;
 
     /**
      * Sets the XPath query used to retrieve the include elements.
@@ -108,6 +115,10 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
         this.includedItemsProcessor = includedItemsProcessor;
     }
 
+    public void setLocaleCodeXPathQuery(String localeCodeXPathQuery) {
+        this.localeCodeXPathQuery = localeCodeXPathQuery;
+    }
+
     /**
      * Replaces special include tags found in a descriptor document with the document tree of descriptors specified in
      * these include tags. If the include tag specifies a XPath query expression (through the select attribute), only
@@ -142,6 +153,11 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
                 logger.debug("Processing includes of item @ " + descriptorUrl);
             }
 
+            Locale locale = null;
+            if (isNotEmpty(localeCodeXPathQuery)) {
+                locale = LocaleUtils.parseLocale(item.queryDescriptorValue(localeCodeXPathQuery));
+            }
+
             for (Node node : includeNodes) {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element includeElement = (Element) node;
@@ -153,6 +169,11 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
 
                     if (!isIncludeDisabled(includeElement)) {
                         if (!includedItemsStack.get().contains(itemToIncludePath)) {
+                            if (locale != null) {
+                                itemToIncludePath = LocaleUtils.findPath(itemToIncludePath, locale, null,
+                                        path -> contentStoreService.exists(context, cachingOptions, path));
+                            }
+
                             Item itemToInclude = getItemToInclude(context, cachingOptions, itemToIncludePath);
                             if (itemToInclude != null && itemToInclude.getDescriptorDom() != null) {
                                 if (logger.isDebugEnabled()) {
