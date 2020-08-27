@@ -45,14 +45,30 @@
     <!-- Content Store Service -->
 
     <bean id="crafter.contentStoreService" class="org.craftercms.core.service.impl.ContentStoreServiceImpl">
-        <property name="cacheTemplate" ref="crafter.cacheTemplate"/>
-        <property name="merger" ref="crafter.merger"/>
-        <property name="processorResolver" ref="crafter.procesorResolverChain"/>
-        <property name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
-        <property name="storeAdapterRegistry" ref="crafter.contentStoreAdapterRegistry"/>
+        <constructor-arg name="cacheTemplate" ref="crafter.cacheTemplate"/>
+        <constructor-arg name="merger" ref="crafter.merger"/>
+        <constructor-arg name="processorResolver" ref="crafter.procesorResolverChain"/>
+        <constructor-arg name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
+        <constructor-arg name="storeAdapterRegistry" ref="crafter.contentStoreAdapterRegistry"/>
 
-        <property name="blobUrlResolver" ref="crafter.blobUrlResolver"/>
-        <property name="blobStoreResolver" ref="crafter.blobStoreResolver"/>
+        <constructor-arg name="blobUrlResolver" ref="crafter.blobUrlResolver"/>
+        <constructor-arg name="blobStoreResolver" ref="crafter.blobStoreResolver"/>
+
+        <constructor-arg name="sourceAttributeName" value="${crafter.core.store.source.attribute.name}"/>
+
+        <property name="sourceAttributeEnabled" value="${crafter.core.store.source.attribute.enabled}"/>
+        <property name="flatteningProcessor" ref="crafter.includeDescriptorsProcessor"/>
+    </bean>
+
+    <bean id="crafter.includeDescriptorsProcessor"
+          class="org.craftercms.core.processors.impl.PageAwareIncludeDescriptorsProcessor">
+        <property name="includeElementXPathQuery" value="${crafter.core.flattening.include.xpath.query}"/>
+        <property name="removeIncludeElement" value="${crafter.core.flattening.include.remove.tags}"/>
+        <property name="disabledIncludeNodeXPathQuery" value="${crafter.core.flattening.include.disable.xpath.query}"/>
+        <property name="localeCodeXPathQuery" value="${crafter.core.flattening.locale.xpath.query}"/>
+        <property name="pagesPathPattern" value="${crafter.core.flattening.pages.pattern}"/>
+        <property name="includedItemsProcessor" ref="crafter.includeDescriptorsProcessor"/>
+        <property name="contentStoreService" ref="crafter.contentStoreService"/>
     </bean>
 
 </beans>
