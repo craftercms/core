@@ -59,13 +59,13 @@ import org.craftercms.core.service.Tree;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.store.ContentStoreAdapterRegistry;
 import org.craftercms.core.util.XmlUtils;
+import org.craftercms.core.util.cache.CacheTemplate;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.craftercms.core.xml.mergers.DescriptorMerger;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.dom4j.Document;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Default implementation of {@link org.craftercms.core.service.ContentStoreService}. Extends from
@@ -104,55 +104,33 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     protected ObjectMapper mapper = new XmlMapper();
 
     /**
-     * Default constructor. Creates the map of open {@link Context}s.
+     * Indicates if the source attribute should be added when merging XML documents
      */
-    public ContentStoreServiceImpl() {
-        contexts = new ConcurrentHashMap<String, Context>();
-    }
+    protected boolean sourceAttributeEnabled = false;
 
     /**
-     * Registry of {@link ContentStoreAdapter}s.
+     * The name of the attribute used to identify the source of an XML element
      */
-    @Required
-    public void setStoreAdapterRegistry(ContentStoreAdapterRegistry storeAdapterRegistry) {
+    protected String sourceAttributeName;
+
+    public ContentStoreServiceImpl(CacheTemplate cacheTemplate, ContentStoreAdapterRegistry storeAdapterRegistry,
+                                   DescriptorMergeStrategyResolver mergeStrategyResolver,
+                                   DescriptorMerger merger, ItemProcessorResolver processorResolver,
+                                   BlobUrlResolver blobUrlResolver, BlobStoreResolver blobStoreResolver,
+                                   String sourceAttributeName) {
+        super(cacheTemplate);
         this.storeAdapterRegistry = storeAdapterRegistry;
-    }
-
-    /**
-     * Sets the {@link DescriptorMergeStrategyResolver}, which resolves the {@link org.craftercms.core.xml.mergers
-     * .DescriptorMergeStrategy} to use for a particular
-     * descriptor.
-     */
-    @Required
-    public void setMergeStrategyResolver(DescriptorMergeStrategyResolver mergeStrategyResolver) {
         this.mergeStrategyResolver = mergeStrategyResolver;
-    }
-
-    /**
-     * Sets the {@link DescriptorMerger}, which merges the primary descriptor with a list of other descriptors,
-     * according to
-     * the merge strategy.
-     */
-    @Required
-    public void setMerger(DescriptorMerger merger) {
         this.merger = merger;
-    }
-
-    /**
-     * Sets the {@link ItemProcessorResolver}, which resolves the {@link org.craftercms.core.processors
-     * .ItemProcessor} to use for a particular {@link Item}.
-     */
-    @Required
-    public void setProcessorResolver(ItemProcessorResolver processorResolver) {
         this.processorResolver = processorResolver;
-    }
-
-    public void setBlobUrlResolver(BlobUrlResolver blobUrlResolver) {
         this.blobUrlResolver = blobUrlResolver;
+        this.blobStoreResolver = blobStoreResolver;
+        this.sourceAttributeName = sourceAttributeName;
+        contexts = new ConcurrentHashMap<>();
     }
 
-    public void setBlobStoreResolver(BlobStoreResolver blobStoreResolver) {
-        this.blobStoreResolver = blobStoreResolver;
+    public void setSourceAttributeEnabled(boolean sourceAttributeEnabled) {
+        this.sourceAttributeEnabled = sourceAttributeEnabled;
     }
 
     /**
@@ -464,7 +442,9 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
             List<Document> documentsToMerge = new ArrayList<>(descriptorsToMerge.size());
 
-            for (MergeableDescriptor descriptorToMerge : descriptorsToMerge) {
+            var iterator = descriptorsToMerge.listIterator();
+            while (iterator.hasNext()) {
+                var descriptorToMerge = iterator.next();
                 String descriptorUrl = descriptorToMerge.getUrl();
                 Item descriptorItem = context.getStoreAdapter().findItem(context, cachingOptions, descriptorUrl, true);
 
@@ -474,7 +454,12 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                         throw new XmlMergeException(
                             "Descriptor file " + descriptorUrl + " not found and is marked as " + "required for merging");
                     }
-
+                    if (descriptorDom != null && sourceAttributeEnabled && iterator.hasNext()) {
+                        var root = descriptorDom.getRootElement();
+                        if (root != null) {
+                            root.elements().forEach(child -> child.addAttribute(sourceAttributeName, descriptorUrl));
+                        }
+                    }
                     documentsToMerge.add(descriptorDom);
                 } else if (!descriptorToMerge.isOptional()) {
                     throw new XmlMergeException("Descriptor file " + descriptorUrl + " not found and is marked as required for merging");

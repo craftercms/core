@@ -33,7 +33,6 @@ import org.craftercms.core.service.ItemFilter;
 import org.craftercms.core.service.Tree;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Abstract {@link ContentStoreService} that provides caching to actual implementations. Subclasses just have to
@@ -75,18 +74,14 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
     protected CachingOptions defaultCachingOptions;
 
     /**
-     * Sets the {@code CacheTemplate}, which is used as a helper for caching.
-     */
-    @Required
-    public void setCacheTemplate(final CacheTemplate cacheTemplate) {
-        this.cacheTemplate = cacheTemplate;
-    }
-
-    /**
      * Sets the default caching options to use when none are specified in the method. Can be null.
      */
     public void setDefaultCachingOptions(CachingOptions defaultCachingOptions) {
         this.defaultCachingOptions = defaultCachingOptions;
+    }
+
+    public AbstractCachedContentStoreService(CacheTemplate cacheTemplate) {
+        this.cacheTemplate = cacheTemplate;
     }
 
     @Override

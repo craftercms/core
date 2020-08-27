@@ -45,14 +45,18 @@
     <!-- Content Store Service -->
 
     <bean id="crafter.contentStoreService" class="org.craftercms.core.service.impl.ContentStoreServiceImpl">
-        <property name="cacheTemplate" ref="crafter.cacheTemplate"/>
-        <property name="merger" ref="crafter.merger"/>
-        <property name="processorResolver" ref="crafter.procesorResolverChain"/>
-        <property name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
-        <property name="storeAdapterRegistry" ref="crafter.contentStoreAdapterRegistry"/>
+        <constructor-arg name="cacheTemplate" ref="crafter.cacheTemplate"/>
+        <constructor-arg name="merger" ref="crafter.merger"/>
+        <constructor-arg name="processorResolver" ref="crafter.procesorResolverChain"/>
+        <constructor-arg name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
+        <constructor-arg name="storeAdapterRegistry" ref="crafter.contentStoreAdapterRegistry"/>
 
-        <property name="blobUrlResolver" ref="crafter.blobUrlResolver"/>
-        <property name="blobStoreResolver" ref="crafter.blobStoreResolver"/>
+        <constructor-arg name="blobUrlResolver" ref="crafter.blobUrlResolver"/>
+        <constructor-arg name="blobStoreResolver" ref="crafter.blobStoreResolver"/>
+
+        <constructor-arg name="sourceAttributeName" value="${crafter.core.store.source.attribute.name}"/>
+
+        <property name="sourceAttributeEnabled" value="${crafter.core.store.source.attribute.enabled}"/>
     </bean>
 
 </beans>
