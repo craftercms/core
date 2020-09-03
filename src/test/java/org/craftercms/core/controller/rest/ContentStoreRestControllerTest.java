@@ -86,83 +86,88 @@ public class ContentStoreRestControllerTest {
 
     @Test
     public void testGetItemNotModified() throws Exception {
-        testNotModified(item, () -> storeRestController.getItem(webRequest, response, context.getId(), ITEM_URL));
+        testNotModified(item, 
+                () -> storeRestController.getItem(webRequest, response, context.getId(), ITEM_URL, false));
 
-        verify(storeService).getItem(context, ITEM_URL);
+        verify(storeService).getItem(context, null, ITEM_URL, null, false);
     }
 
     @Test
     public void testGetItemModified() throws Exception {
-        testModified(item, () -> storeRestController.getItem(webRequest, response, context.getId(), ITEM_URL));
+        testModified(item, () -> storeRestController.getItem(webRequest, response, context.getId(), ITEM_URL, false));
 
-        verify(storeService).getItem(context, ITEM_URL);
+        verify(storeService).getItem(context, null, ITEM_URL, null, false);
     }
 
     @Test(expected = ForbiddenPathException.class)
     public void testGetItemProtected() {
-        storeRestController.getItem(webRequest, response, context.getId(), PROTECTED_URL);
+        storeRestController.getItem(webRequest, response, context.getId(), PROTECTED_URL, false);
         fail("Expected " + ForbiddenPathException.class.getName() + " exception");
     }
 
     @Test
     public void testGetChildrenNotModified() throws Exception {
         testNotModified(children, () -> storeRestController.getChildren(webRequest, response, context.getId(),
-                                                                        FOLDER_URL));
+                                                                        FOLDER_URL, false));
 
         verify(storeService).getChildren(eq(context),
                                          isNull(CachingOptions.class),
                                          eq(FOLDER_URL),
                                          any(ItemFilter.class),
-                                         isNull(ItemProcessor.class));
+                                         isNull(ItemProcessor.class),
+                                         eq(false));
     }
 
     @Test(expected = ForbiddenPathException.class)
     public void testGetChildrenProtected() {
-        storeRestController.getChildren(webRequest, response, context.getId(), PROTECTED_URL);
+        storeRestController.getChildren(webRequest, response, context.getId(), PROTECTED_URL, false);
         fail("Expected " + ForbiddenPathException.class.getName() + " exception");
     }
 
     @Test
     public void testGetChildrenModified() throws Exception {
         testModified(children, () -> storeRestController.getChildren(webRequest, response, context.getId(),
-            FOLDER_URL));
+            FOLDER_URL, false));
 
         verify(storeService).getChildren(eq(context),
                                          isNull(CachingOptions.class),
                                          eq(FOLDER_URL),
                                          any(ItemFilter.class),
-                                         isNull(ItemProcessor.class));
+                                         isNull(ItemProcessor.class),
+                                         eq(false));
     }
 
     @Test
     public void testGetTreeNotModified() throws Exception {
         testNotModified(tree, () -> storeRestController.getTree(webRequest, response, context.getId(), FOLDER_URL,
-                                                                UNLIMITED_TREE_DEPTH));
+                                                                UNLIMITED_TREE_DEPTH, false));
 
         verify(storeService).getTree(eq(context),
                                      isNull(CachingOptions.class),
                                      eq(FOLDER_URL),
                                      eq(UNLIMITED_TREE_DEPTH),
                                      any(ItemFilter.class),
-                                     isNull(ItemProcessor.class));
+                                     isNull(ItemProcessor.class),
+                                     eq(false));
     }
 
     @Test
     public void testGetTreeModified() throws Exception {
         testModified(tree, () -> storeRestController.getTree(webRequest, response, context.getId(), FOLDER_URL,
-            UNLIMITED_TREE_DEPTH));
+            UNLIMITED_TREE_DEPTH, false));
 
         verify(storeService).getTree(eq(context),
                                      isNull(CachingOptions.class),
                                      eq(FOLDER_URL),
                                      eq(UNLIMITED_TREE_DEPTH),
                                      any(ItemFilter.class),
-                                     isNull(ItemProcessor.class));
+                                     isNull(ItemProcessor.class),
+                                     eq(false));
     }
 
     @Test(expected = ForbiddenPathException.class)
     public void testGetTreeProtected() {
-        storeRestController.getTree(webRequest, response, context.getId(), PROTECTED_URL, UNLIMITED_TREE_DEPTH);
+        storeRestController.getTree(webRequest, response, context.getId(), PROTECTED_URL, UNLIMITED_TREE_DEPTH, false);
         fail("Expected " + ForbiddenPathException.class.getName() + " exception");
     }
 
@@ -187,8 +192,8 @@ public class ContentStoreRestControllerTest {
         assertEquals(cachingAwareObject, object);
         assertEquals(HttpServletResponse.SC_OK, response.getStatus());
         //Remove the nano precession,
-        assertEquals(new Long(cachingAwareObject.getCachingTime()/1000),
-                     new Long(response.getDateHeader(LAST_MODIFIED_HEADER_NAME)/1000));
+        assertEquals(cachingAwareObject.getCachingTime()/1000,
+                     response.getDateHeader(LAST_MODIFIED_HEADER_NAME)/1000);
         assertEquals(MUST_REVALIDATE_HEADER_VALUE, response.getHeader(CACHE_CONTROL_HEADER_NAME));
     }
 
@@ -222,27 +227,28 @@ public class ContentStoreRestControllerTest {
         storeService = mock(ContentStoreService.class);
         try {
             when(storeService.getContext(context.getId())).thenReturn(context);
-            when(storeService.getItem(context, ITEM_URL)).thenReturn(item);
+            when(storeService.getItem(context, null, ITEM_URL, null, false)).thenReturn(item);
             when(storeService.getChildren(eq(context),
                                           isNull(CachingOptions.class),
                                           eq(FOLDER_URL),
                                           any(ItemFilter.class),
-                                          isNull(ItemProcessor.class)))
+                                          isNull(ItemProcessor.class),
+                                          eq(false)))
                     .thenReturn(children);
             when(storeService.getTree(eq(context),
                                       isNull(CachingOptions.class),
                                       eq(FOLDER_URL),
                                       eq(UNLIMITED_TREE_DEPTH),
                                       any(ItemFilter.class),
-                                      isNull(ItemProcessor.class)))
+                                      isNull(ItemProcessor.class),
+                                      eq(false)))
                     .thenReturn(tree);
         } catch (Exception e) {
         }
     }
 
     private void setUpTestStoreRestController() {
-        storeRestController = new ContentStoreRestController();
-        storeRestController.setStoreService(storeService);
+        storeRestController = new ContentStoreRestController(storeService);
         storeRestController.setForbiddenUrlPatterns(new String[] {"^/?protected(/.+)?$"});
         storeRestController.afterPropertiesSet();
     }

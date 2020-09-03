@@ -341,18 +341,23 @@
         <constructor-arg value="blob"/>
     </bean>
 
+    <bean id="blobStoreResolver" class="org.craftercms.commons.file.blob.impl.BlobStoreResolverImpl"/>
+
     <!-- ////////////////////////////////////////////////// -->
     <!-- ////////////// CONTENT STORE SERVICE ///////////// -->
     <!-- ////////////////////////////////////////////////// -->
 
     <bean id="contentStoreService" class="org.craftercms.core.service.impl.ContentStoreServiceImpl">
-        <property name="cacheTemplate" ref="cacheTemplate"/>
-        <property name="storeAdapterRegistry" ref="contentStoreAdapterRegistry"/>
-        <property name="merger" ref="merger"/>
-        <property name="processorResolver" ref="procesorResolverChain"/>
-        <property name="mergeStrategyResolver" ref="mergeStrategyResolverChain"/>
+        <constructor-arg name="cacheTemplate" ref="cacheTemplate"/>
+        <constructor-arg name="storeAdapterRegistry" ref="contentStoreAdapterRegistry"/>
+        <constructor-arg name="merger" ref="merger"/>
+        <constructor-arg name="processorResolver" ref="procesorResolverChain"/>
+        <constructor-arg name="mergeStrategyResolver" ref="mergeStrategyResolverChain"/>
 
-        <property name="blobUrlResolver" ref="blobUrlResolver"/>
+        <constructor-arg name="blobUrlResolver" ref="blobUrlResolver"/>
+        <constructor-arg name="blobStoreResolver" ref="blobStoreResolver"/>
+
+        <constructor-arg name="sourceAttributeName" value="crafter-source"/>
     </bean>
 
 </beans>

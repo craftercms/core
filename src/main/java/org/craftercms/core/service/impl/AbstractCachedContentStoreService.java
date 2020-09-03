@@ -25,6 +25,7 @@ import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.exception.XmlFileParseException;
 import org.craftercms.core.exception.XmlMergeException;
 import org.craftercms.core.processors.ItemProcessor;
+import org.craftercms.core.processors.impl.ItemProcessorPipeline;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.ContentStoreService;
 import org.craftercms.core.service.Context;
@@ -33,7 +34,6 @@ import org.craftercms.core.service.ItemFilter;
 import org.craftercms.core.service.Tree;
 import org.craftercms.core.util.cache.CacheTemplate;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Abstract {@link ContentStoreService} that provides caching to actual implementations. Subclasses just have to
@@ -75,18 +75,23 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
     protected CachingOptions defaultCachingOptions;
 
     /**
-     * Sets the {@code CacheTemplate}, which is used as a helper for caching.
+     * Item processor used for flattening descriptors
      */
-    @Required
-    public void setCacheTemplate(final CacheTemplate cacheTemplate) {
-        this.cacheTemplate = cacheTemplate;
-    }
+    protected ItemProcessor flatteningProcessor;
 
     /**
      * Sets the default caching options to use when none are specified in the method. Can be null.
      */
     public void setDefaultCachingOptions(CachingOptions defaultCachingOptions) {
         this.defaultCachingOptions = defaultCachingOptions;
+    }
+
+    public void setFlatteningProcessor(ItemProcessor flatteningProcessor) {
+        this.flatteningProcessor = flatteningProcessor;
+    }
+
+    public AbstractCachedContentStoreService(CacheTemplate cacheTemplate) {
+        this.cacheTemplate = cacheTemplate;
     }
 
     @Override
@@ -116,47 +121,46 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
         }, url, CONST_KEY_ELEM_EXISTS);
     }
 
-    @Override
-    public Item findItem(Context context,
-                         String url) throws InvalidContextException, XmlFileParseException, XmlMergeException,
-        ItemProcessingException, StoreException {
-        return findItem(context, null, url, null);
+    protected ItemProcessor getProcessor(ItemProcessor processor, boolean flatten) {
+        if (!flatten) {
+            return processor;
+        }
+        if (processor == null) {
+            return  flatteningProcessor;
+        } else {
+            return new ItemProcessorPipeline(flatteningProcessor, processor);
+        }
     }
 
     @Override
     public Item findItem(final Context context, final CachingOptions cachingOptions, final String url,
-                         final ItemProcessor processor) throws InvalidContextException, XmlFileParseException,
+                         final ItemProcessor processor, final boolean flatten)
+            throws InvalidContextException, XmlFileParseException,
         XmlMergeException, ItemProcessingException, StoreException {
         final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+        var actualProcessor = getProcessor(processor, flatten);
 
-        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Item>() {
+        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<>() {
 
             @Override
             public Item execute() {
-                return doFindItem(context, actualCachingOptions, url, processor);
+                return doFindItem(context, actualCachingOptions, url, actualProcessor);
             }
 
             @Override
             public String toString() {
                 return String.format(AbstractCachedContentStoreService.this.getClass().getName() +
-                                     ".getItem(%s, %s, %s)", context, url, processor);
+                                     ".getItem(%s, %s, %s)", context, url, actualProcessor);
             }
 
-        }, url, processor, CONST_KEY_ELEM_ITEM);
-    }
-
-    @Override
-    public Item getItem(Context context,
-                        String url) throws InvalidContextException, PathNotFoundException, XmlFileParseException,
-        XmlMergeException, ItemProcessingException, StoreException {
-        return getItem(context, null, url, null);
+        }, url, actualProcessor, CONST_KEY_ELEM_ITEM);
     }
 
     @Override
     public Item getItem(Context context, CachingOptions cachingOptions, String url,
-                        ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
+                        ItemProcessor processor, boolean flatten) throws InvalidContextException, PathNotFoundException,
         XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        Item item = findItem(context, cachingOptions, url, processor);
+        Item item = findItem(context, cachingOptions, url, processor, flatten);
         if (item != null) {
             return item;
         } else {
@@ -165,24 +169,18 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
     }
 
     @Override
-    public List<Item> findChildren(Context context,
-                                   String url) throws InvalidContextException, XmlFileParseException,
-        XmlMergeException, ItemProcessingException, StoreException {
-        return findChildren(context, null, url, null, null);
-    }
-
-    @Override
     public List<Item> findChildren(final Context context, final CachingOptions cachingOptions, final String url,
-                                   final ItemFilter filter,
-                                   final ItemProcessor processor) throws InvalidContextException,
-        XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
+                                   final ItemFilter filter, final ItemProcessor processor, final boolean flatten)
+            throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+            StoreException {
         final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+        var actualProcessor = getProcessor(processor, flatten);
 
-        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<List<Item>>() {
+        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<>() {
 
             @Override
             public List<Item> execute() {
-                List<Item> children = doFindChildren(context, actualCachingOptions, url, filter, processor);
+                var children = doFindChildren(context, actualCachingOptions, url, filter, actualProcessor, flatten);
                 if (children != null) {
                     if (children instanceof CachingAwareList) {
                         return children;
@@ -197,24 +195,17 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
             @Override
             public String toString() {
                 return String.format(AbstractCachedContentStoreService.this.getClass().getName() +
-                                     ".getChildren(%s, %s, %s, %s)", context, url, filter, processor);
+                                     ".getChildren(%s, %s, %s, %s)", context, url, filter, actualProcessor);
             }
 
-        }, url, filter, processor, CONST_KEY_ELEM_CHILDREN);
-    }
-
-    @Override
-    public List<Item> getChildren(Context context,
-                                  String url) throws InvalidContextException, PathNotFoundException,
-        XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        return getChildren(context, null, url, null, null);
+        }, url, filter, actualProcessor, CONST_KEY_ELEM_CHILDREN);
     }
 
     @Override
     public List<Item> getChildren(Context context, CachingOptions cachingOptions, String url, ItemFilter filter,
-                                  ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
-        XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        List<Item> children = findChildren(context, cachingOptions, url, filter, processor);
+                                  ItemProcessor processor, boolean flatten) throws InvalidContextException,
+            PathNotFoundException, XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
+        List<Item> children = findChildren(context, cachingOptions, url, filter, processor, flatten);
         if (children != null) {
             return children;
         } else {
@@ -223,61 +214,34 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
     }
 
     @Override
-    public Tree findTree(final Context context,
-                         final String url) throws InvalidContextException, XmlFileParseException, XmlMergeException,
-        ItemProcessingException, StoreException {
-        return findTree(context, null, url, UNLIMITED_TREE_DEPTH, null, null);
-    }
-
-    @Override
-    public Tree findTree(final Context context, final String url,
-                         final int depth) throws InvalidContextException, XmlFileParseException, XmlMergeException,
-        ItemProcessingException, StoreException {
-        return findTree(context, null, url, depth, null, null);
-    }
-
-    @Override
     public Tree findTree(final Context context, final CachingOptions cachingOptions, final String url, final int depth,
-                         final ItemFilter filter,
-                         final ItemProcessor processor) throws InvalidContextException, XmlFileParseException,
-        XmlMergeException, ItemProcessingException, StoreException {
+                         final ItemFilter filter, final ItemProcessor processor, final boolean flatten)
+            throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+            StoreException {
         final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+        var actualProcessor = getProcessor(processor, flatten);
 
-        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Tree>() {
+        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<>() {
 
             @Override
             public Tree execute() {
-                return doFindTree(context, actualCachingOptions, url, depth, filter, processor);
+                return doFindTree(context, actualCachingOptions, url, depth, filter, actualProcessor, flatten);
             }
 
             @Override
             public String toString() {
                 return String.format(AbstractCachedContentStoreService.this.getClass().getName() +
-                                     ".getTree(%s, %s, %d, %s, %s)", context, url, depth, filter, processor);
+                                     ".getTree(%s, %s, %d, %s, %s)", context, url, depth, filter, actualProcessor);
             }
 
-        }, url, depth, filter, processor, CONST_KEY_ELEM_TREE);
-    }
-
-    @Override
-    public Tree getTree(Context context,
-                        String url) throws InvalidContextException, PathNotFoundException, XmlFileParseException,
-        XmlMergeException, ItemProcessingException, StoreException {
-        return getTree(context, null, url, UNLIMITED_TREE_DEPTH, null, null);
-    }
-
-    @Override
-    public Tree getTree(Context context, String url,
-                        int depth) throws InvalidContextException, PathNotFoundException, XmlFileParseException,
-        XmlMergeException, ItemProcessingException, StoreException {
-        return getTree(context, null, url, depth, null, null);
+        }, url, depth, filter, actualProcessor, CONST_KEY_ELEM_TREE);
     }
 
     @Override
     public Tree getTree(Context context, CachingOptions cachingOptions, String url, int depth, ItemFilter filter,
-                        ItemProcessor processor) throws InvalidContextException, PathNotFoundException,
+                        ItemProcessor processor, boolean flatten) throws InvalidContextException, PathNotFoundException,
         XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        Tree tree = findTree(context, cachingOptions, url, depth, filter, processor);
+        Tree tree = findTree(context, cachingOptions, url, depth, filter, processor, flatten);
         if (tree != null) {
             return tree;
         } else {
@@ -293,13 +257,13 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
         XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
 
     protected abstract List<Item> doFindChildren(Context context, CachingOptions cachingOptions, String url,
-                                                 ItemFilter filter,
-                                                 ItemProcessor processor) throws InvalidContextException,
-        XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException;
+                                                 ItemFilter filter, ItemProcessor processor, boolean flatten)
+            throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+            StoreException;
 
     protected abstract Tree doFindTree(Context context, CachingOptions cachingOptions, String url, int depth,
-                                       ItemFilter filter,
-                                       ItemProcessor processor) throws InvalidContextException, XmlFileParseException,
-        XmlMergeException, ItemProcessingException, StoreException;
+                                       ItemFilter filter, ItemProcessor processor, boolean flatten)
+            throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+            StoreException;
 
 }

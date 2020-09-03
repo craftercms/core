@@ -136,7 +136,6 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
         return item;
     }
 
-    @SuppressWarnings("unchecked")
     protected void includeDescriptors(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
         String descriptorUrl = item.getDescriptorUrl();
 
@@ -215,7 +214,6 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
         }
     }
 
-    @SuppressWarnings("unchecked")
     protected void doInclude(Item item, Element includeElement, Item itemToInclude) throws ItemProcessingException {
         List<Node> includeElementParentChildren = includeElement.getParent().content();
         int includeElementIdx = includeElementParentChildren.indexOf(includeElement);
