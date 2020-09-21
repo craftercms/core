@@ -210,11 +210,11 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- EhCache -->
+        <!-- Guava -->
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>${ehcache.version}</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
         <!-- Jackson -->
@@ -277,12 +277,6 @@
             <version>${jaxen.version}</version>
         </dependency>
 
-        <!-- Transaction (needed for EhCache) -->
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>jta</artifactId>
-            <version>${jta.version}</version>
-        </dependency>
     </dependencies>
 
     <repositories>

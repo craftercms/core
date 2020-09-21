@@ -34,7 +34,7 @@
         <property name="cache">
             <bean class="org.craftercms.core.cache.impl.CacheImpl">
                 <property name="cacheStoreAdapter">
-                    <bean class="org.craftercms.core.cache.impl.store.EhCacheStoreAdapter"/>
+                    <bean class="org.craftercms.core.cache.impl.store.MapCacheStoreAdapter"/>
                 </property>
             </bean>
         </property>

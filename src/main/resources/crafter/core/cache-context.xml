@@ -20,8 +20,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- Cache Store Adapter -->
-
-    <bean id="crafter.cacheStoreAdapter" class="org.craftercms.core.cache.impl.store.EhCacheStoreAdapter"/>
+    <bean id="crafter.cacheStoreAdapter" class="org.craftercms.core.cache.impl.store.guava.GuavaCacheStoreAdapter"/>
 
     <bean id="crafter.cacheRefresher" class="org.craftercms.core.cache.impl.CacheRefresherImpl"/>
 
