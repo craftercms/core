@@ -146,7 +146,7 @@ public abstract class AbstractCachedContentStoreAdapter implements ContentStoreA
             @Override
             public String toString() {
                 return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
-                                     ".findItems(%s, %s, %s)", context, path);
+                                     ".findItems(%s, %s)", context, path);
             }
 
         }, path, CONST_KEY_ELEM_ITEMS);
