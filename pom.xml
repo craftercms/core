@@ -72,7 +72,7 @@
         <commons.codec.version>1.9</commons.codec.version>
         <commons.configuration.version>2.7</commons.configuration.version>
         <slf4j.version>1.7.7</slf4j.version>
-        <spring.version>4.3.18.RELEASE</spring.version>
+        <spring.version>4.3.29.RELEASE</spring.version>
         <ehcache.version>2.10.6</ehcache.version>
         <jackson.version>2.10.5</jackson.version>
         <jackson.databind.version>2.10.5</jackson.databind.version>
