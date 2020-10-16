@@ -66,6 +66,7 @@ import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.craftercms.core.xml.mergers.DescriptorMerger;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
 /**
  * Default implementation of {@link org.craftercms.core.service.ContentStoreService}. Extends from
@@ -113,11 +114,21 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     protected String sourceAttributeName;
 
+    /**
+     * The name of the attribute used to identify the type of the source of an XML element
+     */
+    protected String sourceTypeAttributeName;
+
+    /**
+     * The XPath selector to extract the content-type from descriptors
+     */
+    protected String sourceTypeXPath;
+
     public ContentStoreServiceImpl(CacheTemplate cacheTemplate, ContentStoreAdapterRegistry storeAdapterRegistry,
                                    DescriptorMergeStrategyResolver mergeStrategyResolver,
                                    DescriptorMerger merger, ItemProcessorResolver processorResolver,
                                    BlobUrlResolver blobUrlResolver, BlobStoreResolver blobStoreResolver,
-                                   String sourceAttributeName) {
+                                   String sourceAttributeName, String sourceTypeAttributeName, String sourceTypeXPath) {
         super(cacheTemplate);
         this.storeAdapterRegistry = storeAdapterRegistry;
         this.mergeStrategyResolver = mergeStrategyResolver;
@@ -126,6 +137,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         this.blobUrlResolver = blobUrlResolver;
         this.blobStoreResolver = blobStoreResolver;
         this.sourceAttributeName = sourceAttributeName;
+        this.sourceTypeAttributeName = sourceTypeAttributeName;
+        this.sourceTypeXPath = sourceTypeXPath;
         contexts = new ConcurrentHashMap<>();
     }
 
@@ -443,7 +456,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                     if (descriptorDom != null && sourceAttributeEnabled && iterator.hasNext()) {
                         var root = descriptorDom.getRootElement();
                         if (root != null) {
-                            root.elements().forEach(child -> child.addAttribute(sourceAttributeName, descriptorUrl));
+                            root.elements().forEach(child ->
+                                    addSourceAttributes(descriptorDom, child, descriptorUrl));
                         }
                     }
                     documentsToMerge.add(descriptorDom);
@@ -462,6 +476,11 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         }
 
         return item;
+    }
+
+    protected void addSourceAttributes(Document document, Element element, String descriptorUrl) {
+        element.addAttribute(sourceAttributeName, descriptorUrl);
+        element.addAttribute(sourceTypeAttributeName, XmlUtils.selectSingleNodeValue(document, sourceTypeXPath));
     }
 
     /**
