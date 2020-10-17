@@ -55,6 +55,8 @@
         <constructor-arg name="blobStoreResolver" ref="crafter.blobStoreResolver"/>
 
         <constructor-arg name="sourceAttributeName" value="${crafter.core.store.source.attribute.name}"/>
+        <constructor-arg name="sourceTypeAttributeName" value="${crafter.core.store.source.type.attribute.name}"/>
+        <constructor-arg name="sourceTypeXPath" value="${crafter.core.store.source.type.xpath}"/>
 
         <property name="sourceAttributeEnabled" value="${crafter.core.store.source.attribute.enabled}"/>
         <property name="flatteningProcessor" ref="crafter.includeDescriptorsProcessor"/>
