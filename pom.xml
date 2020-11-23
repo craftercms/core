@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-core</artifactId>
-    <version>3.1.10-SNAPSHOT</version><!-- craftercms version flag -->
+    <version>3.1.11-SNAPSHOT</version><!-- craftercms version flag -->
     <name>Crafter Core</name>
     <description>Crafter Core Library</description>
     <url>https://github.com/craftercms/core</url>
@@ -63,7 +63,7 @@
 
         <!-- Dependency Version Numbers -->
         <servlet.api.version>3.0.1</servlet.api.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <mockito.version>1.9.5</mockito.version>
         <quartz.version>2.3.2</quartz.version>
         <commons.lang.version>3.3.2</commons.lang.version>
