@@ -357,6 +357,10 @@
         <constructor-arg name="blobUrlResolver" ref="blobUrlResolver"/>
         <constructor-arg name="blobStoreResolver" ref="blobStoreResolver"/>
 
+        <constructor-arg name="sourceAttributeName" value="${crafter.core.store.source.attribute.name}"/>
+        <constructor-arg name="sourceTypeAttributeName" value="${crafter.core.store.source.type.attribute.name}"/>
+        <constructor-arg name="sourceTypeXPath" value="${crafter.core.store.source.type.xpath}"/>
+
         <constructor-arg name="sourceAttributeName" value="crafter-source"/>
     </bean>
 
