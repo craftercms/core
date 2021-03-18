@@ -30,7 +30,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.ConfigurationProvider;
 import org.craftercms.commons.file.blob.BlobStore;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
@@ -228,7 +227,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                     BlobStore store = blobStoreResolver.getById(
                             new ConfigurationProviderImpl(cachingOptions, context), blob.getStoreId());
                     return new ResourceBasedContent(store.getResource(url, blob));
-                } catch (IOException | ConfigurationException e) {
+                } catch (Exception e) {
                     throw new StoreException("Error reading blob file at " + blobUrl, e);
                 }
             }
@@ -583,8 +582,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     private class ConfigurationProviderImpl implements ConfigurationProvider {
 
-        private CachingOptions cachingOptions;
-        private Context context;
+        private final CachingOptions cachingOptions;
+        private final Context context;
 
         public ConfigurationProviderImpl(CachingOptions cachingOptions, Context context) {
             this.cachingOptions = cachingOptions;
