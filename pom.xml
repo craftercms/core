@@ -77,7 +77,7 @@
         <jackson.version>2.10.5</jackson.version>
         <jackson.databind.version>2.10.5.1</jackson.databind.version>
         <xstream.version>1.4.16</xstream.version>
-        <freemarker.version>2.3.30</freemarker.version>
+        <freemarker.version>2.3.31</freemarker.version>
         <aspectj.version>1.8.0</aspectj.version>
         <dom4j.version>1.6.1</dom4j.version>
         <jaxen.version>1.1.4</jaxen.version>
