@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-core</artifactId>
-    <version>3.1.13-SNAPSHOT</version><!-- craftercms version flag -->
+    <version>3.1.14-SNAPSHOT</version><!-- craftercms version flag -->
     <name>Crafter Core</name>
     <description>Crafter Core Library</description>
     <url>https://github.com/craftercms/core</url>
@@ -76,8 +76,8 @@
         <ehcache.version>2.10.6</ehcache.version>
         <jackson.version>2.10.5</jackson.version>
         <jackson.databind.version>2.10.5.1</jackson.databind.version>
-        <xstream.version>1.4.15</xstream.version>
-        <freemarker.version>2.3.30</freemarker.version>
+        <xstream.version>1.4.16</xstream.version>
+        <freemarker.version>2.3.31</freemarker.version>
         <aspectj.version>1.8.0</aspectj.version>
         <dom4j.version>1.6.1</dom4j.version>
         <jaxen.version>1.1.4</jaxen.version>
