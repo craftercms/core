@@ -1,5 +1,5 @@
 ![build status](https://travis-ci.org/craftercms/core.svg?branch=develop)
-[![code quality](https://api.codacy.com/project/badge/Grade/f5c942acdfbd4d12baeb0720ce6a4510)](https://www.codacy.com/app/CrafterCMS/core?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=craftercms/core&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9b7269414910489a8be7afc7c60b2536)](https://www.codacy.com/gh/craftercms/core/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=craftercms/core&amp;utm_campaign=Badge_Grade)
 
 core
 ====
