@@ -55,7 +55,7 @@
         <property name="descriptorFileExtension" value=".xml"/>
         <property name="pathValidator">
             <bean class="org.craftercms.commons.validation.validators.impl.SecurePathValidator">
-                <constructor-arg value="path"/>
+                <constructor-arg name="targetKey" value="path"/>
             </bean>
         </property>
     </bean>
@@ -269,7 +269,7 @@
 
     <bean id="systemInfoMetaDataExtractingProcessor"
           class="org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor">
-        <constructor-arg>
+        <constructor-arg name="processors">
             <list>
                 <value>//system-info/java-version</value>
                 <value>//system-info/os-name</value>
@@ -280,7 +280,7 @@
 
     <bean id="imageResolutionMetaDataExtractingProcessor"
           class="org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor">
-        <constructor-arg>
+        <constructor-arg name="processors">
             <list>
                 <value>//system-info/java-version</value>
                 <value>//system-info/os-name</value>
@@ -292,7 +292,7 @@
     </bean>
 
     <bean id="defaultProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
-        <constructor-arg>
+        <constructor-arg name="processors">
             <list>
                 <ref bean="includeDescriptorsProcessor"/>
                 <ref bean="templateProcessor"/>
@@ -302,7 +302,7 @@
     </bean>
 
     <bean id="imageProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
-        <constructor-arg>
+        <constructor-arg name="processors">
             <list>
                 <ref bean="includeDescriptorsProcessor"/>
                 <ref bean="templateProcessor"/>
@@ -338,7 +338,7 @@
     <!-- ////////////////////////////////////////////////// -->
 
     <bean id="blobUrlResolver" class="org.craftercms.commons.file.blob.impl.BlobUrlResolverImpl">
-        <constructor-arg value="blob"/>
+        <constructor-arg name="fileExtension" value="blob"/>
     </bean>
 
     <bean id="blobStoreResolver" class="org.craftercms.commons.file.blob.impl.BlobStoreResolverImpl"/>
