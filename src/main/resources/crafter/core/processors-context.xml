@@ -37,7 +37,7 @@
     </bean>
 
     <bean id="crafter.defaultProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
-        <constructor-arg>
+        <constructor-arg index="0">
             <list>
                 <!--ref bean="crafter.templateProcessor"/-->
             </list>

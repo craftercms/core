@@ -54,7 +54,7 @@
     </bean>
 
     <bean id="urlTransformationPipeline" class="org.craftercms.core.url.impl.UrlTransformerPipeline">
-        <constructor-arg>
+        <constructor-arg name="transformers">
             <list>
                 <ref bean="addDebugParamUrlTransformer" />
                 <ref bean="replaceFirstUrlTransformer" />

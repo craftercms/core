@@ -22,7 +22,7 @@
     <!-- Blob Store -->
 
     <bean id="crafter.blobUrlResolver" class="org.craftercms.commons.file.blob.impl.BlobUrlResolverImpl">
-        <constructor-arg value="${crafter.blob.extension}"/>
+        <constructor-arg name="fileExtension" value="${crafter.blob.extension}"/>
     </bean>
 
     <bean id="crafter.blobStoreResolver" class="org.craftercms.commons.file.blob.impl.BlobStoreResolverImpl">
@@ -36,7 +36,7 @@
     <bean id="crafter.s3ClientFactory" class="org.craftercms.commons.aws.S3ClientCachingFactory"/>
 
     <bean id="crafter.s3ProfileMapper" class="org.craftercms.commons.config.profiles.aws.S3ProfileMapper">
-        <constructor-arg ref="crafter.configurationResolver"/>
+        <constructor-arg name="configurationResolver" ref="crafter.configurationResolver"/>
     </bean>
 
     <bean id="s3BlobStore" class="org.craftercms.commons.file.blob.impl.s3.AwsS3BlobStore" scope="prototype">

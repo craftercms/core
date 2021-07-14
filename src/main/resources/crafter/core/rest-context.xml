@@ -74,7 +74,7 @@
     </bean>
 
     <bean id="crafter.xmlView" class="org.springframework.web.servlet.view.xml.MarshallingView">
-        <constructor-arg ref="crafter.xmlMarshaller"/>
+        <constructor-arg index="0" ref="crafter.xmlMarshaller"/>
     </bean>
 
 </beans>

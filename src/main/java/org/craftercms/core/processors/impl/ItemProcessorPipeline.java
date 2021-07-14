@@ -15,6 +15,7 @@
  */
 package org.craftercms.core.processors.impl;
 
+import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,6 +52,7 @@ public class ItemProcessorPipeline implements ItemProcessor {
     /**
      * Constructor that receives the list of processors which conform the pipeline.
      */
+    @ConstructorProperties({"processors"})
     public ItemProcessorPipeline(List<ItemProcessor> processors) {
         this.processors = processors;
     }
@@ -58,6 +60,7 @@ public class ItemProcessorPipeline implements ItemProcessor {
     /**
      * Constructor that receives the list of processors (as an array) which conform the pipeline.
      */
+    @ConstructorProperties({"processors"})
     public ItemProcessorPipeline(ItemProcessor... processors) {
         this.processors = Arrays.asList(processors);
     }

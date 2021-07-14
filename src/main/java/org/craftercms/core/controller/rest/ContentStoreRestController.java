@@ -32,6 +32,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.servlet.http.HttpServletResponse;
+import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,6 +63,7 @@ public class ContentStoreRestController extends RestControllerBase implements In
 
     private ItemFilter itemFilter;
 
+    @ConstructorProperties({"storeService"})
     public ContentStoreRestController(ContentStoreService storeService) {
         this.storeService = storeService;
     }

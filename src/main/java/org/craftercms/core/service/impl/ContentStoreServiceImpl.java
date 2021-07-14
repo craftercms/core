@@ -15,6 +15,7 @@
  */
 package org.craftercms.core.service.impl;
 
+import java.beans.ConstructorProperties;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -123,6 +124,9 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     protected String sourceTypeXPath;
 
+    @ConstructorProperties({"cacheTemplate", "storeAdapterRegistry", "mergeStrategyResolver", "merger",
+            "processorResolver", "blobUrlResolver", "blobStoreResolver", "sourceAttributeName",
+            "sourceTypeAttributeName", "sourceTypeXPath"})
     public ContentStoreServiceImpl(CacheTemplate cacheTemplate, ContentStoreAdapterRegistry storeAdapterRegistry,
                                    DescriptorMergeStrategyResolver mergeStrategyResolver,
                                    DescriptorMerger merger, ItemProcessorResolver processorResolver,

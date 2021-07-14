@@ -20,8 +20,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
     <bean id="person" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompilerTest$Person">
-        <constructor-arg value="John"/>
-        <constructor-arg value="Doe"/>
+        <constructor-arg name="fistName" value="John"/>
+        <constructor-arg name="lastName" value="Doe"/>
     </bean>
 
     <bean id="templateCompiler" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler"/>
