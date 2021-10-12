@@ -1,10 +1,10 @@
-version: ~> 1.0
+version: "~> 1.0"
 git:
   depth: 1
   quiet: true
 language: java
 jdk:
-  - openjdk11
+- openjdk11
 branches:
   only:
   - develop
@@ -12,7 +12,7 @@ branches:
   - master
 cache:
   directories:
-    - $HOME/.m2
+  - "$HOME/.m2"
 notifications:
   irc:
     channels:
@@ -26,5 +26,5 @@ script:
 - if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then bash -c "mvn clean install" ;fi
 env:
   global:
-  - secure: 8ohuI1p9Ze2xp/z6ovaRrAE3Ns0imaFCBuhG/uuNr3qsiBHkAu9I+2N3jo90Zj1+Cyhx76fcIeweaOSgQIPlaBA7d4oKyRUyqM7ZS4S3537HoU4itfK8O51FBsMR/XZcuG8qHmlPlY6PsXfAaw1U5jHamWi1wTbAtoEJiIRcy50=
-  - secure: RAZAritD7x2RXJ6NkN+zG8JcLTg1WWr0KBVksA2Lt8bPpgRHyAHwfaNvWqQaXCBxsHXJnljvP3x4IyVJZkaACV1L3p2qjpSsA1jmRjNcP/wg9aD9S3iYDUwWQUBMxeTBIDx8ghF6Jf0Tx6KhtiOPE4km+Am+V7oPHdaXyKONH3k=
+  - secure: YEt3ugIGyjS1iAH1TuWaPag+4ufIAUc7wjvtQl92NiMCevf3a9nCuLQbcU6dK0DGYKWGF/+t+6bVGZ1Co52D2If89LDMLFdLXV9qUlfRt48rjY2Bwxg/pd/PWfKLU32r4jnELzcXq88pMprWPdrjxLne/A9VBdMYI0bICZM0znw=
+  - secure: 5UwNG9rS3KNPVK3UKH4PSroDRScGda7q6ZxczcHVl4nnu2pF3RzA7GVr/+XVyQ2+zOkyghyVeT/M32/NvH/OWNo/IvI4JsMJko+8qSzl/2kTQfTwQnykPKHtNv3nJRc6esYHrjSih83zfjHGrVWZmZQ5+3Hu0vXpwSQB63MAT/Y=
