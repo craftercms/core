@@ -269,7 +269,7 @@
 
     <bean id="systemInfoMetaDataExtractingProcessor"
           class="org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor">
-        <constructor-arg name="processors">
+        <constructor-arg name="metaDataNodesXPathQueries">
             <list>
                 <value>//system-info/java-version</value>
                 <value>//system-info/os-name</value>
@@ -280,7 +280,7 @@
 
     <bean id="imageResolutionMetaDataExtractingProcessor"
           class="org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor">
-        <constructor-arg name="processors">
+        <constructor-arg name="metaDataNodesXPathQueries">
             <list>
                 <value>//system-info/java-version</value>
                 <value>//system-info/os-name</value>
