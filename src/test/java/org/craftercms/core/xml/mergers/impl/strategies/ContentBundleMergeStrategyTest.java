@@ -30,7 +30,7 @@ import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.dom4j.Document;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -103,7 +103,7 @@ public class ContentBundleMergeStrategyTest {
 
         DescriptorMergeStrategy baseStrategy = mock(DescriptorMergeStrategy.class);
         when(baseStrategy.getDescriptors(eq(context), eq(DEFAULT_CACHING_OPTIONS), eq(BASE_DESCRIPTOR_URL),
-                                         any(Document.class), anyBoolean())).thenAnswer(new Answer<List<MergeableDescriptor>>() {
+                                         any(), anyBoolean())).thenAnswer(new Answer<List<MergeableDescriptor>>() {
             @Override
             public List<MergeableDescriptor> answer(InvocationOnMock invocation) throws Throwable {
                 boolean isOptionalForMerging = (Boolean)invocation.getArguments()[4];
@@ -112,11 +112,11 @@ public class ContentBundleMergeStrategyTest {
         });
 
         DescriptorMergeStrategyResolver baseResolver = mock(DescriptorMergeStrategyResolver.class);
-        when(baseResolver.getStrategy(eq(BASE_DESCRIPTOR_URL), Matchers.<Document>anyObject())).thenReturn(baseStrategy);
+        when(baseResolver.getStrategy(eq(BASE_DESCRIPTOR_URL), any())).thenReturn(baseStrategy);
 
         DescriptorMergeStrategy regularStrategy = mock(DescriptorMergeStrategy.class);
         when(regularStrategy.getDescriptors(any(Context.class), any(CachingOptions.class),
-                                            eq(NO_PREFIX_DESCRIPTOR_URL), any(Document.class),
+                                            eq(NO_PREFIX_DESCRIPTOR_URL), any(),
                                             anyBoolean())).thenAnswer(
             new Answer<List<MergeableDescriptor>>() {
             @Override

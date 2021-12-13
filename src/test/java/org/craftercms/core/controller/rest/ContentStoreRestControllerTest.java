@@ -42,9 +42,9 @@ import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -111,10 +111,10 @@ public class ContentStoreRestControllerTest {
                                                                         FOLDER_URL, false));
 
         verify(storeService).getChildren(eq(context),
-                                         isNull(CachingOptions.class),
+                                         isNull(),
                                          eq(FOLDER_URL),
                                          any(ItemFilter.class),
-                                         isNull(ItemProcessor.class),
+                                         isNull(),
                                          eq(false));
     }
 
@@ -130,10 +130,10 @@ public class ContentStoreRestControllerTest {
             FOLDER_URL, false));
 
         verify(storeService).getChildren(eq(context),
-                                         isNull(CachingOptions.class),
+                                         isNull(),
                                          eq(FOLDER_URL),
                                          any(ItemFilter.class),
-                                         isNull(ItemProcessor.class),
+                                         isNull(),
                                          eq(false));
     }
 
@@ -143,11 +143,11 @@ public class ContentStoreRestControllerTest {
                                                                 UNLIMITED_TREE_DEPTH, false));
 
         verify(storeService).getTree(eq(context),
-                                     isNull(CachingOptions.class),
+                                     isNull(),
                                      eq(FOLDER_URL),
                                      eq(UNLIMITED_TREE_DEPTH),
                                      any(ItemFilter.class),
-                                     isNull(ItemProcessor.class),
+                                     isNull(),
                                      eq(false));
     }
 
@@ -157,11 +157,11 @@ public class ContentStoreRestControllerTest {
             UNLIMITED_TREE_DEPTH, false));
 
         verify(storeService).getTree(eq(context),
-                                     isNull(CachingOptions.class),
+                                     isNull(),
                                      eq(FOLDER_URL),
                                      eq(UNLIMITED_TREE_DEPTH),
                                      any(ItemFilter.class),
-                                     isNull(ItemProcessor.class),
+                                     isNull(),
                                      eq(false));
     }
 
@@ -229,18 +229,18 @@ public class ContentStoreRestControllerTest {
             when(storeService.getContext(context.getId())).thenReturn(context);
             when(storeService.getItem(context, null, ITEM_URL, null, false)).thenReturn(item);
             when(storeService.getChildren(eq(context),
-                                          isNull(CachingOptions.class),
+                                          isNull(),
                                           eq(FOLDER_URL),
                                           any(ItemFilter.class),
-                                          isNull(ItemProcessor.class),
+                                          isNull(),
                                           eq(false)))
                     .thenReturn(children);
             when(storeService.getTree(eq(context),
-                                      isNull(CachingOptions.class),
+                                      isNull(),
                                       eq(FOLDER_URL),
                                       eq(UNLIMITED_TREE_DEPTH),
                                       any(ItemFilter.class),
-                                      isNull(ItemProcessor.class),
+                                      isNull(),
                                       eq(false)))
                     .thenReturn(tree);
         } catch (Exception e) {

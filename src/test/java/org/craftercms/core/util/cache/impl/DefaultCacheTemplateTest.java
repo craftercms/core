@@ -67,7 +67,7 @@ public class DefaultCacheTemplateTest {
         Object key = generateKey(RANDOM_KEY_ELEM);
 
         verify(cache, atLeast(2)).get(context, key);
-        verify(cache).put(eq(context), eq(key), eq(time1), eq(DEFAULT_CACHING_OPTIONS), any(CacheLoader.class));
+        verify(cache).put(eq(context), eq(key), eq(time1), eq(DEFAULT_CACHING_OPTIONS), any());
     }
 
     private void setUpTestContext() {
@@ -98,8 +98,8 @@ public class DefaultCacheTemplateTest {
         Object key = generateKey(RANDOM_KEY_ELEM);
 
         when(this.cache.get(context, key)).thenAnswer(getFromCacheAnswer);
-        doAnswer(putInCacheAnswer).when(this.cache).put(eq(context), eq(key), anyObject(), eq(DEFAULT_CACHING_OPTIONS),
-                                                        any(CacheLoader.class));
+        doAnswer(putInCacheAnswer).when(this.cache).put(eq(context), eq(key), any(), eq(DEFAULT_CACHING_OPTIONS),
+                                                        any());
     }
 
     private void setUpTestCacheCallback() {

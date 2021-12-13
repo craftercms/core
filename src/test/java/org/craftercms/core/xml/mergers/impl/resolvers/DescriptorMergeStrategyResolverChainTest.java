@@ -22,7 +22,7 @@ import org.craftercms.core.xml.mergers.impl.resolvers.DescriptorMergeStrategyRes
 import org.dom4j.Document;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 
@@ -70,10 +70,10 @@ public class DescriptorMergeStrategyResolverChainTest {
 
     private void setUpTestResolverChain() {
         DescriptorMergeStrategyResolver resolver1 = mock(DescriptorMergeStrategyResolver.class);
-        when(resolver1.getStrategy(eq(DESCRIPTOR_URL1), Matchers.<Document>anyObject())).thenReturn(strategy1);
+        when(resolver1.getStrategy(eq(DESCRIPTOR_URL1), ArgumentMatchers.any())).thenReturn(strategy1);
 
         DescriptorMergeStrategyResolver resolver2 = mock(DescriptorMergeStrategyResolver.class);
-        when(resolver2.getStrategy(eq(DESCRIPTOR_URL2), Matchers.<Document>anyObject())).thenReturn(strategy2);
+        when(resolver2.getStrategy(eq(DESCRIPTOR_URL2), ArgumentMatchers.any())).thenReturn(strategy2);
 
         resolverChain = new DescriptorMergeStrategyResolverChain();
         resolverChain.setResolvers(Arrays.asList(resolver1, resolver2));
