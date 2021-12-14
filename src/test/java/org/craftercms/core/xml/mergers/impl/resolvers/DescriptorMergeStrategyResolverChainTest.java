@@ -15,18 +15,16 @@
  */
 package org.craftercms.core.xml.mergers.impl.resolvers;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import org.craftercms.core.xml.mergers.impl.resolvers.DescriptorMergeStrategyResolverChain;
-import org.dom4j.Document;
+import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
+import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
-import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
-import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 
 import java.util.Arrays;
+
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.*;
 
 /**
  * Class description goes HERE

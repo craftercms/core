@@ -15,9 +15,6 @@
  */
 package org.craftercms.core.xml.mergers.impl.strategies;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
@@ -30,19 +27,15 @@ import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.dom4j.Document;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyBoolean;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Class description goes HERE

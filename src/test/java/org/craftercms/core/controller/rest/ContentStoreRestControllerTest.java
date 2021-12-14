@@ -15,12 +15,7 @@
  */
 package org.craftercms.core.controller.rest;
 
-import java.util.ArrayList;
-import java.util.function.Supplier;
-import javax.servlet.http.HttpServletResponse;
-
 import org.craftercms.core.exception.ForbiddenPathException;
-import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.service.*;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.util.cache.CachingAwareObject;
@@ -32,22 +27,17 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.function.Supplier;
+
 import static org.craftercms.core.controller.rest.ContentStoreRestController.CACHE_CONTROL_HEADER_NAME;
 import static org.craftercms.core.controller.rest.ContentStoreRestController.MUST_REVALIDATE_HEADER_VALUE;
 import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEPTH;
-import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
-import static org.craftercms.core.service.Context.DEFAULT_IGNORE_HIDDEN_FILES;
-import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
-import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.craftercms.core.service.Context.*;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 /**
 * Class description goes HERE

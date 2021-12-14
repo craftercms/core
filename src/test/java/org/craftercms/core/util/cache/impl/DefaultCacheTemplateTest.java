@@ -15,17 +15,16 @@
  */
 package org.craftercms.core.util.cache.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.craftercms.commons.lang.Callback;
-import org.craftercms.core.cache.CacheLoader;
 import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.Context;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.craftercms.core.util.CacheUtils.generateKey;
