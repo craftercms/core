@@ -199,7 +199,7 @@ public class FileSystemContentStoreAdapterTest {
 
         Node body = item.getDescriptorDom().selectSingleNode("/descriptor/body");
         assertNotNull(body);
-        assertEquals("Crafter Software", body.getText());
+        assertEquals("CrafterCMS", body.getText());
     }
 
     private static class ItemComparator implements Comparator<Item> {

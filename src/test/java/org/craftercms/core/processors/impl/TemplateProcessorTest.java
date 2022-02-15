@@ -49,7 +49,7 @@ public class TemplateProcessorTest {
                     "<body>${body}</body>" +
             "</root>";
 
-    private static final String BODY_MODEL_VALUE = "Crafter Software";
+    private static final String BODY_MODEL_VALUE = "CrafterCMS";
 
     private TemplateProcessor processor;
     private XPathNodeScanner nodeScanner;
