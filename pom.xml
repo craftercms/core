@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-core</artifactId>
-    <version>3.1.27E</version><!-- craftercms version flag -->
+    <version>3.1.28-SNAPSHOT</version><!-- craftercms version flag -->
     <name>Crafter Core</name>
     <description>Crafter Core Library</description>
     <url>https://github.com/craftercms/core</url>
