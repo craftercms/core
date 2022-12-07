@@ -15,12 +15,10 @@
  */
 package org.craftercms.core.controller.rest;
 
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.commons.exceptions.InvalidManagementTokenException;
+import org.craftercms.commons.rest.ManagementTokenAware;
 import org.craftercms.core.exception.CacheException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.service.ContentStoreService;
@@ -32,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  * REST service that provides several methods to handle Crafter's cache engine.
  *
@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(RestControllerBase.REST_BASE_URI + CacheRestController.URL_ROOT)
-public class CacheRestController extends RestControllerBase {
+public class CacheRestController extends RestControllerBase implements ManagementTokenAware {
 
     private static final Log logger = LogFactory.getLog(CacheRestController.class);
 
@@ -103,10 +103,8 @@ public class CacheRestController extends RestControllerBase {
         return createResponseMessage("Cache scope for context '" + contextId + "' has been cleared");
     }
 
-    protected void validateToken(String token) throws InvalidManagementTokenException {
-        if (!StringUtils.equals(token, authorizationToken)) {
-            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
-        }
+    @Override
+    public String getConfiguredToken() {
+        return authorizationToken;
     }
-
 }
