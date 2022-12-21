@@ -125,7 +125,11 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
                 writer.write(XML_DECLARATION);
             }
 
-            HierarchicalStreamWriter streamWriter = new EscapingCompactWriter(writer);
+            HierarchicalStreamWriter streamWriter = new EscapingCompactWriter(writer) {{
+                // TODO: JM: Test and ensure this change is backward compatible
+                // Always escape XML when serializing.
+                setEscapeXml(true);
+            }};
             try {
                 getXStream().marshal(graph, streamWriter, dataHolder);
             } catch (Exception ex) {
