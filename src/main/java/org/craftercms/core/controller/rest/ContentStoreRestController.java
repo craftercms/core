@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * REST service that provides several methods to access the Crafter content store.
  *
@@ -45,6 +48,8 @@ import java.util.List;
 @RestController
 @RequestMapping(RestControllerBase.REST_BASE_URI + ContentStoreRestController.URL_ROOT)
 public class ContentStoreRestController extends RestControllerBase implements InitializingBean {
+
+    private static final Logger logger = LoggerFactory.getLogger(ContentStoreRestController.class);
 
     public static final String URL_ROOT = "/content_store";
     public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
@@ -169,12 +174,17 @@ public class ContentStoreRestController extends RestControllerBase implements In
             depth = ContentStoreService.UNLIMITED_TREE_DEPTH;
         }
 
-        Tree tree = storeService.getTree(context, null, url, depth, itemFilter, null, false);
-
-        if (tree.getCachingTime() != null && checkNotModified(tree.getCachingTime(), request, response)) {
-            return null;
-        } else {
-            return tree;
+        try {
+            Tree tree = storeService.getTree(context, null, url, depth, itemFilter, null, false);
+            if (tree.getCachingTime() != null && checkNotModified(tree.getCachingTime(), request, response)) {
+                return null;
+            } else {
+                return tree;
+            }
+        } catch (OutOfMemoryError error) {
+            logger.error("Unable to fulfill the request. Out of memory exception occurred.", error);
+            logger.info("Maximum JVM memory is '{}' bytes", Runtime.getRuntime().maxMemory());
+            throw new StoreException("Unable to fulfill the request. Out of memory exception occurred.");
         }
     }
 
