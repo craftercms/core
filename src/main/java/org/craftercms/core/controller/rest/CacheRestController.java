@@ -15,10 +15,10 @@
  */
 package org.craftercms.core.controller.rest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.commons.exceptions.InvalidManagementTokenException;
-import org.craftercms.commons.rest.ManagementTokenAware;
 import org.craftercms.core.exception.CacheException;
 import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.service.ContentStoreService;
@@ -40,7 +40,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(RestControllerBase.REST_BASE_URI + CacheRestController.URL_ROOT)
-public class CacheRestController extends RestControllerBase implements ManagementTokenAware {
+public class CacheRestController extends RestControllerBase {
 
     private static final Log logger = LogFactory.getLog(CacheRestController.class);
 
@@ -103,8 +103,11 @@ public class CacheRestController extends RestControllerBase implements Managemen
         return createResponseMessage("Cache scope for context '" + contextId + "' has been cleared");
     }
 
-    @Override
-    public String getConfiguredToken() {
-        return authorizationToken;
+    protected void validateToken(String token) throws InvalidManagementTokenException {
+        if (!StringUtils.equals(token, authorizationToken)) {
+            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
+        }
     }
+
+
 }
