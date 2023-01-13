@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -17,8 +17,8 @@ package org.craftercms.core.store.impl;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationUtils;
-import org.craftercms.commons.validation.annotations.param.ValidateSecurePathParam;
 import org.craftercms.core.exception.*;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Content;
@@ -31,7 +31,6 @@ import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.xml.sax.SAXException;
 
@@ -39,7 +38,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -230,10 +228,10 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     protected void validatePath(String path) throws StoreException {
-        Errors errors = ValidationUtils.validateValue(pathValidator, path);
+        ValidationResult result = ValidationUtils.validateValue(pathValidator, path, "path");
 
-        if (errors.hasErrors()) {
-            throw new StoreException(format("Validation of path '%s' failed. Errors: %s", path, errors));
+        if (result.hasErrors()) {
+            throw new StoreException(format("Validation of path '%s' failed. Errors: %s", path, result.getErrors()));
         }
     }
 
