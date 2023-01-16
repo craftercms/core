@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,22 +15,11 @@
  */
 package org.craftercms.core.store.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.craftercms.commons.validation.ValidationResult;
-import org.craftercms.commons.validation.validators.Validator;
-import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.InvalidScopeException;
-import org.craftercms.core.exception.PathNotFoundException;
-import org.craftercms.core.exception.StoreException;
-import org.craftercms.core.exception.XmlFileParseException;
+import org.craftercms.commons.validation.ValidationUtils;
+import org.craftercms.core.exception.*;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
@@ -42,7 +31,17 @@ import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.validation.Validator;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.List;
+
+import static java.lang.String.format;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 /**
  * File-based content store adapter. Takes away common stuff from actual implementations, like handling metadata files
@@ -54,7 +53,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
     public static final String DEFAULT_CHARSET = "UTF-8";
 
-    protected Validator<String> pathValidator;
+    protected Validator pathValidator;
     protected String charset;
     protected String descriptorFileExtension;
     protected String metadataFileExtension;
@@ -69,7 +68,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     @Required
-    public void setPathValidator(Validator<String> pathValidator) {
+    public void setPathValidator(final Validator pathValidator) {
         this.pathValidator = pathValidator;
     }
 
@@ -98,15 +97,13 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
 
         File file = findFile(context, cachingOptions, path);
 
-        if (file != null) {
-            if (file.isFile()) {
-                return getContent(context, cachingOptions, file);
-            } else {
-                throw new StoreException("Unable to find content: " + file + " is not a file");
-            }
-        } else {
+        if (file == null) {
             return null;
         }
+        if (!file.isFile()) {
+            throw new StoreException("Unable to find content: " + file + " is not a file");
+        }
+        return getContent(context, cachingOptions, file);
     }
 
     @Override
@@ -192,7 +189,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
         List<File> children = getChildren(context, cachingOptions, dir);
         CachingAwareList<Item> items = new CachingAwareList<>(children.size());
 
-        if (CollectionUtils.isNotEmpty(children)) {
+        if (isNotEmpty(children)) {
             for (File child : children) {
                 // Ignore any item metadata file. Metadata file DOMs are included in their respective
                 // items.
@@ -231,10 +228,10 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     }
 
     protected void validatePath(String path) throws StoreException {
-        ValidationResult result = new ValidationResult();
+        ValidationResult result = ValidationUtils.validateValue(pathValidator, path, "path");
 
-        if (!pathValidator.validate(path, result)) {
-            throw new StoreException("Validation of path " + path + " failed. Errors: " + result.getErrors());
+        if (result.hasErrors()) {
+            throw new StoreException(format("Validation of path '%s' failed. Errors: %s", path, result.getErrors()));
         }
     }
 
