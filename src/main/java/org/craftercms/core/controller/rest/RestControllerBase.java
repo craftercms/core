@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -17,21 +17,6 @@ package org.craftercms.core.controller.rest;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.craftercms.commons.validation.ValidationException;
-import org.craftercms.commons.validation.ValidationResult;
-import org.craftercms.commons.validation.ValidationRuntimeException;
-import org.craftercms.core.exception.AuthenticationException;
-import org.craftercms.core.exception.ForbiddenPathException;
-import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.PathNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Base class for Crafter REST services

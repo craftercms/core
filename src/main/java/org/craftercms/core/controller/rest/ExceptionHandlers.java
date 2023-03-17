@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -16,9 +16,6 @@
 
 package org.craftercms.core.controller.rest;
 
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-
 import org.craftercms.commons.exceptions.InvalidManagementTokenException;
 import org.craftercms.commons.validation.ValidationException;
 import org.craftercms.commons.validation.ValidationResult;
@@ -32,21 +29,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 import static org.craftercms.core.controller.rest.RestControllerBase.createResponseMessage;
 
 /**
  * Global exception handlers for Crafter REST services.
+ *
  * @author avasquez
  */
 @Order
 @ControllerAdvice(annotations = RestController.class)
 public class ExceptionHandlers {
+    public static final String RESULT_KEY_VALIDATION_ERRORS = "validationErrors";
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlers.class);
 
@@ -110,6 +112,24 @@ public class ExceptionHandlers {
         logger.error("Request for " + request.getRequestURI() + " failed", e);
 
         return e.getResult();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Map<String, Object> handleConstraintValidationException(ConstraintViolationException e) {
+        List<ValidationFieldError> validationErrors = e.getConstraintViolations().stream()
+                .map(c -> new ValidationFieldError(c.getPropertyPath().toString(), c.getMessage()))
+                .collect(toList());
+        return Map.of(RESULT_KEY_VALIDATION_ERRORS, validationErrors);
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public Map<String, Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        List<ValidationFieldError> validationErrors = List.of(new ValidationFieldError(e.getName(), e.getMessage()));
+        return Map.of(RESULT_KEY_VALIDATION_ERRORS, validationErrors);
     }
 
     @ExceptionHandler(Exception.class)

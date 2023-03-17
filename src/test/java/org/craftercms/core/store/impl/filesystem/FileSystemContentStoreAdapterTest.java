@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,13 +15,9 @@
  */
 package org.craftercms.core.store.impl.filesystem;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.craftercms.commons.lang.Callback;
 import org.craftercms.commons.validation.validators.impl.SecurePathValidator;
+import org.craftercms.core.exception.StoreException;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.util.cache.CacheTemplate;
@@ -29,20 +25,18 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
-import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
-import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
-import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
+import static org.craftercms.core.service.Context.*;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Alfonso Vásquez
@@ -66,6 +60,7 @@ public class FileSystemContentStoreAdapterTest {
     private static final String CRAFTER_CMS_LOGO_PATH = FOLDER_PATH + "/" + CRAFTER_CMS_LOGO_NAME;
     private static final String CRAFTER_CMS_LOGO_METADATA_FILE_PATH = FOLDER_PATH + "/craftercms_logo" +
                                                                       METADATA_FILE_EXTENSION;
+    private static final String INVALID_PATH = "/an/invalid/../path";
 
     private static final String HIDDEN_FILE_NAME = ".hidden";
 
@@ -76,6 +71,12 @@ public class FileSystemContentStoreAdapterTest {
     public void setUp() throws Exception {
         setUpTestCacheTemplate();
         setUpTestStoreAdapter();
+    }
+
+    @Test
+    public void testGetInvalidPath() {
+        Context context = createTestContext(true);
+        assertThrows(StoreException.class, () -> storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, true));
     }
 
     @Test
@@ -166,7 +167,7 @@ public class FileSystemContentStoreAdapterTest {
         storeAdapter.setResourceLoader(resourceLoader);
         storeAdapter.setDescriptorFileExtension(DESCRIPTOR_FILE_EXTENSION);
         storeAdapter.setMetadataFileExtension(METADATA_FILE_EXTENSION);
-        storeAdapter.setPathValidator(new SecurePathValidator("path"));
+        storeAdapter.setPathValidator(new SecurePathValidator());
     }
 
     private void assertCrafterCMSLogoItem(Item item) {
