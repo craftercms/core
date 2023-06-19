@@ -24,7 +24,6 @@ import java.util.*;
 
 /**
  * Represents an item of a content store. Content store items can be separated into 3 main categories:
- * <p/>
  * <ol>
  * <li>
  * <b>Standalone descriptors</b>: XML files that contain metadata and content for web pages. These type of
@@ -37,7 +36,6 @@ import java.util.*;
  * <b>Folders</b>: Plain old folders/directories.
  * </li>
  * </ol>
- * <p/>
  * <p>Both regular files and folders can have their own metadata files or descriptors. So we can also say that
  * there are two types of descriptors: standalone descriptors and (regular file and folder) metadata files.</p>
  *

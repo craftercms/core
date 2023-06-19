@@ -18,7 +18,6 @@ package org.craftercms.core.util.generators;
 /**
  * Generator for timestamps. The concrete class the represents the timestamp
  * is defined by implementing classes.
- * <p/>
  * Also, implementations should be thread safe.
  *
  * @author Alfonso Vásquez
