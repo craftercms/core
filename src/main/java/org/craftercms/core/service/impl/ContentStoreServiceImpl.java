@@ -255,7 +255,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
     /**
      * Returns the content store item for the given url, returning null if not found.
-     * <p/>
      * <p>After acquiring the item from the {@link ContentStoreAdapter}, the item's descriptor is merged (according
      * to its {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy}) with related descriptors, and the
      * final item is then processed.</p>
@@ -346,7 +345,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
     /**
      * Does the following:
-     * <p/>
      * <ol>
      * <li>Retrieves the children from the underlying repository (without their descriptors).</li>
      * <li>Filters the returned list if {@link ItemFilter#runBeforeProcessing()} returns <code>true</code>.</li>
@@ -401,7 +399,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
     /**
      * Executes merging for the specified {@link Item}:
-     * <p/>
      * <ol>
      * <li>Gets the {@link org.craftercms.core.xml.mergers.DescriptorMergeStrategy} for the item's descriptor from
      * the {@link DescriptorMergeStrategyResolver}.</li>
@@ -488,7 +485,6 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
     /**
      * Executes processing for the specified {@link Item}:
-     * <p/>
      * <ol>
      * <li>Gets the main {@link ItemProcessor} for the item from the {@link ItemProcessorResolver}.</li>
      * <li>Calls the main processor's <code>process</code> method to process the item.</li>

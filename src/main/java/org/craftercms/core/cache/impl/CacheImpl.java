@@ -299,7 +299,6 @@ public class CacheImpl implements Cache {
     /**
      * Called when a tick occurs. A tick is a logical unit of time. It basically symbolizes the time span between
      * calls to this method (i.e. 15 mins) by a job scheduler like Quartz.
-     * <p/>
      * Checks if some of the {@link CacheItem}s in the cache have expired or need to be refreshed. If the item
      * has expired, it is removed from the cache. If it needs to be refreshed, it is added to a list of items that
      * need to be refreshed that is later passed to the {@link CacheRefresher}.

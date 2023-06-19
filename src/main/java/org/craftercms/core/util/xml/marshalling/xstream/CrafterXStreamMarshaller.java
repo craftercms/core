@@ -32,7 +32,6 @@ import java.io.Writer;
 
 /**
  * Extension of {@link org.springframework.oxm.xstream.XStreamMarshaller} that:
- * <p/>
  * <ol>
  * <li>Provides correct marshalling/unmarshalling support for Crafter objects.</li>
  * <li>Adds a {@code unsupportedClasses} property to exclude any unwanted classes from being
@@ -75,13 +74,11 @@ public class CrafterXStreamMarshaller extends XStreamMarshaller {
 
     /**
      * Returns true if the specified class:
-     * <p/>
      * <ol>
      * <li></li>
      * <li>Is NOT the same, a subclass or subinterface of one of the unsupported classes.</li>
      * <li>Is the the same, a subclass or subinterface of one of the supported classes.</li>
      * </ol>
-     * <p/>
      * Also returns true if there aren't any unsupported or supported classes.
      */
     @Override

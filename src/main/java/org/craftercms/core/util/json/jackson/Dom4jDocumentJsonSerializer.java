@@ -37,21 +37,24 @@ import org.dom4j.Node;
 /**
  * Custom Jackson serializer for {@link org.dom4j.Document}.
  *
- * <p/>
  * The following are the conversion patterns used between XML and JSON:
- * <p/>
- * XML                              JSON                                            Access
- * ---                              ----                                            ------
- * <e/>                             "e": null                                       o.e
- * <e>text</e>                      "e": "text"                                     o.e
- * <e name="value" />               "e": { "name": "value" }                        o.e["name"]
- * <e name="value">text</e>         "e": { "name": "value", "text": "text" }        o.e["name"] o.e["text"]
- * <e><a>text</a><b>text</b></e>    "e": { "a": "text", "b": "text" }               o.e.a o.e.b
- * <e><a>text</a><a>text</a></e>	"e": { "a": ["text", "text"] }                  o.e.a[0] o.e.a[1]
- * <e>text<a>text</a></e>           "e": { "text": "text", "a": "text" }            o.e["text"] o.e.a
- * <e>text<a>text</a>text</e>       "e": { "text": ["text", "text"], "a": "text" }  o.e["text"][0] o.e["text"][1]
- * o.e.a
- * <p/>
+ * <table>
+ *     <caption>XML to JSON conversion patterns</caption>
+ *     <tr>
+ *         <th>XML</th>
+ *         <th>JSON</th>
+ *         <th>Access</th>
+ * </tr>
+ * <tr><td>&lt;e/></td><td>                             "e": null                           </td><td>            o.e</td></tr>
+ * <tr><td>&lt;e>text&lt;/e></td><td>                      "e": "text"                       </td><td>              o.e</td></tr>
+ * <tr><td>&lt;e name="value" /> </td><td>              "e": { "name": "value" }               </td><td>         o.e["name"]</td></tr>
+ * <tr><td>&lt;e name="value">text&lt;/e>  </td><td>       "e": { "name": "value", "text": "text" }    </td><td>    o.e["name"] o.e["text"]</td></tr>
+ * <tr><td>&lt;e>&lt;a>text&lt;/a>&lt;b>text&lt;/b>&lt;/e> </td><td>   "e": { "a": "text", "b": "text" }      </td><td>         o.e.a o.e.b</td></tr>
+ * <tr><td>&lt;e>&lt;a>text&lt;/a>&lt;a>text&lt;/a>&lt;/e></td><td>	"e": { "a": ["text", "text"] }            </td><td>      o.e.a[0] o.e.a[1]</td></tr>
+ * <tr><td>&lt;e>text&lt;a>text&lt;/a>&lt;/e>      </td><td>     "e": { "text": "text", "a": "text" }         </td><td>   o.e["text"] o.e.a</td></tr>
+ * <tr><td>&lt;e>text&lt;a>text&lt;/a>text&lt;/e>   </td><td>    "e": { "text": ["text", "text"], "a": "text" } &nbsp;&nbsp;</td><td> o.e["text"][0] o.e["text"][1] o.e.a</td></tr>
+ * </table>
+ * <br/>
  * <b>IMPORTANT:</b> XML Namespaces are ALWAYS ignored.
  *
  * @author avasquez

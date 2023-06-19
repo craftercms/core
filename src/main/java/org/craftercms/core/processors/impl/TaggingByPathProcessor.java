@@ -28,7 +28,7 @@ import java.util.Map;
 public class TaggingByPathProcessor extends AbstractTaggingProcessor {
 
     /**
-     * Map of paths & values, values can be multiple (separated by commas).
+     * Map of paths &amp; values, values can be multiple (separated by commas).
      */
     protected Map<String, String> pathMapping;
 
