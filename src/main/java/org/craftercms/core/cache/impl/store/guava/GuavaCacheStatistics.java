@@ -20,7 +20,6 @@ import org.craftercms.core.cache.CacheStatistics;
 
 /**
  * @author joseross
- * @since
  */
 public class GuavaCacheStatistics extends CacheStatistics {
 

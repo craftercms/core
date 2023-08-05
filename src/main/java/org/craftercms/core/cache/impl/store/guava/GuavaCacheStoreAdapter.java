@@ -64,7 +64,6 @@ public class GuavaCacheStoreAdapter implements CacheStoreAdapter, DisposableBean
      *
      * @param scope            the name of the scope
      * @param maxItemsInMemory the maximum number of items in memory, before they are evicted
-     * @throws Exception
      */
     @Override
     public void addScope(String scope, int maxItemsInMemory) {

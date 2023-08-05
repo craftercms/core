@@ -47,8 +47,7 @@ import org.springframework.beans.factory.annotation.Required;
  * @see org.craftercms.core.util.template.impl.freemarker.FreeMarkerStringTemplateCompiler
  * @see org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler
  * @see <a href="http://freemarker.sourceforge.net/">FreeMarker</a>
- * @see <a href="http://static.springsource.org/spring/docs/3.0.x/reference/expressions.html>Spring Expression
- * Language (SpEL)</a>
+ * @see <a href="http://static.springsource.org/spring/docs/3.0.x/reference/expressions.html">Spring Expression Language (SpEL)</a>
  */
 public class TemplateProcessor implements ItemProcessor {
 

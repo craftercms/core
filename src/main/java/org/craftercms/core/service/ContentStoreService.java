@@ -32,7 +32,6 @@ import org.craftercms.core.processors.ItemProcessor;
 /**
  * Main Crafter content access API. Besides providing an interface to a content store or repository, implementations
  * of this service also should provide the following facilities:
- * <p/>
  * <ul>
  * <li>
  * <b>Merging:</b>By using a certain merge strategy, the service is able to merge a collection of XML

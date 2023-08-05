@@ -28,10 +28,8 @@ import org.springframework.beans.factory.annotation.Required;
 /**
  * This transformer is similar to {@link ShortToLongUrlTransformer}, but also looks in a content bundle for an
  * item name (long name) that can be mapped to the short name.
- * <p/>
  * See {@link org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategy} for more information
  * about content bundles.
- * <p/>
  * E.g., from the request <code>/main/website/groups/sport/base_fr_nhl/sport_page_one.xml</code> it looks in folders
  * in the following order <code>base_fr_nhl</code>, <code>base_fr</code> and <code>base</code>. Then suppose that
  * <code>sport_page_one.xml</code> exists only in <code>base</code> folder with name
