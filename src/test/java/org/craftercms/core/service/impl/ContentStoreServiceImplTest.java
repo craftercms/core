@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,45 +15,36 @@
  */
 package org.craftercms.core.service.impl;
 
-import java.util.List;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.exception.PathNotFoundException;
 import org.craftercms.core.processors.impl.ItemProcessorPipeline;
+import org.craftercms.core.processors.impl.SkipAllItemProcessor;
 import org.craftercms.core.processors.impl.TextMetaDataCollectionExtractingProcessor;
 import org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor;
-import org.craftercms.core.service.CacheService;
-import org.craftercms.core.service.ContentStoreService;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.service.ItemFilter;
-import org.craftercms.core.service.Tree;
+import org.craftercms.core.processors.impl.resolvers.ItemProcessorResolverChain;
+import org.craftercms.core.service.*;
 import org.craftercms.core.store.impl.filesystem.FileSystemContentStoreAdapter;
 import org.craftercms.core.util.cache.CachingAwareObject;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.craftercms.core.xml.mergers.impl.strategies.InheritLevelsMergeStrategyTest;
-import org.dom4j.Element;
 import org.dom4j.Node;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEPTH;
-import static org.craftercms.core.service.Context.DEFAULT_CACHE_ON;
-import static org.craftercms.core.service.Context.DEFAULT_IGNORE_HIDDEN_FILES;
-import static org.craftercms.core.service.Context.DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE;
-import static org.craftercms.core.service.Context.DEFAULT_MERGING_ON;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.craftercms.core.service.Context.*;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * Class description goes HERE
@@ -130,10 +121,12 @@ public class ContentStoreServiceImplTest {
     private static final String THIRD_QUOTE_FR =
         "Si j'ai vu un peu plus loin c'est en me tenant sur ​​les épaules de géants. -- Issac Newton";
     private static final String THIRD_QUOTE_ES =
-        "Si he visto un poco más lejos es porque lo hecho parado sobre los hombros de gigantes. -- Issac Newton";
+        "Si he visto un poco más lejos es porque lo he hecho parado sobre los hombros de gigantes. -- Issac Newton";
 
     @Autowired
     private ContentStoreService contentStoreService;
+    @Autowired
+    private ItemProcessorResolverChain procesorResolverChain;
     @Autowired
     private CacheService cache;
     private Context context;
@@ -385,6 +378,34 @@ public class ContentStoreServiceImplTest {
             fail("Expected " + PathNotFoundException.class.getName());
         } catch (PathNotFoundException e) {
         }
+    }
+
+    @Test
+    public void testSkipAllItemProcessor() {
+        reset(procesorResolverChain);
+        contentStoreService.getItem(context, DEFAULT_CACHING_OPTIONS, CONTENT_DESCRIPTOR_PATH, new SkipAllItemProcessor());
+        verify(procesorResolverChain, never()).getProcessor(any());
+    }
+
+    @Test
+    public void testProcessorResolverChainCall() {
+        reset(procesorResolverChain);
+        contentStoreService.getItem(context, CONTENT_DESCRIPTOR_PATH);
+        verify(procesorResolverChain, atLeast(1)).getProcessor(any());
+    }
+
+    @Test
+    public void testSkipAllItemProcessorWithFlattenFalse() {
+        reset(procesorResolverChain);
+        contentStoreService.getItem(context, DEFAULT_CACHING_OPTIONS, CONTENT_DESCRIPTOR_PATH, new SkipAllItemProcessor(), false);
+        verify(procesorResolverChain, never()).getProcessor(any());
+    }
+
+    @Test
+    public void testSkipAllItemProcessorWithFlattenTrue() {
+        reset(procesorResolverChain);
+        contentStoreService.getItem(context, DEFAULT_CACHING_OPTIONS, CONTENT_DESCRIPTOR_PATH, new SkipAllItemProcessor(), true);
+        verify(procesorResolverChain, never()).getProcessor(any());
     }
 
     private void assertSystemInfoProperties(Item item) {
