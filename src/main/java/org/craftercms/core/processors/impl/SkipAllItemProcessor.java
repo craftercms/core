@@ -23,6 +23,9 @@ import org.craftercms.core.service.Item;
 
 /**
  * No-op {@link ItemProcessor} exclusive implementation.
+ * This processor does nothing but return the item, a NOOP.
+ * It is also exclusive, so if passed into getItem, it will disable
+ * the processor chain and simply return the item as-is.
  *
  * @since 4.1.2
  */
