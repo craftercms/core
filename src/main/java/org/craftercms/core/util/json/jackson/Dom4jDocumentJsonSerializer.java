@@ -62,7 +62,8 @@ import org.dom4j.Node;
 public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
 
     public static final String ITEM_LIST_ATTRIBUTE_NAME = "item-list";
-    public static final String[] IGNORABLE_ATTRIBUTES = { ITEM_LIST_ATTRIBUTE_NAME };
+    public static final String NO_DEFAULT_ATTRIBUTE_NAME = "no-default";
+    public static final String[] IGNORABLE_ATTRIBUTES = { ITEM_LIST_ATTRIBUTE_NAME, NO_DEFAULT_ATTRIBUTE_NAME };
 
     public static final String TEXT_JSON_KEY = "text";
 
@@ -88,12 +89,13 @@ public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
         if (element.attributeCount() > 0) {
             List<Attribute> attributes = element.attributes();
 
-            jsonGenerator.writeStartObject();
-
-            objectStarted = true;
 
             for (Attribute attribute : attributes) {
                 if (!ArrayUtils.contains(IGNORABLE_ATTRIBUTES, attribute.getName())) {
+                    if (!objectStarted) {
+                        jsonGenerator.writeStartObject();
+                        objectStarted = true;
+                    }
                     jsonGenerator.writeStringField(attribute.getName(), attribute.getValue());
                 }
             }
