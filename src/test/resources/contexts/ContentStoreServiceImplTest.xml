@@ -322,14 +322,17 @@
         </property>
     </bean>
 
-    <bean id="procesorResolverChain"
-          class="org.craftercms.core.processors.impl.resolvers.ItemProcessorResolverChain">
-        <property name="defaultProcessor" ref="defaultProcessorPipeline"/>
-        <property name="resolvers">
-            <list>
-                <ref bean="procesorResolver"/>
-            </list>
-        </property>
+    <bean id="procesorResolverChain" class="org.mockito.Mockito" factory-method="spy">
+        <constructor-arg>
+            <bean class="org.craftercms.core.processors.impl.resolvers.ItemProcessorResolverChain">
+                <property name="defaultProcessor" ref="defaultProcessorPipeline"/>
+                <property name="resolvers">
+                    <list>
+                        <ref bean="procesorResolver"/>
+                    </list>
+                </property>
+            </bean>
+        </constructor-arg>
     </bean>
 
     <!-- ////////////////////////////////////////////////// -->
