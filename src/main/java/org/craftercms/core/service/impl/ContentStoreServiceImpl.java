@@ -342,7 +342,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     protected List<Item> doFindChildren(Context context, CachingOptions cachingOptions, String url, Integer depth,
                                         ItemFilter filter, ItemProcessor processor, boolean flatten) throws InvalidContextException,
         XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        List<Item> children = context.getStoreAdapter().findItems(context, cachingOptions, url);
+        List<Item> children = getChildrenInternal(context, cachingOptions, url, processor, flatten);
         if (children != null) {
             if (filter != null && filter.runBeforeProcessing()) {
                 if (logger.isDebugEnabled()) {
@@ -383,6 +383,20 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * This method is meant to be overridden when the children need to be further processed/filtered
+     *
+     * @param context        the context
+     * @param cachingOptions the caching options
+     * @param url            the url
+     * @param processor      the processor
+     * @param flatten        whether to flatten the children
+     * @return the children
+     */
+    protected List<Item> getChildrenInternal(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor, boolean flatten) {
+        return context.getStoreAdapter().findItems(context, cachingOptions, url);
     }
 
     /**
