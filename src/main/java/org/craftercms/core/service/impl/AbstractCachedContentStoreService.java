@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -105,7 +105,7 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
         throws InvalidContextException, PathNotFoundException, StoreException {
         final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
 
-        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Boolean>() {
+        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<>() {
 
             @Override
             public Boolean execute() {
@@ -126,10 +126,12 @@ public abstract class AbstractCachedContentStoreService implements ContentStoreS
             return processor;
         }
         if (processor == null) {
-            return  flatteningProcessor;
-        } else {
-            return new ItemProcessorPipeline(flatteningProcessor, processor);
+            return flatteningProcessor;
         }
+        if (processor.isExclusive()) {
+            return processor;
+        }
+        return new ItemProcessorPipeline(flatteningProcessor, processor);
     }
 
     @Override

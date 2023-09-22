@@ -15,37 +15,20 @@
  */
 package org.craftercms.core.service.impl;
 
-import java.beans.ConstructorProperties;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.craftercms.commons.config.ConfigurationProvider;
+import org.craftercms.commons.file.blob.Blob;
 import org.craftercms.commons.file.blob.BlobStore;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
-import org.craftercms.commons.file.blob.Blob;
 import org.craftercms.commons.file.blob.BlobUrlResolver;
 import org.craftercms.core.exception.*;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.ContentStoreService;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.service.ItemFilter;
-import org.craftercms.core.service.Tree;
+import org.craftercms.core.service.*;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.store.ContentStoreAdapterRegistry;
 import org.craftercms.core.util.XmlUtils;
@@ -59,6 +42,15 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.beans.ConstructorProperties;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Default implementation of {@link org.craftercms.core.service.ContentStoreService}. Extends from
@@ -494,17 +486,19 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             logger.debug("Doing processing for " + item + "...");
         }
 
-        ItemProcessor mainProcessor = processorResolver.getProcessor(item);
-        if (mainProcessor != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Main processor found for " + item + ": " + mainProcessor);
-            }
+        if (additionalProcessor == null || !additionalProcessor.isExclusive()) {
+            ItemProcessor mainProcessor = processorResolver.getProcessor(item);
+            if (mainProcessor != null) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Main processor found for " + item + ": " + mainProcessor);
+                }
 
-            item = mainProcessor.process(context, cachingOptions, item);
-        } else {
-            if (logger.isDebugEnabled()) {
+                item = mainProcessor.process(context, cachingOptions, item);
+            } else if (logger.isDebugEnabled()) {
                 logger.debug("No main processor was found for " + item);
             }
+        } else if (logger.isDebugEnabled()) {
+            logger.debug("Additional processor is exclusive, skipping main processor for {}", item);
         }
 
         if (additionalProcessor != null) {
