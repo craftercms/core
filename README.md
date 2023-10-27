@@ -1,8 +1,17 @@
-![build status](https://travis-ci.org/craftercms/core.svg?branch=develop)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9b7269414910489a8be7afc7c60b2536)](https://www.codacy.com/gh/craftercms/core/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=craftercms/core&amp;utm_campaign=Badge_Grade)
-
 core
 ====
 
-Crafter Core content rendering library for CrafterCMS. For more information, please visit: http://docs.craftercms.org/en/4.0/developers/projects/core/index.html
+Crafter Core content rendering library for CrafterCMS. For more information, please visit: http://docs.craftercms.org.
 
+# Community
+## Contributors
+https://github.com/craftercms/craftercms/blob/develop/CONTRIBUTORS.md
+
+## Code of Conduct
+https://github.com/craftercms/craftercms/blob/develop/CODE_OF_CONDUCT.md
+
+## Contributing
+https://github.com/craftercms/craftercms/blob/develop/CONTRIBUTING.md
+
+## Git Workflow
+https://github.com/craftercms/craftercms/blob/develop/GIT_WORKFLOW.md
