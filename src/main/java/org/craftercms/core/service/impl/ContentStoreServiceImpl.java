@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,47 +15,20 @@
  */
 package org.craftercms.core.service.impl;
 
-import java.beans.ConstructorProperties;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.craftercms.commons.config.ConfigurationProvider;
+import org.craftercms.commons.file.blob.Blob;
 import org.craftercms.commons.file.blob.BlobStore;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
-import org.craftercms.commons.file.blob.Blob;
 import org.craftercms.commons.file.blob.BlobUrlResolver;
-import org.craftercms.core.exception.AuthenticationException;
-import org.craftercms.core.exception.CrafterException;
-import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.InvalidScopeException;
-import org.craftercms.core.exception.InvalidStoreTypeException;
-import org.craftercms.core.exception.ItemProcessingException;
-import org.craftercms.core.exception.PathNotFoundException;
-import org.craftercms.core.exception.RootFolderNotFoundException;
-import org.craftercms.core.exception.StoreException;
-import org.craftercms.core.exception.XmlFileParseException;
-import org.craftercms.core.exception.XmlMergeException;
+import org.craftercms.core.exception.*;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Content;
-import org.craftercms.core.service.ContentStoreService;
-import org.craftercms.core.service.Context;
-import org.craftercms.core.service.Item;
-import org.craftercms.core.service.ItemFilter;
-import org.craftercms.core.service.Tree;
+import org.craftercms.core.service.*;
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.store.ContentStoreAdapterRegistry;
 import org.craftercms.core.util.XmlUtils;
@@ -67,6 +40,17 @@ import org.craftercms.core.xml.mergers.DescriptorMerger;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.beans.ConstructorProperties;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Default implementation of {@link org.craftercms.core.service.ContentStoreService}. Extends from
@@ -76,7 +60,7 @@ import org.dom4j.Element;
  */
 public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
-    private static final Log logger = LogFactory.getLog(ContentStoreServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ContentStoreServiceImpl.class);
     /**
      * Registry of {@link ContentStoreAdapter}s.
      */
@@ -358,7 +342,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     protected List<Item> doFindChildren(Context context, CachingOptions cachingOptions, String url, Integer depth,
                                         ItemFilter filter, ItemProcessor processor, boolean flatten) throws InvalidContextException,
         XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
-        List<Item> children = context.getStoreAdapter().findItems(context, cachingOptions, url);
+        List<Item> children = getChildrenInternal(context, cachingOptions, url, processor, flatten);
         if (children != null) {
             if (filter != null && filter.runBeforeProcessing()) {
                 if (logger.isDebugEnabled()) {
@@ -371,14 +355,18 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             List<Item> processedChildren = new ArrayList<>(children.size());
 
             for (Item child : children) {
-                Item processedChild;
-                if (depth != null && child.isFolder()) {
-                    processedChild = getTree(context, cachingOptions, child.getUrl(), depth, filter, processor, flatten);
-                } else {
-                    processedChild = getItem(context, cachingOptions, child.getUrl(), processor, flatten);
+                try {
+                    Item processedChild;
+                    if (depth != null && child.isFolder()) {
+                        processedChild = getTree(context, cachingOptions, child.getUrl(), depth, filter, processor, flatten);
+                    } else {
+                        processedChild = getItem(context, cachingOptions, child.getUrl(), processor, flatten);
+                    }
+                    processedChildren.add(processedChild);
+                } catch (StoreAccessDeniedException e) {
+                    logger.warn("Access denied for url '{}'", child.getUrl());
+                    logger.debug("Error getting item for url: '{}'", child.getUrl(), e);
                 }
-
-                processedChildren.add(processedChild);
             }
 
             if (filter != null && filter.runAfterProcessing()) {
@@ -395,6 +383,20 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * This method is meant to be overridden when the children need to be further processed/filtered
+     *
+     * @param context        the context
+     * @param cachingOptions the caching options
+     * @param url            the url
+     * @param processor      the processor
+     * @param flatten        whether to flatten the children
+     * @return the children
+     */
+    protected List<Item> getChildrenInternal(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor, boolean flatten) {
+        return context.getStoreAdapter().findItems(context, cachingOptions, url);
     }
 
     /**
@@ -498,17 +500,19 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             logger.debug("Doing processing for " + item + "...");
         }
 
-        ItemProcessor mainProcessor = processorResolver.getProcessor(item);
-        if (mainProcessor != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Main processor found for " + item + ": " + mainProcessor);
-            }
+        if (additionalProcessor == null || !additionalProcessor.isExclusive()) {
+            ItemProcessor mainProcessor = processorResolver.getProcessor(item);
+            if (mainProcessor != null) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Main processor found for " + item + ": " + mainProcessor);
+                }
 
-            item = mainProcessor.process(context, cachingOptions, item);
-        } else {
-            if (logger.isDebugEnabled()) {
+                item = mainProcessor.process(context, cachingOptions, item);
+            } else if (logger.isDebugEnabled()) {
                 logger.debug("No main processor was found for " + item);
             }
+        } else if (logger.isDebugEnabled()) {
+            logger.debug("Additional processor is exclusive, skipping main processor for {}", item);
         }
 
         if (additionalProcessor != null) {
