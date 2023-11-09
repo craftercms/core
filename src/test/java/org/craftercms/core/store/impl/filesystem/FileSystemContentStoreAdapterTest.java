@@ -153,7 +153,7 @@ public class FileSystemContentStoreAdapterTest {
 
     private void setUpTestCacheTemplate() {
         cacheTemplate = mock(CacheTemplate.class);
-        when(cacheTemplate.getObject(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), any(Callback.class), any()))
+        when(cacheTemplate.getObject(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), any(Callback.class), any(Object[].class)))
                 .thenAnswer(invocation -> ((Callback<?>) invocation.getArguments()[2]).execute());
     }
 
