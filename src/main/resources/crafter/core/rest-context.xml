@@ -51,10 +51,14 @@
 
     <!-- JSON -->
 
+    <bean id="crafter.dom4jDocumentJsonSerializer" class="org.craftercms.core.util.json.jackson.Dom4jDocumentJsonSerializer">
+        <constructor-arg name="renderAttributes" value="${crafter.core.rest.views.json.renderAttributes}"/>
+    </bean>
+
     <bean id="crafter.coreObjectMapper" class="org.craftercms.commons.jackson.CustomSerializationObjectMapper">
         <property name="serializers">
             <list>
-                <bean class="org.craftercms.core.util.json.jackson.Dom4jDocumentJsonSerializer"/>
+                <ref bean="crafter.dom4jDocumentJsonSerializer"/>
             </list>
         </property>
     </bean>

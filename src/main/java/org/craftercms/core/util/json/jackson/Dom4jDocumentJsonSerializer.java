@@ -33,7 +33,6 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
-
 /**
  * Custom Jackson serializer for {@link org.dom4j.Document}.
  *
@@ -47,8 +46,8 @@ import org.dom4j.Node;
  * </tr>
  * <tr><td>&lt;e/></td><td>                             "e": null                           </td><td>            o.e</td></tr>
  * <tr><td>&lt;e>text&lt;/e></td><td>                      "e": "text"                       </td><td>              o.e</td></tr>
- * <tr><td>&lt;e name="value" /> </td><td>              "e": { "name": "value" }               </td><td>         o.e["name"]</td></tr>
- * <tr><td>&lt;e name="value">text&lt;/e>  </td><td>       "e": { "name": "value", "text": "text" }    </td><td>    o.e["name"] o.e["text"]</td></tr>
+ * <tr><td>&lt;e name="value" /> </td><td>              "e": null                              </td><td>         o.e</td></tr>
+ * <tr><td>&lt;e name="value">text&lt;/e>  </td><td>       "e": "text"                          </td><td>    o.e</td></tr>
  * <tr><td>&lt;e>&lt;a>text&lt;/a>&lt;b>text&lt;/b>&lt;/e> </td><td>   "e": { "a": "text", "b": "text" }      </td><td>         o.e.a o.e.b</td></tr>
  * <tr><td>&lt;e>&lt;a>text&lt;/a>&lt;a>text&lt;/a>&lt;/e></td><td>	"e": { "a": ["text", "text"] }            </td><td>      o.e.a[0] o.e.a[1]</td></tr>
  * <tr><td>&lt;e>text&lt;a>text&lt;/a>&lt;/e>      </td><td>     "e": { "text": "text", "a": "text" }         </td><td>   o.e["text"] o.e.a</td></tr>
@@ -66,6 +65,12 @@ public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
     public static final String[] IGNORABLE_ATTRIBUTES = { ITEM_LIST_ATTRIBUTE_NAME, NO_DEFAULT_ATTRIBUTE_NAME };
 
     public static final String TEXT_JSON_KEY = "text";
+
+    private final boolean renderAttributes;
+
+    public Dom4jDocumentJsonSerializer(final boolean renderAttributes) {
+        this.renderAttributes = renderAttributes;
+    }
 
     @Override
     public void serialize(Document doc, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException {
@@ -86,9 +91,8 @@ public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
     private void elementToJson(Element element, JsonGenerator jsonGenerator) throws IOException {
         boolean objectStarted = false;
 
-        if (element.attributeCount() > 0) {
+        if (element.attributeCount() > 0 && renderAttributes) {
             List<Attribute> attributes = element.attributes();
-
 
             for (Attribute attribute : attributes) {
                 if (!ArrayUtils.contains(IGNORABLE_ATTRIBUTES, attribute.getName())) {
@@ -103,7 +107,12 @@ public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
 
         if (!element.hasContent()) {
             if (!objectStarted) {
-                jsonGenerator.writeNull();
+                if (isItemList(element)) {
+                    jsonGenerator.writeStartObject();
+                    objectStarted = true;
+                } else {
+                    jsonGenerator.writeNull();
+                }
             }
         } else if (element.isTextOnly()) {
             if (!objectStarted) {
