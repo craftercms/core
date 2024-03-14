@@ -18,7 +18,6 @@ package org.craftercms.core.xml.mergers.impl.resolvers;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.dom4j.Document;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * {@link DescriptorMergeStrategyResolver} that always returns the same {@link DescriptorMergeStrategy} for
@@ -30,8 +29,7 @@ public class SingleMergeStrategyResolver implements DescriptorMergeStrategyResol
 
     private DescriptorMergeStrategy strategy;
 
-    @Required
-    public void setStrategy(DescriptorMergeStrategy strategy) {
+    public SingleMergeStrategyResolver(DescriptorMergeStrategy strategy) {
         this.strategy = strategy;
     }
 

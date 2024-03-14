@@ -16,7 +16,6 @@
 package org.craftercms.core.xml.mergers.impl.cues.impl;
 
 import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Class description goes HERE
@@ -27,11 +26,14 @@ public abstract class AbstractMergeCue implements MergeCue {
 
     protected int priority;
 
+    public AbstractMergeCue(int priority) {
+        this.priority = priority;
+    }
+
     public int getPriority() {
         return priority;
     }
 
-    @Required
     public void setPriority(int priority) {
         this.priority = priority;
     }

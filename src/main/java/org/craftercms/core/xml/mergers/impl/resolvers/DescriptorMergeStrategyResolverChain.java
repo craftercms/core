@@ -21,7 +21,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.dom4j.Document;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Chain of {@link DescriptorMergeStrategyResolver}s. The strategy returned is the first non-null one returned by a
@@ -34,8 +33,7 @@ public class DescriptorMergeStrategyResolverChain implements DescriptorMergeStra
     private DescriptorMergeStrategy defaultStrategy;
     private List<DescriptorMergeStrategyResolver> resolvers;
 
-    @Required
-    public void setDefaultStrategy(DescriptorMergeStrategy defaultStrategy) {
+    public DescriptorMergeStrategyResolverChain(DescriptorMergeStrategy defaultStrategy) {
         this.defaultStrategy = defaultStrategy;
     }
 

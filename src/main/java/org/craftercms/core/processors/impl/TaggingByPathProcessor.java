@@ -32,6 +32,10 @@ public class TaggingByPathProcessor extends AbstractTaggingProcessor {
      */
     protected Map<String, String> pathMapping;
 
+    public TaggingByPathProcessor(String newField) {
+        super(newField);
+    }
+
     public void setPathMapping(Map<String, String> pathMapping) {
         this.pathMapping = pathMapping;
     }

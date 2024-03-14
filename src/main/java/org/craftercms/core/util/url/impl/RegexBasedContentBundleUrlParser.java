@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 
 import org.craftercms.core.util.url.ContentBundleUrl;
 import org.craftercms.core.util.url.ContentBundleUrlParser;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * @author Alfonso Vásquez
@@ -33,23 +32,11 @@ public class RegexBasedContentBundleUrlParser implements ContentBundleUrlParser 
 
     private Pattern pattern;
 
-    @Required
-    public void setPrefixGroup(int prefixGroup) {
+    public RegexBasedContentBundleUrlParser(int prefixGroup, int baseNameAndExtensionTokenGroup,
+                                            int suffixGroup, Pattern pattern) {
         this.prefixGroup = prefixGroup;
-    }
-
-    @Required
-    public void setBaseNameAndExtensionTokenGroup(int baseNameAndExtensionTokenGroup) {
         this.baseNameAndExtensionTokenGroup = baseNameAndExtensionTokenGroup;
-    }
-
-    @Required
-    public void setSuffixGroup(int suffixGroup) {
         this.suffixGroup = suffixGroup;
-    }
-
-    @Required
-    public void setPattern(Pattern pattern) {
         this.pattern = pattern;
     }
 

@@ -28,7 +28,6 @@ import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.dom4j.Document;
 import org.dom4j.Node;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Implementation of {@link DescriptorMergeStrategy} that merges the descriptor with an explicitly named parent. The
@@ -41,13 +40,9 @@ public class ExplicitParentMergeStrategy implements DescriptorMergeStrategy {
     private DescriptorMergeStrategyResolver mergeStrategyResolver;
     private String parentDescriptorElementXPathQuery;
 
-    @Required
-    public void setMergeStrategyResolver(DescriptorMergeStrategyResolver mergeStrategyResolver) {
+    public ExplicitParentMergeStrategy(DescriptorMergeStrategyResolver mergeStrategyResolver,
+                                       String parentDescriptorElementXPathQuery) {
         this.mergeStrategyResolver = mergeStrategyResolver;
-    }
-
-    @Required
-    public void setParentDescriptorElementXPathQuery(String parentDescriptorElementXPathQuery) {
         this.parentDescriptorElementXPathQuery = parentDescriptorElementXPathQuery;
     }
 

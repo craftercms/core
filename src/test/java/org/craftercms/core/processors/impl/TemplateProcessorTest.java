@@ -94,8 +94,7 @@ public class TemplateProcessorTest {
     }
 
     private void setUpTestNodeScanner() {
-        nodeScanner = new XPathNodeScanner();
-        nodeScanner.setXPathQueries("//body");
+        nodeScanner = new XPathNodeScanner("//body");
     }
 
     private void setUpTestModelFactory() {
@@ -111,10 +110,7 @@ public class TemplateProcessorTest {
     }
 
     private void setUpTestProcessor() {
-        processor = new TemplateProcessor();
-        processor.setTemplateNodeScanner(nodeScanner);
-        processor.setTemplateCompiler(templateCompiler);
-        processor.setModelFactory(modelFactory);
+        processor = new TemplateProcessor(nodeScanner, templateCompiler, modelFactory);
     }
 
 }

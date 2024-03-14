@@ -90,9 +90,7 @@ public class ItemProcessorResolverChainTest {
         ItemProcessorResolver resolver2 = mock(ItemProcessorResolver.class);
         when(resolver1.getProcessor(item2)).thenReturn(processor2);
 
-        resolverChain = new ItemProcessorResolverChain();
-        resolverChain.setResolvers(Arrays.asList(resolver1, resolver2));
-        resolverChain.setDefaultProcessor(defaultProcessor);
+        resolverChain = new ItemProcessorResolverChain(defaultProcessor, Arrays.asList(resolver1, resolver2));
     }
 
 }

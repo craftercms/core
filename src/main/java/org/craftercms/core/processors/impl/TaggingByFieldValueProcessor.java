@@ -17,18 +17,10 @@
 package org.craftercms.core.processors.impl;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.craftercms.core.exception.ItemProcessingException;
 import org.craftercms.core.processors.ItemProcessor;
-import org.craftercms.core.service.CachingOptions;
-import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.util.XmlUtils;
 import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.Node;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Map;
 
@@ -48,18 +40,10 @@ public class TaggingByFieldValueProcessor extends AbstractTaggingProcessor {
      */
     protected Map<String, String> valueMapping;
 
-    @Required
-    public void setSourceField(String sourceField) {
+    public TaggingByFieldValueProcessor(String sourceField, String defaultValue, Map<String, String> valueMapping, String newField) {
+        super(newField);
         this.sourceField = sourceField;
-    }
-
-    @Required
-    public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
-    }
-
-    @Required
-    public void setValueMapping(Map<String, String> valueMapping) {
         this.valueMapping = valueMapping;
     }
 

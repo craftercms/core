@@ -68,8 +68,7 @@ public class UrlPatternMergeStrategyResolverTest {
         strategies.put(DESCRIPTOR_URL_PATTERN1, strategy1);
         strategies.put(DESCRIPTOR_URL_PATTERN2, strategy2);
 
-        resolver = new UrlPatternMergeStrategyResolver();
-        resolver.setUrlPatternToStrategyMappings(strategies);
+        resolver = new UrlPatternMergeStrategyResolver(strategies);
     }
 
 }

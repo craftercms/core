@@ -18,7 +18,6 @@ package org.craftercms.core.processors.impl.resolvers;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
 import org.craftercms.core.service.Item;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * {@link ItemProcessorResolver} that returns a fixed {@link org.craftercms.core.processors.ItemProcessor}
@@ -32,11 +31,7 @@ public class SingleProcessorResolver implements ItemProcessorResolver {
      */
     private ItemProcessor processor;
 
-    /**
-     * Sets the processor to always return.
-     */
-    @Required
-    public void setProcessor(ItemProcessor processor) {
+    public SingleProcessorResolver(ItemProcessor processor) {
         this.processor = processor;
     }
 

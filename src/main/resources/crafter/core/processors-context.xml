@@ -22,7 +22,7 @@
     <!-- Processors -->
 
     <bean id="crafter.templateNodeScanner" class="org.craftercms.core.util.xml.impl.RegexNodeScanner">
-        <property name="patterns" value="\#\{"/>
+        <constructor-arg name="patterns" value="\#\{"/>
         <property name="matchEntireNodeText" value="false"/>
     </bean>
 
@@ -31,9 +31,9 @@
     <bean id="crafter.templateModelFactory" class="org.craftercms.core.processors.impl.template.BeanFactoryModelFactory"/>
 
     <bean id="crafter.templateProcessor" class="org.craftercms.core.processors.impl.template.TemplateProcessor">
-        <property name="templateNodeScanner" ref="crafter.templateNodeScanner"/>
-        <property name="templateCompiler" ref="crafter.templateCompiler"/>
-        <property name="modelFactory" ref="crafter.templateModelFactory"/>
+        <constructor-arg name="templateNodeScanner" ref="crafter.templateNodeScanner"/>
+        <constructor-arg name="templateCompiler" ref="crafter.templateCompiler"/>
+        <constructor-arg name="modelFactory" ref="crafter.templateModelFactory"/>
     </bean>
 
     <bean id="crafter.defaultProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
@@ -47,21 +47,21 @@
     <!-- Processor Resolvers -->
 
     <bean id="crafter.procesorResolver" class="org.craftercms.core.processors.impl.resolvers.MetaDataProcessorResolver">
-        <property name="processorElementXPathQuery" value="${crafter.core.processors.processor.element.xpathQuery}"/>
-        <property name="elementValueToProcessorMappings">
+        <constructor-arg name="processorElementXPathQuery" value="${crafter.core.processors.processor.element.xpathQuery}"/>
+        <constructor-arg name="elementValueToProcessorMappings">
             <map>
                 <entry key="${crafter.core.processors.processor.element.value.default}" value-ref="crafter.defaultProcessorPipeline"/>
             </map>
-        </property>
+        </constructor-arg>
     </bean>
 
     <bean id="crafter.procesorResolverChain" class="org.craftercms.core.processors.impl.resolvers.ItemProcessorResolverChain">
-        <property name="defaultProcessor" ref="crafter.defaultProcessorPipeline"/>
-        <property name="resolvers">
+        <constructor-arg name="defaultProcessor" ref="crafter.defaultProcessorPipeline"/>
+        <constructor-arg name="resolvers">
             <list>
                 <ref bean="crafter.procesorResolver"/>
             </list>
-        </property>
+        </constructor-arg>
     </bean>
 
 </beans>

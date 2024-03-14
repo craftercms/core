@@ -27,7 +27,6 @@ import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Default implementation of {@link org.craftercms.core.xml.mergers.DescriptorMerger}.
@@ -40,13 +39,9 @@ public class DescriptorMergerImpl implements DescriptorMerger {
     private MergeCue initialMergeCue;
     private Map<String, String> initialMergeCueParams;
 
-    public DescriptorMergerImpl() {
-        initialMergeCueParams = Collections.emptyMap();
-    }
-
-    @Required
-    public void setInitialMergeCue(MergeCue initialMergeCue) {
+    public DescriptorMergerImpl(MergeCue initialMergeCue) {
         this.initialMergeCue = initialMergeCue;
+        initialMergeCueParams = Collections.emptyMap();
     }
 
     public void setInitialMergeCueParams(Map<String, String> initialMergeCueParams) {

@@ -21,7 +21,6 @@ import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Class description goes HERE
@@ -36,13 +35,8 @@ public class ReplacePatternAllUrlTransformer implements UrlTransformer {
     protected String patternToReplace;
     protected String replacement;
 
-    @Required
-    public void setPatternToReplace(String patternToReplace) {
+    public ReplacePatternAllUrlTransformer(String patternToReplace, String replacement) {
         this.patternToReplace = patternToReplace;
-    }
-
-    @Required
-    public void setReplacement(String replacement) {
         this.replacement = replacement;
     }
 

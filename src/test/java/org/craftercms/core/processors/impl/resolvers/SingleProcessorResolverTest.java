@@ -50,8 +50,7 @@ public class SingleProcessorResolverTest {
     }
 
     private void setUpTestResolver() {
-        resolver = new SingleProcessorResolver();
-        resolver.setProcessor(processor);
+        resolver = new SingleProcessorResolver(processor);
     }
 
 }

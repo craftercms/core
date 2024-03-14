@@ -21,7 +21,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
 import org.craftercms.core.service.Item;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Composite {@link org.craftercms.core.processors.ItemProcessorResolver}, that iterates through a list of resolvers
@@ -41,19 +40,8 @@ public class ItemProcessorResolverChain implements ItemProcessorResolver {
      */
     protected List<ItemProcessorResolver> resolvers;
 
-    /**
-     * Sets the default to use if no resolver returns a processor.
-     */
-    @Required
-    public void setDefaultProcessor(ItemProcessor defaultProcessor) {
+    public ItemProcessorResolverChain(ItemProcessor defaultProcessor, List<ItemProcessorResolver> resolvers) {
         this.defaultProcessor = defaultProcessor;
-    }
-
-    /**
-     * Sets the chain of resolvers.
-     */
-    @Required
-    public void setResolvers(List<ItemProcessorResolver> resolvers) {
         this.resolvers = resolvers;
     }
 

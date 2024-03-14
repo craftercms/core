@@ -30,7 +30,8 @@ import org.craftercms.core.service.Item;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 import java.util.Locale;
@@ -77,12 +78,14 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      */
     protected String localeCodeXPathQuery;
 
-    /**
-     * Sets the XPath query used to retrieve the include elements.
-     */
-    @Required
-    public void setIncludeElementXPathQuery(String includeElementXPathQuery) {
+    public IncludeDescriptorsProcessor(String includeElementXPathQuery, String disabledIncludeNodeXPathQuery) {
         this.includeElementXPathQuery = includeElementXPathQuery;
+        this.disabledIncludeNodeXPathQuery = disabledIncludeNodeXPathQuery;
+    }
+
+    @Autowired
+    public void setContentStoreService(@Lazy ContentStoreService contentStoreService) {
+        this.contentStoreService = contentStoreService;
     }
 
     /**
@@ -90,22 +93,6 @@ public class IncludeDescriptorsProcessor implements ItemProcessor {
      */
     public void setRemoveIncludeElement(boolean removeIncludeElement) {
         this.removeIncludeElement = removeIncludeElement;
-    }
-
-    /**
-     * Sets the XPath query relative to include elements for nodes tha specify if the include is disabled or not.
-     */
-    @Required
-    public void setDisabledIncludeNodeXPathQuery(String disabledIncludeNodeXPathQuery) {
-        this.disabledIncludeNodeXPathQuery = disabledIncludeNodeXPathQuery;
-    }
-
-    /**
-     * Sets the content store service, used to retrieve the descriptors to include.
-     */
-    @Required
-    public void setContentStoreService(ContentStoreService contentStoreService) {
-        this.contentStoreService = contentStoreService;
     }
 
     /**

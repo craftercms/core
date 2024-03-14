@@ -15,7 +15,6 @@
  */
 package org.craftercms.core.url.impl;
 
-import org.craftercms.core.url.impl.UrlTransformationEngineImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

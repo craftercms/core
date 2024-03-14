@@ -27,7 +27,6 @@ import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.util.CacheUtils;
 import org.craftercms.core.util.cache.CacheTemplate;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -44,18 +43,14 @@ public class DefaultCacheTemplate implements CacheTemplate {
     private CacheService cacheService;
     private KeyBasedLockFactory<ReentrantLock> lockFactory;
 
-    public DefaultCacheTemplate() {
+    public DefaultCacheTemplate(CacheService cacheService) {
+        this.cacheService = cacheService;
         lockFactory = new WeakKeyBasedReentrantLockFactory();
     }
 
     @Override
     public CacheService getCacheService() {
         return cacheService;
-    }
-
-    @Required
-    public void setCacheService(CacheService cacheService) {
-        this.cacheService = cacheService;
     }
 
     @Override

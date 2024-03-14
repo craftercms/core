@@ -73,8 +73,7 @@ public class MetaDataMergeStrategyResolverTest {
         strategies.put(STRATEGY1_ELEMENT_VALUE, strategy1);
         strategies.put(STRATEGY2_ELEMENT_VALUE, strategy2);
 
-        resolver = new MetaDataMergeStrategyResolver();
-        resolver.setMergeStrategyElementXPathQuery(MERGE_STRATEGY_ELEMENT_XPATH_QUERY);
+        resolver = new MetaDataMergeStrategyResolver(MERGE_STRATEGY_ELEMENT_XPATH_QUERY);
         resolver.setElementValueToStrategyMappings(strategies);
     }
 

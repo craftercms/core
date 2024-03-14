@@ -73,9 +73,8 @@ public class DescriptorMergeStrategyResolverChainTest {
         DescriptorMergeStrategyResolver resolver2 = mock(DescriptorMergeStrategyResolver.class);
         when(resolver2.getStrategy(eq(DESCRIPTOR_URL2), ArgumentMatchers.any())).thenReturn(strategy2);
 
-        resolverChain = new DescriptorMergeStrategyResolverChain();
+        resolverChain = new DescriptorMergeStrategyResolverChain(defaultStrategy);
         resolverChain.setResolvers(Arrays.asList(resolver1, resolver2));
-        resolverChain.setDefaultStrategy(defaultStrategy);
     }
 
 }

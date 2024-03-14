@@ -81,8 +81,7 @@ public class InheritLevelsMergeStrategyTest {
     }
 
     private void setUpTestStrategy() {
-        strategy = new InheritLevelsMergeStrategy();
-        strategy.setLevelDescriptorFileName(LEVEL_DESCRIPTOR_NAME);
+        strategy = new InheritLevelsMergeStrategy(LEVEL_DESCRIPTOR_NAME);
     }
 
 }
