@@ -88,15 +88,9 @@ public class ContentBundleShortToLongUrlTransformerTest {
     }
 
     private void setUpTestTransformer() {
-        RegexBasedContentBundleUrlParser urlParser = new RegexBasedContentBundleUrlParser();
-        urlParser.setPattern(Pattern.compile("^(.*/)(base[^/]*)(/.*)$"));
-        urlParser.setPrefixGroup(1);
-        urlParser.setBaseNameAndExtensionTokenGroup(2);
-        urlParser.setSuffixGroup(3);
+        RegexBasedContentBundleUrlParser urlParser = new RegexBasedContentBundleUrlParser(1, 2, 3, Pattern.compile("^(.*/)(base[^/]*)(/.*)$"));
 
-        transformer = new ContentBundleShortToLongUrlTransformer();
-        transformer.setUrlParser(urlParser);
-        transformer.setBaseDelimiter(BASE_DELIMITER);
+        transformer = new ContentBundleShortToLongUrlTransformer(urlParser, BASE_DELIMITER);
     }
 
 }

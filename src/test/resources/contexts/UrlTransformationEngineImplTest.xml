@@ -29,17 +29,17 @@
     <!-- ////////////////////////////////////////////////// -->
 
     <bean id="cacheService" class="org.craftercms.core.service.impl.CacheServiceImpl">
-        <property name="cache">
+        <constructor-arg name="cache">
             <bean class="org.craftercms.core.cache.impl.CacheImpl">
-                <property name="cacheStoreAdapter">
+                <constructor-arg name="cacheStoreAdapter">
                     <bean class="org.craftercms.core.cache.impl.store.MapCacheStoreAdapter" />
-                </property>
+                </constructor-arg>
             </bean>
-        </property>
+        </constructor-arg>
     </bean>
 
     <bean id="cacheTemplate" class="org.craftercms.core.util.cache.impl.DefaultCacheTemplate">
-        <property name="cacheService" ref="cacheService" />
+        <constructor-arg name="cacheService" ref="cacheService" />
     </bean>
 
     <!-- ////////////////////////////////////////////////// -->
@@ -49,8 +49,8 @@
     <bean id="addDebugParamUrlTransformer" class="org.craftercms.core.url.impl.AddDebugParamUrlTransformer" />
 
     <bean id="replaceFirstUrlTransformer" class="org.craftercms.core.url.impl.ReplacePatternFirstUrlTransformer">
-        <property name="patternToReplace" value="html" />
-        <property name="replacement" value="xml" />
+        <constructor-arg name="patternToReplace" value="html" />
+        <constructor-arg name="replacement" value="xml" />
     </bean>
 
     <bean id="urlTransformationPipeline" class="org.craftercms.core.url.impl.UrlTransformerPipeline">
@@ -63,12 +63,12 @@
     </bean>
 
     <bean id="urlTransformationEngine" class="org.craftercms.core.url.impl.UrlTransformationEngineImpl">
-        <property name="cacheTemplate" ref="cacheTemplate"/>
-        <property name="transformers">
+        <constructor-arg name="transformers">
             <map>
                 <entry key="mainPipeline" value-ref="urlTransformationPipeline" />
             </map>
-        </property>
+        </constructor-arg>
+        <constructor-arg name="cacheTemplate" ref="cacheTemplate"/>
     </bean>
 
 </beans>

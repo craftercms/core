@@ -17,7 +17,6 @@ package org.craftercms.core.store.impl;
 
 import org.craftercms.core.store.ContentStoreAdapter;
 import org.craftercms.core.store.ContentStoreAdapterRegistry;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Map;
 
@@ -30,8 +29,7 @@ public class ContentStoreAdapterRegistryImpl implements ContentStoreAdapterRegis
 
     private Map<String, ContentStoreAdapter> adapters;
 
-    @Required
-    public void setAdapters(Map<String, ContentStoreAdapter> adapters) {
+    public ContentStoreAdapterRegistryImpl(Map<String, ContentStoreAdapter> adapters) {
         this.adapters = adapters;
     }
 

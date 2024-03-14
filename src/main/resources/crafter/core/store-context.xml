@@ -34,11 +34,11 @@
     <!-- Content Store Adapter Registry -->
 
     <bean id="crafter.contentStoreAdapterRegistry" class="org.craftercms.core.store.impl.ContentStoreAdapterRegistryImpl" >
-        <property name="adapters">
+        <constructor-arg name="adapters">
             <map>
                 <entry key="filesystem" value-ref="crafter.contentStoreAdapter.filesystem"/>
             </map>
-        </property>
+        </constructor-arg>
     </bean>
 
     <!-- Content Store Service -->
@@ -63,13 +63,13 @@
 
     <bean id="crafter.includeDescriptorsProcessor"
           class="org.craftercms.core.processors.impl.PageAwareIncludeDescriptorsProcessor">
-        <property name="includeElementXPathQuery" value="${crafter.core.flattening.include.xpath.query}"/>
+        <constructor-arg name="includeElementXPathQuery" value="${crafter.core.flattening.include.xpath.query}"/>
+        <constructor-arg name="disabledIncludeNodeXPathQuery" value="${crafter.core.flattening.include.disable.xpath.query}"/>
+        <property name="contentStoreService" ref="crafter.contentStoreService"/>
         <property name="removeIncludeElement" value="${crafter.core.flattening.include.remove.tags}"/>
-        <property name="disabledIncludeNodeXPathQuery" value="${crafter.core.flattening.include.disable.xpath.query}"/>
         <property name="localeCodeXPathQuery" value="${crafter.core.flattening.locale.xpath.query}"/>
         <property name="pagesPathPattern" value="${crafter.core.flattening.pages.pattern}"/>
         <property name="includedItemsProcessor" ref="crafter.includeDescriptorsProcessor"/>
-        <property name="contentStoreService" ref="crafter.contentStoreService"/>
     </bean>
 
 </beans>

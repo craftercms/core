@@ -20,7 +20,6 @@ import java.util.Map;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
 import org.craftercms.core.service.Item;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * {@link org.craftercms.core.processors.ItemProcessorResolver} that returns certain
@@ -35,11 +34,7 @@ public class UrlPatternProcessorResolver implements ItemProcessorResolver {
      */
     protected Map<String, ItemProcessor> patternToProcessorMappings;
 
-    /**
-     * Sets the mappings of url patterns to processor names.
-     */
-    @Required
-    public void setPatternToProcessorMappings(Map<String, ItemProcessor> patternToProcessorMappings) {
+    public UrlPatternProcessorResolver(Map<String, ItemProcessor> patternToProcessorMappings) {
         this.patternToProcessorMappings = patternToProcessorMappings;
     }
 

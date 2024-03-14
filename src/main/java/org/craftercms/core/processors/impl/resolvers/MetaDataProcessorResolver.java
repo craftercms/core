@@ -22,7 +22,6 @@ import org.craftercms.core.exception.XmlException;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
 import org.craftercms.core.service.Item;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * {@link ItemProcessorResolver} that searches the item's descriptor for a processor element that defines the name of
@@ -41,19 +40,8 @@ public class MetaDataProcessorResolver implements ItemProcessorResolver {
      */
     protected Map<String, ItemProcessor> elementValueToProcessorMappings;
 
-    /**
-     * Sets the XPath query for the processor element that defines the processor to use.
-     */
-    @Required
-    public void setProcessorElementXPathQuery(String processorElementXPathQuery) {
+    public MetaDataProcessorResolver(String processorElementXPathQuery, Map<String, ItemProcessor> elementValueToProcessorMappings) {
         this.processorElementXPathQuery = processorElementXPathQuery;
-    }
-
-    /**
-     * Sets the mappings of processor element values to processor names.
-     */
-    @Required
-    public void setElementValueToProcessorMappings(Map<String, ItemProcessor> elementValueToProcessorMappings) {
         this.elementValueToProcessorMappings = elementValueToProcessorMappings;
     }
 

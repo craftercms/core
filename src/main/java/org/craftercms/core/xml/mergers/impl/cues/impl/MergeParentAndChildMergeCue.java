@@ -26,7 +26,8 @@ import org.craftercms.core.xml.mergers.impl.cues.MergeCueContext;
 import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * Class description goes HERE
@@ -40,24 +41,17 @@ public class MergeParentAndChildMergeCue extends AbstractMergeCue {
     protected String mergeOrderParamName;
     protected String defaultMergeOrder;
 
-    @Required
-    public void setElementMergeMatcher(ElementMergeMatcher elementMergeMatcher) {
+    public MergeParentAndChildMergeCue(ElementMergeMatcher elementMergeMatcher,
+                                       String mergeOrderParamName, String defaultMergeOrder, int priority) {
+        super(priority);
         this.elementMergeMatcher = elementMergeMatcher;
-    }
-
-    @Required
-    public void setMergeCueResolver(MergeCueResolver mergeCueResolver) {
-        this.mergeCueResolver = mergeCueResolver;
-    }
-
-    @Required
-    public void setMergeOrderParamName(String mergeOrderParamName) {
         this.mergeOrderParamName = mergeOrderParamName;
+        this.defaultMergeOrder = defaultMergeOrder;
     }
 
-    @Required
-    public void setDefaultMergeOrder(String defaultMergeOrder) {
-        this.defaultMergeOrder = defaultMergeOrder;
+    @Autowired
+    public void setMergeCueResolver(@Lazy MergeCueResolver mergeCueResolver) {
+        this.mergeCueResolver = mergeCueResolver;
     }
 
     @Override

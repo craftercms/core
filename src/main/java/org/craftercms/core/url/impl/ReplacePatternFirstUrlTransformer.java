@@ -23,6 +23,10 @@ package org.craftercms.core.url.impl;
  */
 public class ReplacePatternFirstUrlTransformer extends ReplacePatternAllUrlTransformer {
 
+    public ReplacePatternFirstUrlTransformer(String patternToReplace, String replacement) {
+        super(patternToReplace, replacement);
+    }
+
     @Override
     protected String doReplacing(String url) {
         return url.replaceFirst(patternToReplace, replacement);

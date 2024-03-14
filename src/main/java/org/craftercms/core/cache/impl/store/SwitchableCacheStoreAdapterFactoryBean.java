@@ -17,7 +17,6 @@ package org.craftercms.core.cache.impl.store;
 
 import org.craftercms.core.cache.impl.CacheStoreAdapter;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * {@link FactoryBean} that returns a different {@link org.craftercms.core.cache.impl.CacheStoreAdapter} depending on
@@ -32,18 +31,10 @@ public class SwitchableCacheStoreAdapterFactoryBean implements FactoryBean<Cache
     private CacheStoreAdapter onCacheStoreAdapter;
     private boolean cacheOn;
 
-    public SwitchableCacheStoreAdapterFactoryBean() {
-        cacheOn = true;
-    }
-
-    @Required
-    public void setOffCacheStoreAdapter(CacheStoreAdapter offCacheStoreAdapter) {
+    public SwitchableCacheStoreAdapterFactoryBean(CacheStoreAdapter offCacheStoreAdapter, CacheStoreAdapter onCacheStoreAdapter) {
         this.offCacheStoreAdapter = offCacheStoreAdapter;
-    }
-
-    @Required
-    public void setOnCacheStoreAdapter(CacheStoreAdapter onCacheStoreAdapter) {
         this.onCacheStoreAdapter = onCacheStoreAdapter;
+        cacheOn = true;
     }
 
     public void setCacheOn(boolean cacheOn) {

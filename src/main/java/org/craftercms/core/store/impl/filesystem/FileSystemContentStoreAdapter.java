@@ -25,9 +25,11 @@ import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.store.impl.AbstractFileBasedContentStoreAdapter;
 import org.craftercms.core.store.impl.File;
+import org.craftercms.core.util.cache.CacheTemplate;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.validation.Validator;
 
 import java.io.FileFilter;
 import java.io.IOException;
@@ -44,6 +46,10 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
     public static final String STORE_TYPE = "filesystem";
 
     private ResourceLoader resourceLoader;
+
+    public FileSystemContentStoreAdapter(Validator pathValidator, String descriptorFileExtension, String metadataFileExtension, CacheTemplate cacheTemplate) {
+        super(pathValidator, descriptorFileExtension, metadataFileExtension, cacheTemplate);
+    }
 
     @Override
     public void setResourceLoader(ResourceLoader resourceLoader) {

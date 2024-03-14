@@ -21,7 +21,6 @@ import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.url.UrlTransformationEngine;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * {@link org.craftercms.core.processors.ItemProcessor} that takes the item url, transforms it by calling
@@ -35,18 +34,9 @@ public class ItemUrlTransformingProcessor implements ItemProcessor {
     protected String transformerName;
     protected UrlTransformationEngine urlTransformationEngine;
 
-    @Required
-    public void setTransformedUrlPropName(String transformedUrlPropName) {
+    public ItemUrlTransformingProcessor(String transformedUrlPropName, String transformerName, UrlTransformationEngine urlTransformationEngine) {
         this.transformedUrlPropName = transformedUrlPropName;
-    }
-
-    @Required
-    public void setTransformerName(String transformerName) {
         this.transformerName = transformerName;
-    }
-
-    @Required
-    public void setUrlTransformationEngine(UrlTransformationEngine urlTransformationEngine) {
         this.urlTransformationEngine = urlTransformationEngine;
     }
 

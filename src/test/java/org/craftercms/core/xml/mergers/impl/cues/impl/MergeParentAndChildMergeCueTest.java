@@ -45,6 +45,8 @@ public class MergeParentAndChildMergeCueTest {
 
     public static final String MERGE_ORDER_PARAM_NAME = "order";
     public static final String DEFAULT_MERGE_ORDER = "after";
+
+    public static final int DEFAULT_MERGE_PRIORITY = 1;
     public static final Logger LOGGER = LoggerFactory.getLogger(MergeParentAndChildMergeCueTest.class);
 
     private static final String PARENT_XML =
@@ -102,8 +104,7 @@ public class MergeParentAndChildMergeCueTest {
     }
 
     private void setUpTestMergeCue() {
-        ElementMergeMatcherImpl elementMergeMatcher = new ElementMergeMatcherImpl();
-        elementMergeMatcher.setIdAttributeName(new QName(ID_ATTR_NAME));
+        ElementMergeMatcherImpl elementMergeMatcher = new ElementMergeMatcherImpl(new QName(ID_ATTR_NAME));
 
         MergeCueResolver mergeCueResolver = new MergeCueResolver() {
 
@@ -114,11 +115,8 @@ public class MergeParentAndChildMergeCueTest {
 
         };
 
-        mergeCue = new MergeParentAndChildMergeCue();
-        mergeCue.setElementMergeMatcher(elementMergeMatcher);
+        mergeCue = new MergeParentAndChildMergeCue(elementMergeMatcher, MERGE_ORDER_PARAM_NAME, DEFAULT_MERGE_ORDER, DEFAULT_MERGE_PRIORITY);
         mergeCue.setMergeCueResolver(mergeCueResolver);
-        mergeCue.setMergeOrderParamName(MERGE_ORDER_PARAM_NAME);
-        mergeCue.setDefaultMergeOrder(DEFAULT_MERGE_ORDER);
     }
 
     private void setUpTestDocuments() throws DocumentException, SAXException {

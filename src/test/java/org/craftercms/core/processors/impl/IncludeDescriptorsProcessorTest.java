@@ -89,8 +89,10 @@ public class IncludeDescriptorsProcessorTest {
 
     @Before
     public void setUp() throws Exception {
+        storeService = mock(ContentStoreService.class);
         // Create first to avoid circular dependency problems
-        processor = new IncludeDescriptorsProcessor();
+        processor = new IncludeDescriptorsProcessor(INCLUDE_ELEM_XPATH_QUERY, DISABLED_INCLUDE_NODE_XPATH_QUERY);
+        processor.setContentStoreService(storeService);
 
         setUpTestContext();
         setUpTestDescriptorDoms();
@@ -126,8 +128,6 @@ public class IncludeDescriptorsProcessorTest {
     }
 
     private void setUpTestStoreService() {
-        storeService = mock(ContentStoreService.class);
-
         when(storeService.findItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR2_URL, processor)).thenAnswer(
             invocationOnMock -> {
                 Item item2 = new Item();
@@ -149,9 +149,6 @@ public class IncludeDescriptorsProcessorTest {
     }
 
     private void setUpTestProcessor() {
-        processor.setIncludeElementXPathQuery(INCLUDE_ELEM_XPATH_QUERY);
-        processor.setDisabledIncludeNodeXPathQuery(DISABLED_INCLUDE_NODE_XPATH_QUERY);
-        processor.setContentStoreService(storeService);
         processor.setIncludedItemsProcessor(processor);
     }
 

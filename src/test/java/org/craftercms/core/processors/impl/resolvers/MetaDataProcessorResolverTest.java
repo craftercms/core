@@ -80,9 +80,7 @@ public class MetaDataProcessorResolverTest {
         processors.put(PROCESSOR1_ELEMENT_VALUE, processor1);
         processors.put(PROCESSOR2_ELEMENT_VALUE, processor2);
 
-        resolver = new MetaDataProcessorResolver();
-        resolver.setProcessorElementXPathQuery(PROCESSOR_ELEMENT_XPATH_QUERY);
-        resolver.setElementValueToProcessorMappings(processors);
+        resolver = new MetaDataProcessorResolver(PROCESSOR_ELEMENT_XPATH_QUERY, processors);
     }
     
     private void setUpTestDescriptorDoms() {
