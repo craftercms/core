@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -16,10 +16,8 @@
 package org.craftercms.core.service;
 
 import org.craftercms.core.store.ContentStoreAdapter;
-import org.craftercms.core.util.CacheUtils;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Default {@link Context} implementation.
@@ -39,9 +37,10 @@ public class ContextImpl implements Context {
     protected volatile long cacheVersion;
     protected int maxAllowedItemsInCache;
     protected boolean ignoreHiddenFiles;
+    protected Map<String, String> configurationVariables;
 
     public ContextImpl(String id, ContentStoreAdapter storeAdapter, String rootFolderPath, boolean mergingOn,
-                       boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles) {
+                       boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables) {
         this.id = id;
         this.storeAdapter = storeAdapter;
         this.rootFolderPath = rootFolderPath;
@@ -50,6 +49,7 @@ public class ContextImpl implements Context {
         this.cacheVersion = System.nanoTime();
         this.maxAllowedItemsInCache = maxAllowedItemsInCache;
         this.ignoreHiddenFiles = ignoreHiddenFiles;
+        this.configurationVariables = configurationVariables;
     }
 
     @Override
@@ -95,6 +95,11 @@ public class ContextImpl implements Context {
     @Override
     public boolean ignoreHiddenFiles() {
         return ignoreHiddenFiles;
+    }
+
+    @Override
+    public Map<String, String> getConfigLookupVariables() {
+        return configurationVariables;
     }
 
     @Override

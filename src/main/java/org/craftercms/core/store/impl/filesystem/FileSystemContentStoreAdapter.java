@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -33,6 +33,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Implementation of {@link org.craftercms.core.store.ContentStoreAdapter} that enables access to a store in the filesystem.
@@ -52,7 +53,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
 
     @Override
     public Context createContext(String id, String rootFolderPath, boolean mergingOn, boolean cacheOn,
-                                 int maxAllowedItemsInCache, boolean ignoreHiddenFiles)
+                                 int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables)
             throws RootFolderNotFoundException, StoreException, AuthenticationException {
         Resource rootFolderResource = resourceLoader.getResource(rootFolderPath);
 
@@ -69,7 +70,7 @@ public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStore
         }
 
         return new FileSystemContext(id, this, rootFolderPath, rootFolder, mergingOn, cacheOn, maxAllowedItemsInCache,
-                                     ignoreHiddenFiles);
+                                     ignoreHiddenFiles, configurationVariables);
     }
 
     @Override
