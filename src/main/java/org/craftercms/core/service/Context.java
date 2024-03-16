@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -17,6 +17,8 @@
 package org.craftercms.core.service;
 
 import org.craftercms.core.store.ContentStoreAdapter;
+
+import java.util.Map;
 
 /**
  * Contains information of the content store used by a particular tenant.
@@ -51,4 +53,10 @@ public interface Context extends Cloneable {
 
     Context clone();
 
+    /**
+     * Config variables for the context. e.g.: ${siteName} will be replaced by the value of the siteName variable
+     *
+     * @return Return a map of variables to be used when loading configuration files.
+     */
+    Map<String, String> getConfigLookupVariables();
 }
