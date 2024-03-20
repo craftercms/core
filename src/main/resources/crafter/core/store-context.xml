@@ -22,13 +22,13 @@
     <!-- Content Store Adapter -->
 
     <bean id="crafter.contentStoreAdapter.filesystem" class="org.craftercms.core.store.impl.filesystem.FileSystemContentStoreAdapter">
-        <property name="cacheTemplate" ref="crafter.cacheTemplate"/>
-        <property name="metadataFileExtension" value="${crafter.core.store.metadataFile.extension}"/>
-        <property name="descriptorFileExtension" value="${crafter.core.store.descriptorFile.extension}"/>
-        <property name="pathValidator">
+        <constructor-arg name="pathValidator">
             <bean class="org.craftercms.commons.validation.validators.impl.SecurePathValidator">
             </bean>
-        </property>
+        </constructor-arg>
+        <constructor-arg name="descriptorFileExtension" value="${crafter.core.store.descriptorFile.extension}"/>
+        <constructor-arg name="metadataFileExtension" value="${crafter.core.store.metadataFile.extension}"/>
+        <constructor-arg name="cacheTemplate" ref="crafter.cacheTemplate"/>
     </bean>
 
     <!-- Content Store Adapter Registry -->
