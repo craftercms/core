@@ -32,12 +32,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.craftercms.core.service.CachingOptions.DEFAULT_CACHING_OPTIONS;
 import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEPTH;
@@ -123,6 +123,9 @@ public class ContentStoreServiceImplTest {
     private static final String THIRD_QUOTE_ES =
         "Si he visto un poco más lejos es porque lo he hecho parado sobre los hombros de gigantes. -- Issac Newton";
 
+    private static final String CONTEXT_NAME = "contextName";
+    private static final String CONTEXT_NAME_VALUE = "crafter-test";
+
     @Autowired
     private ContentStoreService contentStoreService;
     @Autowired
@@ -130,6 +133,7 @@ public class ContentStoreServiceImplTest {
     @Autowired
     private CacheService cache;
     private Context context;
+    private Map<String, String> contextConfigVariables;
 
     private static String getJavaVersion() {
         return System.getProperty("java.version");
@@ -145,10 +149,11 @@ public class ContentStoreServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
+        contextConfigVariables = Map.of(CONTEXT_NAME, CONTEXT_NAME_VALUE);
         context = contentStoreService.getContext(null, FileSystemContentStoreAdapter.STORE_TYPE,
-                                                 CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_MERGING_ON,
-                                                 DEFAULT_CACHE_ON, DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE,
-                                                 DEFAULT_IGNORE_HIDDEN_FILES, null);
+                CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_MERGING_ON,
+                DEFAULT_CACHE_ON, DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE,
+                DEFAULT_IGNORE_HIDDEN_FILES, contextConfigVariables);
     }
 
     @After
@@ -406,6 +411,14 @@ public class ContentStoreServiceImplTest {
         reset(procesorResolverChain);
         contentStoreService.getItem(context, DEFAULT_CACHING_OPTIONS, CONTENT_DESCRIPTOR_PATH, new SkipAllItemProcessor(), true);
         verify(procesorResolverChain, never()).getProcessor(any());
+    }
+
+    @Test
+    public void testContextLookup() {
+        // Make sure the configured variables are passed to the context on creation
+        contextConfigVariables.keySet().forEach(key -> {
+            assertEquals(contextConfigVariables.get(key), context.getConfigLookupVariables().get(key));
+        });
     }
 
     private void assertSystemInfoProperties(Item item) {
