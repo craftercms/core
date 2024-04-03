@@ -146,7 +146,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     @Override
     public Context getContext(String tag, String storeType, String rootFolderPath, boolean mergingOn,
-                              boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles,Map<String, String> configurationVariables)
+                              boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables)
         throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException {
         String id = createContextId(tag, storeType, rootFolderPath, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 

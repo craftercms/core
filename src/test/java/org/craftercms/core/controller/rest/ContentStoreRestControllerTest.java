@@ -29,6 +29,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static org.craftercms.core.controller.rest.ContentStoreRestController.CACHE_CONTROL_HEADER_NAME;
@@ -52,6 +53,8 @@ public class ContentStoreRestControllerTest {
     private static final String FOLDER_URL = "/folder";
     private static final String ITEM_URL = FOLDER_URL + "/item";
     private static final String PROTECTED_URL = "/protected/folder";
+    private static final String CONTEXT_NAME = "contextName";
+    private static final String CONTEXT_NAME_VALUE = "crafter-test";
 
     private ContentStoreRestController storeRestController;
     private ContentStoreService storeService;
@@ -62,6 +65,7 @@ public class ContentStoreRestControllerTest {
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private WebRequest webRequest;
+    private Map<String, String> contextConfigVariables;
 
     @Before
     public void setUp() throws Exception {
@@ -72,6 +76,15 @@ public class ContentStoreRestControllerTest {
         setUpTestWebRequest();
         setUpTestStoreService();
         setUpTestStoreRestController();
+    }
+
+    @Test
+    public void testContextConfigVariables() {
+        storeRestController.getItem(webRequest, response, context.getId(), ITEM_URL, false);
+        verify(storeService).getItem(argThat(context-> {
+            Map<String, String> contextVariables = context.getConfigLookupVariables();
+            return contextConfigVariables.entrySet().stream().allMatch(entry -> entry.getValue().equals(contextVariables.get(entry.getKey())));
+        }), any(), eq(ITEM_URL), any(), anyBoolean());
     }
 
     @Test
@@ -196,8 +209,9 @@ public class ContentStoreRestControllerTest {
     private void setUpTestContext() {
         ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
 
+        contextConfigVariables = Map.of(CONTEXT_NAME, CONTEXT_NAME_VALUE);
         context = new ContextImpl("0", storeAdapter, "/", DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
-                                  DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES, null);
+                                  DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, DEFAULT_IGNORE_HIDDEN_FILES, contextConfigVariables);
     }
 
     private void setUpTestRequest() {
