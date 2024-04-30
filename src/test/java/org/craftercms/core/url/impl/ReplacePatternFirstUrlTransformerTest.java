@@ -45,9 +45,7 @@ public class ReplacePatternFirstUrlTransformerTest {
     }
 
     private void setUpTestTransformer() {
-        transformer = new ReplacePatternFirstUrlTransformer();
-        transformer.setPatternToReplace("xml");
-        transformer.setReplacement("html");
+        transformer = new ReplacePatternFirstUrlTransformer("xml", "html");
     }
 
 }

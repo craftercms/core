@@ -56,9 +56,8 @@ public class CacheImplTest {
     public void setUp() throws InternalCacheEngineException {
         cacheStore = new MapCacheStoreAdapter();
 
-        cache = new CacheImpl();
+        cache = new CacheImpl(cacheStore);
         cache.setCacheRefresher(new CacheRefresherImpl());
-        cache.setCacheStoreAdapter(cacheStore);
 
         cache.addScope(SCOPE, MAX_ITEMS_IN_MEMORY);
     }

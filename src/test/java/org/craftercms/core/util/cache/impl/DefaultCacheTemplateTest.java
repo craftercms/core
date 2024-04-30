@@ -113,8 +113,7 @@ public class DefaultCacheTemplateTest {
     }
 
     private void setUpTestCacheTemplate() {
-        cacheTemplate = new DefaultCacheTemplate();
-        cacheTemplate.setCacheService(cache);
+        cacheTemplate = new DefaultCacheTemplate(cache);
     }
 
 }

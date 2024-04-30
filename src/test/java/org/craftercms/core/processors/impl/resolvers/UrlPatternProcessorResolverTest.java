@@ -75,8 +75,7 @@ public class UrlPatternProcessorResolverTest {
         processors.put(PAGES_PROCESSOR_PATTERN, pagesProcessor);
         processors.put(STATIC_ASSETS_PROCESSOR_PATTERN, staticAssetsProcessor);
 
-        resolver = new UrlPatternProcessorResolver();
-        resolver.setPatternToProcessorMappings(processors);
+        resolver = new UrlPatternProcessorResolver(processors);
     }
 
 }

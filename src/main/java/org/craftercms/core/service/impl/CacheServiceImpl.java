@@ -17,7 +17,6 @@ package org.craftercms.core.service.impl;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.craftercms.core.cache.Cache;
 import org.craftercms.core.cache.CacheItem;
@@ -29,7 +28,6 @@ import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Default implementation of {@link CacheService}. Adapts a {@link Cache}.
@@ -41,13 +39,7 @@ public class CacheServiceImpl implements CacheService {
 
     protected Cache cache;
 
-    /**
-     * Sets the cache engine.
-     *
-     * @param cache
-     */
-    @Required
-    public void setCache(Cache cache) {
+    public CacheServiceImpl(Cache cache) {
         this.cache = cache;
     }
 

@@ -33,7 +33,6 @@ import org.craftercms.core.util.template.impl.IdentifiableStringTemplateSource;
 import org.craftercms.core.util.xml.NodeScanner;
 import org.dom4j.Document;
 import org.dom4j.Node;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * {@link ItemProcessor} that processes the content of certain XML nodes in item descriptors as templates. Template
@@ -67,28 +66,11 @@ public class TemplateProcessor implements ItemProcessor {
      */
     protected NodeTemplateModelFactory modelFactory;
 
-    /**
-     * Sets the {@code NodeScanner} for template nodes.
-     */
-    @Required
-    public void setTemplateNodeScanner(NodeScanner templateNodeScanner) {
+    public TemplateProcessor(NodeScanner templateNodeScanner,
+                             TemplateCompiler<IdentifiableStringTemplateSource> templateCompiler,
+                             NodeTemplateModelFactory modelFactory) {
         this.templateNodeScanner = templateNodeScanner;
-    }
-
-    /**
-     * Sets the template compiler. It basically compiles the template provided in an element and then processes it by
-     * using a model obtained through the {@code modelFactory}.
-     */
-    @Required
-    public void setTemplateCompiler(TemplateCompiler<IdentifiableStringTemplateSource> templateCompiler) {
         this.templateCompiler = templateCompiler;
-    }
-
-    /**
-     * Sets the factory that provides the models for the templates.
-     */
-    @Required
-    public void setModelFactory(NodeTemplateModelFactory modelFactory) {
         this.modelFactory = modelFactory;
     }
 

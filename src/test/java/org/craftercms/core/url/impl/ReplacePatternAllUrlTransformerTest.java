@@ -15,7 +15,6 @@
  */
 package org.craftercms.core.url.impl;
 
-import org.craftercms.core.url.impl.ReplacePatternAllUrlTransformer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,9 +44,7 @@ public class ReplacePatternAllUrlTransformerTest {
     }
 
     private void setUpTestTransformer() {
-        transformer = new ReplacePatternAllUrlTransformer();
-        transformer.setPatternToReplace("xml");
-        transformer.setReplacement("html");
+        transformer = new ReplacePatternAllUrlTransformer("xml", "html");
     }
 
 }

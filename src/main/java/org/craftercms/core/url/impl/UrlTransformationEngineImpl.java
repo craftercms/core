@@ -24,7 +24,7 @@ import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
-import org.springframework.beans.factory.annotation.Required;
+import org.craftercms.core.util.cache.CacheTemplate;
 
 /**
  * Class description goes HERE
@@ -38,8 +38,8 @@ public class UrlTransformationEngineImpl extends AbstractCachedUrlTransformation
 
     private Map<String, UrlTransformer> transformers;
 
-    @Required
-    public void setTransformers(Map<String, UrlTransformer> transformers) {
+    public UrlTransformationEngineImpl(Map<String, UrlTransformer> transformers, CacheTemplate cacheTemplate) {
+        super(cacheTemplate);
         this.transformers = transformers;
     }
 

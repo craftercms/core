@@ -25,20 +25,20 @@
     <bean id="crafter.cacheRefresher" class="org.craftercms.core.cache.impl.CacheRefresherImpl"/>
 
     <bean id="crafter.cache" class="org.craftercms.core.cache.impl.CacheImpl">
-        <property name="cacheStoreAdapter" ref="crafter.cacheStoreAdapter"/>
+        <constructor-arg name="cacheStoreAdapter" ref="crafter.cacheStoreAdapter"/>
         <property name="cacheRefresher" ref="crafter.cacheRefresher"/>
     </bean>
 
     <!-- Cache Service -->
 
     <bean id="crafter.cacheService" class="org.craftercms.core.service.impl.CacheServiceImpl">
-        <property name="cache" ref="crafter.cache"/>
+        <constructor-arg name="cache" ref="crafter.cache"/>
     </bean>
 
     <!-- Cache Template -->
 
     <bean id="crafter.cacheTemplate" class="org.craftercms.core.util.cache.impl.DefaultCacheTemplate">
-        <property name="cacheService" ref="crafter.cacheService" />
+        <constructor-arg name="cacheService" ref="crafter.cacheService" />
     </bean>
 
     <!-- Cache Ticker -->

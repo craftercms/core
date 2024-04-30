@@ -25,7 +25,6 @@ import org.craftercms.core.cache.CacheStatistics;
 import org.craftercms.core.exception.InternalCacheEngineException;
 import org.craftercms.core.exception.InvalidScopeException;
 import org.craftercms.core.util.cache.CachingAwareObject;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,18 +58,9 @@ public class CacheImpl implements Cache {
      * Default constructor. Sets <code>timestampGenerator</code> to {@link org.craftercms.core.util.generators.impl
      * .IncrementalTimestampGenerator}.
      */
-    public CacheImpl() {
-        ticks = new AtomicInteger(0);
-    }
-
-    /**
-     * Sets the underlying {@link CacheStoreAdapter}
-     *
-     * @param cacheStoreAdapter the adapter for the cache data structure
-     */
-    @Required
-    public void setCacheStoreAdapter(CacheStoreAdapter cacheStoreAdapter) {
+    public CacheImpl(CacheStoreAdapter cacheStoreAdapter) {
         this.cacheStoreAdapter = cacheStoreAdapter;
+        ticks = new AtomicInteger(0);
     }
 
     /**

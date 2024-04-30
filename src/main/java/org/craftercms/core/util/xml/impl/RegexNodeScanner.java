@@ -27,7 +27,6 @@ import org.dom4j.Document;
 import org.dom4j.Node;
 import org.dom4j.Text;
 import org.dom4j.VisitorSupport;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * {@link NodeScanner} implementation that scans the document to find nodes that match certain regex patterns.
@@ -39,13 +38,9 @@ public class RegexNodeScanner implements NodeScanner {
     protected Pattern[] patterns;
     protected boolean matchEntireNodeText;
 
-    public RegexNodeScanner() {
-        matchEntireNodeText = true;
-    }
-
-    @Required
-    public void setPatterns(Pattern... patterns) {
+    public RegexNodeScanner(Pattern... patterns) {
         this.patterns = patterns;
+        matchEntireNodeText = true;
     }
 
     public void setMatchEntireNodeText(boolean matchEntireNodeText) {

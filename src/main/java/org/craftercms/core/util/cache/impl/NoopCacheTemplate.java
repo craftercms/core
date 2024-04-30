@@ -16,6 +16,7 @@
 package org.craftercms.core.util.cache.impl;
 
 import org.craftercms.commons.lang.Callback;
+import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 
@@ -26,6 +27,10 @@ import org.craftercms.core.service.Context;
  * @since 3.1.18
  */
 public class NoopCacheTemplate extends DefaultCacheTemplate {
+
+    public NoopCacheTemplate(CacheService cacheService) {
+        super(cacheService);
+    }
 
     @Override
     public <T> T getObject(Context context, CachingOptions options, Callback<T> callback, Object... keyElements) {

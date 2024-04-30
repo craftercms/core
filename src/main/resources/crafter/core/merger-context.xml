@@ -22,10 +22,10 @@
     <!-- Content Bundle Url Parser -->
 
     <bean id="crafter.contentBundleUrlParser" class="org.craftercms.core.util.url.impl.RegexBasedContentBundleUrlParser">
-        <property name="pattern" value="${crafter.core.merger.strategy.contentBundle.urlParser.urlPattern}"/>
-        <property name="prefixGroup" value="${crafter.core.merger.strategy.contentBundle.urlParser.prefixGroup}"/>
-        <property name="baseNameAndExtensionTokenGroup" value="${crafter.core.merger.strategy.contentBundle.urlParser.baseNameAndExtensionGroup}"/>
-        <property name="suffixGroup" value="${crafter.core.merger.strategy.contentBundle.urlParser.suffixGroup}"/>
+        <constructor-arg name="prefixGroup" value="${crafter.core.merger.strategy.contentBundle.urlParser.prefixGroup}"/>
+        <constructor-arg name="baseNameAndExtensionTokenGroup" value="${crafter.core.merger.strategy.contentBundle.urlParser.baseNameAndExtensionGroup}"/>
+        <constructor-arg name="suffixGroup" value="${crafter.core.merger.strategy.contentBundle.urlParser.suffixGroup}"/>
+        <constructor-arg name="pattern" value="${crafter.core.merger.strategy.contentBundle.urlParser.urlPattern}"/>
     </bean>
 
     <!-- Merge Strategies -->
@@ -34,28 +34,28 @@
 
     <bean id="crafter.inheritLevelsMergeStrategy"
           class="org.craftercms.core.xml.mergers.impl.strategies.InheritLevelsMergeStrategy">
-        <property name="levelDescriptorFileName" value="${crafter.core.merger.strategy.inheritLevels.levelDescriptor.name}"/>
+        <constructor-arg name="levelDescriptorFileName" value="${crafter.core.merger.strategy.inheritLevels.levelDescriptor.name}"/>
         <property name="baseFolders" value="${crafter.core.merger.strategy.inheritLevels.baseFolders}"/>
     </bean>
 
     <bean id="crafter.contentBundleMergeStrategy"
           class="org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategy">
-        <property name="urlParser" ref="crafter.contentBundleUrlParser"/>
-        <property name="baseDelimiter" value="${crafter.core.merger.strategy.contentBundle.baseDelimiter}"/>
+        <constructor-arg name="urlParser" ref="crafter.contentBundleUrlParser"/>
+        <constructor-arg name="baseDelimiter" value="${crafter.core.merger.strategy.contentBundle.baseDelimiter}"/>
+        <constructor-arg name="regularMergeStrategy" ref="crafter.inheritLevelsMergeStrategy"/>
         <property name="baseMergeStrategyResolver" ref="crafter.metaDataMergeStrategyResolver"/>
-        <property name="regularMergeStrategy" ref="crafter.inheritLevelsMergeStrategy"/>
     </bean>
 
     <bean id="crafter.explicitParentMergeStrategy" class="org.craftercms.core.xml.mergers.impl.strategies.ExplicitParentMergeStrategy">
-        <property name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
-        <property name="parentDescriptorElementXPathQuery"
+        <constructor-arg name="mergeStrategyResolver" ref="crafter.mergeStrategyResolverChain"/>
+        <constructor-arg name="parentDescriptorElementXPathQuery"
                   value="${crafter.core.merger.strategy.explicitParent.parentDescriptor.element.xpathQuery}"/>
     </bean>
 
     <!-- Merge Strategy Resolvers -->
 
     <bean id="crafter.metaDataMergeStrategyResolver" class="org.craftercms.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolver">
-        <property name="mergeStrategyElementXPathQuery" value="${crafter.core.merger.strategy.element.xpathQuery}"/>
+        <constructor-arg name="mergeStrategyElementXPathQuery" value="${crafter.core.merger.strategy.element.xpathQuery}"/>
         <property name="elementValueToStrategyMappings">
             <map>
                 <entry key="${crafter.core.merger.strategy.element.value.singleFile}"
@@ -71,7 +71,7 @@
     </bean>
 
     <bean id="crafter.mergeStrategyResolverChain" class="org.craftercms.core.xml.mergers.impl.resolvers.DescriptorMergeStrategyResolverChain">
-        <property name="defaultStrategy" ref="crafter.singleFileMergeStrategy"/>
+        <constructor-arg name="defaultStrategy" ref="crafter.singleFileMergeStrategy"/>
         <property name="resolvers">
             <list>
                 <ref bean="crafter.metaDataMergeStrategyResolver"/>
@@ -82,27 +82,28 @@
     <!-- Merger -->
 
     <bean id="crafter.elementMergeMatcher" class="org.craftercms.core.xml.mergers.impl.cues.impl.ElementMergeMatcherImpl">
-        <property name="idAttributeName" value="${crafter.core.merger.cues.matcher.id.attributeName}"/>
+        <constructor-arg name="idAttributeName" value="${crafter.core.merger.cues.matcher.id.attributeName}"/>
     </bean>
 
     <bean id="crafter.abstractMergeParentAndChildMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCue"
           abstract="true">
-        <property name="elementMergeMatcher" ref="crafter.elementMergeMatcher"/>
+        <constructor-arg name="elementMergeMatcher" ref="crafter.elementMergeMatcher"/>
+        <constructor-arg name="mergeOrderParamName" value="${crafter.core.merger.cues.mergeParentAndChild.order.param.name}"/>
+        <constructor-arg name="defaultMergeOrder" value="${crafter.core.merger.cues.mergeParentAndChild.order.value.default}"/>
+        <constructor-arg name="priority" value="${crafter.core.merger.cues.mergeParentAndChild.default.priority}"/>
         <property name="mergeCueResolver" ref="crafter.mergeCueResolver"/>
-        <property name="mergeOrderParamName" value="${crafter.core.merger.cues.mergeParentAndChild.order.param.name}"/>
-        <property name="defaultMergeOrder" value="${crafter.core.merger.cues.mergeParentAndChild.order.value.default}"/>
     </bean>
 
     <bean id="crafter.overrideParentMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
-        <property name="priority" value="${crafter.core.merger.cues.child.overrideParent.priority}"/>
+        <constructor-arg name="priority" value="${crafter.core.merger.cues.child.overrideParent.priority}"/>
     </bean>
 
     <bean id="crafter.disallowOverrideMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
-        <property name="priority" value="${crafter.core.merger.cues.parent.disallowOverride.priority}"/>
+        <constructor-arg name="priority" value="${crafter.core.merger.cues.parent.disallowOverride.priority}"/>
     </bean>
 
     <bean id="crafter.useParentMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
-        <property name="priority" value="${crafter.core.merger.cues.child.useParent.priority}"/>
+        <constructor-arg name="priority" value="${crafter.core.merger.cues.child.useParent.priority}"/>
     </bean>
 
     <bean id="crafter.mergeWithParentMergeCue" parent="crafter.abstractMergeParentAndChildMergeCue">
@@ -114,11 +115,11 @@
     </bean>
     
     <bean id="crafter.defaultParentMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentIfNotEmptyMergeCue">
-        <property name="priority" value="${crafter.core.merger.cues.parent.default.priority}"/>
+        <constructor-arg name="priority" value="${crafter.core.merger.cues.parent.default.priority}"/>
     </bean>
 
     <bean id="crafter.defaultChildMergeCue" class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildIfNotEmptyMergeCue">
-        <property name="priority" value="${crafter.core.merger.cues.child.default.priority}"/>
+        <constructor-arg name="priority" value="${crafter.core.merger.cues.child.default.priority}"/>
     </bean>
 
     <bean id="crafter.mergeCueResolver" class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeCueResolverImpl">
@@ -145,7 +146,7 @@
     </bean>
 
     <bean id="crafter.merger" class="org.craftercms.core.xml.mergers.impl.DescriptorMergerImpl">
-        <property name="initialMergeCue" ref="crafter.mergeWithChildMergeCue"/>
+        <constructor-arg name="initialMergeCue" ref="crafter.mergeWithChildMergeCue"/>
     </bean>
 
 </beans>

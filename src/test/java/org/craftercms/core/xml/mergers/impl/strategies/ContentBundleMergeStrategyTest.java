@@ -119,11 +119,8 @@ public class ContentBundleMergeStrategyTest {
             }
         });
 
-        strategy = new ContentBundleMergeStrategy();
-        strategy.setUrlParser(contentBundleUrlParser);
-        strategy.setBaseDelimiter(BASE_DELIMITER);
+        strategy = new ContentBundleMergeStrategy(contentBundleUrlParser, BASE_DELIMITER, regularStrategy);
         strategy.setBaseMergeStrategyResolver(baseResolver);
-        strategy.setRegularMergeStrategy(regularStrategy);
     }
 
 }

@@ -15,6 +15,7 @@
  */
 package org.craftercms.core.processors.impl;
 
+import org.craftercms.core.service.ContentStoreService;
 import org.dom4j.Element;
 
 /**
@@ -28,7 +29,8 @@ public class PageAwareIncludeDescriptorsProcessor extends IncludeDescriptorsProc
     protected boolean disablePageInclusion;
     protected String pagesPathPattern;
 
-    public PageAwareIncludeDescriptorsProcessor() {
+    public PageAwareIncludeDescriptorsProcessor(String includeElementXPathQuery, String disabledIncludeNodeXPathQuery) {
+        super(includeElementXPathQuery, disabledIncludeNodeXPathQuery);
         disablePageInclusion = true;
     }
 

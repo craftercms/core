@@ -23,7 +23,6 @@ import org.craftercms.core.exception.XmlException;
 import org.craftercms.core.util.xml.NodeScanner;
 import org.dom4j.Document;
 import org.dom4j.Node;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * {@link NodeScanner} implementation that scans the document by executing XPath queries.
@@ -34,8 +33,7 @@ public class XPathNodeScanner implements NodeScanner {
 
     protected String[] xpathQueries;
 
-    @Required
-    public void setXPathQueries(String... xpathQueries) {
+    public XPathNodeScanner(String... xpathQueries) {
         this.xpathQueries = xpathQueries;
     }
 

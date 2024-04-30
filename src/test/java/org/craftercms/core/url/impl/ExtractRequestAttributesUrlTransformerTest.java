@@ -54,8 +54,7 @@ public class ExtractRequestAttributesUrlTransformerTest {
     }
 
     private void setUpTestTransformer() {
-        transformer = new ExtractRequestAttributesUrlTransformer();
-        transformer.setUriTemplate(URI_TEMPLATE);
+        transformer = new ExtractRequestAttributesUrlTransformer(URI_TEMPLATE);
     }
 
     private void setUpTestRequestAttributes() {
