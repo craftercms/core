@@ -23,7 +23,6 @@ import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.util.url.ContentBundleUrl;
 import org.craftercms.core.util.url.ContentBundleUrlParser;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * This transformer is similar to {@link ShortToLongUrlTransformer}, but also looks in a content bundle for an
@@ -47,13 +46,8 @@ public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransf
     private ContentBundleUrlParser urlParser;
     private String baseDelimiter;
 
-    @Required
-    public void setUrlParser(ContentBundleUrlParser urlParser) {
+    public ContentBundleShortToLongUrlTransformer(ContentBundleUrlParser urlParser, String baseDelimiter) {
         this.urlParser = urlParser;
-    }
-
-    @Required
-    public void setBaseDelimiter(String baseDelimiter) {
         this.baseDelimiter = baseDelimiter;
     }
 

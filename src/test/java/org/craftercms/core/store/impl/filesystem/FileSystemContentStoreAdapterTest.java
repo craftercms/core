@@ -162,12 +162,8 @@ public class FileSystemContentStoreAdapterTest {
         when(resourceLoader.getResource(CLASSPATH_STORE_ROOT_FOLDER_PATH)).thenReturn(new ClassPathResource(
                 CLASSPATH_STORE_ROOT_FOLDER_PATH));
 
-        storeAdapter = new FileSystemContentStoreAdapter();
-        storeAdapter.setCacheTemplate(cacheTemplate);
+        storeAdapter = new FileSystemContentStoreAdapter(new SecurePathValidator(), DESCRIPTOR_FILE_EXTENSION, METADATA_FILE_EXTENSION, cacheTemplate);
         storeAdapter.setResourceLoader(resourceLoader);
-        storeAdapter.setDescriptorFileExtension(DESCRIPTOR_FILE_EXTENSION);
-        storeAdapter.setMetadataFileExtension(METADATA_FILE_EXTENSION);
-        storeAdapter.setPathValidator(new SecurePathValidator());
     }
 
     private void assertCrafterCMSLogoItem(Item item) {

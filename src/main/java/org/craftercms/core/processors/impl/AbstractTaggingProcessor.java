@@ -26,8 +26,6 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.springframework.beans.factory.annotation.Required;
-
 
 /**
  * Base {@link ItemProcessor} to add a new field to documents.
@@ -48,8 +46,7 @@ public abstract class AbstractTaggingProcessor implements ItemProcessor {
      */
     protected String defaultValue;
 
-    @Required
-    public void setNewField(String newField) {
+    public AbstractTaggingProcessor(String newField) {
         this.newField = newField;
     }
 

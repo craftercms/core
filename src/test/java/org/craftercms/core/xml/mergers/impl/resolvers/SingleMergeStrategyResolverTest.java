@@ -50,8 +50,7 @@ public class SingleMergeStrategyResolverTest {
     }
 
     private void setUpTestResolver() {
-        resolver = new SingleMergeStrategyResolver();
-        resolver.setStrategy(strategy);
+        resolver = new SingleMergeStrategyResolver(strategy);
     }
 
 }

@@ -21,7 +21,6 @@ import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.dom4j.Document;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Implementation of {@link AbstractInheritFromHierarchyMergeStrategy}. Descriptors "inherited" are level descriptors
@@ -34,8 +33,7 @@ public class InheritLevelsMergeStrategy extends AbstractInheritFromHierarchyMerg
 
     protected String levelDescriptorFileName;
 
-    @Required
-    public void setLevelDescriptorFileName(String levelDescriptorFileName) {
+    public InheritLevelsMergeStrategy(String levelDescriptorFileName) {
         this.levelDescriptorFileName = levelDescriptorFileName;
     }
 

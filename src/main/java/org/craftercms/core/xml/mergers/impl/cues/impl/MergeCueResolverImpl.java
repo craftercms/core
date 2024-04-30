@@ -27,7 +27,8 @@ import org.craftercms.core.xml.mergers.impl.cues.MergeCueResolver;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * Class description goes HERE
@@ -41,22 +42,22 @@ public class MergeCueResolverImpl implements MergeCueResolver {
     protected MergeCue defaultParentMergeCue;
     protected MergeCue defaultChildMergeCue;
 
-    @Required
-    public void setParentMergeCues(Map<QName, MergeCue> parentMergeCues) {
+    @Autowired
+    public void setParentMergeCues(@Lazy Map<QName, MergeCue> parentMergeCues) {
         this.parentMergeCues = parentMergeCues;
     }
 
-    @Required
-    public void setChildMergeCues(Map<QName, MergeCue> childMergeCues) {
+    @Autowired
+    public void setChildMergeCues(@Lazy Map<QName, MergeCue> childMergeCues) {
         this.childMergeCues = childMergeCues;
     }
 
-    @Required
+    @Autowired
     public void setDefaultParentMergeCue(MergeCue defaultParentMergeCue) {
         this.defaultParentMergeCue = defaultParentMergeCue;
     }
 
-    @Required
+    @Autowired
     public void setDefaultChildMergeCue(MergeCue defaultChildMergeCue) {
         this.defaultChildMergeCue = defaultChildMergeCue;
     }

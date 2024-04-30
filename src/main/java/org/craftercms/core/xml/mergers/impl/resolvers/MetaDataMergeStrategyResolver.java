@@ -22,7 +22,8 @@ import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.dom4j.Document;
 import org.dom4j.Node;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * Resolves the {@link DescriptorMergeStrategy} to use for a given descriptor, based on the value of an element in
@@ -36,13 +37,12 @@ public class MetaDataMergeStrategyResolver implements DescriptorMergeStrategyRes
     private String mergeStrategyElementXPathQuery;
     private Map<String, DescriptorMergeStrategy> elementValueToStrategyMappings;
 
-    @Required
-    public void setMergeStrategyElementXPathQuery(String mergeStrategyElementXPathQuery) {
+    public MetaDataMergeStrategyResolver(String mergeStrategyElementXPathQuery) {
         this.mergeStrategyElementXPathQuery = mergeStrategyElementXPathQuery;
     }
 
-    @Required
-    public void setElementValueToStrategyMappings(Map<String, DescriptorMergeStrategy> elementValueToStrategyMappings) {
+    @Autowired
+    public void setElementValueToStrategyMappings(@Lazy Map<String, DescriptorMergeStrategy> elementValueToStrategyMappings) {
         this.elementValueToStrategyMappings = elementValueToStrategyMappings;
     }
 

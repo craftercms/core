@@ -20,7 +20,6 @@ import java.util.Map;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.dom4j.Document;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Resolves the {@link DescriptorMergeStrategy} to use for a given descriptor by matching the descriptor URL
@@ -33,8 +32,7 @@ public class UrlPatternMergeStrategyResolver implements DescriptorMergeStrategyR
 
     private Map<String, DescriptorMergeStrategy> urlPatternToStrategyMappings;
 
-    @Required
-    public void setUrlPatternToStrategyMappings(Map<String, DescriptorMergeStrategy> urlPatternToStrategyMappings) {
+    public UrlPatternMergeStrategyResolver(Map<String, DescriptorMergeStrategy> urlPatternToStrategyMappings) {
         this.urlPatternToStrategyMappings = urlPatternToStrategyMappings;
     }
 

@@ -15,7 +15,7 @@
  */
 package org.craftercms.core.url.impl;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.craftercms.commons.http.RequestContext;
 import org.junit.After;

@@ -21,7 +21,6 @@ import org.craftercms.core.util.template.CompiledTemplate;
 import org.craftercms.core.util.template.TemplateCompiler;
 import org.craftercms.core.util.template.impl.IdentifiableStringTemplateSource;
 import org.craftercms.core.util.template.impl.freemarker.ConcurrentStringTemplateLoader.StringTemplateSource;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Class description goes HERE
@@ -42,12 +41,10 @@ public class FreeMarkerStringTemplateCompiler implements TemplateCompiler<Identi
         templateConfiguration.setTemplateUpdateDelayMilliseconds(0);
     }
 
-    @Required
     public void setTemplateConfiguration(Configuration templateConfiguration) {
         this.templateConfiguration = templateConfiguration;
     }
 
-    @Required
     public void setTemplateLoader(ConcurrentStringTemplateLoader templateLoader) {
         this.templateLoader = templateLoader;
     }

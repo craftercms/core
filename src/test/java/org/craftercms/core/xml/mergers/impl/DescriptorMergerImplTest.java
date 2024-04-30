@@ -129,37 +129,27 @@ public class DescriptorMergerImplTest {
     private void setUpTestMerger() {
         MergeCueResolverImpl mergeCueResolver = new MergeCueResolverImpl();
 
-        ElementMergeMatcherImpl elementMergeMatcher = new ElementMergeMatcherImpl();
-        elementMergeMatcher.setIdAttributeName(new QName(MergeParentAndChildMergeCueTest.ID_ATTR_NAME));
+        ElementMergeMatcherImpl elementMergeMatcher = new ElementMergeMatcherImpl(new QName(MergeParentAndChildMergeCueTest.ID_ATTR_NAME));
 
-        UseChildMergeCue overrideParentMergeCue = new UseChildMergeCue();
-        overrideParentMergeCue.setPriority(OVERRIDE_PARENT_MERGE_CUE_PRIORITY);
+        UseChildMergeCue overrideParentMergeCue = new UseChildMergeCue(OVERRIDE_PARENT_MERGE_CUE_PRIORITY);
 
-        UseParentMergeCue disallowOverrideMergeCue = new UseParentMergeCue();
-        disallowOverrideMergeCue.setPriority(DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY);
+        UseParentMergeCue disallowOverrideMergeCue = new UseParentMergeCue(DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY);
 
-        UseParentMergeCue useParentIfAvailableMergeCue = new UseParentMergeCue();
-        useParentIfAvailableMergeCue.setPriority(USE_PARENT_MERGE_CUE_PRIORITY);
+        UseParentMergeCue useParentIfAvailableMergeCue = new UseParentMergeCue(USE_PARENT_MERGE_CUE_PRIORITY);
 
-        MergeParentAndChildMergeCue mergeWithParentMergeCue = new MergeParentAndChildMergeCue();
-        mergeWithParentMergeCue.setPriority(MERGE_WITH_PARENT_MERGE_CUE_PRIORITY);
-        mergeWithParentMergeCue.setElementMergeMatcher(elementMergeMatcher);
+        MergeParentAndChildMergeCue mergeWithParentMergeCue = new MergeParentAndChildMergeCue(elementMergeMatcher,
+                MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME, MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER,
+                MERGE_WITH_PARENT_MERGE_CUE_PRIORITY);
         mergeWithParentMergeCue.setMergeCueResolver(mergeCueResolver);
-        mergeWithParentMergeCue.setMergeOrderParamName(MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME);
-        mergeWithParentMergeCue.setDefaultMergeOrder(MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER);
 
-        MergeParentAndChildMergeCue mergeWithChildMergeCue = new MergeParentAndChildMergeCue();
-        mergeWithChildMergeCue.setPriority(MERGE_WITH_CHILD_MERGE_CUE_PRIORITY);
-        mergeWithChildMergeCue.setElementMergeMatcher(elementMergeMatcher);
+        MergeParentAndChildMergeCue mergeWithChildMergeCue = new MergeParentAndChildMergeCue(elementMergeMatcher,
+                MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME, MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER,
+                MERGE_WITH_CHILD_MERGE_CUE_PRIORITY);
         mergeWithChildMergeCue.setMergeCueResolver(mergeCueResolver);
-        mergeWithChildMergeCue.setMergeOrderParamName(MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME);
-        mergeWithChildMergeCue.setDefaultMergeOrder(MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER);
 
-        UseParentIfNotEmptyMergeCue defaultParentMergeCue = new UseParentIfNotEmptyMergeCue();
-        defaultParentMergeCue.setPriority(DEFAULT_PARENT_MERGE_CUE_PRIORITY);
+        UseParentIfNotEmptyMergeCue defaultParentMergeCue = new UseParentIfNotEmptyMergeCue(DEFAULT_PARENT_MERGE_CUE_PRIORITY);
 
-        UseChildIfNotEmptyMergeCue defaultChildMergeCue = new UseChildIfNotEmptyMergeCue();
-        defaultParentMergeCue.setPriority(DEFAULT_CHILD_MERGE_CUE_PRIORITY);
+        UseChildIfNotEmptyMergeCue defaultChildMergeCue = new UseChildIfNotEmptyMergeCue(DEFAULT_CHILD_MERGE_CUE_PRIORITY);
 
         Map<QName, MergeCue> parentMergeCues = new HashMap<QName, MergeCue>(2);
         parentMergeCues.put(new QName(DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME), disallowOverrideMergeCue);
@@ -175,8 +165,7 @@ public class DescriptorMergerImplTest {
         mergeCueResolver.setDefaultParentMergeCue(defaultParentMergeCue);
         mergeCueResolver.setDefaultChildMergeCue(defaultChildMergeCue);
 
-        merger = new DescriptorMergerImpl();
-        merger.setInitialMergeCue(mergeWithChildMergeCue);
+        merger = new DescriptorMergerImpl(mergeWithChildMergeCue);
     }
 
     private void setUpTestDescriptorsToMerge() throws DocumentException, SAXException {

@@ -21,7 +21,6 @@ import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformationEngine;
 import org.craftercms.core.util.cache.CacheTemplate;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Class description goes HERE
@@ -34,8 +33,7 @@ public abstract class AbstractCachedUrlTransformationEngine implements UrlTransf
 
     protected CacheTemplate cacheTemplate;
 
-    @Required
-    public void setCacheTemplate(CacheTemplate cacheTemplate) {
+    public AbstractCachedUrlTransformationEngine(CacheTemplate cacheTemplate) {
         this.cacheTemplate = cacheTemplate;
     }
 

@@ -30,7 +30,8 @@ import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
 import org.craftercms.core.xml.mergers.DescriptorMergeStrategyResolver;
 import org.craftercms.core.xml.mergers.MergeableDescriptor;
 import org.dom4j.Document;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * {@link DescriptorMergeStrategy} that returns the level descriptors in the hierarchy and the base descriptors
@@ -51,24 +52,15 @@ public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
     private DescriptorMergeStrategyResolver baseMergeStrategyResolver;
     private DescriptorMergeStrategy regularMergeStrategy;
 
-    @Required
-    public void setUrlParser(ContentBundleUrlParser urlParser) {
+    public ContentBundleMergeStrategy(ContentBundleUrlParser urlParser, String baseDelimiter, DescriptorMergeStrategy regularMergeStrategy) {
         this.urlParser = urlParser;
-    }
-
-    @Required
-    public void setBaseDelimiter(String baseDelimiter) {
         this.baseDelimiter = baseDelimiter;
-    }
-
-    @Required
-    public void setBaseMergeStrategyResolver(DescriptorMergeStrategyResolver baseMergeStrategyResolver) {
-        this.baseMergeStrategyResolver = baseMergeStrategyResolver;
-    }
-
-    @Required
-    public void setRegularMergeStrategy(DescriptorMergeStrategy regularMergeStrategy) {
         this.regularMergeStrategy = regularMergeStrategy;
+    }
+
+    @Autowired
+    public void setBaseMergeStrategyResolver(@Lazy DescriptorMergeStrategyResolver baseMergeStrategyResolver) {
+        this.baseMergeStrategyResolver = baseMergeStrategyResolver;
     }
 
     @Override

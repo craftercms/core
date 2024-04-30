@@ -27,6 +27,10 @@ import org.dom4j.Element;
  */
 public class UseChildIfNotEmptyMergeCue extends AbstractMergeCue {
 
+    public UseChildIfNotEmptyMergeCue(int priority) {
+        super(priority);
+    }
+
     @Override
     public Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException {
         if (child.hasContent()) {

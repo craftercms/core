@@ -22,7 +22,6 @@ import org.craftercms.core.exception.UrlTransformationException;
 import org.craftercms.core.service.CachingOptions;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.url.UrlTransformer;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriTemplate;
 
 /**
@@ -37,8 +36,7 @@ public class ExtractRequestAttributesUrlTransformer implements UrlTransformer {
 
     private UriTemplate uriTemplate;
 
-    @Required
-    public void setUriTemplate(String uriTemplate) {
+    public ExtractRequestAttributesUrlTransformer(String uriTemplate) {
         this.uriTemplate = new UriTemplate(uriTemplate);
     }
 

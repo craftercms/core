@@ -25,12 +25,12 @@ import org.craftercms.core.service.Content;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.service.Item;
 import org.craftercms.core.util.ContentStoreUtils;
+import org.craftercms.core.util.cache.CacheTemplate;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.Validator;
 import org.xml.sax.SAXException;
 
@@ -59,27 +59,17 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
     protected String metadataFileExtension;
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFileBasedContentStoreAdapter.class);
 
-    public AbstractFileBasedContentStoreAdapter() {
+    public AbstractFileBasedContentStoreAdapter(final Validator pathValidator, String descriptorFileExtension,
+                                                String metadataFileExtension, CacheTemplate cacheTemplate) {
+        super(cacheTemplate);
+        this.pathValidator = pathValidator;
+        this.descriptorFileExtension = descriptorFileExtension;
+        this.metadataFileExtension = metadataFileExtension;
         charset = DEFAULT_CHARSET;
     }
 
     public void setCharset(String charset) {
         this.charset = charset;
-    }
-
-    @Required
-    public void setPathValidator(final Validator pathValidator) {
-        this.pathValidator = pathValidator;
-    }
-
-    @Required
-    public void setDescriptorFileExtension(String descriptorFileExtension) {
-        this.descriptorFileExtension = descriptorFileExtension;
-    }
-
-    @Required
-    public void setMetadataFileExtension(String metadataFileExtension) {
-        this.metadataFileExtension = metadataFileExtension;
     }
 
     @Override

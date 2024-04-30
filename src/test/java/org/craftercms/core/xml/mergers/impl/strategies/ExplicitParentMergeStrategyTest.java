@@ -107,9 +107,7 @@ public class ExplicitParentMergeStrategyTest {
         when(mergeStrategyResolver.getStrategy(eq(PARENT_DESCRIPTOR_URL), any(Document.class)))
             .thenReturn(parentStrategy);
 
-        strategy = new ExplicitParentMergeStrategy();
-        strategy.setMergeStrategyResolver(mergeStrategyResolver);
-        strategy.setParentDescriptorElementXPathQuery(PARENT_DESCRIPTOR_ELEM_XPATH_QUERY);
+        strategy = new ExplicitParentMergeStrategy(mergeStrategyResolver, PARENT_DESCRIPTOR_ELEM_XPATH_QUERY);
     }
 
 }

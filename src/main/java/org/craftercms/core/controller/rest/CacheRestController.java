@@ -24,7 +24,6 @@ import org.craftercms.core.exception.InvalidContextException;
 import org.craftercms.core.service.ContentStoreService;
 import org.craftercms.core.service.Context;
 import org.craftercms.core.util.cache.CacheTemplate;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,18 +57,9 @@ public class CacheRestController extends RestControllerBase {
 
     private String authorizationToken;
 
-    @Required
-    public void setCacheTemplate(CacheTemplate cacheTemplate) {
+    public CacheRestController(CacheTemplate cacheTemplate, ContentStoreService storeService, final String authorizationToken) {
         this.cacheTemplate = cacheTemplate;
-    }
-
-    @Required
-    public void setStoreService(ContentStoreService storeService) {
         this.storeService = storeService;
-    }
-
-    @Required
-    public void setAuthorizationToken(final String authorizationToken) {
         this.authorizationToken = authorizationToken;
     }
 
