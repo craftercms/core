@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,19 +15,11 @@
  */
 package org.craftercms.core.service;
 
-import java.util.List;
-
-import org.craftercms.core.exception.AuthenticationException;
-import org.craftercms.core.exception.InvalidContextException;
-import org.craftercms.core.exception.InvalidScopeException;
-import org.craftercms.core.exception.InvalidStoreTypeException;
-import org.craftercms.core.exception.ItemProcessingException;
-import org.craftercms.core.exception.PathNotFoundException;
-import org.craftercms.core.exception.RootFolderNotFoundException;
-import org.craftercms.core.exception.StoreException;
-import org.craftercms.core.exception.XmlFileParseException;
-import org.craftercms.core.exception.XmlMergeException;
+import org.craftercms.core.exception.*;
 import org.craftercms.core.processors.ItemProcessor;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Main Crafter content access API. Besides providing an interface to a content store or repository, implementations
@@ -76,6 +68,7 @@ public interface ContentStoreService {
      * @param cacheOn indicates if content caching should be enabled
      * @param maxAllowedItemsInCache the maximum number of items to hold in the cache
      * @param ignoreHiddenFiles indicates if hidden files should be ignored
+     * @param configurationVariables a map of configuration variables to use when creating the context
      * @return the {@link Context} object
      * @throws InvalidStoreTypeException if the provided store type is invalid
      * @throws RootFolderNotFoundException if the provided root folder path doesn't exist
@@ -83,7 +76,7 @@ public interface ContentStoreService {
      * @throws AuthenticationException if there is any authentication error during the creation of the context
      */
     Context getContext(String tag, String storeType, String rootFolderPath, boolean mergingOn, boolean cacheOn,
-                       int maxAllowedItemsInCache, boolean ignoreHiddenFiles)
+                       int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables)
         throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException;
 
     /**

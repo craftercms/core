@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -146,7 +146,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     @Override
     public Context getContext(String tag, String storeType, String rootFolderPath, boolean mergingOn,
-                              boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles)
+                              boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables)
         throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException {
         String id = createContextId(tag, storeType, rootFolderPath, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 
@@ -157,7 +157,7 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             }
 
             Context context = storeAdapter.createContext(id, rootFolderPath, mergingOn, cacheOn,
-                                                         maxAllowedItemsInCache, ignoreHiddenFiles);
+                                                         maxAllowedItemsInCache, ignoreHiddenFiles, configurationVariables);
 
             cacheTemplate.getCacheService().addScope(context);
 
@@ -602,6 +602,11 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         @Override
         public InputStream getConfig(String path) throws IOException {
             return ContentStoreServiceImpl.this.getContent(context, cachingOptions, path).getInputStream();
+        }
+
+        @Override
+        public Map<String, String> getLookupVariables() {
+            return context.getConfigLookupVariables();
         }
     }
 

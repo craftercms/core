@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -16,6 +16,7 @@
 package org.craftercms.core.store;
 
 import java.util.List;
+import java.util.Map;
 
 import org.craftercms.core.exception.AuthenticationException;
 import org.craftercms.core.exception.InvalidContextException;
@@ -37,7 +38,7 @@ import org.craftercms.core.service.Item;
 public interface ContentStoreAdapter {
 
     Context createContext(String id, String rootFolderPath, boolean mergingOn, boolean cacheOn,
-                          int maxAllowedItemsInCache, boolean ignoreHiddenFiles)
+                          int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables)
             throws RootFolderNotFoundException, StoreException, AuthenticationException;
 
     boolean validate(Context context) throws StoreException, AuthenticationException;
