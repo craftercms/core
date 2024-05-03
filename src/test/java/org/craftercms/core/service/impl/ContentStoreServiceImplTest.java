@@ -61,7 +61,7 @@ public class ContentStoreServiceImplTest {
     private static final String CLASSPATH_STORE_ROOT_FOLDER_PATH =
         "classpath:stores/" + ContentStoreServiceImplTest.class.getSimpleName();
 
-    private static final String ROOT_FOLDER_NAME = "";
+    private static final String ROOT_FOLDER_NAME = "ContentStoreServiceImplTest";
     private static final String ROOT_FOLDER_PATH = "/";
 
     private static final String INVALID_PATH = "no_file";
