@@ -35,12 +35,15 @@
 
     <bean id="crafter.s3ClientFactory" class="org.craftercms.commons.aws.S3ClientCachingFactory"/>
 
+    <bean id="crafter.s3AsyncClientFactory" class="org.craftercms.commons.aws.S3AsyncClientCachingFactory"/>
+
     <bean id="crafter.s3ProfileMapper" class="org.craftercms.commons.config.profiles.aws.S3ProfileMapper">
         <constructor-arg name="configurationResolver" ref="crafter.configurationResolver"/>
     </bean>
 
     <bean id="s3BlobStore" class="org.craftercms.commons.file.blob.impl.s3.AwsS3BlobStore" scope="prototype">
         <property name="clientFactory" ref="crafter.s3ClientFactory"/>
+        <property name="asyncClientFactory" ref="crafter.s3AsyncClientFactory" />
         <property name="publishingTargetResolver" ref="crafter.publishingTargetResolver"/>
         <property name="profileMapper" ref="crafter.s3ProfileMapper"/>
     </bean>
