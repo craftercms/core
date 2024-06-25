@@ -63,14 +63,20 @@ public class ContentStoreRestController extends RestControllerBase implements In
     public static final String URL_TREE = "/tree";
 
     private ContentStoreService storeService;
+    private final int treeDepthLimit;
     private String[] allowedUrlPatterns;
     private String[] forbiddenUrlPatterns;
 
     private ItemFilter itemFilter;
 
-    @ConstructorProperties({"storeService"})
-    public ContentStoreRestController(ContentStoreService storeService) {
+    @ConstructorProperties({"storeService", "treeDepthLimit"})
+    public ContentStoreRestController(ContentStoreService storeService, int treeDepthLimit) {
         this.storeService = storeService;
+        if (treeDepthLimit < 0 || treeDepthLimit > ContentStoreService.TREE_DEPTH_HARD_LIMIT) {
+            this.treeDepthLimit = ContentStoreService.TREE_DEPTH_HARD_LIMIT;
+        } else {
+            this.treeDepthLimit = treeDepthLimit;
+        }
     }
 
     public void setAllowedUrlPatterns(String[] allowedUrlPatterns) {
@@ -170,8 +176,9 @@ public class ContentStoreRestController extends RestControllerBase implements In
             throw new IllegalArgumentException("No context found for ID " + contextId);
         }
 
-        if (depth == null) {
-            depth = ContentStoreService.UNLIMITED_TREE_DEPTH;
+        // tree depth must not exceed the configured limit
+        if (depth == null || depth < 0 || depth > treeDepthLimit) {
+            depth = treeDepthLimit;
         }
 
         try {
