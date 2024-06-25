@@ -32,6 +32,7 @@
 
     <bean id="crafter.contentStoreRestController" class="org.craftercms.core.controller.rest.ContentStoreRestController">
         <constructor-arg name="storeService" ref="crafter.contentStoreService"/>
+        <constructor-arg name="treeDepthLimit" value="${crafter.core.rest.content.store.tree.depth.limit}"/>
         <property name="allowedUrlPatterns" value="${crafter.core.rest.content.store.url.allowedPatterns}"/>
         <property name="forbiddenUrlPatterns" value="${crafter.core.rest.content.store.url.forbiddenPatterns}"/>
     </bean>
