@@ -64,6 +64,12 @@ public interface ContentStoreService {
     int UNLIMITED_TREE_DEPTH = -1;
 
     /**
+     * Constant used to indicate that the depth of the tree should be at maximum of this limit. This means that the tree
+     * won't be built for any deeper of the folder hierarchy upon this limit.
+     */
+    int TREE_DEPTH_HARD_LIMIT = 20;
+
+    /**
      * Returns the open {@link Context} for the given ID, or null if no context found for the ID.
      */
     Context getContext(String contextId);

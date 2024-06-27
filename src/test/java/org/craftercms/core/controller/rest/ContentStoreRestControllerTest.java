@@ -33,7 +33,7 @@ import java.util.function.Supplier;
 
 import static org.craftercms.core.controller.rest.ContentStoreRestController.CACHE_CONTROL_HEADER_NAME;
 import static org.craftercms.core.controller.rest.ContentStoreRestController.MUST_REVALIDATE_HEADER_VALUE;
-import static org.craftercms.core.service.ContentStoreService.UNLIMITED_TREE_DEPTH;
+import static org.craftercms.core.service.ContentStoreService.TREE_DEPTH_HARD_LIMIT;
 import static org.craftercms.core.service.Context.*;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -130,12 +130,12 @@ public class ContentStoreRestControllerTest {
     @Test
     public void testGetTreeNotModified() throws Exception {
         testNotModified(tree, () -> storeRestController.getTree(webRequest, response, context.getId(), FOLDER_URL,
-                                                                UNLIMITED_TREE_DEPTH, false));
+                                                                TREE_DEPTH_HARD_LIMIT, false));
 
         verify(storeService).getTree(eq(context),
                                      isNull(),
                                      eq(FOLDER_URL),
-                                     eq(UNLIMITED_TREE_DEPTH),
+                                     eq(TREE_DEPTH_HARD_LIMIT),
                                      any(ItemFilter.class),
                                      isNull(),
                                      eq(false));
@@ -144,12 +144,12 @@ public class ContentStoreRestControllerTest {
     @Test
     public void testGetTreeModified() throws Exception {
         testModified(tree, () -> storeRestController.getTree(webRequest, response, context.getId(), FOLDER_URL,
-            UNLIMITED_TREE_DEPTH, false));
+                TREE_DEPTH_HARD_LIMIT, false));
 
         verify(storeService).getTree(eq(context),
                                      isNull(),
                                      eq(FOLDER_URL),
-                                     eq(UNLIMITED_TREE_DEPTH),
+                                     eq(TREE_DEPTH_HARD_LIMIT),
                                      any(ItemFilter.class),
                                      isNull(),
                                      eq(false));
@@ -157,7 +157,7 @@ public class ContentStoreRestControllerTest {
 
     @Test(expected = ForbiddenPathException.class)
     public void testGetTreeProtected() {
-        storeRestController.getTree(webRequest, response, context.getId(), PROTECTED_URL, UNLIMITED_TREE_DEPTH, false);
+        storeRestController.getTree(webRequest, response, context.getId(), PROTECTED_URL, TREE_DEPTH_HARD_LIMIT, false);
         fail("Expected " + ForbiddenPathException.class.getName() + " exception");
     }
 
@@ -228,7 +228,7 @@ public class ContentStoreRestControllerTest {
             when(storeService.getTree(eq(context),
                                       isNull(),
                                       eq(FOLDER_URL),
-                                      eq(UNLIMITED_TREE_DEPTH),
+                                      eq(TREE_DEPTH_HARD_LIMIT),
                                       any(ItemFilter.class),
                                       isNull(),
                                       eq(false)))
@@ -238,7 +238,7 @@ public class ContentStoreRestControllerTest {
     }
 
     private void setUpTestStoreRestController() {
-        storeRestController = new ContentStoreRestController(storeService);
+        storeRestController = new ContentStoreRestController(storeService, TREE_DEPTH_HARD_LIMIT);
         storeRestController.setForbiddenUrlPatterns(new String[] {"^/?protected(/.+)?$"});
         storeRestController.afterPropertiesSet();
     }
