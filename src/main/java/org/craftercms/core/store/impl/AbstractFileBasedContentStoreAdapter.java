@@ -183,7 +183,7 @@ public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCache
         }
 
         if (!dir.isDirectory()) {
-            throw new StoreException("The path " + dir + " doesn't correspond to a dir");
+            throw new StoreException(format("The path '%s' doesn't correspond to a dir", path));
         }
 
         List<File> children = getChildren(context, cachingOptions, dir);
