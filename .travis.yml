@@ -4,31 +4,26 @@ git:
   quiet: true
 language: java
 jdk:
-- openjdk17
+  - openjdk17
 branches:
   only:
-  - develop
-  - support/4.1.x
-  - master
+    - develop
+    - support/4.1.x
+    - support/4.0.x
+    - master
 cache:
   directories:
-  - "$HOME/.m2"
+    - "$HOME/.m2"
 notifications:
-  irc:
-    channels:
-    - chat.freenode.net#craftercms
-    use_notice: true
-    skip_join: true
   slack: craftersoftware:7YiSb41ZG5rfMgiAY7Qgprc7
 before_install:
   - mkdir -p $HOME/.m2
   - cp .travis-settings.xml $HOME/.m2/settings.xml
 install: skip
 script:
-- if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then bash -c  "mvn deploy --settings
-  .travis-settings.xml";  fi
-- if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then bash -c "mvn clean install" ;fi
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then bash -c "mvn deploy --settings .travis-settings.xml"; fi
+  - if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then bash -c "mvn clean install"; fi
 env:
   global:
-  - secure: YEt3ugIGyjS1iAH1TuWaPag+4ufIAUc7wjvtQl92NiMCevf3a9nCuLQbcU6dK0DGYKWGF/+t+6bVGZ1Co52D2If89LDMLFdLXV9qUlfRt48rjY2Bwxg/pd/PWfKLU32r4jnELzcXq88pMprWPdrjxLne/A9VBdMYI0bICZM0znw=
-  - secure: 5UwNG9rS3KNPVK3UKH4PSroDRScGda7q6ZxczcHVl4nnu2pF3RzA7GVr/+XVyQ2+zOkyghyVeT/M32/NvH/OWNo/IvI4JsMJko+8qSzl/2kTQfTwQnykPKHtNv3nJRc6esYHrjSih83zfjHGrVWZmZQ5+3Hu0vXpwSQB63MAT/Y=
+    - secure: "mT4tWipiHeR31T+048KfBh1nTvxsb6haW0HWaCKoBggg0VHlDwMwkIaj358WYyHKTWN2TfWDPRPGLG/Q+YEkQVAVAjukzeuoxFqoGb8TUiuSgf8wlg7JiyXhdKyvzAfAG2SkLdWyi56Fo4iYgkYOfiF07O3OiF1sAbr5MI4iUA0="
+    - secure: "QWVd8MxRAMrAHRPZtCsrxPBh9UT5VL2dXGExFOqdtw6TjEOb0jEi7tgxgThHnYrAzw3F4kYt0yEd5yBdZU7VrI1tYDFX+kS0fiNxM0KQZkwRGiHUUxKbpM1OVtkMrW0rbU4kdI+jH9aXeizpsyRz9uvfGvwNR0cwU600uhc5vKc="
