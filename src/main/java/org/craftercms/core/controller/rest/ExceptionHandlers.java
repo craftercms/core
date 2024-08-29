@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -46,7 +46,7 @@ import static org.craftercms.core.controller.rest.RestControllerBase.createRespo
  * @author avasquez
  */
 @Order
-@ControllerAdvice(annotations = RestController.class)
+@ControllerAdvice(annotations = CrafterRestController.class)
 public class ExceptionHandlers {
     public static final String RESULT_KEY_VALIDATION_ERRORS = "validationErrors";
 
