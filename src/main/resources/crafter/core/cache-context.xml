@@ -16,59 +16,59 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-		<!-- Cache Store Adapter -->
-		<bean id="crafter.cacheStoreAdapter" class="org.craftercms.core.cache.impl.store.guava.GuavaCacheStoreAdapter"/>
+	<!-- Cache Store Adapter -->
+	<bean id="crafter.cacheStoreAdapter" class="org.craftercms.core.cache.impl.store.guava.GuavaCacheStoreAdapter"/>
 
-		<bean id="crafter.cacheRefresher" class="org.craftercms.core.cache.impl.CacheRefresherImpl"/>
+	<bean id="crafter.cacheRefresher" class="org.craftercms.core.cache.impl.CacheRefresherImpl"/>
 
-		<bean id="crafter.cache" class="org.craftercms.core.cache.impl.CacheImpl">
-				<constructor-arg name="cacheStoreAdapter" ref="crafter.cacheStoreAdapter"/>
-				<property name="cacheRefresher" ref="crafter.cacheRefresher"/>
+	<bean id="crafter.cache" class="org.craftercms.core.cache.impl.CacheImpl">
+		<constructor-arg name="cacheStoreAdapter" ref="crafter.cacheStoreAdapter"/>
+		<property name="cacheRefresher" ref="crafter.cacheRefresher"/>
+	</bean>
+
+	<!-- Cache Service -->
+
+	<bean id="crafter.cacheService" class="org.craftercms.core.service.impl.CacheServiceImpl">
+		<constructor-arg name="cache" ref="crafter.cache"/>
+	</bean>
+
+	<!-- Cache Template -->
+
+	<bean id="crafter.cacheTemplate" class="org.craftercms.core.util.cache.impl.DefaultCacheTemplate">
+		<constructor-arg name="cacheService" ref="crafter.cacheService"/>
+	</bean>
+
+	<!-- Cache Ticker -->
+
+	<beans profile="crafter.core.activeCache">
+		<bean id="crafter.cacheTickerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+			<property name="targetObject" ref="crafter.cache"/>
+			<property name="targetMethod" value="tick"/>
+			<property name="concurrent" value="false"/>
 		</bean>
 
-		<!-- Cache Service -->
-
-		<bean id="crafter.cacheService" class="org.craftercms.core.service.impl.CacheServiceImpl">
-				<constructor-arg name="cache" ref="crafter.cache"/>
+		<bean id="crafter.cacheTickerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+			<property name="jobDetail" ref="crafter.cacheTickerJob"/>
+			<property name="startDelay" value="${crafter.core.cache.tick.frequency}"/>
+			<property name="repeatInterval" value="${crafter.core.cache.tick.frequency}"/>
 		</bean>
 
-		<!-- Cache Template -->
-
-		<bean id="crafter.cacheTemplate" class="org.craftercms.core.util.cache.impl.DefaultCacheTemplate">
-				<constructor-arg name="cacheService" ref="crafter.cacheService"/>
+		<bean id="crafter.cacheTickerScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		      destroy-method="destroy">
+			<property name="triggers">
+				<list>
+					<ref bean="crafter.cacheTickerTrigger"/>
+				</list>
+			</property>
+			<property name="quartzProperties">
+				<props>
+					<prop key="org.quartz.threadPool.threadCount">1</prop>
+				</props>
+			</property>
 		</bean>
-
-		<!-- Cache Ticker -->
-
-		<beans profile="crafter.core.activeCache">
-				<bean id="crafter.cacheTickerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-						<property name="targetObject" ref="crafter.cache"/>
-						<property name="targetMethod" value="tick"/>
-						<property name="concurrent" value="false"/>
-				</bean>
-
-				<bean id="crafter.cacheTickerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-						<property name="jobDetail" ref="crafter.cacheTickerJob"/>
-						<property name="startDelay" value="${crafter.core.cache.tick.frequency}"/>
-						<property name="repeatInterval" value="${crafter.core.cache.tick.frequency}"/>
-				</bean>
-
-				<bean id="crafter.cacheTickerScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
-					  destroy-method="destroy">
-						<property name="triggers">
-								<list>
-										<ref bean="crafter.cacheTickerTrigger"/>
-								</list>
-						</property>
-						<property name="quartzProperties">
-								<props>
-										<prop key="org.quartz.threadPool.threadCount">1</prop>
-								</props>
-						</property>
-				</bean>
-		</beans>
+	</beans>
 
 </beans>

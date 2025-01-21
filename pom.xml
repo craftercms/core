@@ -16,251 +16,251 @@
   -->
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-		<modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.craftercms</groupId>
+	<artifactId>crafter-core</artifactId>
+
+	<name>Crafter Core</name>
+	<description>Crafter Core Library</description>
+	<url>https://github.com/craftercms/core</url>
+
+	<parent>
 		<groupId>org.craftercms</groupId>
-		<artifactId>crafter-core</artifactId>
+		<artifactId>craftercms</artifactId>
+		<version>5.0.0-SNAPSHOT</version><!-- craftercms version flag -->
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
 
-		<name>Crafter Core</name>
-		<description>Crafter Core Library</description>
-		<url>https://github.com/craftercms/core</url>
+	<scm>
+		<connection>scm:git:git://github.com/craftercms/core</connection>
+		<developerConnection>scm:git:git://github.com/craftercms/core</developerConnection>
+		<url>scm:git:git://github.com/craftercms/core</url>
+	</scm>
 
-		<parent>
-				<groupId>org.craftercms</groupId>
-				<artifactId>craftercms</artifactId>
-				<version>5.0.0-SNAPSHOT</version><!-- craftercms version flag -->
-				<relativePath/> <!-- lookup parent from repository -->
-		</parent>
+	<dependencies>
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-		<scm>
-				<connection>scm:git:git://github.com/craftercms/core</connection>
-				<developerConnection>scm:git:git://github.com/craftercms/core</developerConnection>
-				<url>scm:git:git://github.com/craftercms/core</url>
-		</scm>
+		<!-- Crafter -->
+		<dependency>
+			<groupId>org.craftercms</groupId>
+			<artifactId>crafter-commons-utilities</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.craftercms</groupId>
+			<artifactId>crafter-commons-validation</artifactId>
+		</dependency>
 
-		<dependencies>
-				<dependency>
-						<groupId>jakarta.servlet</groupId>
-						<artifactId>jakarta.servlet-api</artifactId>
-						<scope>provided</scope>
-				</dependency>
+		<!-- Testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-				<!-- Crafter -->
-				<dependency>
-						<groupId>org.craftercms</groupId>
-						<artifactId>crafter-commons-utilities</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.craftercms</groupId>
-						<artifactId>crafter-commons-validation</artifactId>
-				</dependency>
+		<!-- Quartz -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
 
-				<!-- Testing -->
-				<dependency>
-						<groupId>junit</groupId>
-						<artifactId>junit</artifactId>
-						<scope>test</scope>
-				</dependency>
-				<dependency>
-						<groupId>org.mockito</groupId>
-						<artifactId>mockito-core</artifactId>
-						<scope>test</scope>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-test</artifactId>
-						<scope>test</scope>
-				</dependency>
-				<dependency>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-simple</artifactId>
-						<scope>test</scope>
-				</dependency>
+		<!-- Commons start -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-configuration2</artifactId>
+		</dependency>
 
-				<!-- Quartz -->
-				<dependency>
-						<groupId>org.quartz-scheduler</groupId>
-						<artifactId>quartz</artifactId>
-				</dependency>
+		<!-- Logging start -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
 
-				<!-- Commons start -->
-				<dependency>
-						<groupId>org.apache.commons</groupId>
-						<artifactId>commons-lang3</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.apache.commons</groupId>
-						<artifactId>commons-collections4</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>commons-io</groupId>
-						<artifactId>commons-io</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>commons-codec</groupId>
-						<artifactId>commons-codec</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.apache.commons</groupId>
-						<artifactId>commons-configuration2</artifactId>
-				</dependency>
+		<!-- Spring start -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+		</dependency>
 
-				<!-- Logging start -->
-				<dependency>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.slf4j</groupId>
-						<artifactId>jcl-over-slf4j</artifactId>
-				</dependency>
+		<!-- Guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
 
-				<!-- Spring start -->
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-core</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-context</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-context-support</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-beans</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-expression</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-web</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-webmvc</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-tx</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-oxm</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-aop</artifactId>
-				</dependency>
+		<!-- Jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
 
-				<!-- Guava -->
-				<dependency>
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-				</dependency>
+		<!-- XStream -->
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+		</dependency>
 
-				<!-- Jackson -->
-				<dependency>
-						<groupId>com.fasterxml.jackson.core</groupId>
-						<artifactId>jackson-databind</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>com.fasterxml.jackson.dataformat</groupId>
-						<artifactId>jackson-dataformat-xml</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>com.fasterxml.jackson.core</groupId>
-						<artifactId>jackson-core</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>com.fasterxml.jackson.core</groupId>
-						<artifactId>jackson-annotations</artifactId>
-				</dependency>
+		<!-- FreeMarker -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+		</dependency>
 
-				<!-- XStream -->
-				<dependency>
-						<groupId>com.thoughtworks.xstream</groupId>
-						<artifactId>xstream</artifactId>
-				</dependency>
+		<!-- AspectJ -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+		</dependency>
 
-				<!-- FreeMarker -->
-				<dependency>
-						<groupId>org.freemarker</groupId>
-						<artifactId>freemarker</artifactId>
-				</dependency>
+		<!-- Dom4j -->
+		<dependency>
+			<groupId>org.dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+		</dependency>
+		<dependency>
+			<!-- Needed by Dom4j -->
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+		</dependency>
+	</dependencies>
 
-				<!-- AspectJ -->
-				<dependency>
-						<groupId>org.aspectj</groupId>
-						<artifactId>aspectjrt</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.aspectj</groupId>
-						<artifactId>aspectjweaver</artifactId>
-				</dependency>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<configLocation>https://raw.githubusercontent.com/craftercms/craftercms/refs/heads/develop/checkstyle.xml</configLocation>
+				</configuration>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-				<!-- Dom4j -->
-				<dependency>
-						<groupId>org.dom4j</groupId>
-						<artifactId>dom4j</artifactId>
-				</dependency>
-				<dependency>
-						<!-- Needed by Dom4j -->
-						<groupId>jaxen</groupId>
-						<artifactId>jaxen</artifactId>
-				</dependency>
-		</dependencies>
+	<repositories>
+		<repository>
+			<id>sonatype-snapshots</id>
+			<name>Sonatype Snapshot Repository</name>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</repository>
+	</repositories>
 
-		<build>
-				<plugins>
-						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-checkstyle-plugin</artifactId>
-								<configuration>
-										<configLocation>https://raw.githubusercontent.com/craftercms/craftercms/refs/heads/develop/checkstyle.xml</configLocation>
-								</configuration>
-								<executions>
-										<execution>
-												<id>validate</id>
-												<phase>validate</phase>
-												<goals>
-														<goal>check</goal>
-												</goals>
-										</execution>
-								</executions>
-						</plugin>
-				</plugins>
-		</build>
-
-		<repositories>
-				<repository>
-						<id>sonatype-snapshots</id>
-						<name>Sonatype Snapshot Repository</name>
-						<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-						<releases>
-								<enabled>false</enabled>
-						</releases>
-						<snapshots>
-								<enabled>true</enabled>
-								<updatePolicy>always</updatePolicy>
-								<checksumPolicy>fail</checksumPolicy>
-						</snapshots>
-				</repository>
-		</repositories>
-
-		<distributionManagement>
-				<snapshotRepository>
-						<id>sonatype-snapshots</id>
-						<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-				</snapshotRepository>
-				<repository>
-						<id>sonatype-staging</id>
-						<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-				</repository>
-		</distributionManagement>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>sonatype-snapshots</id>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>sonatype-staging</id>
+			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 </project>

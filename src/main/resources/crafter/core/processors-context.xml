@@ -16,52 +16,52 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-		<!-- Processors -->
+	<!-- Processors -->
 
-		<bean id="crafter.templateNodeScanner" class="org.craftercms.core.util.xml.impl.RegexNodeScanner">
-				<constructor-arg name="patterns" value="\#\{"/>
-				<property name="matchEntireNodeText" value="false"/>
-		</bean>
+	<bean id="crafter.templateNodeScanner" class="org.craftercms.core.util.xml.impl.RegexNodeScanner">
+		<constructor-arg name="patterns" value="\#\{"/>
+		<property name="matchEntireNodeText" value="false"/>
+	</bean>
 
-		<bean id="crafter.templateCompiler" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler"/>
+	<bean id="crafter.templateCompiler" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler"/>
 
-		<bean id="crafter.templateModelFactory" class="org.craftercms.core.processors.impl.template.BeanFactoryModelFactory"/>
+	<bean id="crafter.templateModelFactory" class="org.craftercms.core.processors.impl.template.BeanFactoryModelFactory"/>
 
-		<bean id="crafter.templateProcessor" class="org.craftercms.core.processors.impl.template.TemplateProcessor">
-				<constructor-arg name="templateNodeScanner" ref="crafter.templateNodeScanner"/>
-				<constructor-arg name="templateCompiler" ref="crafter.templateCompiler"/>
-				<constructor-arg name="modelFactory" ref="crafter.templateModelFactory"/>
-		</bean>
+	<bean id="crafter.templateProcessor" class="org.craftercms.core.processors.impl.template.TemplateProcessor">
+		<constructor-arg name="templateNodeScanner" ref="crafter.templateNodeScanner"/>
+		<constructor-arg name="templateCompiler" ref="crafter.templateCompiler"/>
+		<constructor-arg name="modelFactory" ref="crafter.templateModelFactory"/>
+	</bean>
 
-		<bean id="crafter.defaultProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
-				<constructor-arg index="0">
-						<list>
-								<!--ref bean="crafter.templateProcessor"/-->
-						</list>
-				</constructor-arg>
-		</bean>
+	<bean id="crafter.defaultProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
+		<constructor-arg index="0">
+			<list>
+				<!--ref bean="crafter.templateProcessor"/-->
+			</list>
+		</constructor-arg>
+	</bean>
 
-		<!-- Processor Resolvers -->
+	<!-- Processor Resolvers -->
 
-		<bean id="crafter.procesorResolver" class="org.craftercms.core.processors.impl.resolvers.MetaDataProcessorResolver">
-				<constructor-arg name="processorElementXPathQuery" value="${crafter.core.processors.processor.element.xpathQuery}"/>
-				<constructor-arg name="elementValueToProcessorMappings">
-						<map>
-								<entry key="${crafter.core.processors.processor.element.value.default}" value-ref="crafter.defaultProcessorPipeline"/>
-						</map>
-				</constructor-arg>
-		</bean>
+	<bean id="crafter.procesorResolver" class="org.craftercms.core.processors.impl.resolvers.MetaDataProcessorResolver">
+		<constructor-arg name="processorElementXPathQuery" value="${crafter.core.processors.processor.element.xpathQuery}"/>
+		<constructor-arg name="elementValueToProcessorMappings">
+			<map>
+				<entry key="${crafter.core.processors.processor.element.value.default}" value-ref="crafter.defaultProcessorPipeline"/>
+			</map>
+		</constructor-arg>
+	</bean>
 
-		<bean id="crafter.procesorResolverChain" class="org.craftercms.core.processors.impl.resolvers.ItemProcessorResolverChain">
-				<constructor-arg name="defaultProcessor" ref="crafter.defaultProcessorPipeline"/>
-				<constructor-arg name="resolvers">
-						<list>
-								<ref bean="crafter.procesorResolver"/>
-						</list>
-				</constructor-arg>
-		</bean>
+	<bean id="crafter.procesorResolverChain" class="org.craftercms.core.processors.impl.resolvers.ItemProcessorResolverChain">
+		<constructor-arg name="defaultProcessor" ref="crafter.defaultProcessorPipeline"/>
+		<constructor-arg name="resolvers">
+			<list>
+				<ref bean="crafter.procesorResolver"/>
+			</list>
+		</constructor-arg>
+	</bean>
 
 </beans>

@@ -16,14 +16,14 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
-		<bean id="person" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompilerTest$Person">
-				<constructor-arg name="firstName" value="John"/>
-				<constructor-arg name="lastName" value="Doe"/>
-		</bean>
+	<bean id="person" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompilerTest$Person">
+		<constructor-arg name="firstName" value="John"/>
+		<constructor-arg name="lastName" value="Doe"/>
+	</bean>
 
-		<bean id="templateCompiler" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler"/>
+	<bean id="templateCompiler" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler"/>
 
 </beans>

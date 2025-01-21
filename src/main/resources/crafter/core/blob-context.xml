@@ -16,36 +16,36 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-		<!-- Blob Store -->
+	<!-- Blob Store -->
 
-		<bean id="crafter.blobUrlResolver" class="org.craftercms.commons.file.blob.impl.BlobUrlResolverImpl">
-				<constructor-arg name="fileExtension" value="${crafter.blob.extension}"/>
-		</bean>
+	<bean id="crafter.blobUrlResolver" class="org.craftercms.commons.file.blob.impl.BlobUrlResolverImpl">
+		<constructor-arg name="fileExtension" value="${crafter.blob.extension}"/>
+	</bean>
 
-		<bean id="crafter.blobStoreResolver" class="org.craftercms.commons.file.blob.impl.BlobStoreResolverImpl">
-				<property name="configModule" value="${crafter.blob.configuration.module}"/>
-				<property name="configPath" value="${crafter.blob.configuration.path}"/>
-				<property name="configurationResolver" ref="crafter.configurationResolver"/>
-		</bean>
+	<bean id="crafter.blobStoreResolver" class="org.craftercms.commons.file.blob.impl.BlobStoreResolverImpl">
+		<property name="configModule" value="${crafter.blob.configuration.module}"/>
+		<property name="configPath" value="${crafter.blob.configuration.path}"/>
+		<property name="configurationResolver" ref="crafter.configurationResolver"/>
+	</bean>
 
-		<!-- S3 -->
+	<!-- S3 -->
 
-		<bean id="crafter.s3ClientFactory" class="org.craftercms.commons.aws.S3ClientCachingFactory"/>
+	<bean id="crafter.s3ClientFactory" class="org.craftercms.commons.aws.S3ClientCachingFactory"/>
 
-		<bean id="crafter.s3AsyncClientFactory" class="org.craftercms.commons.aws.S3AsyncClientCachingFactory"/>
+	<bean id="crafter.s3AsyncClientFactory" class="org.craftercms.commons.aws.S3AsyncClientCachingFactory"/>
 
-		<bean id="crafter.s3ProfileMapper" class="org.craftercms.commons.config.profiles.aws.S3ProfileMapper">
-				<constructor-arg name="configurationResolver" ref="crafter.configurationResolver"/>
-		</bean>
+	<bean id="crafter.s3ProfileMapper" class="org.craftercms.commons.config.profiles.aws.S3ProfileMapper">
+		<constructor-arg name="configurationResolver" ref="crafter.configurationResolver"/>
+	</bean>
 
-		<bean id="s3BlobStore" class="org.craftercms.commons.file.blob.impl.s3.AwsS3BlobStore" scope="prototype">
-				<property name="clientFactory" ref="crafter.s3ClientFactory"/>
-				<property name="asyncClientFactory" ref="crafter.s3AsyncClientFactory"/>
-				<property name="publishingTargetResolver" ref="crafter.publishingTargetResolver"/>
-				<property name="profileMapper" ref="crafter.s3ProfileMapper"/>
-		</bean>
+	<bean id="s3BlobStore" class="org.craftercms.commons.file.blob.impl.s3.AwsS3BlobStore" scope="prototype">
+		<property name="clientFactory" ref="crafter.s3ClientFactory"/>
+		<property name="asyncClientFactory" ref="crafter.s3AsyncClientFactory"/>
+		<property name="publishingTargetResolver" ref="crafter.publishingTargetResolver"/>
+		<property name="profileMapper" ref="crafter.s3ProfileMapper"/>
+	</bean>
 
 </beans>
