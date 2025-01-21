@@ -31,80 +31,80 @@ import org.craftercms.core.exception.InvalidScopeException;
  */
 public interface CacheService {
 
-    /**
-     * Returns the list of scopes this cache manages.
-     */
-    Collection<String> getScopes() throws InternalCacheEngineException;
+	/**
+	 * Returns the list of scopes this cache manages.
+	 */
+	Collection<String> getScopes() throws InternalCacheEngineException;
 
-    /**
-     * Clears the contents of the entire cache.
-     */
-    void clearAll() throws InternalCacheEngineException;
+	/**
+	 * Clears the contents of the entire cache.
+	 */
+	void clearAll() throws InternalCacheEngineException;
 
-    /**
-     * Adds a new scope to the cache for the given context.
-     */
-    void addScope(Context context) throws InternalCacheEngineException;
+	/**
+	 * Adds a new scope to the cache for the given context.
+	 */
+	void addScope(Context context) throws InternalCacheEngineException;
 
-    /**
-     * Removes the scope associated to the given context
-     */
-    void removeScope(Context context) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Removes the scope associated to the given context
+	 */
+	void removeScope(Context context) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Returns true if the scope of the given context exists.
-     */
-    boolean hasScope(Context context) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Returns true if the scope of the given context exists.
+	 */
+	boolean hasScope(Context context) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Returns the quantity of items present in scope of the given context.
-     */
-    int getSize(Context context) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Returns the quantity of items present in scope of the given context.
+	 */
+	int getSize(Context context) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Returns a list of the keys of the items present in the scope of the given context.
-     */
-    Collection<?> getKeys(Context context) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Returns a list of the keys of the items present in the scope of the given context.
+	 */
+	Collection<?> getKeys(Context context) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Returns true if there's and item with the specified key in the scope of the given context.
-     */
-    boolean hasKey(Context context, Object key) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Returns true if there's and item with the specified key in the scope of the given context.
+	 */
+	boolean hasKey(Context context, Object key) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Retrieves an item from the scope of the given context, or null if not found.
-     */
-    CacheItem getItem(Context context, Object key) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Retrieves an item from the scope of the given context, or null if not found.
+	 */
+	CacheItem getItem(Context context, Object key) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Retrieves an item's value from the scope of the given context, or null if not found.
-     */
-    Object get(Context context, Object key) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Retrieves an item's value from the scope of the given context, or null if not found.
+	 */
+	Object get(Context context, Object key) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Puts an item in the scope of the given context.
-     */
-    void put(Context context, Object key, Object value) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Puts an item in the scope of the given context.
+	 */
+	void put(Context context, Object key, Object value) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Puts and item in the scope of the given context.
-     */
-    void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
-             Object... loaderParams) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Puts and item in the scope of the given context.
+	 */
+	void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
+		 Object... loaderParams) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Removes an item from the scope of the given context.
-     */
-    boolean remove(Context context, Object key) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Removes an item from the scope of the given context.
+	 */
+	boolean remove(Context context, Object key) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Clears the contents of the scope of the given context.
-     */
-    void clearScope(Context context) throws InvalidContextException, InternalCacheEngineException;
+	/**
+	 * Clears the contents of the scope of the given context.
+	 */
+	void clearScope(Context context) throws InvalidContextException, InternalCacheEngineException;
 
-    /**
-     * Returns the statistics for the scope of the given context.
-     */
-    CacheStatistics getStatistics(Context context);
+	/**
+	 * Returns the statistics for the scope of the given context.
+	 */
+	CacheStatistics getStatistics(Context context);
 
 }

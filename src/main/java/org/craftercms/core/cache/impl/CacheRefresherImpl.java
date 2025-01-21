@@ -32,50 +32,51 @@ import org.craftercms.core.exception.InternalCacheEngineException;
  */
 public class CacheRefresherImpl implements CacheRefresher {
 
-    private static final Log logger = LogFactory.getLog(CacheRefresherImpl.class);
-    /**
-     * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s.
-     */
-    public void refreshItems(List<CacheItem> itemsToRefresh, Cache cache) {
-        for (CacheItem item : itemsToRefresh) {
-            try {
-                refreshItem(item, cache);
-            } catch (Exception ex) {
-                logger.error("Refresh for " + getScopeAndKeyString(item) + " failed", ex);
-            }
-        }
-    }
+	private static final Log logger = LogFactory.getLog(CacheRefresherImpl.class);
 
-    /**
-     * Refreshes only one item. To refresh the item, its {@link CacheLoader} is called to get a new value of the item.
-     * If the value returned by the loader is null, the item is removed from the cache instead.
-     *
-     * @throws Exception
-     */
-    protected void refreshItem(CacheItem item, Cache cache) throws Exception {
-        CacheLoader loader = item.getLoader();
-        Object[] loaderParams = item.getLoaderParams();
+	/**
+	 * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s.
+	 */
+	public void refreshItems(List<CacheItem> itemsToRefresh, Cache cache) {
+		for (CacheItem item : itemsToRefresh) {
+			try {
+				refreshItem(item, cache);
+			} catch (Exception ex) {
+				logger.error("Refresh for " + getScopeAndKeyString(item) + " failed", ex);
+			}
+		}
+	}
 
-        if (loader == null) {
-            throw new InternalCacheEngineException("No cache loader for " + getScopeAndKeyString(item));
-        }
+	/**
+	 * Refreshes only one item. To refresh the item, its {@link CacheLoader} is called to get a new value of the item.
+	 * If the value returned by the loader is null, the item is removed from the cache instead.
+	 *
+	 * @throws Exception
+	 */
+	protected void refreshItem(CacheItem item, Cache cache) throws Exception {
+		CacheLoader loader = item.getLoader();
+		Object[] loaderParams = item.getLoaderParams();
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Refreshing " + getScopeAndKeyString(item));
-        }
+		if (loader == null) {
+			throw new InternalCacheEngineException("No cache loader for " + getScopeAndKeyString(item));
+		}
 
-        Object newValue = loader.load(loaderParams);
-        if (newValue != null) {
-            cache.put(item.getScope(), item.getKey(), newValue, item.getTicksToExpire(), item.getTicksToRefresh(),
-                      item.getLoader(), item.getLoaderParams());
-        } else {
-            // If newValue returned is null, remove the item from the cache
-            cache.remove(item.getScope(), item.getKey());
-        }
-    }
+		if (logger.isDebugEnabled()) {
+			logger.debug("Refreshing " + getScopeAndKeyString(item));
+		}
 
-    protected String getScopeAndKeyString(CacheItem item) {
-        return "[scope='" + item.getScope() + "', key=" + item.getKey() + "]";
-    }
+		Object newValue = loader.load(loaderParams);
+		if (newValue != null) {
+			cache.put(item.getScope(), item.getKey(), newValue, item.getTicksToExpire(), item.getTicksToRefresh(),
+				item.getLoader(), item.getLoaderParams());
+		} else {
+			// If newValue returned is null, remove the item from the cache
+			cache.remove(item.getScope(), item.getKey());
+		}
+	}
+
+	protected String getScopeAndKeyString(CacheItem item) {
+		return "[scope='" + item.getScope() + "', key=" + item.getKey() + "]";
+	}
 
 }

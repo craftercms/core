@@ -23,21 +23,21 @@ package org.craftercms.core.exception;
  */
 public class StoreException extends CrafterException {
 
-    private static final long serialVersionUID = -8458465314378737128L;
+	private static final long serialVersionUID = -8458465314378737128L;
 
-    public StoreException() {
-    }
+	public StoreException() {
+	}
 
-    public StoreException(String message) {
-        super(message);
-    }
+	public StoreException(String message) {
+		super(message);
+	}
 
-    public StoreException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public StoreException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public StoreException(Throwable cause) {
-        super(cause);
-    }
+	public StoreException(Throwable cause) {
+		super(cause);
+	}
 
 }

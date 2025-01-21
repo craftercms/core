@@ -26,14 +26,14 @@ import org.craftercms.core.util.generators.IdentifierGenerator;
  */
 public class UuidIdentifierGenerator implements IdentifierGenerator {
 
-    /**
-     * Generates a UUID identifier. UUIDs are unique between any calls to any instances.
-     *
-     * @return the UUID, as string
-     */
-    @Override
-    public String generate() {
-        return UUID.randomUUID().toString();
-    }
+	/**
+	 * Generates a UUID identifier. UUIDs are unique between any calls to any instances.
+	 *
+	 * @return the UUID, as string
+	 */
+	@Override
+	public String generate() {
+		return UUID.randomUUID().toString();
+	}
 
 }

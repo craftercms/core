@@ -29,28 +29,28 @@ import org.craftercms.core.service.Item;
  */
 public class UrlPatternProcessorResolver implements ItemProcessorResolver {
 
-    /**
-     * Mappings of url patterns to processor names.
-     */
-    protected Map<String, ItemProcessor> patternToProcessorMappings;
+	/**
+	 * Mappings of url patterns to processor names.
+	 */
+	protected Map<String, ItemProcessor> patternToProcessorMappings;
 
-    public UrlPatternProcessorResolver(Map<String, ItemProcessor> patternToProcessorMappings) {
-        this.patternToProcessorMappings = patternToProcessorMappings;
-    }
+	public UrlPatternProcessorResolver(Map<String, ItemProcessor> patternToProcessorMappings) {
+		this.patternToProcessorMappings = patternToProcessorMappings;
+	}
 
-    /**
-     * If the item url matches one of the patterns defined in {@code patternToProcessorMappings}, the processor
-     * mapped to that pattern is returned. If not, null is returned.
-     */
-    @Override
-    public ItemProcessor getProcessor(Item item) {
-        for (Map.Entry<String, ItemProcessor> mapping : patternToProcessorMappings.entrySet()) {
-            if (item.getUrl().matches(mapping.getKey())) {
-                return mapping.getValue();
-            }
-        }
+	/**
+	 * If the item url matches one of the patterns defined in {@code patternToProcessorMappings}, the processor
+	 * mapped to that pattern is returned. If not, null is returned.
+	 */
+	@Override
+	public ItemProcessor getProcessor(Item item) {
+		for (Map.Entry<String, ItemProcessor> mapping : patternToProcessorMappings.entrySet()) {
+			if (item.getUrl().matches(mapping.getKey())) {
+				return mapping.getValue();
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
 }

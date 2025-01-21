@@ -32,20 +32,20 @@ import org.dom4j.Document;
  */
 public class CompositeInheritFromHierarchyMergeStrategy extends AbstractInheritFromHierarchyMergeStrategy {
 
-    private List<AbstractInheritFromHierarchyMergeStrategy> strategies;
+	private List<AbstractInheritFromHierarchyMergeStrategy> strategies;
 
-    public CompositeInheritFromHierarchyMergeStrategy(List<AbstractInheritFromHierarchyMergeStrategy> strategies) {
-        this.strategies = strategies;
-    }
+	public CompositeInheritFromHierarchyMergeStrategy(List<AbstractInheritFromHierarchyMergeStrategy> strategies) {
+		this.strategies = strategies;
+	}
 
-    @Override
-    protected void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
-                                                   List<MergeableDescriptor> inheritedDescriptors, String folder,
-                                                   String mainDescriptorUrl, Document mainDescriptorDom) {
-        for (AbstractInheritFromHierarchyMergeStrategy strategy : strategies) {
-            strategy.addInheritedDescriptorsInFolder(context, cachingOptions, inheritedDescriptors, folder,
-                                                     mainDescriptorUrl, mainDescriptorDom);
-        }
-    }
+	@Override
+	protected void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
+						       List<MergeableDescriptor> inheritedDescriptors, String folder,
+						       String mainDescriptorUrl, Document mainDescriptorDom) {
+		for (AbstractInheritFromHierarchyMergeStrategy strategy : strategies) {
+			strategy.addInheritedDescriptorsInFolder(context, cachingOptions, inheritedDescriptors, folder,
+				mainDescriptorUrl, mainDescriptorDom);
+		}
+	}
 
 }

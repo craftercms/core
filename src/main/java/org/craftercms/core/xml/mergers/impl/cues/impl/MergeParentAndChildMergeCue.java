@@ -36,90 +36,90 @@ import org.springframework.context.annotation.Lazy;
  */
 public class MergeParentAndChildMergeCue extends AbstractMergeCue {
 
-    protected ElementMergeMatcher elementMergeMatcher;
-    protected MergeCueResolver mergeCueResolver;
-    protected String mergeOrderParamName;
-    protected String defaultMergeOrder;
+	protected ElementMergeMatcher elementMergeMatcher;
+	protected MergeCueResolver mergeCueResolver;
+	protected String mergeOrderParamName;
+	protected String defaultMergeOrder;
 
-    public MergeParentAndChildMergeCue(ElementMergeMatcher elementMergeMatcher,
-                                       String mergeOrderParamName, String defaultMergeOrder, int priority) {
-        super(priority);
-        this.elementMergeMatcher = elementMergeMatcher;
-        this.mergeOrderParamName = mergeOrderParamName;
-        this.defaultMergeOrder = defaultMergeOrder;
-    }
+	public MergeParentAndChildMergeCue(ElementMergeMatcher elementMergeMatcher,
+					   String mergeOrderParamName, String defaultMergeOrder, int priority) {
+		super(priority);
+		this.elementMergeMatcher = elementMergeMatcher;
+		this.mergeOrderParamName = mergeOrderParamName;
+		this.defaultMergeOrder = defaultMergeOrder;
+	}
 
-    @Autowired
-    public void setMergeCueResolver(@Lazy MergeCueResolver mergeCueResolver) {
-        this.mergeCueResolver = mergeCueResolver;
-    }
+	@Autowired
+	public void setMergeCueResolver(@Lazy MergeCueResolver mergeCueResolver) {
+		this.mergeCueResolver = mergeCueResolver;
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException {
-        Element merged = DocumentHelper.createElement(child.getQName());
-        org.craftercms.core.util.CollectionUtils.move(child.attributes(), merged.attributes());
+	@Override
+	@SuppressWarnings("unchecked")
+	public Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException {
+		Element merged = DocumentHelper.createElement(child.getQName());
+		org.craftercms.core.util.CollectionUtils.move(child.attributes(), merged.attributes());
 
-        if (parent.isTextOnly() && child.isTextOnly()) {
-            String parentText = parent.getText();
-            String childText = child.getText();
+		if (parent.isTextOnly() && child.isTextOnly()) {
+			String parentText = parent.getText();
+			String childText = child.getText();
 
-            if (getMergeOrder(params).equalsIgnoreCase("after")) {
-                merged.setText(parentText + childText);
-            } else {
-                merged.setText(childText + parentText);
-            }
-        } else {
-            List<Element> parentElements = parent.elements();
-            List<Element> childElements = child.elements();
-            List<Element> mergedElements = merged.elements();
+			if (getMergeOrder(params).equalsIgnoreCase("after")) {
+				merged.setText(parentText + childText);
+			} else {
+				merged.setText(childText + parentText);
+			}
+		} else {
+			List<Element> parentElements = parent.elements();
+			List<Element> childElements = child.elements();
+			List<Element> mergedElements = merged.elements();
 
-            if (CollectionUtils.isNotEmpty(parentElements) && CollectionUtils.isNotEmpty(childElements)) {
-                for (Iterator<Element> i = parentElements.iterator(); i.hasNext(); ) {
-                    Element parentElement = i.next();
-                    boolean elementsMerged = false;
+			if (CollectionUtils.isNotEmpty(parentElements) && CollectionUtils.isNotEmpty(childElements)) {
+				for (Iterator<Element> i = parentElements.iterator(); i.hasNext(); ) {
+					Element parentElement = i.next();
+					boolean elementsMerged = false;
 
-                    for (Iterator<Element> j = childElements.iterator(); !elementsMerged && j.hasNext(); ) {
-                        Element childElement = j.next();
-                        if (elementMergeMatcher.matchForMerge(parentElement, childElement)) {
-                            MergeCueContext context = mergeCueResolver.getMergeCue(parentElement, childElement);
-                            if (context != null) {
-                                i.remove();
-                                j.remove();
+					for (Iterator<Element> j = childElements.iterator(); !elementsMerged && j.hasNext(); ) {
+						Element childElement = j.next();
+						if (elementMergeMatcher.matchForMerge(parentElement, childElement)) {
+							MergeCueContext context = mergeCueResolver.getMergeCue(parentElement, childElement);
+							if (context != null) {
+								i.remove();
+								j.remove();
 
-                                Element mergedElement = context.doMerge();
-                                mergedElements.add(mergedElement);
+								Element mergedElement = context.doMerge();
+								mergedElements.add(mergedElement);
 
-                                elementsMerged = true;
-                            } else {
-                                throw new XmlMergeException("No merge cue was resolved for matching elements " +
-                                                            parentElement + " (parent) and " + childElement +
-                                                            " (child)");
-                            }
-                        }
-                    }
-                }
-            }
+								elementsMerged = true;
+							} else {
+								throw new XmlMergeException("No merge cue was resolved for matching elements " +
+									parentElement + " (parent) and " + childElement +
+									" (child)");
+							}
+						}
+					}
+				}
+			}
 
-            if (getMergeOrder(params).equalsIgnoreCase("after")) {
-                org.craftercms.core.util.CollectionUtils.move(parentElements, mergedElements);
-                org.craftercms.core.util.CollectionUtils.move(childElements, mergedElements);
-            } else {
-                org.craftercms.core.util.CollectionUtils.move(childElements, mergedElements);
-                org.craftercms.core.util.CollectionUtils.move(parentElements, mergedElements);
-            }
-        }
+			if (getMergeOrder(params).equalsIgnoreCase("after")) {
+				org.craftercms.core.util.CollectionUtils.move(parentElements, mergedElements);
+				org.craftercms.core.util.CollectionUtils.move(childElements, mergedElements);
+			} else {
+				org.craftercms.core.util.CollectionUtils.move(childElements, mergedElements);
+				org.craftercms.core.util.CollectionUtils.move(parentElements, mergedElements);
+			}
+		}
 
-        return merged;
-    }
+		return merged;
+	}
 
-    protected String getMergeOrder(Map<String, String> mergeParams) throws XmlMergeException {
-        String mergeOrder = mergeParams.get(mergeOrderParamName);
-        if (mergeOrder != null) {
-            return mergeOrder;
-        } else {
-            return defaultMergeOrder;
-        }
-    }
+	protected String getMergeOrder(Map<String, String> mergeParams) throws XmlMergeException {
+		String mergeOrder = mergeParams.get(mergeOrderParamName);
+		if (mergeOrder != null) {
+			return mergeOrder;
+		} else {
+			return defaultMergeOrder;
+		}
+	}
 
 }

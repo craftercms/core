@@ -27,17 +27,17 @@ import org.dom4j.Element;
  */
 public class UseParentIfNotEmptyMergeCue extends AbstractMergeCue {
 
-    public UseParentIfNotEmptyMergeCue(int priority) {
-        super(priority);
-    }
+	public UseParentIfNotEmptyMergeCue(int priority) {
+		super(priority);
+	}
 
-    @Override
-    public Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException {
-        if (parent.hasContent()) {
-            return parent;
-        } else {
-            return child;
-        }
-    }
+	@Override
+	public Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException {
+		if (parent.hasContent()) {
+			return parent;
+		} else {
+			return child;
+		}
+	}
 
 }

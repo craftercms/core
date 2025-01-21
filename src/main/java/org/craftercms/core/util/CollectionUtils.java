@@ -25,13 +25,13 @@ import java.util.Iterator;
  */
 public class CollectionUtils {
 
-    public static <T> void move(Collection<T> fromCollection, Collection<T> toCollection) {
-        for (Iterator<T> i = fromCollection.iterator(); i.hasNext(); ) {
-            T element = i.next();
-            i.remove();
+	public static <T> void move(Collection<T> fromCollection, Collection<T> toCollection) {
+		for (Iterator<T> i = fromCollection.iterator(); i.hasNext(); ) {
+			T element = i.next();
+			i.remove();
 
-            toCollection.add(element);
-        }
-    }
+			toCollection.add(element);
+		}
+	}
 
 }

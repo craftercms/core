@@ -34,6 +34,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -48,97 +49,97 @@ import static org.craftercms.core.controller.rest.RestControllerBase.createRespo
 @Order
 @ControllerAdvice(annotations = CrafterRestController.class)
 public class ExceptionHandlers {
-    public static final String RESULT_KEY_VALIDATION_ERRORS = "validationErrors";
+	public static final String RESULT_KEY_VALIDATION_ERRORS = "validationErrors";
 
-    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlers.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlers.class);
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Map<String, Object> handleInvalidContextException(HttpServletRequest request,
-                                                             MissingServletRequestParameterException e) {
-        return handleException(request, e);
-    }
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public Map<String, Object> handleInvalidContextException(HttpServletRequest request,
+								 MissingServletRequestParameterException e) {
+		return handleException(request, e);
+	}
 
-    @ExceptionHandler(InvalidManagementTokenException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ResponseBody
-    public Map<String, Object> handleInvalidContextException(HttpServletRequest request,
-                                                             InvalidManagementTokenException e) {
-        return handleException(request, e);
-    }
+	@ExceptionHandler(InvalidManagementTokenException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ResponseBody
+	public Map<String, Object> handleInvalidContextException(HttpServletRequest request,
+								 InvalidManagementTokenException e) {
+		return handleException(request, e);
+	}
 
-    @ExceptionHandler(InvalidContextException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Map<String, Object> handleInvalidContextException(HttpServletRequest request, InvalidContextException e) {
-        return handleException(request, e);
-    }
+	@ExceptionHandler(InvalidContextException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public Map<String, Object> handleInvalidContextException(HttpServletRequest request, InvalidContextException e) {
+		return handleException(request, e);
+	}
 
-    @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ResponseBody
-    public Map<String, Object> handleAuthenticationException(HttpServletRequest request, AuthenticationException e) {
-        return handleException(request, e);
-    }
+	@ExceptionHandler(AuthenticationException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ResponseBody
+	public Map<String, Object> handleAuthenticationException(HttpServletRequest request, AuthenticationException e) {
+		return handleException(request, e);
+	}
 
-    @ExceptionHandler(PathNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ResponseBody
-    public Map<String, Object> handlePathNotFoundException(HttpServletRequest request, PathNotFoundException e) {
-        return handleException(request, e);
-    }
+	@ExceptionHandler(PathNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseBody
+	public Map<String, Object> handlePathNotFoundException(HttpServletRequest request, PathNotFoundException e) {
+		return handleException(request, e);
+	}
 
-    @ExceptionHandler(ForbiddenPathException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ResponseBody
-    public Map<String, Object> handleForbiddenPathException(HttpServletRequest request, ForbiddenPathException e) {
-        return handleException(request, e);
-    }
+	@ExceptionHandler(ForbiddenPathException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ResponseBody
+	public Map<String, Object> handleForbiddenPathException(HttpServletRequest request, ForbiddenPathException e) {
+		return handleException(request, e);
+	}
 
-    @ExceptionHandler(ValidationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ValidationResult handleValidationException(HttpServletRequest request, ValidationException e) {
-        logger.error("Request for " + request.getRequestURI() + " failed", e);
+	@ExceptionHandler(ValidationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ValidationResult handleValidationException(HttpServletRequest request, ValidationException e) {
+		logger.error("Request for " + request.getRequestURI() + " failed", e);
 
-        return e.getResult();
-    }
+		return e.getResult();
+	}
 
-    @ExceptionHandler(ValidationRuntimeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ValidationResult handleValidationRuntimeException(HttpServletRequest request, ValidationRuntimeException e) {
-        logger.error("Request for " + request.getRequestURI() + " failed", e);
+	@ExceptionHandler(ValidationRuntimeException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ValidationResult handleValidationRuntimeException(HttpServletRequest request, ValidationRuntimeException e) {
+		logger.error("Request for " + request.getRequestURI() + " failed", e);
 
-        return e.getResult();
-    }
+		return e.getResult();
+	}
 
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ConstraintViolationException.class)
-    public Map<String, Object> handleConstraintValidationException(ConstraintViolationException e) {
-        List<ValidationFieldError> validationErrors = e.getConstraintViolations().stream()
-                .map(c -> new ValidationFieldError(c.getPropertyPath().toString(), c.getMessage()))
-                .collect(toList());
-        return Map.of(RESULT_KEY_VALIDATION_ERRORS, validationErrors);
-    }
+	@ResponseBody
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(ConstraintViolationException.class)
+	public Map<String, Object> handleConstraintValidationException(ConstraintViolationException e) {
+		List<ValidationFieldError> validationErrors = e.getConstraintViolations().stream()
+			.map(c -> new ValidationFieldError(c.getPropertyPath().toString(), c.getMessage()))
+			.collect(toList());
+		return Map.of(RESULT_KEY_VALIDATION_ERRORS, validationErrors);
+	}
 
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public Map<String, Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        List<ValidationFieldError> validationErrors = List.of(new ValidationFieldError(e.getName(), e.getMessage()));
-        return Map.of(RESULT_KEY_VALIDATION_ERRORS, validationErrors);
-    }
+	@ResponseBody
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	public Map<String, Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+		List<ValidationFieldError> validationErrors = List.of(new ValidationFieldError(e.getName(), e.getMessage()));
+		return Map.of(RESULT_KEY_VALIDATION_ERRORS, validationErrors);
+	}
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ResponseBody
-    public Map<String, Object> handleException(HttpServletRequest request, Exception e) {
-        logger.error("Request for " + request.getRequestURI() + " failed", e);
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	public Map<String, Object> handleException(HttpServletRequest request, Exception e) {
+		logger.error("Request for " + request.getRequestURI() + " failed", e);
 
-        return createResponseMessage(e.getMessage());
-    }
+		return createResponseMessage(e.getMessage());
+	}
 
 }

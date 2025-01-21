@@ -30,26 +30,26 @@ import org.springframework.expression.Expression;
  */
 public class SpElCompiledTemplate implements CompiledTemplate {
 
-    private Expression expression;
-    private EvaluationContext evaluationContext;
+	private Expression expression;
+	private EvaluationContext evaluationContext;
 
-    public SpElCompiledTemplate(Expression expression, EvaluationContext evaluationContext) {
-        this.expression = expression;
-        this.evaluationContext = evaluationContext;
-    }
+	public SpElCompiledTemplate(Expression expression, EvaluationContext evaluationContext) {
+		this.expression = expression;
+		this.evaluationContext = evaluationContext;
+	}
 
-    @Override
-    public void process(Object model, Writer output) throws TemplateException {
-        try {
-            String result = expression.getValue(evaluationContext, model, String.class);
+	@Override
+	public void process(Object model, Writer output) throws TemplateException {
+		try {
+			String result = expression.getValue(evaluationContext, model, String.class);
 
-            output.write(result);
-            output.flush();
-        } catch (IOException e) {
-            throw new TemplateException("An I/O error occurred while writing to output", e);
-        } catch (Exception e) {
-            throw new TemplateException("Unable to process SpEL template:\n" + expression.getExpressionString(), e);
-        }
-    }
+			output.write(result);
+			output.flush();
+		} catch (IOException e) {
+			throw new TemplateException("An I/O error occurred while writing to output", e);
+		} catch (Exception e) {
+			throw new TemplateException("Unable to process SpEL template:\n" + expression.getExpressionString(), e);
+		}
+	}
 
 }

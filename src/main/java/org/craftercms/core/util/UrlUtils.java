@@ -28,31 +28,31 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class UrlUtils {
 
-    public static final char URL_PARAM_DELIM = '?';
-    public static final char URL_PARAM_SEPARATOR = '&';
+	public static final char URL_PARAM_DELIM = '?';
+	public static final char URL_PARAM_SEPARATOR = '&';
 
-    /**
-     * Returns the short name representation of a long name.
-     *
-     * @param longName
-     * @param containsShortNameRegex the regex that identifies whether the long name contains a short name. This
-     *                               regex should also contain
-     *                               a group expression that can be use to capture for the short name (see the
-     *                               Pattern class javadoc).
-     * @param shortNameRegexGroup    the index of the captured group that represents the short name (see the Pattern
-     *                               class javadoc)
-     * @return the short name, or the long name if there was no short name match
-     * @see Pattern
-     */
-    public static String getShortName(String longName, String containsShortNameRegex, int shortNameRegexGroup) {
-        Pattern pattern = Pattern.compile(containsShortNameRegex);
-        Matcher matcher = pattern.matcher(longName);
+	/**
+	 * Returns the short name representation of a long name.
+	 *
+	 * @param longName
+	 * @param containsShortNameRegex the regex that identifies whether the long name contains a short name. This
+	 *                               regex should also contain
+	 *                               a group expression that can be use to capture for the short name (see the
+	 *                               Pattern class javadoc).
+	 * @param shortNameRegexGroup    the index of the captured group that represents the short name (see the Pattern
+	 *                               class javadoc)
+	 * @return the short name, or the long name if there was no short name match
+	 * @see Pattern
+	 */
+	public static String getShortName(String longName, String containsShortNameRegex, int shortNameRegexGroup) {
+		Pattern pattern = Pattern.compile(containsShortNameRegex);
+		Matcher matcher = pattern.matcher(longName);
 
-        if (matcher.matches()) {
-            return matcher.group(shortNameRegexGroup);
-        } else {
-            return longName;
-        }
-    }
+		if (matcher.matches()) {
+			return matcher.group(shortNameRegexGroup);
+		} else {
+			return longName;
+		}
+	}
 
 }

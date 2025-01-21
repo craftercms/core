@@ -29,27 +29,27 @@ import static org.craftercms.core.url.impl.AddDebugParamUrlTransformer.DEFAULT_D
  */
 public class AddDebugParamUrlTransformerTest {
 
-    private static final String URL = "/index.html";
-    private static final String URL_WITH_PARAM = "/index.html?param=value";
+	private static final String URL = "/index.html";
+	private static final String URL_WITH_PARAM = "/index.html?param=value";
 
-    private AddDebugParamUrlTransformer transformer;
+	private AddDebugParamUrlTransformer transformer;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestTransformer();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestTransformer();
+	}
 
-    @Test
-    public void testTransformer() throws Exception {
-        String transformedUrl = transformer.transformUrl(null, null, URL);
-        assertEquals(URL + "?" + DEFAULT_DEBUG_URL_PARAM +  "=true", transformedUrl);
+	@Test
+	public void testTransformer() throws Exception {
+		String transformedUrl = transformer.transformUrl(null, null, URL);
+		assertEquals(URL + "?" + DEFAULT_DEBUG_URL_PARAM + "=true", transformedUrl);
 
-        transformedUrl = transformer.transformUrl(null, null, URL_WITH_PARAM);
-        assertEquals(URL_WITH_PARAM + "&" + DEFAULT_DEBUG_URL_PARAM + "=true", transformedUrl);
-    }
+		transformedUrl = transformer.transformUrl(null, null, URL_WITH_PARAM);
+		assertEquals(URL_WITH_PARAM + "&" + DEFAULT_DEBUG_URL_PARAM + "=true", transformedUrl);
+	}
 
-    private void setUpTestTransformer() {
-        transformer = new AddDebugParamUrlTransformer();
-    }
+	private void setUpTestTransformer() {
+		transformer = new AddDebugParamUrlTransformer();
+	}
 
 }

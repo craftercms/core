@@ -30,29 +30,29 @@ import org.dom4j.Document;
  */
 public class UrlPatternMergeStrategyResolver implements DescriptorMergeStrategyResolver {
 
-    private Map<String, DescriptorMergeStrategy> urlPatternToStrategyMappings;
+	private Map<String, DescriptorMergeStrategy> urlPatternToStrategyMappings;
 
-    public UrlPatternMergeStrategyResolver(Map<String, DescriptorMergeStrategy> urlPatternToStrategyMappings) {
-        this.urlPatternToStrategyMappings = urlPatternToStrategyMappings;
-    }
+	public UrlPatternMergeStrategyResolver(Map<String, DescriptorMergeStrategy> urlPatternToStrategyMappings) {
+		this.urlPatternToStrategyMappings = urlPatternToStrategyMappings;
+	}
 
-    /**
-     * Returns a {@link DescriptorMergeStrategy} for a given descriptor, picked by matching the descriptor URL to a
-     * pattern associated to the strategy.
-     *
-     * @param descriptorUrl the URL that identifies the descriptor
-     * @param descriptorDom the XML DOM of the descriptor
-     * @return the {@link DescriptorMergeStrategy} for the descriptor, or null if the descriptor URL doesn't
-     *         match any pattern.
-     */
-    public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) {
-        for (Map.Entry<String, DescriptorMergeStrategy> entry : urlPatternToStrategyMappings.entrySet()) {
-            if (descriptorUrl.matches(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
+	/**
+	 * Returns a {@link DescriptorMergeStrategy} for a given descriptor, picked by matching the descriptor URL to a
+	 * pattern associated to the strategy.
+	 *
+	 * @param descriptorUrl the URL that identifies the descriptor
+	 * @param descriptorDom the XML DOM of the descriptor
+	 * @return the {@link DescriptorMergeStrategy} for the descriptor, or null if the descriptor URL doesn't
+	 * match any pattern.
+	 */
+	public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) {
+		for (Map.Entry<String, DescriptorMergeStrategy> entry : urlPatternToStrategyMappings.entrySet()) {
+			if (descriptorUrl.matches(entry.getKey())) {
+				return entry.getValue();
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
 }

@@ -23,21 +23,21 @@ package org.craftercms.core.exception;
  */
 public class CacheException extends CrafterException {
 
-    private static final long serialVersionUID = -5083587758276765475L;
+	private static final long serialVersionUID = -5083587758276765475L;
 
-    public CacheException() {
-    }
+	public CacheException() {
+	}
 
-    public CacheException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public CacheException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public CacheException(String message) {
-        super(message);
-    }
+	public CacheException(String message) {
+		super(message);
+	}
 
-    public CacheException(Throwable cause) {
-        super(cause);
-    }
+	public CacheException(Throwable cause) {
+		super(cause);
+	}
 
 }

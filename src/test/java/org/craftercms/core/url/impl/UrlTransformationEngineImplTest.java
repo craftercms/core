@@ -41,45 +41,45 @@ import static org.craftercms.core.url.impl.AddDebugParamUrlTransformer.DEFAULT_D
 @ContextConfiguration("/contexts/UrlTransformationEngineImplTest.xml")
 public class UrlTransformationEngineImplTest {
 
-    private static final String URL = "/index.html";
-    private static final String TRANSFORMED_URL = "/index.xml?" + DEFAULT_DEBUG_URL_PARAM + "=true";
-    private static final String TRANSFORMER_NAME = "mainPipeline";
+	private static final String URL = "/index.html";
+	private static final String TRANSFORMED_URL = "/index.xml?" + DEFAULT_DEBUG_URL_PARAM + "=true";
+	private static final String TRANSFORMER_NAME = "mainPipeline";
 
-    @Autowired
-    private UrlTransformationEngineImpl transformationEngine;
-    @Autowired
-    private CacheService cacheService;
-    @Autowired
-    private CacheTemplate cacheTemplate;
-    private Context context;
+	@Autowired
+	private UrlTransformationEngineImpl transformationEngine;
+	@Autowired
+	private CacheService cacheService;
+	@Autowired
+	private CacheTemplate cacheTemplate;
+	private Context context;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestContext();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestContext();
+	}
 
-    @Test
-    public void testTransformationEngine() throws Exception {
-        String transformedUrl = transformationEngine.transformUrl(context, TRANSFORMER_NAME, URL);
-        assertEquals(TRANSFORMED_URL, transformedUrl);
-        assertTrue(cacheService.hasKey(context, cacheTemplate.getKey(TRANSFORMER_NAME, URL, TRANSFORMED_URL_CONST_KEY_ELEM)));
+	@Test
+	public void testTransformationEngine() throws Exception {
+		String transformedUrl = transformationEngine.transformUrl(context, TRANSFORMER_NAME, URL);
+		assertEquals(TRANSFORMED_URL, transformedUrl);
+		assertTrue(cacheService.hasKey(context, cacheTemplate.getKey(TRANSFORMER_NAME, URL, TRANSFORMED_URL_CONST_KEY_ELEM)));
 
-        try {
-            transformationEngine.transformUrl(context, "invalidPipeline", URL);
-            fail();
-        } catch (UrlTransformationException e) {
-            // expected
-        }
-    }
+		try {
+			transformationEngine.transformUrl(context, "invalidPipeline", URL);
+			fail();
+		} catch (UrlTransformationException e) {
+			// expected
+		}
+	}
 
-    private void setUpTestContext() {
-        context = mock(Context.class);
-        when(context.getId()).thenReturn("0");
-        when(context.getCacheScope()).thenReturn("0");
-        when(context.getMaxAllowedItemsInCache()).thenReturn(DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE);
-        when(context.isCacheOn()).thenReturn(DEFAULT_CACHE_ON);
+	private void setUpTestContext() {
+		context = mock(Context.class);
+		when(context.getId()).thenReturn("0");
+		when(context.getCacheScope()).thenReturn("0");
+		when(context.getMaxAllowedItemsInCache()).thenReturn(DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE);
+		when(context.isCacheOn()).thenReturn(DEFAULT_CACHE_ON);
 
-        cacheService.addScope(context);
-    }
+		cacheService.addScope(context);
+	}
 
 }

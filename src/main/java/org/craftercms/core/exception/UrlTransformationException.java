@@ -24,21 +24,21 @@ package org.craftercms.core.exception;
  */
 public class UrlTransformationException extends CrafterException {
 
-    private static final long serialVersionUID = 1987858998547665933L;
+	private static final long serialVersionUID = 1987858998547665933L;
 
-    public UrlTransformationException() {
-    }
+	public UrlTransformationException() {
+	}
 
-    public UrlTransformationException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public UrlTransformationException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public UrlTransformationException(String message) {
-        super(message);
-    }
+	public UrlTransformationException(String message) {
+		super(message);
+	}
 
-    public UrlTransformationException(Throwable cause) {
-        super(cause);
-    }
+	public UrlTransformationException(Throwable cause) {
+		super(cause);
+	}
 
 }

@@ -28,41 +28,41 @@ import static org.junit.Assert.assertEquals;
  */
 public class ExtractRequestAttributesUrlTransformerTest {
 
-    private static final String URI_TEMPLATE = "/site/website/hotels/{hotel}/bookings/{booking}/index.xml";
-    private static final String URL = "/site/website/hotels/1/bookings/42/index.xml";
-    private static final String TRANSFORMED_URL = "/site/website/hotels/bookings/index.xml";
+	private static final String URI_TEMPLATE = "/site/website/hotels/{hotel}/bookings/{booking}/index.xml";
+	private static final String URL = "/site/website/hotels/1/bookings/42/index.xml";
+	private static final String TRANSFORMED_URL = "/site/website/hotels/bookings/index.xml";
 
-    private ExtractRequestAttributesUrlTransformer transformer;
+	private ExtractRequestAttributesUrlTransformer transformer;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestRequestAttributes();
-        setUpTestTransformer();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestRequestAttributes();
+		setUpTestTransformer();
+	}
 
-    @After
-    public void tearDown() throws Exception {
-        tearDownTestRequestAttributes();
-    }
+	@After
+	public void tearDown() throws Exception {
+		tearDownTestRequestAttributes();
+	}
 
-    @Test
-    public void testTransformUrl() throws Exception {
-        String transformedUrl = transformer.transformUrl(null, null, URL);
-        assertEquals(TRANSFORMED_URL, transformedUrl);
-        assertEquals("1", RequestContext.getCurrent().getRequest().getAttribute("hotel"));
-        assertEquals("42", RequestContext.getCurrent().getRequest().getAttribute("booking"));
-    }
+	@Test
+	public void testTransformUrl() throws Exception {
+		String transformedUrl = transformer.transformUrl(null, null, URL);
+		assertEquals(TRANSFORMED_URL, transformedUrl);
+		assertEquals("1", RequestContext.getCurrent().getRequest().getAttribute("hotel"));
+		assertEquals("42", RequestContext.getCurrent().getRequest().getAttribute("booking"));
+	}
 
-    private void setUpTestTransformer() {
-        transformer = new ExtractRequestAttributesUrlTransformer(URI_TEMPLATE);
-    }
+	private void setUpTestTransformer() {
+		transformer = new ExtractRequestAttributesUrlTransformer(URI_TEMPLATE);
+	}
 
-    private void setUpTestRequestAttributes() {
-        RequestContext.setCurrent(new RequestContext(new MockHttpServletRequest(), null, null));
-    }
+	private void setUpTestRequestAttributes() {
+		RequestContext.setCurrent(new RequestContext(new MockHttpServletRequest(), null, null));
+	}
 
-    private void tearDownTestRequestAttributes() {
-        RequestContext.clear();
-    }
+	private void tearDownTestRequestAttributes() {
+		RequestContext.clear();
+	}
 
 }

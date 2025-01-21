@@ -21,15 +21,15 @@ package org.craftercms.core.exception;
  * @since 4.1.2
  */
 public class StoreAccessDeniedException extends StoreException {
-    public StoreAccessDeniedException(String message) {
-        super(message);
-    }
+	public StoreAccessDeniedException(String message) {
+		super(message);
+	}
 
-    public StoreAccessDeniedException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public StoreAccessDeniedException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public StoreAccessDeniedException(Throwable cause) {
-        super(cause);
-    }
+	public StoreAccessDeniedException(Throwable cause) {
+		super(cause);
+	}
 }

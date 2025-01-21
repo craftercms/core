@@ -30,38 +30,38 @@ import org.craftercms.core.util.UrlUtils;
  */
 public class AddDebugParamUrlTransformer implements UrlTransformer {
 
-    private static final Log logger = LogFactory.getLog(AddDebugParamUrlTransformer.class);
+	private static final Log logger = LogFactory.getLog(AddDebugParamUrlTransformer.class);
 
-    public static final String DEFAULT_DEBUG_URL_PARAM = "debug";
+	public static final String DEFAULT_DEBUG_URL_PARAM = "debug";
 
-    private String debugParam;
+	private String debugParam;
 
-    public AddDebugParamUrlTransformer() {
-        this.debugParam = DEFAULT_DEBUG_URL_PARAM;
-    }
+	public AddDebugParamUrlTransformer() {
+		this.debugParam = DEFAULT_DEBUG_URL_PARAM;
+	}
 
-    public void setDebugParam(String debugParam) {
-        this.debugParam = debugParam;
-    }
+	public void setDebugParam(String debugParam) {
+		this.debugParam = debugParam;
+	}
 
-    @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) {
-        String result;
-        int indexOfParamDelim = url.indexOf(UrlUtils.URL_PARAM_DELIM);
+	@Override
+	public String transformUrl(Context context, CachingOptions cachingOptions, String url) {
+		String result;
+		int indexOfParamDelim = url.indexOf(UrlUtils.URL_PARAM_DELIM);
 
-        if (indexOfParamDelim < 0) {
-            // The URL doesn't have a param delim, add it and tack on the debug flag
-            result = url + UrlUtils.URL_PARAM_DELIM + debugParam + "=true";
-        } else {
-            // The URL does have a param delim, add param separator and tack on the debug flag
-            result = url + UrlUtils.URL_PARAM_SEPARATOR + debugParam + "=true";
-        }
+		if (indexOfParamDelim < 0) {
+			// The URL doesn't have a param delim, add it and tack on the debug flag
+			result = url + UrlUtils.URL_PARAM_DELIM + debugParam + "=true";
+		} else {
+			// The URL does have a param delim, add param separator and tack on the debug flag
+			result = url + UrlUtils.URL_PARAM_SEPARATOR + debugParam + "=true";
+		}
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Transformation in: " + url + ", Transformation out: " + result);
-        }
+		if (logger.isDebugEnabled()) {
+			logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 }

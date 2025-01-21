@@ -27,24 +27,24 @@ import static org.junit.Assert.assertEquals;
  */
 public class ReplacePatternAllUrlTransformerTest {
 
-    private static final String URL = "/xml/index.xml";
-    private static final String TRANSFORMED_URL = "/html/index.html";
+	private static final String URL = "/xml/index.xml";
+	private static final String TRANSFORMED_URL = "/html/index.html";
 
-    private ReplacePatternAllUrlTransformer transformer;
+	private ReplacePatternAllUrlTransformer transformer;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestTransformer();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestTransformer();
+	}
 
-    @Test
-    public void testTransformer() throws Exception {
-        String transformedUrl = transformer.transformUrl(null, null, URL);
-        assertEquals(TRANSFORMED_URL, transformedUrl);
-    }
+	@Test
+	public void testTransformer() throws Exception {
+		String transformedUrl = transformer.transformUrl(null, null, URL);
+		assertEquals(TRANSFORMED_URL, transformedUrl);
+	}
 
-    private void setUpTestTransformer() {
-        transformer = new ReplacePatternAllUrlTransformer("xml", "html");
-    }
+	private void setUpTestTransformer() {
+		transformer = new ReplacePatternAllUrlTransformer("xml", "html");
+	}
 
 }

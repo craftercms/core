@@ -29,39 +29,39 @@ import org.craftercms.core.util.cache.CacheTemplate;
  */
 public abstract class AbstractCachedUrlTransformationEngine implements UrlTransformationEngine {
 
-    public static final String TRANSFORMED_URL_CONST_KEY_ELEM = "urlTransformationEngine.transformedUrl";
+	public static final String TRANSFORMED_URL_CONST_KEY_ELEM = "urlTransformationEngine.transformedUrl";
 
-    protected CacheTemplate cacheTemplate;
+	protected CacheTemplate cacheTemplate;
 
-    public AbstractCachedUrlTransformationEngine(CacheTemplate cacheTemplate) {
-        this.cacheTemplate = cacheTemplate;
-    }
+	public AbstractCachedUrlTransformationEngine(CacheTemplate cacheTemplate) {
+		this.cacheTemplate = cacheTemplate;
+	}
 
-    @Override
-    public String transformUrl(Context context, String transformerName, String url) throws UrlTransformationException {
-        return transformUrl(context, CachingOptions.DEFAULT_CACHING_OPTIONS, transformerName, url);
-    }
+	@Override
+	public String transformUrl(Context context, String transformerName, String url) throws UrlTransformationException {
+		return transformUrl(context, CachingOptions.DEFAULT_CACHING_OPTIONS, transformerName, url);
+	}
 
-    @Override
-    public String transformUrl(final Context context, final CachingOptions cachingOptions,
-                               final String transformerName, final String url) throws UrlTransformationException {
-        return cacheTemplate.getObject(context, cachingOptions, new Callback<String>() {
+	@Override
+	public String transformUrl(final Context context, final CachingOptions cachingOptions,
+				   final String transformerName, final String url) throws UrlTransformationException {
+		return cacheTemplate.getObject(context, cachingOptions, new Callback<String>() {
 
-            @Override
-            public String execute() {
-                return doTransformUrl(context, cachingOptions, transformerName, url);
-            }
+			@Override
+			public String execute() {
+				return doTransformUrl(context, cachingOptions, transformerName, url);
+			}
 
-            @Override
-            public String toString() {
-                return String.format(AbstractCachedUrlTransformationEngine.this.getClass().getName() +
-                                     ".transformUrl(%s, %s, %s)", context, transformerName, url);
-            }
+			@Override
+			public String toString() {
+				return String.format(AbstractCachedUrlTransformationEngine.this.getClass().getName() +
+					".transformUrl(%s, %s, %s)", context, transformerName, url);
+			}
 
-        }, transformerName, url, TRANSFORMED_URL_CONST_KEY_ELEM);
-    }
+		}, transformerName, url, TRANSFORMED_URL_CONST_KEY_ELEM);
+	}
 
-    protected abstract String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName,
-                                             String url) throws UrlTransformationException;
+	protected abstract String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName,
+						 String url) throws UrlTransformationException;
 
 }

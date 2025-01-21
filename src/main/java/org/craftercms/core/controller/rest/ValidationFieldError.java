@@ -20,19 +20,19 @@ package org.craftercms.core.controller.rest;
  * Holds the result of a field validation error.
  */
 public class ValidationFieldError {
-    private final String field;
-    private final String message;
+	private final String field;
+	private final String message;
 
-    public ValidationFieldError(final String field, final String message) {
-        this.field = field;
-        this.message = message;
-    }
+	public ValidationFieldError(final String field, final String message) {
+		this.field = field;
+		this.message = message;
+	}
 
-    public String getField() {
-        return field;
-    }
+	public String getField() {
+		return field;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public String getMessage() {
+		return message;
+	}
 }

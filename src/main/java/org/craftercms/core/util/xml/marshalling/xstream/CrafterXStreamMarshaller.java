@@ -42,103 +42,103 @@ import java.io.Writer;
  */
 public class CrafterXStreamMarshaller extends XStreamMarshaller {
 
-    public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
-    public static final String ITEM_CLASS_ALIAS = "item";
-    public static final String TREE_CLASS_ALIAS = "tree";
-    public static final String DOCUMENT_CLASS_ALIAS = "document";
+	public static final String ITEM_CLASS_ALIAS = "item";
+	public static final String TREE_CLASS_ALIAS = "tree";
+	public static final String DOCUMENT_CLASS_ALIAS = "document";
 
-    protected Class[] unsupportedClasses;
-    protected boolean suppressXmlDeclaration;
+	protected Class[] unsupportedClasses;
+	protected boolean suppressXmlDeclaration;
 
-    public CrafterXStreamMarshaller() {
-        suppressXmlDeclaration = false;
-    }
+	public CrafterXStreamMarshaller() {
+		suppressXmlDeclaration = false;
+	}
 
-    public void setUnsupportedClasses(Class[] unsupportedClasses) {
-        this.unsupportedClasses = unsupportedClasses;
-    }
+	public void setUnsupportedClasses(Class[] unsupportedClasses) {
+		this.unsupportedClasses = unsupportedClasses;
+	}
 
-    public void setSuppressXmlDeclaration(boolean suppressXmlDeclaration) {
-        this.suppressXmlDeclaration = suppressXmlDeclaration;
-    }
+	public void setSuppressXmlDeclaration(boolean suppressXmlDeclaration) {
+		this.suppressXmlDeclaration = suppressXmlDeclaration;
+	}
 
-    @Override
-    protected void customizeXStream(XStream xstream) {
-        xstream.alias(ITEM_CLASS_ALIAS, Item.class);
-        xstream.alias(TREE_CLASS_ALIAS, Tree.class);
-        xstream.aliasType(DOCUMENT_CLASS_ALIAS, Document.class);
+	@Override
+	protected void customizeXStream(XStream xstream) {
+		xstream.alias(ITEM_CLASS_ALIAS, Item.class);
+		xstream.alias(TREE_CLASS_ALIAS, Tree.class);
+		xstream.aliasType(DOCUMENT_CLASS_ALIAS, Document.class);
 
-        xstream.registerConverter(Dom4jDocumentConverter.INSTANCE);
-    }
+		xstream.registerConverter(Dom4jDocumentConverter.INSTANCE);
+	}
 
-    /**
-     * Returns true if the specified class:
-     * <ol>
-     * <li></li>
-     * <li>Is NOT the same, a subclass or subinterface of one of the unsupported classes.</li>
-     * <li>Is the the same, a subclass or subinterface of one of the supported classes.</li>
-     * </ol>
-     * Also returns true if there aren't any unsupported or supported classes.
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean supports(Class clazz) {
-        if (ArrayUtils.isNotEmpty(unsupportedClasses)) {
-            for (Class unsupportedClass : unsupportedClasses) {
-                if (unsupportedClass.isAssignableFrom(clazz)) {
-                    return false;
-                }
-            }
-        }
+	/**
+	 * Returns true if the specified class:
+	 * <ol>
+	 * <li></li>
+	 * <li>Is NOT the same, a subclass or subinterface of one of the unsupported classes.</li>
+	 * <li>Is the the same, a subclass or subinterface of one of the supported classes.</li>
+	 * </ol>
+	 * Also returns true if there aren't any unsupported or supported classes.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public boolean supports(Class clazz) {
+		if (ArrayUtils.isNotEmpty(unsupportedClasses)) {
+			for (Class unsupportedClass : unsupportedClasses) {
+				if (unsupportedClass.isAssignableFrom(clazz)) {
+					return false;
+				}
+			}
+		}
 
-        return super.supports(clazz);
-    }
+		return super.supports(clazz);
+	}
 
-    /**
-     * Just as super(), but instead of a {@link com.thoughtworks.xstream.io.xml.CompactWriter} creates a {@link
-     * EscapingCompactWriter}.
-     * Also if the object graph is a Dom4j document, the document is written directly instead of using XStream.
-     */
-    @Override
-    public void marshalWriter(Object graph, Writer writer, DataHolder dataHolder) throws XmlMappingException,
-            IOException {
-        if (graph instanceof Document) {
-            OutputFormat outputFormat = OutputFormat.createCompactFormat();
-            outputFormat.setSuppressDeclaration(suppressXmlDeclaration);
+	/**
+	 * Just as super(), but instead of a {@link com.thoughtworks.xstream.io.xml.CompactWriter} creates a {@link
+	 * EscapingCompactWriter}.
+	 * Also if the object graph is a Dom4j document, the document is written directly instead of using XStream.
+	 */
+	@Override
+	public void marshalWriter(Object graph, Writer writer, DataHolder dataHolder) throws XmlMappingException,
+		IOException {
+		if (graph instanceof Document) {
+			OutputFormat outputFormat = OutputFormat.createCompactFormat();
+			outputFormat.setSuppressDeclaration(suppressXmlDeclaration);
 
-            XMLWriter xmlWriter = new XMLWriter(writer, outputFormat);
-            try {
-                xmlWriter.write((Document)graph);
-            } finally {
-                try {
-                    xmlWriter.flush();
-                } catch (Exception ex) {
-                    logger.debug("Could not flush XMLWriter", ex);
-                }
-            }
-        } else {
-            if (!suppressXmlDeclaration) {
-                writer.write(XML_DECLARATION);
-            }
+			XMLWriter xmlWriter = new XMLWriter(writer, outputFormat);
+			try {
+				xmlWriter.write((Document) graph);
+			} finally {
+				try {
+					xmlWriter.flush();
+				} catch (Exception ex) {
+					logger.debug("Could not flush XMLWriter", ex);
+				}
+			}
+		} else {
+			if (!suppressXmlDeclaration) {
+				writer.write(XML_DECLARATION);
+			}
 
-            HierarchicalStreamWriter streamWriter = new EscapingCompactWriter(writer) {{
-                // TODO: JM: Test and ensure this change is backward compatible
-                // Always escape XML when serializing.
-                setEscapeXml(true);
-            }};
-            try {
-                getXStream().marshal(graph, streamWriter, dataHolder);
-            } catch (Exception ex) {
-                throw convertXStreamException(ex, true);
-            } finally {
-                try {
-                    streamWriter.flush();
-                } catch (Exception ex) {
-                    logger.debug("Could not flush HierarchicalStreamWriter", ex);
-                }
-            }
-        }
-    }
+			HierarchicalStreamWriter streamWriter = new EscapingCompactWriter(writer) {{
+				// TODO: JM: Test and ensure this change is backward compatible
+				// Always escape XML when serializing.
+				setEscapeXml(true);
+			}};
+			try {
+				getXStream().marshal(graph, streamWriter, dataHolder);
+			} catch (Exception ex) {
+				throw convertXStreamException(ex, true);
+			} finally {
+				try {
+					streamWriter.flush();
+				} catch (Exception ex) {
+					logger.debug("Could not flush HierarchicalStreamWriter", ex);
+				}
+			}
+		}
+	}
 
 }

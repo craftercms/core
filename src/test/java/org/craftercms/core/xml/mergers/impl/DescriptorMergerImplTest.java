@@ -47,138 +47,138 @@ import static org.junit.Assert.assertNotNull;
  * @author Alfonso Vásquez
  */
 public class DescriptorMergerImplTest {
-    
-    public static final String OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME = "override-parent";
-    public static final String DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME = "disallow-override";
-    public static final String USE_PARENT_MERGE_CUE_ATTR_NAME = "use-parent";
-    public static final String MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME = "merge-with-parent";
-    public static final String MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME = "merge-with-child";
 
-    public static final int OVERRIDE_PARENT_MERGE_CUE_PRIORITY = 5;
-    public static final int DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY = 5;
-    public static final int USE_PARENT_MERGE_CUE_PRIORITY = 5;
-    public static final int MERGE_WITH_PARENT_MERGE_CUE_PRIORITY = 5;
-    public static final int MERGE_WITH_CHILD_MERGE_CUE_PRIORITY = 5;
-    
-    public static final int DEFAULT_PARENT_MERGE_CUE_PRIORITY = 1;
-    public static final int DEFAULT_CHILD_MERGE_CUE_PRIORITY = 1;
+	public static final String OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME = "override-parent";
+	public static final String DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME = "disallow-override";
+	public static final String USE_PARENT_MERGE_CUE_ATTR_NAME = "use-parent";
+	public static final String MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME = "merge-with-parent";
+	public static final String MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME = "merge-with-child";
 
-    private static final String DESCRIPTOR1_XML =
-            "<root>" +
-                "<element id=\"1\">a</element>" +
-                "<element id=\"2\" disallow-override=\"true\">b</element>" +
-                "<element id=\"3\">c</element>" +
-                "<group id=\"4\">" +
-                    "<element id=\"5\">d</element>" +
-                "</group>" +
-                "<group id=\"6\" merge-with-child=\"true\" merge-with-child-order=\"after\">" +
-                    "<element id=\"7\">e</element>" +
-                "</group>" +
-                "<element id=\"10\">f</element>" +
-                "<element id=\"11\"/>" +
-            "</root>";
+	public static final int OVERRIDE_PARENT_MERGE_CUE_PRIORITY = 5;
+	public static final int DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY = 5;
+	public static final int USE_PARENT_MERGE_CUE_PRIORITY = 5;
+	public static final int MERGE_WITH_PARENT_MERGE_CUE_PRIORITY = 5;
+	public static final int MERGE_WITH_CHILD_MERGE_CUE_PRIORITY = 5;
 
-    private static final String DESCRIPTOR2_XML =
-            "<root>" +
-                "<element id=\"1\" override-parent=\"true\">f</element>" +
-                "<element id=\"2\">g</element>" +
-                "<element id=\"3\" use-parent=\"true\">h</element>" +
-                "<group id=\"4\" merge-with-parent=\"true\" merge-with-parent-order=\"before\">" +
-                    "<element id=\"8\">i</element>" +
-                "</group>" +
-                "<group id=\"6\">" +
-                    "<element id=\"9\">j</element>" +
-                "</group>" +
-                "<element id=\"10\"/>" +
-                "<element id=\"11\">g</element>" +
-            "</root>";
+	public static final int DEFAULT_PARENT_MERGE_CUE_PRIORITY = 1;
+	public static final int DEFAULT_CHILD_MERGE_CUE_PRIORITY = 1;
 
-    private static final String MERGED_XML =
-            "<root>" +
-                "<element id=\"1\">f</element>" +
-                "<element id=\"2\">b</element>" +
-                "<element id=\"3\">c</element>" +
-                "<group id=\"4\">" +
-                    "<element id=\"8\">i</element>" +
-                    "<element id=\"5\">d</element>" +
-                "</group>" +
-                "<group id=\"6\">" +
-                    "<element id=\"7\">e</element>" +
-                    "<element id=\"9\">j</element>" +
-                "</group>" +
-                "<element id=\"10\">f</element>" +
-                "<element id=\"11\">g</element>" +
-            "</root>";
+	private static final String DESCRIPTOR1_XML =
+		"<root>" +
+			"<element id=\"1\">a</element>" +
+			"<element id=\"2\" disallow-override=\"true\">b</element>" +
+			"<element id=\"3\">c</element>" +
+			"<group id=\"4\">" +
+			"<element id=\"5\">d</element>" +
+			"</group>" +
+			"<group id=\"6\" merge-with-child=\"true\" merge-with-child-order=\"after\">" +
+			"<element id=\"7\">e</element>" +
+			"</group>" +
+			"<element id=\"10\">f</element>" +
+			"<element id=\"11\"/>" +
+			"</root>";
 
-    private DescriptorMergerImpl merger;
-    private List<Document> descriptorsToMerge;
+	private static final String DESCRIPTOR2_XML =
+		"<root>" +
+			"<element id=\"1\" override-parent=\"true\">f</element>" +
+			"<element id=\"2\">g</element>" +
+			"<element id=\"3\" use-parent=\"true\">h</element>" +
+			"<group id=\"4\" merge-with-parent=\"true\" merge-with-parent-order=\"before\">" +
+			"<element id=\"8\">i</element>" +
+			"</group>" +
+			"<group id=\"6\">" +
+			"<element id=\"9\">j</element>" +
+			"</group>" +
+			"<element id=\"10\"/>" +
+			"<element id=\"11\">g</element>" +
+			"</root>";
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestMerger();
-        setUpTestDescriptorsToMerge();
-    }
+	private static final String MERGED_XML =
+		"<root>" +
+			"<element id=\"1\">f</element>" +
+			"<element id=\"2\">b</element>" +
+			"<element id=\"3\">c</element>" +
+			"<group id=\"4\">" +
+			"<element id=\"8\">i</element>" +
+			"<element id=\"5\">d</element>" +
+			"</group>" +
+			"<group id=\"6\">" +
+			"<element id=\"7\">e</element>" +
+			"<element id=\"9\">j</element>" +
+			"</group>" +
+			"<element id=\"10\">f</element>" +
+			"<element id=\"11\">g</element>" +
+			"</root>";
 
-    @Test
-    public void testMerge() throws Exception {
-        Document merged = merger.merge(descriptorsToMerge);
-        assertNotNull(merged);
-        assertEquals(MERGED_XML, merged.getRootElement().asXML());
-    }
+	private DescriptorMergerImpl merger;
+	private List<Document> descriptorsToMerge;
 
-    private void setUpTestMerger() {
-        MergeCueResolverImpl mergeCueResolver = new MergeCueResolverImpl();
+	@Before
+	public void setUp() throws Exception {
+		setUpTestMerger();
+		setUpTestDescriptorsToMerge();
+	}
 
-        ElementMergeMatcherImpl elementMergeMatcher = new ElementMergeMatcherImpl(new QName(MergeParentAndChildMergeCueTest.ID_ATTR_NAME));
+	@Test
+	public void testMerge() throws Exception {
+		Document merged = merger.merge(descriptorsToMerge);
+		assertNotNull(merged);
+		assertEquals(MERGED_XML, merged.getRootElement().asXML());
+	}
 
-        UseChildMergeCue overrideParentMergeCue = new UseChildMergeCue(OVERRIDE_PARENT_MERGE_CUE_PRIORITY);
+	private void setUpTestMerger() {
+		MergeCueResolverImpl mergeCueResolver = new MergeCueResolverImpl();
 
-        UseParentMergeCue disallowOverrideMergeCue = new UseParentMergeCue(DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY);
+		ElementMergeMatcherImpl elementMergeMatcher = new ElementMergeMatcherImpl(new QName(MergeParentAndChildMergeCueTest.ID_ATTR_NAME));
 
-        UseParentMergeCue useParentIfAvailableMergeCue = new UseParentMergeCue(USE_PARENT_MERGE_CUE_PRIORITY);
+		UseChildMergeCue overrideParentMergeCue = new UseChildMergeCue(OVERRIDE_PARENT_MERGE_CUE_PRIORITY);
 
-        MergeParentAndChildMergeCue mergeWithParentMergeCue = new MergeParentAndChildMergeCue(elementMergeMatcher,
-                MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME, MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER,
-                MERGE_WITH_PARENT_MERGE_CUE_PRIORITY);
-        mergeWithParentMergeCue.setMergeCueResolver(mergeCueResolver);
+		UseParentMergeCue disallowOverrideMergeCue = new UseParentMergeCue(DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY);
 
-        MergeParentAndChildMergeCue mergeWithChildMergeCue = new MergeParentAndChildMergeCue(elementMergeMatcher,
-                MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME, MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER,
-                MERGE_WITH_CHILD_MERGE_CUE_PRIORITY);
-        mergeWithChildMergeCue.setMergeCueResolver(mergeCueResolver);
+		UseParentMergeCue useParentIfAvailableMergeCue = new UseParentMergeCue(USE_PARENT_MERGE_CUE_PRIORITY);
 
-        UseParentIfNotEmptyMergeCue defaultParentMergeCue = new UseParentIfNotEmptyMergeCue(DEFAULT_PARENT_MERGE_CUE_PRIORITY);
+		MergeParentAndChildMergeCue mergeWithParentMergeCue = new MergeParentAndChildMergeCue(elementMergeMatcher,
+			MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME, MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER,
+			MERGE_WITH_PARENT_MERGE_CUE_PRIORITY);
+		mergeWithParentMergeCue.setMergeCueResolver(mergeCueResolver);
 
-        UseChildIfNotEmptyMergeCue defaultChildMergeCue = new UseChildIfNotEmptyMergeCue(DEFAULT_CHILD_MERGE_CUE_PRIORITY);
+		MergeParentAndChildMergeCue mergeWithChildMergeCue = new MergeParentAndChildMergeCue(elementMergeMatcher,
+			MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME, MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER,
+			MERGE_WITH_CHILD_MERGE_CUE_PRIORITY);
+		mergeWithChildMergeCue.setMergeCueResolver(mergeCueResolver);
 
-        Map<QName, MergeCue> parentMergeCues = new HashMap<QName, MergeCue>(2);
-        parentMergeCues.put(new QName(DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME), disallowOverrideMergeCue);
-        parentMergeCues.put(new QName(MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME), mergeWithChildMergeCue);
+		UseParentIfNotEmptyMergeCue defaultParentMergeCue = new UseParentIfNotEmptyMergeCue(DEFAULT_PARENT_MERGE_CUE_PRIORITY);
 
-        Map<QName, MergeCue> childMergeCues = new HashMap<QName, MergeCue>(3);
-        childMergeCues.put(new QName(OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME), overrideParentMergeCue);
-        childMergeCues.put(new QName(USE_PARENT_MERGE_CUE_ATTR_NAME), useParentIfAvailableMergeCue);
-        childMergeCues.put(new QName(MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME), mergeWithParentMergeCue);
+		UseChildIfNotEmptyMergeCue defaultChildMergeCue = new UseChildIfNotEmptyMergeCue(DEFAULT_CHILD_MERGE_CUE_PRIORITY);
 
-        mergeCueResolver.setParentMergeCues(parentMergeCues);
-        mergeCueResolver.setChildMergeCues(childMergeCues);
-        mergeCueResolver.setDefaultParentMergeCue(defaultParentMergeCue);
-        mergeCueResolver.setDefaultChildMergeCue(defaultChildMergeCue);
+		Map<QName, MergeCue> parentMergeCues = new HashMap<QName, MergeCue>(2);
+		parentMergeCues.put(new QName(DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME), disallowOverrideMergeCue);
+		parentMergeCues.put(new QName(MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME), mergeWithChildMergeCue);
 
-        merger = new DescriptorMergerImpl(mergeWithChildMergeCue);
-    }
+		Map<QName, MergeCue> childMergeCues = new HashMap<QName, MergeCue>(3);
+		childMergeCues.put(new QName(OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME), overrideParentMergeCue);
+		childMergeCues.put(new QName(USE_PARENT_MERGE_CUE_ATTR_NAME), useParentIfAvailableMergeCue);
+		childMergeCues.put(new QName(MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME), mergeWithParentMergeCue);
 
-    private void setUpTestDescriptorsToMerge() throws DocumentException, SAXException {
-        SAXReader reader = new SAXReader();
+		mergeCueResolver.setParentMergeCues(parentMergeCues);
+		mergeCueResolver.setChildMergeCues(childMergeCues);
+		mergeCueResolver.setDefaultParentMergeCue(defaultParentMergeCue);
+		mergeCueResolver.setDefaultChildMergeCue(defaultChildMergeCue);
 
-        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		merger = new DescriptorMergerImpl(mergeWithChildMergeCue);
+	}
 
-        Document descriptorDoc1 = reader.read(new StringReader(DESCRIPTOR1_XML));
-        Document descriptorDoc2 = reader.read(new StringReader(DESCRIPTOR2_XML));
+	private void setUpTestDescriptorsToMerge() throws DocumentException, SAXException {
+		SAXReader reader = new SAXReader();
 
-        descriptorsToMerge = Arrays.asList(descriptorDoc1, descriptorDoc2);
-    }
+		reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+		Document descriptorDoc1 = reader.read(new StringReader(DESCRIPTOR1_XML));
+		Document descriptorDoc2 = reader.read(new StringReader(DESCRIPTOR2_XML));
+
+		descriptorsToMerge = Arrays.asList(descriptorDoc1, descriptorDoc2);
+	}
 
 }

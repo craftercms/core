@@ -27,37 +27,37 @@ import org.springframework.beans.factory.FactoryBean;
  */
 public class SwitchableCacheStoreAdapterFactoryBean implements FactoryBean<CacheStoreAdapter> {
 
-    private CacheStoreAdapter offCacheStoreAdapter;
-    private CacheStoreAdapter onCacheStoreAdapter;
-    private boolean cacheOn;
+	private CacheStoreAdapter offCacheStoreAdapter;
+	private CacheStoreAdapter onCacheStoreAdapter;
+	private boolean cacheOn;
 
-    public SwitchableCacheStoreAdapterFactoryBean(CacheStoreAdapter offCacheStoreAdapter, CacheStoreAdapter onCacheStoreAdapter) {
-        this.offCacheStoreAdapter = offCacheStoreAdapter;
-        this.onCacheStoreAdapter = onCacheStoreAdapter;
-        cacheOn = true;
-    }
+	public SwitchableCacheStoreAdapterFactoryBean(CacheStoreAdapter offCacheStoreAdapter, CacheStoreAdapter onCacheStoreAdapter) {
+		this.offCacheStoreAdapter = offCacheStoreAdapter;
+		this.onCacheStoreAdapter = onCacheStoreAdapter;
+		cacheOn = true;
+	}
 
-    public void setCacheOn(boolean cacheOn) {
-        this.cacheOn = cacheOn;
-    }
+	public void setCacheOn(boolean cacheOn) {
+		this.cacheOn = cacheOn;
+	}
 
-    @Override
-    public CacheStoreAdapter getObject() throws Exception {
-        if (cacheOn) {
-            return onCacheStoreAdapter;
-        } else {
-            return offCacheStoreAdapter;
-        }
-    }
+	@Override
+	public CacheStoreAdapter getObject() throws Exception {
+		if (cacheOn) {
+			return onCacheStoreAdapter;
+		} else {
+			return offCacheStoreAdapter;
+		}
+	}
 
-    @Override
-    public Class<?> getObjectType() {
-        return CacheStoreAdapter.class;
-    }
+	@Override
+	public Class<?> getObjectType() {
+		return CacheStoreAdapter.class;
+	}
 
-    @Override
-    public boolean isSingleton() {
-        return true;
-    }
+	@Override
+	public boolean isSingleton() {
+		return true;
+	}
 
 }

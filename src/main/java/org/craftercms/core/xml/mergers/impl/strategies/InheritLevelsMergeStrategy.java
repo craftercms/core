@@ -31,17 +31,17 @@ import org.dom4j.Document;
  */
 public class InheritLevelsMergeStrategy extends AbstractInheritFromHierarchyMergeStrategy {
 
-    protected String levelDescriptorFileName;
+	protected String levelDescriptorFileName;
 
-    public InheritLevelsMergeStrategy(String levelDescriptorFileName) {
-        this.levelDescriptorFileName = levelDescriptorFileName;
-    }
+	public InheritLevelsMergeStrategy(String levelDescriptorFileName) {
+		this.levelDescriptorFileName = levelDescriptorFileName;
+	}
 
-    @Override
-    protected void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
-                                                   List<MergeableDescriptor> inheritedDescriptors, String folder,
-                                                   String mainDescriptorUrl, Document mainDescriptorDom) {
-        inheritedDescriptors.add(new MergeableDescriptor(folder + '/' + levelDescriptorFileName, true));
-    }
+	@Override
+	protected void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
+						       List<MergeableDescriptor> inheritedDescriptors, String folder,
+						       String mainDescriptorUrl, Document mainDescriptorDom) {
+		inheritedDescriptors.add(new MergeableDescriptor(folder + '/' + levelDescriptorFileName, true));
+	}
 
 }

@@ -30,70 +30,70 @@ import org.craftercms.core.store.impl.File;
  */
 public class FileSystemFile implements File {
 
-    private java.io.File file;
+	private java.io.File file;
 
-    public FileSystemFile(String path) {
-        file = new java.io.File(path);
-    }
+	public FileSystemFile(String path) {
+		file = new java.io.File(path);
+	}
 
-    public FileSystemFile(FileSystemFile parent, String child) {
-        file = new java.io.File(parent.getFile(), child);
-    }
+	public FileSystemFile(FileSystemFile parent, String child) {
+		file = new java.io.File(parent.getFile(), child);
+	}
 
-    public FileSystemFile(java.io.File file) {
-        this.file = file;
-    }
+	public FileSystemFile(java.io.File file) {
+		this.file = file;
+	}
 
-    public java.io.File getFile() {
-        return file;
-    }
+	public java.io.File getFile() {
+		return file;
+	}
 
-    @Override
-    public String getName() {
-        return file.getName();
-    }
+	@Override
+	public String getName() {
+		return file.getName();
+	}
 
-    @Override
-    public String getPath() {
-        return file.getPath();
-    }
+	@Override
+	public String getPath() {
+		return file.getPath();
+	}
 
-    @Override
-    public boolean isFile() {
-        return file.isFile();
-    }
+	@Override
+	public boolean isFile() {
+		return file.isFile();
+	}
 
-    @Override
-    public boolean isDirectory() {
-        return file.isDirectory();
-    }
+	@Override
+	public boolean isDirectory() {
+		return file.isDirectory();
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        FileSystemFile other = (FileSystemFile)o;
+		FileSystemFile other = (FileSystemFile) o;
 
-        if (!file.equals(other.file)) {
-            return false;
-        }
+		if (!file.equals(other.file)) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-        return file.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return file.hashCode();
+	}
 
-    @Override
-    public String toString() {
-        return file.toString();
-    }
+	@Override
+	public String toString() {
+		return file.toString();
+	}
 
 }

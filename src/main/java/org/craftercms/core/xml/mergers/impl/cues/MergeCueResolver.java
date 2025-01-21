@@ -24,6 +24,6 @@ import org.dom4j.Element;
  */
 public interface MergeCueResolver {
 
-    MergeCueContext getMergeCue(Element parent, Element child);
+	MergeCueContext getMergeCue(Element parent, Element child);
 
 }

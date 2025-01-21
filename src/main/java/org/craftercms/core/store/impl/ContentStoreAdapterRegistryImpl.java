@@ -27,15 +27,15 @@ import java.util.Map;
  */
 public class ContentStoreAdapterRegistryImpl implements ContentStoreAdapterRegistry {
 
-    private Map<String, ContentStoreAdapter> adapters;
+	private Map<String, ContentStoreAdapter> adapters;
 
-    public ContentStoreAdapterRegistryImpl(Map<String, ContentStoreAdapter> adapters) {
-        this.adapters = adapters;
-    }
+	public ContentStoreAdapterRegistryImpl(Map<String, ContentStoreAdapter> adapters) {
+		this.adapters = adapters;
+	}
 
-    @Override
-    public ContentStoreAdapter get(String storeType) {
-        return adapters.get(storeType);
-    }
+	@Override
+	public ContentStoreAdapter get(String storeType) {
+		return adapters.get(storeType);
+	}
 
 }

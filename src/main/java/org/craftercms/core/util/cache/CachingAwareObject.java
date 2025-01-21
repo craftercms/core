@@ -23,16 +23,16 @@ package org.craftercms.core.util.cache;
  */
 public interface CachingAwareObject {
 
-    String getScope();
+	String getScope();
 
-    void setScope(String scope);
+	void setScope(String scope);
 
-    Object getKey();
+	Object getKey();
 
-    void setKey(Object key);
+	void setKey(Object key);
 
-    Long getCachingTime();
+	Long getCachingTime();
 
-    void setCachingTime(Long cachingTime);
+	void setCachingTime(Long cachingTime);
 
 }

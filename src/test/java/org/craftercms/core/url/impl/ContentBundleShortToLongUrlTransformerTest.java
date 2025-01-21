@@ -38,59 +38,59 @@ import static org.mockito.Mockito.when;
  */
 public class ContentBundleShortToLongUrlTransformerTest {
 
-    private static final String URL = "/folder/base_fr_es/index.html/";
-    private static final String TRANSFORMED_URL = "/001_folder/base_fr_es/002_index.html/";
+	private static final String URL = "/folder/base_fr_es/index.html/";
+	private static final String TRANSFORMED_URL = "/001_folder/base_fr_es/002_index.html/";
 
-    private ContentBundleShortToLongUrlTransformer transformer;
-    private Context context;
+	private ContentBundleShortToLongUrlTransformer transformer;
+	private Context context;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestContext();
-        setUpTestTransformer();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestContext();
+		setUpTestTransformer();
+	}
 
-    @Test
-    public void testTransformer() throws Exception {
-        String transformedUrl = transformer.transformUrl(context, DEFAULT_CACHING_OPTIONS, URL);
-        assertEquals(TRANSFORMED_URL, transformedUrl);
-    }
+	@Test
+	public void testTransformer() throws Exception {
+		String transformedUrl = transformer.transformUrl(context, DEFAULT_CACHING_OPTIONS, URL);
+		assertEquals(TRANSFORMED_URL, transformedUrl);
+	}
 
-    private void setUpTestContext() {
-        context = mock(Context.class);
+	private void setUpTestContext() {
+		context = mock(Context.class);
 
-        ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
+		ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
 
-        Item folderItem = new Item();
-        folderItem.setName("001_folder");
+		Item folderItem = new Item();
+		folderItem.setName("001_folder");
 
-        Item baseItem = new Item();
-        baseItem.setName("base");
+		Item baseItem = new Item();
+		baseItem.setName("base");
 
-        Item baseFrItem = new Item();
-        baseFrItem.setName("base_fr");
+		Item baseFrItem = new Item();
+		baseFrItem.setName("base_fr");
 
-        Item baseFrEsItem = new Item();
-        baseFrEsItem.setName("base_fr_es");
+		Item baseFrEsItem = new Item();
+		baseFrEsItem.setName("base_fr_es");
 
-        Item indexItem = new Item();
-        indexItem.setName("002_index.html");
+		Item indexItem = new Item();
+		indexItem.setName("002_index.html");
 
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/")).thenReturn(
-            Arrays.asList(folderItem));
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName())).thenReturn(
-            Arrays.asList(baseItem, baseFrItem, baseFrEsItem));
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS,
-                                    "/" + folderItem.getName() + "/" + baseItem.getName()))
-                .thenReturn(Arrays.asList(indexItem));
+		when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/")).thenReturn(
+			Arrays.asList(folderItem));
+		when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName())).thenReturn(
+			Arrays.asList(baseItem, baseFrItem, baseFrEsItem));
+		when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS,
+			"/" + folderItem.getName() + "/" + baseItem.getName()))
+			.thenReturn(Arrays.asList(indexItem));
 
-        when(context.getStoreAdapter()).thenReturn(storeAdapter);
-    }
+		when(context.getStoreAdapter()).thenReturn(storeAdapter);
+	}
 
-    private void setUpTestTransformer() {
-        RegexBasedContentBundleUrlParser urlParser = new RegexBasedContentBundleUrlParser(1, 2, 3, Pattern.compile("^(.*/)(base[^/]*)(/.*)$"));
+	private void setUpTestTransformer() {
+		RegexBasedContentBundleUrlParser urlParser = new RegexBasedContentBundleUrlParser(1, 2, 3, Pattern.compile("^(.*/)(base[^/]*)(/.*)$"));
 
-        transformer = new ContentBundleShortToLongUrlTransformer(urlParser, BASE_DELIMITER);
-    }
+		transformer = new ContentBundleShortToLongUrlTransformer(urlParser, BASE_DELIMITER);
+	}
 
 }

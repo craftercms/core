@@ -36,54 +36,54 @@ import org.dom4j.Node;
  */
 public class FieldRenamingProcessor implements ItemProcessor {
 
-    private static final Log logger = LogFactory.getLog(FieldRenamingProcessor.class);
+	private static final Log logger = LogFactory.getLog(FieldRenamingProcessor.class);
 
-    private Map<String, String> fieldMappings;
+	private Map<String, String> fieldMappings;
 
-    public void setFieldMappings(Map<String, String> fieldMappings) {
-        this.fieldMappings = fieldMappings;
-    }
+	public void setFieldMappings(Map<String, String> fieldMappings) {
+		this.fieldMappings = fieldMappings;
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
-        Document document = item.getDescriptorDom();
-        if (document != null && MapUtils.isNotEmpty(fieldMappings)) {
-            for (Map.Entry<String, String> entry : fieldMappings.entrySet()) {
-                String xpath = entry.getKey();
-                String newName = entry.getValue();
+	@Override
+	@SuppressWarnings("unchecked")
+	public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
+		Document document = item.getDescriptorDom();
+		if (document != null && MapUtils.isNotEmpty(fieldMappings)) {
+			for (Map.Entry<String, String> entry : fieldMappings.entrySet()) {
+				String xpath = entry.getKey();
+				String newName = entry.getValue();
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Renaming elements that match XPath " + xpath + " to '" + newName + "' for descriptor of " + item);
-                }
+				if (logger.isDebugEnabled()) {
+					logger.debug("Renaming elements that match XPath " + xpath + " to '" + newName + "' for descriptor of " + item);
+				}
 
-                List<Node> nodes = document.selectNodes(xpath);
-                if (CollectionUtils.isNotEmpty(nodes)) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Number of matching nodes: " + nodes.size());
-                    }
+				List<Node> nodes = document.selectNodes(xpath);
+				if (CollectionUtils.isNotEmpty(nodes)) {
+					if (logger.isDebugEnabled()) {
+						logger.debug("Number of matching nodes: " + nodes.size());
+					}
 
-                    for (Node node: nodes) {
-                        if (node.getNodeType() == Node.ELEMENT_NODE) {
-                            Element element = (Element) node;
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("Renaming element " + element.getUniquePath() + " to ");
-                            }
+					for (Node node : nodes) {
+						if (node.getNodeType() == Node.ELEMENT_NODE) {
+							Element element = (Element) node;
+							if (logger.isDebugEnabled()) {
+								logger.debug("Renaming element " + element.getUniquePath() + " to ");
+							}
 
-                            element.setName(newName);
+							element.setName(newName);
 
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("Element renamed to " + element.getUniquePath());
-                            }
-                        } else {
-                            logger.info("Unable to execute against a non-XML-element: " + node.getUniquePath());
-                        }
-                    }
-                }
-            }
-        }
+							if (logger.isDebugEnabled()) {
+								logger.debug("Element renamed to " + element.getUniquePath());
+							}
+						} else {
+							logger.info("Unable to execute against a non-XML-element: " + node.getUniquePath());
+						}
+					}
+				}
+			}
+		}
 
-        return item;
-    }
+		return item;
+	}
 
 }

@@ -37,59 +37,59 @@ import org.dom4j.Node;
  */
 public class ExplicitParentMergeStrategy implements DescriptorMergeStrategy {
 
-    private DescriptorMergeStrategyResolver mergeStrategyResolver;
-    private String parentDescriptorElementXPathQuery;
+	private DescriptorMergeStrategyResolver mergeStrategyResolver;
+	private String parentDescriptorElementXPathQuery;
 
-    public ExplicitParentMergeStrategy(DescriptorMergeStrategyResolver mergeStrategyResolver,
-                                       String parentDescriptorElementXPathQuery) {
-        this.mergeStrategyResolver = mergeStrategyResolver;
-        this.parentDescriptorElementXPathQuery = parentDescriptorElementXPathQuery;
-    }
+	public ExplicitParentMergeStrategy(DescriptorMergeStrategyResolver mergeStrategyResolver,
+					   String parentDescriptorElementXPathQuery) {
+		this.mergeStrategyResolver = mergeStrategyResolver;
+		this.parentDescriptorElementXPathQuery = parentDescriptorElementXPathQuery;
+	}
 
-    @Override
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String mainDescriptorUrl,
-                                                    Document mainDescriptorDom) throws XmlMergeException {
-        return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
-    }
+	@Override
+	public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+							String mainDescriptorUrl,
+							Document mainDescriptorDom) throws XmlMergeException {
+		return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
+	}
 
-    @Override
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String mainDescriptorUrl, Document mainDescriptorDom,
-                                                    boolean mainDescriptorOptional) throws XmlMergeException {
-        Node parentDescriptorElem = mainDescriptorDom.selectSingleNode(parentDescriptorElementXPathQuery);
-        List<MergeableDescriptor> descriptors = new ArrayList<>();
+	@Override
+	public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+							String mainDescriptorUrl, Document mainDescriptorDom,
+							boolean mainDescriptorOptional) throws XmlMergeException {
+		Node parentDescriptorElem = mainDescriptorDom.selectSingleNode(parentDescriptorElementXPathQuery);
+		List<MergeableDescriptor> descriptors = new ArrayList<>();
 
-        if (parentDescriptorElem != null) {
-            String parentDescriptorUrl = parentDescriptorElem.getText();
-            Document parentDescriptorDom = getDescriptorDom(context, cachingOptions, parentDescriptorUrl);
+		if (parentDescriptorElem != null) {
+			String parentDescriptorUrl = parentDescriptorElem.getText();
+			Document parentDescriptorDom = getDescriptorDom(context, cachingOptions, parentDescriptorUrl);
 
-            if (parentDescriptorDom != null) {
-                DescriptorMergeStrategy parentMergeStrategy = mergeStrategyResolver.getStrategy(parentDescriptorUrl,
-                                                                                                parentDescriptorDom);
-                if (parentMergeStrategy != null) {
-                    descriptors.addAll(parentMergeStrategy.getDescriptors(context, cachingOptions, parentDescriptorUrl,
-                                                                          parentDescriptorDom, true));
-                }
-            } else {
-                throw new XmlMergeException("No parent descriptor found at " + parentDescriptorUrl);
-            }
-        } else {
-            throw new XmlMergeException("No parent descriptor element specified");
-        }
+			if (parentDescriptorDom != null) {
+				DescriptorMergeStrategy parentMergeStrategy = mergeStrategyResolver.getStrategy(parentDescriptorUrl,
+					parentDescriptorDom);
+				if (parentMergeStrategy != null) {
+					descriptors.addAll(parentMergeStrategy.getDescriptors(context, cachingOptions, parentDescriptorUrl,
+						parentDescriptorDom, true));
+				}
+			} else {
+				throw new XmlMergeException("No parent descriptor found at " + parentDescriptorUrl);
+			}
+		} else {
+			throw new XmlMergeException("No parent descriptor element specified");
+		}
 
-        descriptors.add(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
+		descriptors.add(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
 
-        return descriptors;
-    }
+		return descriptors;
+	}
 
-    protected Document getDescriptorDom(Context context, CachingOptions cachingOptions, String url) {
-        Item item = context.getStoreAdapter().findItem(context, cachingOptions, url, true);
-        if (item != null) {
-            return item.getDescriptorDom();
-        } else {
-            return null;
-        }
-    }
+	protected Document getDescriptorDom(Context context, CachingOptions cachingOptions, String url) {
+		Item item = context.getStoreAdapter().findItem(context, cachingOptions, url, true);
+		if (item != null) {
+			return item.getDescriptorDom();
+		} else {
+			return null;
+		}
+	}
 
 }

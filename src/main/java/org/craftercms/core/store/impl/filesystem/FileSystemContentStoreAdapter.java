@@ -44,108 +44,108 @@ import java.util.Map;
  */
 public class FileSystemContentStoreAdapter extends AbstractFileBasedContentStoreAdapter implements ResourceLoaderAware {
 
-    public static final String STORE_TYPE = "filesystem";
+	public static final String STORE_TYPE = "filesystem";
 
-    private ResourceLoader resourceLoader;
+	private ResourceLoader resourceLoader;
 
-    public FileSystemContentStoreAdapter(Validator pathValidator, String descriptorFileExtension, String metadataFileExtension, CacheTemplate cacheTemplate) {
-        super(pathValidator, descriptorFileExtension, metadataFileExtension, cacheTemplate);
-    }
+	public FileSystemContentStoreAdapter(Validator pathValidator, String descriptorFileExtension, String metadataFileExtension, CacheTemplate cacheTemplate) {
+		super(pathValidator, descriptorFileExtension, metadataFileExtension, cacheTemplate);
+	}
 
-    @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
-    }
+	@Override
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
+	}
 
-    @Override
-    public Context createContext(String id, String rootFolderPath, boolean mergingOn, boolean cacheOn,
-                                 int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables)
-            throws RootFolderNotFoundException, StoreException, AuthenticationException {
-        Resource rootFolderResource = resourceLoader.getResource(rootFolderPath);
+	@Override
+	public Context createContext(String id, String rootFolderPath, boolean mergingOn, boolean cacheOn,
+				     int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables)
+		throws RootFolderNotFoundException, StoreException, AuthenticationException {
+		Resource rootFolderResource = resourceLoader.getResource(rootFolderPath);
 
-        if (!rootFolderResource.exists()) {
-            throw new RootFolderNotFoundException("Root folder " + rootFolderPath + " not found (make sure that it " +
-                                                  "has a valid URL prefix (e.g. file:))");
-        }
+		if (!rootFolderResource.exists()) {
+			throw new RootFolderNotFoundException("Root folder " + rootFolderPath + " not found (make sure that it " +
+				"has a valid URL prefix (e.g. file:))");
+		}
 
-        FileSystemFile rootFolder;
-        try {
-            rootFolder = new FileSystemFile(rootFolderResource.getFile());
-        } catch (IOException e) {
-            throw new StoreException("Unable to retrieve file handle for root folder " + rootFolderPath, e);
-        }
+		FileSystemFile rootFolder;
+		try {
+			rootFolder = new FileSystemFile(rootFolderResource.getFile());
+		} catch (IOException e) {
+			throw new StoreException("Unable to retrieve file handle for root folder " + rootFolderPath, e);
+		}
 
-        return new FileSystemContext(id, this, rootFolderPath, rootFolder, mergingOn, cacheOn, maxAllowedItemsInCache,
-                                     ignoreHiddenFiles, configurationVariables);
-    }
+		return new FileSystemContext(id, this, rootFolderPath, rootFolder, mergingOn, cacheOn, maxAllowedItemsInCache,
+			ignoreHiddenFiles, configurationVariables);
+	}
 
-    @Override
-    public boolean validate(Context context) throws InvalidContextException, StoreException, AuthenticationException {
-        FileSystemFile rootFolder = ((FileSystemContext)context).getRootFolder();
+	@Override
+	public boolean validate(Context context) throws InvalidContextException, StoreException, AuthenticationException {
+		FileSystemFile rootFolder = ((FileSystemContext) context).getRootFolder();
 
-        return rootFolder.getFile().exists();
-    }
+		return rootFolder.getFile().exists();
+	}
 
-    @Override
-    public void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
-        // Nothing to destroy
-    }
+	@Override
+	public void destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
+		// Nothing to destroy
+	}
 
-    @Override
-    protected Content getContent(Context context, CachingOptions cachingOptions,
-                                 File file) throws InvalidContextException, StoreException {
-        return new FileSystemContent(((FileSystemFile)file).getFile());
-    }
+	@Override
+	protected Content getContent(Context context, CachingOptions cachingOptions,
+				     File file) throws InvalidContextException, StoreException {
+		return new FileSystemContent(((FileSystemFile) file).getFile());
+	}
 
-    @Override
-    protected File findFile(Context context, CachingOptions cachingOptions, String path) {
-        FileSystemFile rootFolder = ((FileSystemContext)context).getRootFolder();
+	@Override
+	protected File findFile(Context context, CachingOptions cachingOptions, String path) {
+		FileSystemFile rootFolder = ((FileSystemContext) context).getRootFolder();
 
-        if (StringUtils.isNotEmpty(path)) {
-            FileSystemFile file = new FileSystemFile(rootFolder, path);
-            if (file.getFile().exists()) {
-                return file;
-            } else {
-                return null;
-            }
-        } else {
-            return rootFolder;
-        }
-    }
+		if (StringUtils.isNotEmpty(path)) {
+			FileSystemFile file = new FileSystemFile(rootFolder, path);
+			if (file.getFile().exists()) {
+				return file;
+			} else {
+				return null;
+			}
+		} else {
+			return rootFolder;
+		}
+	}
 
-    @Override
-    protected List<File> getChildren(Context context, CachingOptions cachingOptions, File dir) {
-        java.io.File[] listing;
-        if (context.ignoreHiddenFiles()) {
-            listing = ((FileSystemFile)dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);
-        } else {
-            listing = ((FileSystemFile)dir).getFile().listFiles();
-        }
+	@Override
+	protected List<File> getChildren(Context context, CachingOptions cachingOptions, File dir) {
+		java.io.File[] listing;
+		if (context.ignoreHiddenFiles()) {
+			listing = ((FileSystemFile) dir).getFile().listFiles(IgnoreHiddenFileFilter.INSTANCE);
+		} else {
+			listing = ((FileSystemFile) dir).getFile().listFiles();
+		}
 
-        if (listing != null) {
-            List<File> children = new ArrayList<File>(listing.length);
-            for (java.io.File file : listing) {
-                children.add(new FileSystemFile(file));
-            }
+		if (listing != null) {
+			List<File> children = new ArrayList<File>(listing.length);
+			for (java.io.File file : listing) {
+				children.add(new FileSystemFile(file));
+			}
 
-            return children;
-        } else {
-            return null;
-        }
-    }
+			return children;
+		} else {
+			return null;
+		}
+	}
 
-    private static class IgnoreHiddenFileFilter implements FileFilter {
+	private static class IgnoreHiddenFileFilter implements FileFilter {
 
-        public static final IgnoreHiddenFileFilter INSTANCE = new IgnoreHiddenFileFilter();
+		public static final IgnoreHiddenFileFilter INSTANCE = new IgnoreHiddenFileFilter();
 
-        private IgnoreHiddenFileFilter() {
-        }
+		private IgnoreHiddenFileFilter() {
+		}
 
-        @Override
-        public boolean accept(java.io.File pathname) {
-            return !pathname.isHidden();
-        }
+		@Override
+		public boolean accept(java.io.File pathname) {
+			return !pathname.isHidden();
+		}
 
-    }
+	}
 
 }

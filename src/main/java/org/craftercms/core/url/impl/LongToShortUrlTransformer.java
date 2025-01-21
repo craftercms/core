@@ -32,52 +32,52 @@ import org.craftercms.core.util.UrlUtils;
  */
 public class LongToShortUrlTransformer implements UrlTransformer {
 
-    private static final Log logger = LogFactory.getLog(LongToShortUrlTransformer.class);
+	private static final Log logger = LogFactory.getLog(LongToShortUrlTransformer.class);
 
-    public static final String URL_NUMBERED_NAME_REGEX = "\\b\\d*_(.+)\\b";
-    public static final int URL_NUMBERED_NAME_REGEX_SHORT_NAME_GROUP = 1;
+	public static final String URL_NUMBERED_NAME_REGEX = "\\b\\d*_(.+)\\b";
+	public static final int URL_NUMBERED_NAME_REGEX_SHORT_NAME_GROUP = 1;
 
-    private String containsShortNameRegex;
-    private int shortNameRegexGroup;
+	private String containsShortNameRegex;
+	private int shortNameRegexGroup;
 
-    public LongToShortUrlTransformer() {
-        containsShortNameRegex = URL_NUMBERED_NAME_REGEX;
-        shortNameRegexGroup = URL_NUMBERED_NAME_REGEX_SHORT_NAME_GROUP;
-    }
+	public LongToShortUrlTransformer() {
+		containsShortNameRegex = URL_NUMBERED_NAME_REGEX;
+		shortNameRegexGroup = URL_NUMBERED_NAME_REGEX_SHORT_NAME_GROUP;
+	}
 
-    public void setContainsShortNameRegex(String containsShortNameRegex) {
-        this.containsShortNameRegex = containsShortNameRegex;
-    }
+	public void setContainsShortNameRegex(String containsShortNameRegex) {
+		this.containsShortNameRegex = containsShortNameRegex;
+	}
 
-    public void setShortNameRegexGroup(int shortNameRegexGroup) {
-        this.shortNameRegexGroup = shortNameRegexGroup;
-    }
+	public void setShortNameRegexGroup(int shortNameRegexGroup) {
+		this.shortNameRegexGroup = shortNameRegexGroup;
+	}
 
-    protected String getShortUrl(String longUrl) {
-        String[] levels = StringUtils.strip(longUrl, "/").split("/");
-        StringBuilder result = new StringBuilder();
+	protected String getShortUrl(String longUrl) {
+		String[] levels = StringUtils.strip(longUrl, "/").split("/");
+		StringBuilder result = new StringBuilder();
 
-        if (ArrayUtils.isNotEmpty(levels)) {
-            for (String level : levels) {
-                result.append("/").append(UrlUtils.getShortName(level, containsShortNameRegex, shortNameRegexGroup));
-            }
-        }
+		if (ArrayUtils.isNotEmpty(levels)) {
+			for (String level : levels) {
+				result.append("/").append(UrlUtils.getShortName(level, containsShortNameRegex, shortNameRegexGroup));
+			}
+		}
 
-        if (longUrl.endsWith("/")) {
-            result.append("/");
-        }
+		if (longUrl.endsWith("/")) {
+			result.append("/");
+		}
 
-        return result.toString();
-    }
+		return result.toString();
+	}
 
-    public String transformUrl(Context context, CachingOptions cachingOptions, String url) {
-        String result = getShortUrl(url);
+	public String transformUrl(Context context, CachingOptions cachingOptions, String url) {
+		String result = getShortUrl(url);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Transformation in: " + url + ", Transformation out: " + result);
-        }
+		if (logger.isDebugEnabled()) {
+			logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 }

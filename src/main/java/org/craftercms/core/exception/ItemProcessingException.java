@@ -26,21 +26,21 @@ package org.craftercms.core.exception;
  */
 public class ItemProcessingException extends CrafterException {
 
-    private static final long serialVersionUID = -7494746631220427670L;
+	private static final long serialVersionUID = -7494746631220427670L;
 
-    public ItemProcessingException() {
-    }
+	public ItemProcessingException() {
+	}
 
-    public ItemProcessingException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public ItemProcessingException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public ItemProcessingException(String message) {
-        super(message);
-    }
+	public ItemProcessingException(String message) {
+		super(message);
+	}
 
-    public ItemProcessingException(Throwable cause) {
-        super(cause);
-    }
+	public ItemProcessingException(Throwable cause) {
+		super(cause);
+	}
 
 }

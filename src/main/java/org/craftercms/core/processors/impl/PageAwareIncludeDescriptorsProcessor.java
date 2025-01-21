@@ -26,26 +26,26 @@ import org.dom4j.Element;
  */
 public class PageAwareIncludeDescriptorsProcessor extends IncludeDescriptorsProcessor {
 
-    protected boolean disablePageInclusion;
-    protected String pagesPathPattern;
+	protected boolean disablePageInclusion;
+	protected String pagesPathPattern;
 
-    public PageAwareIncludeDescriptorsProcessor(String includeElementXPathQuery, String disabledIncludeNodeXPathQuery) {
-        super(includeElementXPathQuery, disabledIncludeNodeXPathQuery);
-        disablePageInclusion = true;
-    }
+	public PageAwareIncludeDescriptorsProcessor(String includeElementXPathQuery, String disabledIncludeNodeXPathQuery) {
+		super(includeElementXPathQuery, disabledIncludeNodeXPathQuery);
+		disablePageInclusion = true;
+	}
 
-    public void setPagesPathPattern(String pagesPathPattern) {
-        this.pagesPathPattern = pagesPathPattern;
-    }
+	public void setPagesPathPattern(String pagesPathPattern) {
+		this.pagesPathPattern = pagesPathPattern;
+	}
 
-    public void setDisablePageInclusion(boolean disablePageInclusion) {
-        this.disablePageInclusion = disablePageInclusion;
-    }
+	public void setDisablePageInclusion(boolean disablePageInclusion) {
+		this.disablePageInclusion = disablePageInclusion;
+	}
 
-    @Override
-    protected boolean isIncludeDisabled(Element includeElement) {
-        return super.isIncludeDisabled(includeElement) ||
-                (disablePageInclusion && includeElement.getTextTrim().matches(pagesPathPattern));
-    }
+	@Override
+	protected boolean isIncludeDisabled(Element includeElement) {
+		return super.isIncludeDisabled(includeElement) ||
+			(disablePageInclusion && includeElement.getTextTrim().matches(pagesPathPattern));
+	}
 
 }

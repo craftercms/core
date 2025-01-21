@@ -22,19 +22,19 @@ package org.craftercms.core.exception;
  */
 public class InvalidStoreTypeException extends CrafterException {
 
-    public InvalidStoreTypeException() {
-    }
+	public InvalidStoreTypeException() {
+	}
 
-    public InvalidStoreTypeException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public InvalidStoreTypeException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public InvalidStoreTypeException(String message) {
-        super(message);
-    }
+	public InvalidStoreTypeException(String message) {
+		super(message);
+	}
 
-    public InvalidStoreTypeException(Throwable cause) {
-        super(cause);
-    }
+	public InvalidStoreTypeException(Throwable cause) {
+		super(cause);
+	}
 
 }

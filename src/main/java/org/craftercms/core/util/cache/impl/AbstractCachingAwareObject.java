@@ -30,52 +30,52 @@ import org.craftercms.core.util.cache.CachingAwareObject;
  */
 public abstract class AbstractCachingAwareObject implements CachingAwareObject {
 
-    protected transient String scope;
-    protected transient Object key;
-    protected transient Long cachingTime;
+	protected transient String scope;
+	protected transient Object key;
+	protected transient Long cachingTime;
 
-    protected AbstractCachingAwareObject() {
-    }
+	protected AbstractCachingAwareObject() {
+	}
 
-    protected AbstractCachingAwareObject(CachingAwareObject cachingAwareObject) {
-        this.scope = cachingAwareObject.getScope();
-        this.key = cachingAwareObject.getKey();
-        this.cachingTime = cachingAwareObject.getCachingTime();
-    }
+	protected AbstractCachingAwareObject(CachingAwareObject cachingAwareObject) {
+		this.scope = cachingAwareObject.getScope();
+		this.key = cachingAwareObject.getKey();
+		this.cachingTime = cachingAwareObject.getCachingTime();
+	}
 
-    @JsonIgnore
-    @Override
-    public String getScope() {
-        return scope;
-    }
+	@JsonIgnore
+	@Override
+	public String getScope() {
+		return scope;
+	}
 
-    @JsonIgnore
-    @Override
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
+	@JsonIgnore
+	@Override
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
 
-    @JsonIgnore
-    @Override
-    public Object getKey() {
-        return key;
-    }
+	@JsonIgnore
+	@Override
+	public Object getKey() {
+		return key;
+	}
 
-    @Override
-    public void setKey(Object key) {
-        this.key = key;
-    }
+	@Override
+	public void setKey(Object key) {
+		this.key = key;
+	}
 
-    @JsonIgnore
-    @Override
-    public Long getCachingTime() {
-        return cachingTime;
-    }
+	@JsonIgnore
+	@Override
+	public Long getCachingTime() {
+		return cachingTime;
+	}
 
-    @JsonIgnore
-    @Override
-    public void setCachingTime(Long cachingTime) {
-        this.cachingTime = cachingTime;
-    }
+	@JsonIgnore
+	@Override
+	public void setCachingTime(Long cachingTime) {
+		this.cachingTime = cachingTime;
+	}
 
 }

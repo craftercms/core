@@ -25,8 +25,8 @@ import org.craftercms.core.cache.CacheLoader;
  */
 public class DummyCacheLoader implements CacheLoader {
 
-    public Object load(Object... parameters) throws Exception {
-        return parameters[0].toString().toUpperCase();
-    }
-    
+	public Object load(Object... parameters) throws Exception {
+		return parameters[0].toString().toUpperCase();
+	}
+
 }

@@ -41,93 +41,93 @@ import static org.junit.Assert.assertNotNull;
  */
 public class MergeParentAndChildMergeCueTest {
 
-    public static final String ID_ATTR_NAME = "id";
+	public static final String ID_ATTR_NAME = "id";
 
-    public static final String MERGE_ORDER_PARAM_NAME = "order";
-    public static final String DEFAULT_MERGE_ORDER = "after";
+	public static final String MERGE_ORDER_PARAM_NAME = "order";
+	public static final String DEFAULT_MERGE_ORDER = "after";
 
-    public static final int DEFAULT_MERGE_PRIORITY = 1;
-    public static final Logger LOGGER = LoggerFactory.getLogger(MergeParentAndChildMergeCueTest.class);
+	public static final int DEFAULT_MERGE_PRIORITY = 1;
+	public static final Logger LOGGER = LoggerFactory.getLogger(MergeParentAndChildMergeCueTest.class);
 
-    private static final String PARENT_XML =
-            "<group>" +
-                    "<item id=\"1\">a</item>" +
-                    "<item id=\"2\">b</item>" +
-                    "<group id=\"3\"></group>" +
-                    "<group id=\"4\">" +
-                        "<item id=\"5\">c</item>" +
-                    "</group>" +
-            "</group>";
+	private static final String PARENT_XML =
+		"<group>" +
+			"<item id=\"1\">a</item>" +
+			"<item id=\"2\">b</item>" +
+			"<group id=\"3\"></group>" +
+			"<group id=\"4\">" +
+			"<item id=\"5\">c</item>" +
+			"</group>" +
+			"</group>";
 
-    private static final String CHILD_XML =
-            "<group>" +
-                    "<item id=\"1\">d</item>" +
-                    "<item id=\"6\">e</item>" +
-                    "<group id=\"3\">" +
-                        "<item id=\"7\">d</item>" +
-                    "</group>" +
-                    "<group id=\"4\"></group>" +
-            "</group>";
+	private static final String CHILD_XML =
+		"<group>" +
+			"<item id=\"1\">d</item>" +
+			"<item id=\"6\">e</item>" +
+			"<group id=\"3\">" +
+			"<item id=\"7\">d</item>" +
+			"</group>" +
+			"<group id=\"4\"></group>" +
+			"</group>";
 
-    private static final String MERGED_XML =
-            "<group>" +
-                    "<item id=\"1\">ad</item>" +
-                    "<group id=\"3\">" +
-                        "<item id=\"7\">d</item>" +
-                    "</group>" +
-                    "<group id=\"4\">" +
-                        "<item id=\"5\">c</item>" +
-                    "</group>" +
-                    "<item id=\"2\">b</item>" +
-                    "<item id=\"6\">e</item>" +
-            "</group>";
+	private static final String MERGED_XML =
+		"<group>" +
+			"<item id=\"1\">ad</item>" +
+			"<group id=\"3\">" +
+			"<item id=\"7\">d</item>" +
+			"</group>" +
+			"<group id=\"4\">" +
+			"<item id=\"5\">c</item>" +
+			"</group>" +
+			"<item id=\"2\">b</item>" +
+			"<item id=\"6\">e</item>" +
+			"</group>";
 
-    private MergeParentAndChildMergeCue mergeCue;
-    private Document parentDoc;
-    private Document childDoc;
+	private MergeParentAndChildMergeCue mergeCue;
+	private Document parentDoc;
+	private Document childDoc;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestMergeCue();
-        setUpTestDocuments();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestMergeCue();
+		setUpTestDocuments();
+	}
 
-    @Test
-    public void testMergeCue() throws Exception {
-        Element parent = (Element) parentDoc.selectSingleNode("/group");
-        Element child = (Element) childDoc.selectSingleNode("/group");
+	@Test
+	public void testMergeCue() throws Exception {
+		Element parent = (Element) parentDoc.selectSingleNode("/group");
+		Element child = (Element) childDoc.selectSingleNode("/group");
 
-        Element merged = mergeCue.merge(parent, child, Collections.singletonMap(MERGE_ORDER_PARAM_NAME,
-                                                                                DEFAULT_MERGE_ORDER));
-        assertNotNull(merged);
-        assertEquals(MERGED_XML, merged.asXML());
-    }
+		Element merged = mergeCue.merge(parent, child, Collections.singletonMap(MERGE_ORDER_PARAM_NAME,
+			DEFAULT_MERGE_ORDER));
+		assertNotNull(merged);
+		assertEquals(MERGED_XML, merged.asXML());
+	}
 
-    private void setUpTestMergeCue() {
-        ElementMergeMatcherImpl elementMergeMatcher = new ElementMergeMatcherImpl(new QName(ID_ATTR_NAME));
+	private void setUpTestMergeCue() {
+		ElementMergeMatcherImpl elementMergeMatcher = new ElementMergeMatcherImpl(new QName(ID_ATTR_NAME));
 
-        MergeCueResolver mergeCueResolver = new MergeCueResolver() {
+		MergeCueResolver mergeCueResolver = new MergeCueResolver() {
 
-            @Override
-            public MergeCueContext getMergeCue(Element parent, Element child) {
-                return new MergeCueContext(mergeCue, parent, child, Collections.<String, String>emptyMap());
-            }
+			@Override
+			public MergeCueContext getMergeCue(Element parent, Element child) {
+				return new MergeCueContext(mergeCue, parent, child, Collections.<String, String>emptyMap());
+			}
 
-        };
+		};
 
-        mergeCue = new MergeParentAndChildMergeCue(elementMergeMatcher, MERGE_ORDER_PARAM_NAME, DEFAULT_MERGE_ORDER, DEFAULT_MERGE_PRIORITY);
-        mergeCue.setMergeCueResolver(mergeCueResolver);
-    }
+		mergeCue = new MergeParentAndChildMergeCue(elementMergeMatcher, MERGE_ORDER_PARAM_NAME, DEFAULT_MERGE_ORDER, DEFAULT_MERGE_PRIORITY);
+		mergeCue.setMergeCueResolver(mergeCueResolver);
+	}
 
-    private void setUpTestDocuments() throws DocumentException, SAXException {
-        SAXReader reader = new SAXReader();
+	private void setUpTestDocuments() throws DocumentException, SAXException {
+		SAXReader reader = new SAXReader();
 
-        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
-        parentDoc = reader.read(new StringReader(PARENT_XML));
-        childDoc = reader.read(new StringReader(CHILD_XML));
-    }
+		parentDoc = reader.read(new StringReader(PARENT_XML));
+		childDoc = reader.read(new StringReader(CHILD_XML));
+	}
 
 }

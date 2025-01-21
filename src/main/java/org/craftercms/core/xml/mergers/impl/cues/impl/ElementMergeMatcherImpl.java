@@ -26,24 +26,24 @@ import org.dom4j.QName;
  */
 public class ElementMergeMatcherImpl implements ElementMergeMatcher {
 
-    protected QName idAttributeName;
+	protected QName idAttributeName;
 
-    public ElementMergeMatcherImpl(QName idAttributeName) {
-        this.idAttributeName = idAttributeName;
-    }
+	public ElementMergeMatcherImpl(QName idAttributeName) {
+		this.idAttributeName = idAttributeName;
+	}
 
-    @Override
-    public boolean matchForMerge(Element parent, Element child) {
-        String parentId = parent.attributeValue(idAttributeName);
-        String childId = child.attributeValue(idAttributeName);
+	@Override
+	public boolean matchForMerge(Element parent, Element child) {
+		String parentId = parent.attributeValue(idAttributeName);
+		String childId = child.attributeValue(idAttributeName);
 
-        if (parentId == null && childId == null) {
-            return parent.getQualifiedName().equals(child.getQualifiedName());
-        } else if (parentId != null) {
-            return parentId.equals(childId);
-        } else {
-            return false;
-        }
-    }
+		if (parentId == null && childId == null) {
+			return parent.getQualifiedName().equals(child.getQualifiedName());
+		} else if (parentId != null) {
+			return parentId.equals(childId);
+		} else {
+			return false;
+		}
+	}
 
 }

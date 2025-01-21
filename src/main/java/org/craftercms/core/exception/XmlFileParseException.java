@@ -23,21 +23,21 @@ package org.craftercms.core.exception;
  */
 public class XmlFileParseException extends XmlException {
 
-    private static final long serialVersionUID = 2828753041303831911L;
+	private static final long serialVersionUID = 2828753041303831911L;
 
-    public XmlFileParseException() {
-    }
+	public XmlFileParseException() {
+	}
 
-    public XmlFileParseException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public XmlFileParseException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public XmlFileParseException(String message) {
-        super(message);
-    }
+	public XmlFileParseException(String message) {
+		super(message);
+	}
 
-    public XmlFileParseException(Throwable cause) {
-        super(cause);
-    }
+	public XmlFileParseException(Throwable cause) {
+		super(cause);
+	}
 
 }

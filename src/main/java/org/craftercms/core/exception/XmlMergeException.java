@@ -23,21 +23,21 @@ package org.craftercms.core.exception;
  */
 public class XmlMergeException extends XmlException {
 
-    private static final long serialVersionUID = 8924660634344041072L;
+	private static final long serialVersionUID = 8924660634344041072L;
 
-    public XmlMergeException() {
-    }
+	public XmlMergeException() {
+	}
 
-    public XmlMergeException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public XmlMergeException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public XmlMergeException(String message) {
-        super(message);
-    }
+	public XmlMergeException(String message) {
+		super(message);
+	}
 
-    public XmlMergeException(Throwable cause) {
-        super(cause);
-    }
+	public XmlMergeException(Throwable cause) {
+		super(cause);
+	}
 
 }

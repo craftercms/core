@@ -32,46 +32,46 @@ import static org.mockito.Mockito.when;
  * @author Alfonso Vásquez
  */
 public class TextMetaDataExtractingProcessorTest {
-    
-    private static final String CSS = "css.css";
-    private static final String JS = "js.js";
 
-    private String[] testMetaDataNodesXPathQueries = { "//css", "//js" };
+	private static final String CSS = "css.css";
+	private static final String JS = "js.js";
 
-    private TextMetaDataExtractingProcessor processor;
-    private Item item;
+	private String[] testMetaDataNodesXPathQueries = {"//css", "//js"};
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestProcessor();
-        setUpTestItem();
-    }
+	private TextMetaDataExtractingProcessor processor;
+	private Item item;
 
-    @Test
-    public void testProcessor() throws Exception {
-        processor.process(null, null, item);
+	@Before
+	public void setUp() throws Exception {
+		setUpTestProcessor();
+		setUpTestItem();
+	}
 
-        assertEquals(CSS, item.getProperty(testMetaDataNodesXPathQueries[0]));
-        assertEquals(JS, item.getProperty(testMetaDataNodesXPathQueries[1]));
-    }
+	@Test
+	public void testProcessor() throws Exception {
+		processor.process(null, null, item);
 
-    private void setUpTestProcessor() {
-        processor = new TextMetaDataExtractingProcessor(testMetaDataNodesXPathQueries);
-    }
+		assertEquals(CSS, item.getProperty(testMetaDataNodesXPathQueries[0]));
+		assertEquals(JS, item.getProperty(testMetaDataNodesXPathQueries[1]));
+	}
 
-    private void setUpTestItem() {
-        Node cssNode = mock(Node.class);
-        when(cssNode.getText()).thenReturn(CSS);
+	private void setUpTestProcessor() {
+		processor = new TextMetaDataExtractingProcessor(testMetaDataNodesXPathQueries);
+	}
 
-        Node jsNode = mock(Node.class);
-        when(jsNode.getText()).thenReturn(JS);
+	private void setUpTestItem() {
+		Node cssNode = mock(Node.class);
+		when(cssNode.getText()).thenReturn(CSS);
 
-        Document descriptorDom = mock(Document.class);
-        when(descriptorDom.selectSingleNode(testMetaDataNodesXPathQueries[0])).thenReturn(cssNode);
-        when(descriptorDom.selectSingleNode(testMetaDataNodesXPathQueries[1])).thenReturn(jsNode);
+		Node jsNode = mock(Node.class);
+		when(jsNode.getText()).thenReturn(JS);
 
-        item = new Item();
-        item.setDescriptorDom(descriptorDom);
-    }    
-    
+		Document descriptorDom = mock(Document.class);
+		when(descriptorDom.selectSingleNode(testMetaDataNodesXPathQueries[0])).thenReturn(cssNode);
+		when(descriptorDom.selectSingleNode(testMetaDataNodesXPathQueries[1])).thenReturn(jsNode);
+
+		item = new Item();
+		item.setDescriptorDom(descriptorDom);
+	}
+
 }

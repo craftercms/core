@@ -34,26 +34,26 @@ import org.springframework.web.util.UriTemplate;
  */
 public class ExtractRequestAttributesUrlTransformer implements UrlTransformer {
 
-    private UriTemplate uriTemplate;
+	private UriTemplate uriTemplate;
 
-    public ExtractRequestAttributesUrlTransformer(String uriTemplate) {
-        this.uriTemplate = new UriTemplate(uriTemplate);
-    }
+	public ExtractRequestAttributesUrlTransformer(String uriTemplate) {
+		this.uriTemplate = new UriTemplate(uriTemplate);
+	}
 
-    @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions,
-                               String url) throws UrlTransformationException {
-        if (uriTemplate.matches(url)) {
-            Map<String, String> variables = uriTemplate.match(url);
-            for (Map.Entry<String, String> entry : variables.entrySet()) {
-                RequestContext.getCurrent().getRequest().setAttribute(entry.getKey(), entry.getValue());
-            }
+	@Override
+	public String transformUrl(Context context, CachingOptions cachingOptions,
+				   String url) throws UrlTransformationException {
+		if (uriTemplate.matches(url)) {
+			Map<String, String> variables = uriTemplate.match(url);
+			for (Map.Entry<String, String> entry : variables.entrySet()) {
+				RequestContext.getCurrent().getRequest().setAttribute(entry.getKey(), entry.getValue());
+			}
 
-            url = uriTemplate.toString().replaceAll("\\{[^{}]+\\}", "");
-            url = url.replace("//", "/");
-        }
+			url = uriTemplate.toString().replaceAll("\\{[^{}]+\\}", "");
+			url = url.replace("//", "/");
+		}
 
-        return url;
-    }
+		return url;
+	}
 
 }

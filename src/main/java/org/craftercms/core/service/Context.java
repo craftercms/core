@@ -28,35 +28,35 @@ import java.util.Map;
  */
 public interface Context extends Cloneable {
 
-    boolean DEFAULT_MERGING_ON = true;
-    boolean DEFAULT_CACHE_ON = true;
-    int DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE = 0;
-    boolean DEFAULT_IGNORE_HIDDEN_FILES = true;
+	boolean DEFAULT_MERGING_ON = true;
+	boolean DEFAULT_CACHE_ON = true;
+	int DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE = 0;
+	boolean DEFAULT_IGNORE_HIDDEN_FILES = true;
 
-    String getId();
+	String getId();
 
-    long getCacheVersion();
+	long getCacheVersion();
 
-    void setCacheVersion(long cacheVersion);
+	void setCacheVersion(long cacheVersion);
 
-    String getCacheScope();
+	String getCacheScope();
 
-    ContentStoreAdapter getStoreAdapter();
+	ContentStoreAdapter getStoreAdapter();
 
-    boolean isMergingOn();
+	boolean isMergingOn();
 
-    boolean isCacheOn();
+	boolean isCacheOn();
 
-    int getMaxAllowedItemsInCache();
+	int getMaxAllowedItemsInCache();
 
-    boolean ignoreHiddenFiles();
+	boolean ignoreHiddenFiles();
 
-    Context clone();
+	Context clone();
 
-    /**
-     * Config variables for the context. e.g.: ${siteName} will be replaced by the value of the siteName variable
-     *
-     * @return Return a map of variables to be used when loading configuration files.
-     */
-    Map<String, String> getConfigLookupVariables();
+	/**
+	 * Config variables for the context. e.g.: ${siteName} will be replaced by the value of the siteName variable
+	 *
+	 * @return Return a map of variables to be used when loading configuration files.
+	 */
+	Map<String, String> getConfigLookupVariables();
 }

@@ -25,79 +25,79 @@ import org.craftercms.core.cache.CacheItem;
  */
 public class CachingOptions {
 
-    public static final CachingOptions DEFAULT_CACHING_OPTIONS = new CachingOptions();
-    public static final CachingOptions CACHE_OFF_CACHING_OPTIONS = new CachingOptions(false, 0, 0);
+	public static final CachingOptions DEFAULT_CACHING_OPTIONS = new CachingOptions();
+	public static final CachingOptions CACHE_OFF_CACHING_OPTIONS = new CachingOptions(false, 0, 0);
 
-    private boolean doCaching;
-    private long expireAfter;
-    private long refreshFrequency;
+	private boolean doCaching;
+	private long expireAfter;
+	private long refreshFrequency;
 
-    public CachingOptions() {
-        this.doCaching = true;
-        this.expireAfter = CacheItem.NEVER_EXPIRE;
-        this.refreshFrequency = CacheItem.NEVER_REFRESH;
-    }
+	public CachingOptions() {
+		this.doCaching = true;
+		this.expireAfter = CacheItem.NEVER_EXPIRE;
+		this.refreshFrequency = CacheItem.NEVER_REFRESH;
+	}
 
-    public CachingOptions(boolean doCaching, long expireAfter, long refreshFrequency) {
-        this.doCaching = doCaching;
-        this.expireAfter = expireAfter;
-        this.refreshFrequency = refreshFrequency;
-    }
+	public CachingOptions(boolean doCaching, long expireAfter, long refreshFrequency) {
+		this.doCaching = doCaching;
+		this.expireAfter = expireAfter;
+		this.refreshFrequency = refreshFrequency;
+	}
 
-    public boolean doCaching() {
-        return doCaching;
-    }
+	public boolean doCaching() {
+		return doCaching;
+	}
 
-    public void setDoCaching(boolean doCaching) {
-        this.doCaching = doCaching;
-    }
+	public void setDoCaching(boolean doCaching) {
+		this.doCaching = doCaching;
+	}
 
-    public long getExpireAfter() {
-        return expireAfter;
-    }
+	public long getExpireAfter() {
+		return expireAfter;
+	}
 
-    public void setExpireAfter(long expireAfter) {
-        this.expireAfter = expireAfter;
-    }
+	public void setExpireAfter(long expireAfter) {
+		this.expireAfter = expireAfter;
+	}
 
-    public long getRefreshFrequency() {
-        return refreshFrequency;
-    }
+	public long getRefreshFrequency() {
+		return refreshFrequency;
+	}
 
-    public void setRefreshFrequency(long refreshFrequency) {
-        this.refreshFrequency = refreshFrequency;
-    }
+	public void setRefreshFrequency(long refreshFrequency) {
+		this.refreshFrequency = refreshFrequency;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        CachingOptions options = (CachingOptions)o;
+		CachingOptions options = (CachingOptions) o;
 
-        if (doCaching != options.doCaching) {
-            return false;
-        }
-        if (expireAfter != options.expireAfter) {
-            return false;
-        }
-        if (refreshFrequency != options.refreshFrequency) {
-            return false;
-        }
+		if (doCaching != options.doCaching) {
+			return false;
+		}
+		if (expireAfter != options.expireAfter) {
+			return false;
+		}
+		if (refreshFrequency != options.refreshFrequency) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-        int result = (doCaching? 1: 0);
-        result = 31 * result + (int)(expireAfter ^ (expireAfter >>> 32));
-        result = 31 * result + (int)(refreshFrequency ^ (refreshFrequency >>> 32));
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		int result = (doCaching ? 1 : 0);
+		result = 31 * result + (int) (expireAfter ^ (expireAfter >>> 32));
+		result = 31 * result + (int) (refreshFrequency ^ (refreshFrequency >>> 32));
+		return result;
+	}
 
 }

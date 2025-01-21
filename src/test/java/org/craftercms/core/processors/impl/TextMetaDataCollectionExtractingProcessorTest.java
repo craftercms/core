@@ -35,53 +35,53 @@ import static org.mockito.Mockito.when;
  */
 public class TextMetaDataCollectionExtractingProcessorTest {
 
-    private static final String CSS1 = "css1.css";
-    private static final String CSS2 = "css2.css";
-    private static final String JS1 = "js1.js";
-    private static final String JS2 = "js2.js";
+	private static final String CSS1 = "css1.css";
+	private static final String CSS2 = "css2.css";
+	private static final String JS1 = "js1.js";
+	private static final String JS2 = "js2.js";
 
-    private String[] testMetaDataNodesXPathQueries = { "//css", "//js" };
+	private String[] testMetaDataNodesXPathQueries = {"//css", "//js"};
 
-    private TextMetaDataCollectionExtractingProcessor processor;
-    private Item item;
+	private TextMetaDataCollectionExtractingProcessor processor;
+	private Item item;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestProcessor();
-        setUpTestItem();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestProcessor();
+		setUpTestItem();
+	}
 
-    @Test
-    public void testProcess() throws Exception {
-        processor.process(null, null, item);
+	@Test
+	public void testProcess() throws Exception {
+		processor.process(null, null, item);
 
-        assertEquals(Arrays.asList(CSS1, CSS2), item.getProperty(testMetaDataNodesXPathQueries[0]));
-        assertEquals(Arrays.asList(JS1, JS2), item.getProperty(testMetaDataNodesXPathQueries[1]));
-    }
+		assertEquals(Arrays.asList(CSS1, CSS2), item.getProperty(testMetaDataNodesXPathQueries[0]));
+		assertEquals(Arrays.asList(JS1, JS2), item.getProperty(testMetaDataNodesXPathQueries[1]));
+	}
 
-    private void setUpTestProcessor() {
-        processor = new TextMetaDataCollectionExtractingProcessor(testMetaDataNodesXPathQueries);
-    }
+	private void setUpTestProcessor() {
+		processor = new TextMetaDataCollectionExtractingProcessor(testMetaDataNodesXPathQueries);
+	}
 
-    private void setUpTestItem() {
-        Node css1Node = mock(Node.class);
-        when(css1Node.getText()).thenReturn(CSS1);
+	private void setUpTestItem() {
+		Node css1Node = mock(Node.class);
+		when(css1Node.getText()).thenReturn(CSS1);
 
-        Node css2Node = mock(Node.class);
-        when(css2Node.getText()).thenReturn(CSS2);
+		Node css2Node = mock(Node.class);
+		when(css2Node.getText()).thenReturn(CSS2);
 
-        Node js1Node = mock(Node.class);
-        when(js1Node.getText()).thenReturn(JS1);
+		Node js1Node = mock(Node.class);
+		when(js1Node.getText()).thenReturn(JS1);
 
-        Node js2Node = mock(Node.class);
-        when(js2Node.getText()).thenReturn(JS2);
+		Node js2Node = mock(Node.class);
+		when(js2Node.getText()).thenReturn(JS2);
 
-        Document descriptorDom = mock(Document.class);
-        when(descriptorDom.selectNodes(testMetaDataNodesXPathQueries[0])).thenReturn(Arrays.asList(css1Node, css2Node));
-        when(descriptorDom.selectNodes(testMetaDataNodesXPathQueries[1])).thenReturn(Arrays.asList(js1Node, js2Node));
+		Document descriptorDom = mock(Document.class);
+		when(descriptorDom.selectNodes(testMetaDataNodesXPathQueries[0])).thenReturn(Arrays.asList(css1Node, css2Node));
+		when(descriptorDom.selectNodes(testMetaDataNodesXPathQueries[1])).thenReturn(Arrays.asList(js1Node, js2Node));
 
-        item = new Item();
-        item.setDescriptorDom(descriptorDom);
-    }
+		item = new Item();
+		item.setDescriptorDom(descriptorDom);
+	}
 
 }

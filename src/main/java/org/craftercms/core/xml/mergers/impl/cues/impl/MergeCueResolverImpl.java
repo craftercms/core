@@ -37,109 +37,109 @@ import org.springframework.context.annotation.Lazy;
  */
 public class MergeCueResolverImpl implements MergeCueResolver {
 
-    protected Map<QName, MergeCue> parentMergeCues;
-    protected Map<QName, MergeCue> childMergeCues;
-    protected MergeCue defaultParentMergeCue;
-    protected MergeCue defaultChildMergeCue;
+	protected Map<QName, MergeCue> parentMergeCues;
+	protected Map<QName, MergeCue> childMergeCues;
+	protected MergeCue defaultParentMergeCue;
+	protected MergeCue defaultChildMergeCue;
 
-    @Autowired
-    public void setParentMergeCues(@Lazy Map<QName, MergeCue> parentMergeCues) {
-        this.parentMergeCues = parentMergeCues;
-    }
+	@Autowired
+	public void setParentMergeCues(@Lazy Map<QName, MergeCue> parentMergeCues) {
+		this.parentMergeCues = parentMergeCues;
+	}
 
-    @Autowired
-    public void setChildMergeCues(@Lazy Map<QName, MergeCue> childMergeCues) {
-        this.childMergeCues = childMergeCues;
-    }
+	@Autowired
+	public void setChildMergeCues(@Lazy Map<QName, MergeCue> childMergeCues) {
+		this.childMergeCues = childMergeCues;
+	}
 
-    @Autowired
-    public void setDefaultParentMergeCue(MergeCue defaultParentMergeCue) {
-        this.defaultParentMergeCue = defaultParentMergeCue;
-    }
+	@Autowired
+	public void setDefaultParentMergeCue(MergeCue defaultParentMergeCue) {
+		this.defaultParentMergeCue = defaultParentMergeCue;
+	}
 
-    @Autowired
-    public void setDefaultChildMergeCue(MergeCue defaultChildMergeCue) {
-        this.defaultChildMergeCue = defaultChildMergeCue;
-    }
+	@Autowired
+	public void setDefaultChildMergeCue(MergeCue defaultChildMergeCue) {
+		this.defaultChildMergeCue = defaultChildMergeCue;
+	}
 
-    @Override
-    public MergeCueContext getMergeCue(Element parent, Element child) {
-        MergeCue parentMergeCue;
-        MergeCue childMergeCue;
+	@Override
+	public MergeCueContext getMergeCue(Element parent, Element child) {
+		MergeCue parentMergeCue;
+		MergeCue childMergeCue;
 
-        Attribute parentMergeCueAttribute = getMergeCueAttribute(parent, parentMergeCues);
-        if (parentMergeCueAttribute != null) {
-            parentMergeCue = parentMergeCues.get(parentMergeCueAttribute.getQName());
-        } else {
-            parentMergeCue = defaultParentMergeCue;
-        }
+		Attribute parentMergeCueAttribute = getMergeCueAttribute(parent, parentMergeCues);
+		if (parentMergeCueAttribute != null) {
+			parentMergeCue = parentMergeCues.get(parentMergeCueAttribute.getQName());
+		} else {
+			parentMergeCue = defaultParentMergeCue;
+		}
 
-        Attribute childMergeCueAttribute = getMergeCueAttribute(child, childMergeCues);
-        if (childMergeCueAttribute != null) {
-            childMergeCue = childMergeCues.get(childMergeCueAttribute.getQName());
-        } else {
-            childMergeCue = defaultChildMergeCue;
-        }
+		Attribute childMergeCueAttribute = getMergeCueAttribute(child, childMergeCues);
+		if (childMergeCueAttribute != null) {
+			childMergeCue = childMergeCues.get(childMergeCueAttribute.getQName());
+		} else {
+			childMergeCue = defaultChildMergeCue;
+		}
 
-        MergeCue chosenMergeCue;
-        Map<String, String> mergeCueParams;
+		MergeCue chosenMergeCue;
+		Map<String, String> mergeCueParams;
 
-        if (parentMergeCue.getPriority() > childMergeCue.getPriority()) {
-            chosenMergeCue = parentMergeCue;
+		if (parentMergeCue.getPriority() > childMergeCue.getPriority()) {
+			chosenMergeCue = parentMergeCue;
 
-            if (parentMergeCueAttribute != null) {
-                mergeCueParams = getMergeCueParams(parent, parentMergeCueAttribute);
-            } else {
-                mergeCueParams = Collections.emptyMap();
-            }
-        } else {
-            chosenMergeCue = childMergeCue;
+			if (parentMergeCueAttribute != null) {
+				mergeCueParams = getMergeCueParams(parent, parentMergeCueAttribute);
+			} else {
+				mergeCueParams = Collections.emptyMap();
+			}
+		} else {
+			chosenMergeCue = childMergeCue;
 
-            if (childMergeCueAttribute != null) {
-                mergeCueParams = getMergeCueParams(child, childMergeCueAttribute);
-            } else {
-                mergeCueParams = Collections.emptyMap();
-            }
-        }
+			if (childMergeCueAttribute != null) {
+				mergeCueParams = getMergeCueParams(child, childMergeCueAttribute);
+			} else {
+				mergeCueParams = Collections.emptyMap();
+			}
+		}
 
-        return new MergeCueContext(chosenMergeCue, parent, child, mergeCueParams);
-    }
+		return new MergeCueContext(chosenMergeCue, parent, child, mergeCueParams);
+	}
 
-    @SuppressWarnings("unchecked")
-    protected Attribute getMergeCueAttribute(Element element, Map<QName, MergeCue> mergeCues) {
-        List<Attribute> attributes = element.attributes();
-        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
-            Attribute attribute = i.next();
-            if (mergeCues.containsKey(attribute.getQName())) {
-                i.remove();
+	@SuppressWarnings("unchecked")
+	protected Attribute getMergeCueAttribute(Element element, Map<QName, MergeCue> mergeCues) {
+		List<Attribute> attributes = element.attributes();
+		for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
+			Attribute attribute = i.next();
+			if (mergeCues.containsKey(attribute.getQName())) {
+				i.remove();
 
-                return attribute;
-            }
-        }
+				return attribute;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @SuppressWarnings("unchecked")
-    protected Map<String, String> getMergeCueParams(Element element, Attribute mergeCueAttribute) {
-        Map<String, String> params = new HashMap<String, String>();
-        String paramsPrefix = mergeCueAttribute.getQualifiedName() + "-";
-        List<Attribute> attributes = element.attributes();
+	@SuppressWarnings("unchecked")
+	protected Map<String, String> getMergeCueParams(Element element, Attribute mergeCueAttribute) {
+		Map<String, String> params = new HashMap<String, String>();
+		String paramsPrefix = mergeCueAttribute.getQualifiedName() + "-";
+		List<Attribute> attributes = element.attributes();
 
-        for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
-            Attribute attribute = i.next();
-            String attributeQualifiedName = attribute.getQualifiedName();
-            if (attributeQualifiedName.startsWith(paramsPrefix)) {
-                i.remove();
+		for (Iterator<Attribute> i = attributes.iterator(); i.hasNext(); ) {
+			Attribute attribute = i.next();
+			String attributeQualifiedName = attribute.getQualifiedName();
+			if (attributeQualifiedName.startsWith(paramsPrefix)) {
+				i.remove();
 
-                String paramName = attributeQualifiedName.substring(paramsPrefix.length());
-                String paramValue = attribute.getValue();
+				String paramName = attributeQualifiedName.substring(paramsPrefix.length());
+				String paramValue = attribute.getValue();
 
-                params.put(paramName, paramValue);
-            }
-        }
+				params.put(paramName, paramValue);
+			}
+		}
 
-        return params;
-    }
+		return params;
+	}
 
 }

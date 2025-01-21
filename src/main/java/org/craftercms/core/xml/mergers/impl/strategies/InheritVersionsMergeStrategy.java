@@ -33,17 +33,17 @@ import org.dom4j.Document;
  */
 public class InheritVersionsMergeStrategy extends AbstractInheritFromHierarchyMergeStrategy {
 
-    @Override
-    protected void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
-                                                   List<MergeableDescriptor> inheritedDescriptors, String folder,
-                                                   String mainDescriptorUrl, Document mainDescriptorDom) {
-        String primaryDescriptorFilename = FilenameUtils.getName(mainDescriptorUrl);
-        String inheritedDescriptorUrl = folder + '/' + primaryDescriptorFilename;
+	@Override
+	protected void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
+						       List<MergeableDescriptor> inheritedDescriptors, String folder,
+						       String mainDescriptorUrl, Document mainDescriptorDom) {
+		String primaryDescriptorFilename = FilenameUtils.getName(mainDescriptorUrl);
+		String inheritedDescriptorUrl = folder + '/' + primaryDescriptorFilename;
 
-        // Avoid adding the primary descriptor twice.
-        if (!inheritedDescriptorUrl.equals(mainDescriptorUrl)) {
-            inheritedDescriptors.add(new MergeableDescriptor(inheritedDescriptorUrl, true));
-        }
-    }
+		// Avoid adding the primary descriptor twice.
+		if (!inheritedDescriptorUrl.equals(mainDescriptorUrl)) {
+			inheritedDescriptors.add(new MergeableDescriptor(inheritedDescriptorUrl, true));
+		}
+	}
 
 }

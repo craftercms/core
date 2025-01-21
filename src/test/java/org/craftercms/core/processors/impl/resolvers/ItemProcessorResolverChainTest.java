@@ -35,62 +35,62 @@ import static org.mockito.Mockito.when;
  */
 public class ItemProcessorResolverChainTest {
 
-    private static final String ITEM1_URL = "/item1.xml";
-    private static final String ITEM2_URL = "/item2.xml";
-    private static final String ITEM3_URL = "/item3.xml";
+	private static final String ITEM1_URL = "/item1.xml";
+	private static final String ITEM2_URL = "/item2.xml";
+	private static final String ITEM3_URL = "/item3.xml";
 
-    private ItemProcessorResolverChain resolverChain;
-    private Item item1;
-    private Item item2;
-    private Item item3;
-    private ItemProcessor processor1;
-    private ItemProcessor processor2;
-    private ItemProcessor defaultProcessor;
+	private ItemProcessorResolverChain resolverChain;
+	private Item item1;
+	private Item item2;
+	private Item item3;
+	private ItemProcessor processor1;
+	private ItemProcessor processor2;
+	private ItemProcessor defaultProcessor;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestItems();
-        setUpTestProcessors();
-        setUpTestResolverChain();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestItems();
+		setUpTestProcessors();
+		setUpTestResolverChain();
+	}
 
-    @Test
-    public void testResolverChain() throws Exception {
-        ItemProcessor processor = resolverChain.getProcessor(item1);
-        assertSame(processor1, processor);
+	@Test
+	public void testResolverChain() throws Exception {
+		ItemProcessor processor = resolverChain.getProcessor(item1);
+		assertSame(processor1, processor);
 
-        processor = resolverChain.getProcessor(item2);
-        assertSame(processor2, processor);
+		processor = resolverChain.getProcessor(item2);
+		assertSame(processor2, processor);
 
-        processor = resolverChain.getProcessor(item3);
-        assertSame(defaultProcessor, processor);
-    }
+		processor = resolverChain.getProcessor(item3);
+		assertSame(defaultProcessor, processor);
+	}
 
-    private void setUpTestItems() {
-        item1 = new Item();
-        item1.setUrl(ITEM1_URL);
+	private void setUpTestItems() {
+		item1 = new Item();
+		item1.setUrl(ITEM1_URL);
 
-        item2 = new Item();
-        item2.setUrl(ITEM2_URL);
+		item2 = new Item();
+		item2.setUrl(ITEM2_URL);
 
-        item3 = new Item();
-        item3.setUrl(ITEM3_URL);
-    }
+		item3 = new Item();
+		item3.setUrl(ITEM3_URL);
+	}
 
-    private void setUpTestProcessors() {
-        processor1 = mock(ItemProcessor.class);
-        processor2 = mock(ItemProcessor.class);
-        defaultProcessor = mock(ItemProcessor.class);
-    }
+	private void setUpTestProcessors() {
+		processor1 = mock(ItemProcessor.class);
+		processor2 = mock(ItemProcessor.class);
+		defaultProcessor = mock(ItemProcessor.class);
+	}
 
-    private void setUpTestResolverChain() {
-        ItemProcessorResolver resolver1 = mock(ItemProcessorResolver.class);
-        when(resolver1.getProcessor(item1)).thenReturn(processor1);
+	private void setUpTestResolverChain() {
+		ItemProcessorResolver resolver1 = mock(ItemProcessorResolver.class);
+		when(resolver1.getProcessor(item1)).thenReturn(processor1);
 
-        ItemProcessorResolver resolver2 = mock(ItemProcessorResolver.class);
-        when(resolver1.getProcessor(item2)).thenReturn(processor2);
+		ItemProcessorResolver resolver2 = mock(ItemProcessorResolver.class);
+		when(resolver1.getProcessor(item2)).thenReturn(processor2);
 
-        resolverChain = new ItemProcessorResolverChain(defaultProcessor, Arrays.asList(resolver1, resolver2));
-    }
+		resolverChain = new ItemProcessorResolverChain(defaultProcessor, Arrays.asList(resolver1, resolver2));
+	}
 
 }

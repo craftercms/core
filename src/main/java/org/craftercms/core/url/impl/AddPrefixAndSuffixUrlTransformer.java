@@ -28,61 +28,61 @@ import org.craftercms.core.url.UrlTransformer;
  */
 public class AddPrefixAndSuffixUrlTransformer implements UrlTransformer {
 
-    private String prefix;
-    private String suffix;
-    private boolean prefixPathSeparator;
-    private boolean suffixPathSeparator;
+	private String prefix;
+	private String suffix;
+	private boolean prefixPathSeparator;
+	private boolean suffixPathSeparator;
 
-    public AddPrefixAndSuffixUrlTransformer() {
-        prefixPathSeparator = true;
-        suffixPathSeparator = false;
-    }
+	public AddPrefixAndSuffixUrlTransformer() {
+		prefixPathSeparator = true;
+		suffixPathSeparator = false;
+	}
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 
-    public void setSuffix(String suffix) {
-        this.suffix = suffix;
-    }
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
 
-    public void setAddPrefixPathSeparator(boolean addPrefixPathSeparator) {
-        this.prefixPathSeparator = addPrefixPathSeparator;
-    }
+	public void setAddPrefixPathSeparator(boolean addPrefixPathSeparator) {
+		this.prefixPathSeparator = addPrefixPathSeparator;
+	}
 
-    public void setAddSuffixPathSeparator(boolean addSuffixPathSeparator) {
-        this.suffixPathSeparator = addSuffixPathSeparator;
-    }
+	public void setAddSuffixPathSeparator(boolean addSuffixPathSeparator) {
+		this.suffixPathSeparator = addSuffixPathSeparator;
+	}
 
-    public void setPrefixPathSeparator(boolean prefixPathSeparator) {
-        this.prefixPathSeparator = prefixPathSeparator;
-    }
+	public void setPrefixPathSeparator(boolean prefixPathSeparator) {
+		this.prefixPathSeparator = prefixPathSeparator;
+	}
 
-    public void setSuffixPathSeparator(boolean suffixPathSeparator) {
-        this.suffixPathSeparator = suffixPathSeparator;
-    }
+	public void setSuffixPathSeparator(boolean suffixPathSeparator) {
+		this.suffixPathSeparator = suffixPathSeparator;
+	}
 
-    @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions,
-                               String url) throws UrlTransformationException {
-        StringBuilder urlBuf = new StringBuilder(url);
+	@Override
+	public String transformUrl(Context context, CachingOptions cachingOptions,
+				   String url) throws UrlTransformationException {
+		StringBuilder urlBuf = new StringBuilder(url);
 
-        if (StringUtils.isNotEmpty(prefix)) {
-            if (prefixPathSeparator && !url.startsWith("/")) {
-                urlBuf.insert(0, '/');
-            }
+		if (StringUtils.isNotEmpty(prefix)) {
+			if (prefixPathSeparator && !url.startsWith("/")) {
+				urlBuf.insert(0, '/');
+			}
 
-            urlBuf.insert(0, prefix);
-        }
-        if (StringUtils.isNotEmpty(suffix)) {
-            if (suffixPathSeparator && !url.endsWith("/")) {
-                urlBuf.append('/');
-            }
+			urlBuf.insert(0, prefix);
+		}
+		if (StringUtils.isNotEmpty(suffix)) {
+			if (suffixPathSeparator && !url.endsWith("/")) {
+				urlBuf.append('/');
+			}
 
-            urlBuf.append(suffix);
-        }
+			urlBuf.append(suffix);
+		}
 
-        return urlBuf.toString();
-    }
+		return urlBuf.toString();
+	}
 
 }

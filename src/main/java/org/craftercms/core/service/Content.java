@@ -25,19 +25,19 @@ import java.io.InputStream;
  */
 public interface Content {
 
-    /**
-     * Returns the last modified date of the content.
-     */
-    long getLastModified();
+	/**
+	 * Returns the last modified date of the content.
+	 */
+	long getLastModified();
 
-    /**
-     * Returns the content length.
-     */
-    long getLength();
+	/**
+	 * Returns the content length.
+	 */
+	long getLength();
 
-    /**
-     * Returns a {@link InputStream} for the data.
-     */
-    InputStream getInputStream() throws IOException;
+	/**
+	 * Returns a {@link InputStream} for the data.
+	 */
+	InputStream getInputStream() throws IOException;
 
 }

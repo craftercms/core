@@ -35,99 +35,99 @@ import org.dom4j.VisitorSupport;
  */
 public class RegexNodeScanner implements NodeScanner {
 
-    protected Pattern[] patterns;
-    protected boolean matchEntireNodeText;
+	protected Pattern[] patterns;
+	protected boolean matchEntireNodeText;
 
-    public RegexNodeScanner(Pattern... patterns) {
-        this.patterns = patterns;
-        matchEntireNodeText = true;
-    }
+	public RegexNodeScanner(Pattern... patterns) {
+		this.patterns = patterns;
+		matchEntireNodeText = true;
+	}
 
-    public void setMatchEntireNodeText(boolean matchEntireNodeText) {
-        this.matchEntireNodeText = matchEntireNodeText;
-    }
+	public void setMatchEntireNodeText(boolean matchEntireNodeText) {
+		this.matchEntireNodeText = matchEntireNodeText;
+	}
 
-    @Override
-    public List<Node> scan(Document document) {
-        List<Node> matchingNodes = new ArrayList<Node>();
+	@Override
+	public List<Node> scan(Document document) {
+		List<Node> matchingNodes = new ArrayList<Node>();
 
-        for (Pattern pattern : patterns) {
-            document.accept(new RegexMatcherVisitor(matchingNodes, pattern));
-        }
+		for (Pattern pattern : patterns) {
+			document.accept(new RegexMatcherVisitor(matchingNodes, pattern));
+		}
 
-        return matchingNodes;
-    }
+		return matchingNodes;
+	}
 
-    protected class RegexMatcherVisitor extends VisitorSupport {
+	protected class RegexMatcherVisitor extends VisitorSupport {
 
-        protected List<Node> matchingNodes;
-        protected Pattern pattern;
+		protected List<Node> matchingNodes;
+		protected Pattern pattern;
 
-        public RegexMatcherVisitor(List<Node> matchingNodes, Pattern pattern) {
-            this.matchingNodes = matchingNodes;
-            this.pattern = pattern;
-        }
+		public RegexMatcherVisitor(List<Node> matchingNodes, Pattern pattern) {
+			this.matchingNodes = matchingNodes;
+			this.pattern = pattern;
+		}
 
-        @Override
-        public void visit(Text text) {
-            if (matchNodeText(text)) {
-                matchingNodes.add(text);
-            }
-        }
+		@Override
+		public void visit(Text text) {
+			if (matchNodeText(text)) {
+				matchingNodes.add(text);
+			}
+		}
 
-        @Override
-        public void visit(CDATA cdata) {
-            if (matchNodeText(cdata)) {
-                matchingNodes.add(cdata);
-            }
-        }
+		@Override
+		public void visit(CDATA cdata) {
+			if (matchNodeText(cdata)) {
+				matchingNodes.add(cdata);
+			}
+		}
 
-        @Override
-        public void visit(Attribute attribute) {
-            if (matchNodeText(attribute)) {
-                matchingNodes.add(attribute);
-            }
-        }
+		@Override
+		public void visit(Attribute attribute) {
+			if (matchNodeText(attribute)) {
+				matchingNodes.add(attribute);
+			}
+		}
 
-        protected boolean matchNodeText(Node node) {
-            String text = node.getText();
-            Matcher matcher = pattern.matcher(text);
+		protected boolean matchNodeText(Node node) {
+			String text = node.getText();
+			Matcher matcher = pattern.matcher(text);
 
-            if (matchEntireNodeText) {
-                return matcher.matches();
-            } else {
-                return matcher.find();
-            }
-        }
+			if (matchEntireNodeText) {
+				return matcher.matches();
+			} else {
+				return matcher.find();
+			}
+		}
 
-    }
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        RegexNodeScanner that = (RegexNodeScanner)o;
+		RegexNodeScanner that = (RegexNodeScanner) o;
 
-        if (matchEntireNodeText != that.matchEntireNodeText) {
-            return false;
-        }
-        if (!patterns.equals(that.patterns)) {
-            return false;
-        }
+		if (matchEntireNodeText != that.matchEntireNodeText) {
+			return false;
+		}
+		if (!patterns.equals(that.patterns)) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-        int result = patterns.hashCode();
-        result = 31 * result + (matchEntireNodeText? 1: 0);
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		int result = patterns.hashCode();
+		result = 31 * result + (matchEntireNodeText ? 1 : 0);
+		return result;
+	}
 
 }

@@ -31,41 +31,41 @@ import org.craftercms.core.service.Item;
  */
 public class MetaDataProcessorResolver implements ItemProcessorResolver {
 
-    /**
-     * The XPath query for the processor element that defines the processor to use.
-     */
-    protected String processorElementXPathQuery;
-    /**
-     * Mappings of processor element values to processor names.
-     */
-    protected Map<String, ItemProcessor> elementValueToProcessorMappings;
+	/**
+	 * The XPath query for the processor element that defines the processor to use.
+	 */
+	protected String processorElementXPathQuery;
+	/**
+	 * Mappings of processor element values to processor names.
+	 */
+	protected Map<String, ItemProcessor> elementValueToProcessorMappings;
 
-    public MetaDataProcessorResolver(String processorElementXPathQuery, Map<String, ItemProcessor> elementValueToProcessorMappings) {
-        this.processorElementXPathQuery = processorElementXPathQuery;
-        this.elementValueToProcessorMappings = elementValueToProcessorMappings;
-    }
+	public MetaDataProcessorResolver(String processorElementXPathQuery, Map<String, ItemProcessor> elementValueToProcessorMappings) {
+		this.processorElementXPathQuery = processorElementXPathQuery;
+		this.elementValueToProcessorMappings = elementValueToProcessorMappings;
+	}
 
-    /**
-     * Looks for the processor element (by querying it with the {@code processorElementXPathQuery}) in the item's
-     * descriptor. If the element is found, the element value is mapped to a processor and that processor is
-     * returned.
-     *
-     * @throws XmlException if the element value doesn't refer to an existing processor
-     */
-    @Override
-    public ItemProcessor getProcessor(Item item) throws XmlException {
-        String processorElementValue = item.queryDescriptorValue(processorElementXPathQuery);
-        if (StringUtils.isNotEmpty(processorElementValue)) {
-            ItemProcessor processor = elementValueToProcessorMappings.get(processorElementValue);
-            if (processor != null) {
-                return processor;
-            } else {
-                throw new XmlException("Element value \"" + processorElementValue + "\" doesn't refer to a " +
-                                       "registered processor");
-            }
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * Looks for the processor element (by querying it with the {@code processorElementXPathQuery}) in the item's
+	 * descriptor. If the element is found, the element value is mapped to a processor and that processor is
+	 * returned.
+	 *
+	 * @throws XmlException if the element value doesn't refer to an existing processor
+	 */
+	@Override
+	public ItemProcessor getProcessor(Item item) throws XmlException {
+		String processorElementValue = item.queryDescriptorValue(processorElementXPathQuery);
+		if (StringUtils.isNotEmpty(processorElementValue)) {
+			ItemProcessor processor = elementValueToProcessorMappings.get(processorElementValue);
+			if (processor != null) {
+				return processor;
+			} else {
+				throw new XmlException("Element value \"" + processorElementValue + "\" doesn't refer to a " +
+					"registered processor");
+			}
+		} else {
+			return null;
+		}
+	}
 
 }

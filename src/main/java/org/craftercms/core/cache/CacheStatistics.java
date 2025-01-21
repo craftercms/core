@@ -18,23 +18,24 @@ package org.craftercms.core.cache;
 
 /**
  * Base class for all cache implementations to provide statistics.
+ *
  * @author joseross
  */
 public class CacheStatistics {
 
-    public static final CacheStatistics EMPTY = new CacheStatistics();
+	public static final CacheStatistics EMPTY = new CacheStatistics();
 
-    protected long size;
+	protected long size;
 
-    public CacheStatistics() {
-    }
+	public CacheStatistics() {
+	}
 
-    public CacheStatistics(final long size) {
-        this.size = size;
-    }
+	public CacheStatistics(final long size) {
+		this.size = size;
+	}
 
-    public long getSize() {
-        return size;
-    }
+	public long getSize() {
+		return size;
+	}
 
 }

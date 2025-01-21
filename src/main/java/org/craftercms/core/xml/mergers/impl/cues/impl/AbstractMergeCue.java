@@ -24,18 +24,18 @@ import org.craftercms.core.xml.mergers.impl.cues.MergeCue;
  */
 public abstract class AbstractMergeCue implements MergeCue {
 
-    protected int priority;
+	protected int priority;
 
-    public AbstractMergeCue(int priority) {
-        this.priority = priority;
-    }
+	public AbstractMergeCue(int priority) {
+		this.priority = priority;
+	}
 
-    public int getPriority() {
-        return priority;
-    }
+	public int getPriority() {
+		return priority;
+	}
 
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
 
 }

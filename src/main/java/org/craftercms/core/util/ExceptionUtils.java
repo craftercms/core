@@ -22,20 +22,20 @@ package org.craftercms.core.util;
  */
 public class ExceptionUtils extends org.apache.commons.lang3.exception.ExceptionUtils {
 
-    @SuppressWarnings("unchecked")
-    public static <T> T getThrowableOfType(Throwable throwable, Class<T> type) {
-        if (throwable == null || type == null) {
-            return null;
-        }
+	@SuppressWarnings("unchecked")
+	public static <T> T getThrowableOfType(Throwable throwable, Class<T> type) {
+		if (throwable == null || type == null) {
+			return null;
+		}
 
-        Throwable[] throwables = getThrowables(throwable);
-        for (Throwable throwableInChain : throwables) {
-            if (type.isAssignableFrom(throwableInChain.getClass())) {
-                return (T)throwableInChain;
-            }
-        }
+		Throwable[] throwables = getThrowables(throwable);
+		for (Throwable throwableInChain : throwables) {
+			if (type.isAssignableFrom(throwableInChain.getClass())) {
+				return (T) throwableInChain;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
 }

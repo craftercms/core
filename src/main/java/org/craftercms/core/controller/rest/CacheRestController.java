@@ -41,63 +41,63 @@ import java.util.Map;
 @RequestMapping(RestControllerBase.REST_BASE_URI + CacheRestController.URL_ROOT)
 public class CacheRestController extends RestControllerBase {
 
-    private static final Log logger = LogFactory.getLog(CacheRestController.class);
+	private static final Log logger = LogFactory.getLog(CacheRestController.class);
 
-    /**
-     * rest URLs *
-     */
-    public static final String URL_ROOT = "/cache";
-    public static final String URL_CLEAR_ALL_SCOPES = "/clear_all";
-    public static final String URL_CLEAR_SCOPE = "/clear";
+	/**
+	 * rest URLs *
+	 */
+	public static final String URL_ROOT = "/cache";
+	public static final String URL_CLEAR_ALL_SCOPES = "/clear_all";
+	public static final String URL_CLEAR_SCOPE = "/clear";
 
-    public static final String REQUEST_PARAM_CONTEXT_ID = "contextId";
+	public static final String REQUEST_PARAM_CONTEXT_ID = "contextId";
 
-    private CacheTemplate cacheTemplate;
-    private ContentStoreService storeService;
+	private CacheTemplate cacheTemplate;
+	private ContentStoreService storeService;
 
-    private String authorizationToken;
+	private String authorizationToken;
 
-    public CacheRestController(CacheTemplate cacheTemplate, ContentStoreService storeService, final String authorizationToken) {
-        this.cacheTemplate = cacheTemplate;
-        this.storeService = storeService;
-        this.authorizationToken = authorizationToken;
-    }
+	public CacheRestController(CacheTemplate cacheTemplate, ContentStoreService storeService, final String authorizationToken) {
+		this.cacheTemplate = cacheTemplate;
+		this.storeService = storeService;
+		this.authorizationToken = authorizationToken;
+	}
 
-    @RequestMapping(value = URL_CLEAR_ALL_SCOPES, method = RequestMethod.GET)
-    public Map<String, Object> clearAllScopes(@RequestParam String token)
-        throws CacheException, InvalidManagementTokenException {
-        validateToken(token);
-        cacheTemplate.getCacheService().clearAll();
-        if (logger.isInfoEnabled()) {
-            logger.info("[CACHE] All scopes have been cleared");
-        }
+	@RequestMapping(value = URL_CLEAR_ALL_SCOPES, method = RequestMethod.GET)
+	public Map<String, Object> clearAllScopes(@RequestParam String token)
+		throws CacheException, InvalidManagementTokenException {
+		validateToken(token);
+		cacheTemplate.getCacheService().clearAll();
+		if (logger.isInfoEnabled()) {
+			logger.info("[CACHE] All scopes have been cleared");
+		}
 
-        return createResponseMessage("All cache scopes have been cleared");
-    }
+		return createResponseMessage("All cache scopes have been cleared");
+	}
 
-    @RequestMapping(value = URL_CLEAR_SCOPE, method = RequestMethod.GET)
-    public Map<String, Object> clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                                          @RequestParam String token)
-        throws InvalidContextException, CacheException, InvalidManagementTokenException {
-        validateToken(token);
-        Context context = storeService.getContext(contextId);
-        if (context == null) {
-            throw new InvalidContextException("No context found for ID " + contextId);
-        }
+	@RequestMapping(value = URL_CLEAR_SCOPE, method = RequestMethod.GET)
+	public Map<String, Object> clearScope(@RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+					      @RequestParam String token)
+		throws InvalidContextException, CacheException, InvalidManagementTokenException {
+		validateToken(token);
+		Context context = storeService.getContext(contextId);
+		if (context == null) {
+			throw new InvalidContextException("No context found for ID " + contextId);
+		}
 
-        cacheTemplate.getCacheService().clearScope(context);
-        if (logger.isInfoEnabled()) {
-            logger.info("[CACHE] Scope for context " + context + " has been cleared");
-        }
+		cacheTemplate.getCacheService().clearScope(context);
+		if (logger.isInfoEnabled()) {
+			logger.info("[CACHE] Scope for context " + context + " has been cleared");
+		}
 
-        return createResponseMessage("Cache scope for context '" + contextId + "' has been cleared");
-    }
+		return createResponseMessage("Cache scope for context '" + contextId + "' has been cleared");
+	}
 
-    protected void validateToken(String token) throws InvalidManagementTokenException {
-        if (!StringUtils.equals(token, authorizationToken)) {
-            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
-        }
-    }
+	protected void validateToken(String token) throws InvalidManagementTokenException {
+		if (!StringUtils.equals(token, authorizationToken)) {
+			throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
+		}
+	}
 
 
 }

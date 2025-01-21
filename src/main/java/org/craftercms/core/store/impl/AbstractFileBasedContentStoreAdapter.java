@@ -51,196 +51,196 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
  */
 public abstract class AbstractFileBasedContentStoreAdapter extends AbstractCachedContentStoreAdapter {
 
-    public static final String DEFAULT_CHARSET = "UTF-8";
+	public static final String DEFAULT_CHARSET = "UTF-8";
 
-    protected Validator pathValidator;
-    protected String charset;
-    protected String descriptorFileExtension;
-    protected String metadataFileExtension;
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFileBasedContentStoreAdapter.class);
+	protected Validator pathValidator;
+	protected String charset;
+	protected String descriptorFileExtension;
+	protected String metadataFileExtension;
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFileBasedContentStoreAdapter.class);
 
-    public AbstractFileBasedContentStoreAdapter(final Validator pathValidator, String descriptorFileExtension,
-                                                String metadataFileExtension, CacheTemplate cacheTemplate) {
-        super(cacheTemplate);
-        this.pathValidator = pathValidator;
-        this.descriptorFileExtension = descriptorFileExtension;
-        this.metadataFileExtension = metadataFileExtension;
-        charset = DEFAULT_CHARSET;
-    }
+	public AbstractFileBasedContentStoreAdapter(final Validator pathValidator, String descriptorFileExtension,
+						    String metadataFileExtension, CacheTemplate cacheTemplate) {
+		super(cacheTemplate);
+		this.pathValidator = pathValidator;
+		this.descriptorFileExtension = descriptorFileExtension;
+		this.metadataFileExtension = metadataFileExtension;
+		charset = DEFAULT_CHARSET;
+	}
 
-    public void setCharset(String charset) {
-        this.charset = charset;
-    }
+	public void setCharset(String charset) {
+		this.charset = charset;
+	}
 
-    @Override
-    public boolean doExists(Context context, CachingOptions cachingOptions, String path)
-        throws InvalidScopeException, StoreException {
-        return findFile(context, cachingOptions, path) != null;
-    }
+	@Override
+	public boolean doExists(Context context, CachingOptions cachingOptions, String path)
+		throws InvalidScopeException, StoreException {
+		return findFile(context, cachingOptions, path) != null;
+	}
 
-    @Override
-    protected Content doFindContent(Context context, CachingOptions cachingOptions, String path)
-        throws InvalidContextException, StoreException {
-        validatePath(path);
+	@Override
+	protected Content doFindContent(Context context, CachingOptions cachingOptions, String path)
+		throws InvalidContextException, StoreException {
+		validatePath(path);
 
-        path = ContentStoreUtils.normalizePath(path);
+		path = ContentStoreUtils.normalizePath(path);
 
-        File file = findFile(context, cachingOptions, path);
+		File file = findFile(context, cachingOptions, path);
 
-        if (file == null) {
-            return null;
-        }
-        if (!file.isFile()) {
-            throw new StoreException("Unable to find content: " + file + " is not a file");
-        }
-        return getContent(context, cachingOptions, file);
-    }
+		if (file == null) {
+			return null;
+		}
+		if (!file.isFile()) {
+			throw new StoreException("Unable to find content: " + file + " is not a file");
+		}
+		return getContent(context, cachingOptions, file);
+	}
 
-    @Override
-    protected Item doFindItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
-        throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException {
-        validatePath(path);
+	@Override
+	protected Item doFindItem(Context context, CachingOptions cachingOptions, String path, boolean withDescriptor)
+		throws InvalidContextException, PathNotFoundException, XmlFileParseException, StoreException {
+		validatePath(path);
 
-        path = ContentStoreUtils.normalizePath(path);
+		path = ContentStoreUtils.normalizePath(path);
 
-        File file = findFile(context, cachingOptions, path);
+		File file = findFile(context, cachingOptions, path);
 
-        if (file == null) {
-            return null;
-        }
+		if (file == null) {
+			return null;
+		}
 
-        Item item = new Item();
-        item.setName(file.getName());
-        item.setUrl(path);
-        item.setFolder(file.isDirectory());
+		Item item = new Item();
+		item.setName(file.getName());
+		item.setUrl(path);
+		item.setFolder(file.isDirectory());
 
-        if (withDescriptor) {
-            File descriptorFile;
+		if (withDescriptor) {
+			File descriptorFile;
 
-            // If it's a file and it's a descriptor, set the descriptor url to the item's path and load the file as
-            // a DOM.
-            if (file.isFile() && item.getName().endsWith(descriptorFileExtension)) {
-                item.setDescriptorUrl(path);
+			// If it's a file and it's a descriptor, set the descriptor url to the item's path and load the file as
+			// a DOM.
+			if (file.isFile() && item.getName().endsWith(descriptorFileExtension)) {
+				item.setDescriptorUrl(path);
 
-                descriptorFile = file;
-                // If it's not a file (a dir) or is not a descriptor (a static asset, like an image), locate the file's
-                // descriptor by appending a metadata file extension to the file name. If the file exists, load it as
-                // a DOM.
-            } else {
-                String descriptorPath = FilenameUtils.removeExtension(path) + metadataFileExtension;
+				descriptorFile = file;
+				// If it's not a file (a dir) or is not a descriptor (a static asset, like an image), locate the file's
+				// descriptor by appending a metadata file extension to the file name. If the file exists, load it as
+				// a DOM.
+			} else {
+				String descriptorPath = FilenameUtils.removeExtension(path) + metadataFileExtension;
 
-                item.setDescriptorUrl(descriptorPath);
+				item.setDescriptorUrl(descriptorPath);
 
-                descriptorFile = findFile(context, cachingOptions, descriptorPath);
-                if (descriptorFile != null && !descriptorFile.isFile()) {
-                    throw new StoreException("Descriptor file at " + descriptorFile + " is not really a file");
-                }
-            }
+				descriptorFile = findFile(context, cachingOptions, descriptorPath);
+				if (descriptorFile != null && !descriptorFile.isFile()) {
+					throw new StoreException("Descriptor file at " + descriptorFile + " is not really a file");
+				}
+			}
 
-            if (descriptorFile != null) {
-                try {
-                    InputStream fileInputStream = getContent(context, cachingOptions, descriptorFile).getInputStream();
-                    Reader fileReader = new InputStreamReader(fileInputStream, charset);
+			if (descriptorFile != null) {
+				try {
+					InputStream fileInputStream = getContent(context, cachingOptions, descriptorFile).getInputStream();
+					Reader fileReader = new InputStreamReader(fileInputStream, charset);
 
-                    try {
-                        item.setDescriptorDom(createXmlReader().read(fileReader));
-                    } finally {
-                        IOUtils.closeQuietly(fileReader);
-                    }
-                } catch (IOException e) {
-                    throw new StoreException("Unable to open input stream for descriptor file at " + descriptorFile, e);
-                } catch (DocumentException e) {
-                    throw new XmlFileParseException("Error while parsing xml document at " + descriptorFile, e);
-                }
-            }
-        }
+					try {
+						item.setDescriptorDom(createXmlReader().read(fileReader));
+					} finally {
+						IOUtils.closeQuietly(fileReader);
+					}
+				} catch (IOException e) {
+					throw new StoreException("Unable to open input stream for descriptor file at " + descriptorFile, e);
+				} catch (DocumentException e) {
+					throw new XmlFileParseException("Error while parsing xml document at " + descriptorFile, e);
+				}
+			}
+		}
 
-        return item;
-    }
+		return item;
+	}
 
-    @Override
-    protected List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path)
-            throws InvalidContextException, PathNotFoundException,
-        XmlFileParseException, StoreException {
-        validatePath(path);
+	@Override
+	protected List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path)
+		throws InvalidContextException, PathNotFoundException,
+		XmlFileParseException, StoreException {
+		validatePath(path);
 
-        path = ContentStoreUtils.normalizePath(path);
+		path = ContentStoreUtils.normalizePath(path);
 
-        File dir = findFile(context, cachingOptions, path);
+		File dir = findFile(context, cachingOptions, path);
 
-        if (dir == null) {
-            return null;
-        }
+		if (dir == null) {
+			return null;
+		}
 
-        if (!dir.isDirectory()) {
-            throw new StoreException(format("The path '%s' doesn't correspond to a dir", path));
-        }
+		if (!dir.isDirectory()) {
+			throw new StoreException(format("The path '%s' doesn't correspond to a dir", path));
+		}
 
-        List<File> children = getChildren(context, cachingOptions, dir);
-        CachingAwareList<Item> items = new CachingAwareList<>(children.size());
+		List<File> children = getChildren(context, cachingOptions, dir);
+		CachingAwareList<Item> items = new CachingAwareList<>(children.size());
 
-        if (isNotEmpty(children)) {
-            for (File child : children) {
-                // Ignore any item metadata file. Metadata file DOMs are included in their respective
-                // items.
-                if (!child.isFile() || !child.getName().endsWith(metadataFileExtension)) {
-                    String fileRelPath = path + (!path.equals("/")? "/": "") + child.getName();
-                    Item item = findItem(context, cachingOptions, fileRelPath, false);
+		if (isNotEmpty(children)) {
+			for (File child : children) {
+				// Ignore any item metadata file. Metadata file DOMs are included in their respective
+				// items.
+				if (!child.isFile() || !child.getName().endsWith(metadataFileExtension)) {
+					String fileRelPath = path + (!path.equals("/") ? "/" : "") + child.getName();
+					Item item = findItem(context, cachingOptions, fileRelPath, false);
 
-                    if (item != null) {
-                        items.add(item);
-                    }
-                }
-            }
-        }
+					if (item != null) {
+						items.add(item);
+					}
+				}
+			}
+		}
 
-        return items;
-    }
+		return items;
+	}
 
-    /**
-     * Creates and configures an XML SAX reader.
-     */
-    protected SAXReader createXmlReader() {
-        SAXReader xmlReader = new SAXReader();
-        xmlReader.setMergeAdjacentText(true);
-        xmlReader.setStripWhitespaceText(true);
-        xmlReader.setIgnoreComments(true);
+	/**
+	 * Creates and configures an XML SAX reader.
+	 */
+	protected SAXReader createXmlReader() {
+		SAXReader xmlReader = new SAXReader();
+		xmlReader.setMergeAdjacentText(true);
+		xmlReader.setStripWhitespaceText(true);
+		xmlReader.setIgnoreComments(true);
 
-        try {
-            xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-        }catch (SAXException ex){
-            LOGGER.error("Unable to turn off external entity loading, This could be a security risk.", ex);
-        }
+		try {
+			xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+			xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+			xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		} catch (SAXException ex) {
+			LOGGER.error("Unable to turn off external entity loading, This could be a security risk.", ex);
+		}
 
-        return xmlReader;
-    }
+		return xmlReader;
+	}
 
-    protected void validatePath(String path) throws StoreException {
-        ValidationResult result = ValidationUtils.validateValue(pathValidator, path, "path");
+	protected void validatePath(String path) throws StoreException {
+		ValidationResult result = ValidationUtils.validateValue(pathValidator, path, "path");
 
-        if (result.hasErrors()) {
-            throw new StoreException(format("Validation of path '%s' failed. Errors: %s", path, result.getErrors()));
-        }
-    }
+		if (result.hasErrors()) {
+			throw new StoreException(format("Validation of path '%s' failed. Errors: %s", path, result.getErrors()));
+		}
+	}
 
-    /**
-     * Returns the {@link Content} for the given file.
-     */
-    protected abstract Content getContent(Context context, CachingOptions cachingOptions,
-                                          File file) throws InvalidContextException, StoreException;
+	/**
+	 * Returns the {@link Content} for the given file.
+	 */
+	protected abstract Content getContent(Context context, CachingOptions cachingOptions,
+					      File file) throws InvalidContextException, StoreException;
 
-    /**
-     * Returns the {@link File} at the given path, returning null if not found.
-     */
-    protected abstract File findFile(Context context, CachingOptions cachingOptions,
-                                     String path) throws InvalidContextException, StoreException;
+	/**
+	 * Returns the {@link File} at the given path, returning null if not found.
+	 */
+	protected abstract File findFile(Context context, CachingOptions cachingOptions,
+					 String path) throws InvalidContextException, StoreException;
 
-    /**
-     * Returns the list of children of the given directory.
-     */
-    protected abstract List<File> getChildren(Context context, CachingOptions cachingOptions,
-                                              File dir) throws InvalidContextException, StoreException;
+	/**
+	 * Returns the list of children of the given directory.
+	 */
+	protected abstract List<File> getChildren(Context context, CachingOptions cachingOptions,
+						  File dir) throws InvalidContextException, StoreException;
 
 }

@@ -35,51 +35,51 @@ import static org.mockito.Mockito.when;
  */
 public class ShortToLongUrlTransformerTest {
 
-    private static final String SHORT_URL = "/folder/subfolder/index.html/";
-    private static final String LONG_URL = "/001_folder/002_subfolder/003_index.html/";
+	private static final String SHORT_URL = "/folder/subfolder/index.html/";
+	private static final String LONG_URL = "/001_folder/002_subfolder/003_index.html/";
 
-    private ShortToLongUrlTransformer transformer;
-    private Context context;
+	private ShortToLongUrlTransformer transformer;
+	private Context context;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestContext();
-        setUpTestTransformer();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestContext();
+		setUpTestTransformer();
+	}
 
-    @Test
-    public void testTransformer() throws Exception {
-        String transformedUrl = transformer.transformUrl(context, DEFAULT_CACHING_OPTIONS, SHORT_URL);
-        assertEquals(LONG_URL, transformedUrl);
-    }
+	@Test
+	public void testTransformer() throws Exception {
+		String transformedUrl = transformer.transformUrl(context, DEFAULT_CACHING_OPTIONS, SHORT_URL);
+		assertEquals(LONG_URL, transformedUrl);
+	}
 
-    private void setUpTestContext() {
-        context = mock(Context.class);
+	private void setUpTestContext() {
+		context = mock(Context.class);
 
-        ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
+		ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
 
-        Item folderItem = new Item();
-        folderItem.setName("001_folder");
+		Item folderItem = new Item();
+		folderItem.setName("001_folder");
 
-        Item subFolderItem = new Item();
-        subFolderItem.setName("002_subfolder");
+		Item subFolderItem = new Item();
+		subFolderItem.setName("002_subfolder");
 
-        Item indexItem = new Item();
-        indexItem.setName("003_index.html");
+		Item indexItem = new Item();
+		indexItem.setName("003_index.html");
 
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/")).thenReturn(
-            Arrays.asList(folderItem));
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName())).thenReturn(
-            Arrays.asList(subFolderItem));
-        when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS,
-                                    "/" + folderItem.getName() + "/" + subFolderItem.getName()))
-                .thenReturn(Arrays.asList(indexItem));
+		when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/")).thenReturn(
+			Arrays.asList(folderItem));
+		when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, "/" + folderItem.getName())).thenReturn(
+			Arrays.asList(subFolderItem));
+		when(storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS,
+			"/" + folderItem.getName() + "/" + subFolderItem.getName()))
+			.thenReturn(Arrays.asList(indexItem));
 
-        when(context.getStoreAdapter()).thenReturn(storeAdapter);
-    }
+		when(context.getStoreAdapter()).thenReturn(storeAdapter);
+	}
 
-    private void setUpTestTransformer() {
-        transformer = new ShortToLongUrlTransformer();
-    }
+	private void setUpTestTransformer() {
+		transformer = new ShortToLongUrlTransformer();
+	}
 
 }

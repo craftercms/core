@@ -29,29 +29,29 @@ import org.dom4j.Document;
  */
 public class Dom4jDocumentConverter implements Converter {
 
-    public static final Dom4jDocumentConverter INSTANCE = new Dom4jDocumentConverter();
+	public static final Dom4jDocumentConverter INSTANCE = new Dom4jDocumentConverter();
 
-    private Dom4jDocumentConverter() {
-    }
+	private Dom4jDocumentConverter() {
+	}
 
-    @Override
-    public boolean canConvert(Class type) {
-        return Document.class.isAssignableFrom(type);
-    }
+	@Override
+	public boolean canConvert(Class type) {
+		return Document.class.isAssignableFrom(type);
+	}
 
-    @Override
-    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-        Document document = (Document)source;
+	@Override
+	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+		Document document = (Document) source;
 
-        EscapingCompactWriter escapingCompactWriter = (EscapingCompactWriter)writer.underlyingWriter();
-        escapingCompactWriter.setEscapeXml(false);
-        escapingCompactWriter.setValue(document.getRootElement().asXML());
-        escapingCompactWriter.setEscapeXml(true);
-    }
+		EscapingCompactWriter escapingCompactWriter = (EscapingCompactWriter) writer.underlyingWriter();
+		escapingCompactWriter.setEscapeXml(false);
+		escapingCompactWriter.setValue(document.getRootElement().asXML());
+		escapingCompactWriter.setEscapeXml(true);
+	}
 
-    @Override
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        throw new UnsupportedOperationException();
-    }
+	@Override
+	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+		throw new UnsupportedOperationException();
+	}
 
 }

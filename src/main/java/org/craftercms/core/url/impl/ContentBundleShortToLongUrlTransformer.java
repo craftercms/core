@@ -41,65 +41,65 @@ import org.craftercms.core.util.url.ContentBundleUrlParser;
  */
 public class ContentBundleShortToLongUrlTransformer extends ShortToLongUrlTransformer {
 
-    private static final Log logger = LogFactory.getLog(ContentBundleShortToLongUrlTransformer.class);
+	private static final Log logger = LogFactory.getLog(ContentBundleShortToLongUrlTransformer.class);
 
-    private ContentBundleUrlParser urlParser;
-    private String baseDelimiter;
+	private ContentBundleUrlParser urlParser;
+	private String baseDelimiter;
 
-    public ContentBundleShortToLongUrlTransformer(ContentBundleUrlParser urlParser, String baseDelimiter) {
-        this.urlParser = urlParser;
-        this.baseDelimiter = baseDelimiter;
-    }
+	public ContentBundleShortToLongUrlTransformer(ContentBundleUrlParser urlParser, String baseDelimiter) {
+		this.urlParser = urlParser;
+		this.baseDelimiter = baseDelimiter;
+	}
 
-    @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions,
-                               String url) throws UrlTransformationException {
-        String result = getLongUrlLookingInBundle(context, cachingOptions, url);
+	@Override
+	public String transformUrl(Context context, CachingOptions cachingOptions,
+				   String url) throws UrlTransformationException {
+		String result = getLongUrlLookingInBundle(context, cachingOptions, url);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Transformation in: " + url + ", Transformation out: " + result);
-        }
+		if (logger.isDebugEnabled()) {
+			logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    private String getLongUrlLookingInBundle(Context context, CachingOptions cachingOptions,
-                                             String shortUrl) throws UrlTransformationException {
-        ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(shortUrl);
-        String prefix = parsedUrl.getPrefix();
-        String originalBase = parsedUrl.getBaseNameAndExtensionToken();
-        String suffix = parsedUrl.getSuffix();
+	private String getLongUrlLookingInBundle(Context context, CachingOptions cachingOptions,
+						 String shortUrl) throws UrlTransformationException {
+		ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(shortUrl);
+		String prefix = parsedUrl.getPrefix();
+		String originalBase = parsedUrl.getBaseNameAndExtensionToken();
+		String suffix = parsedUrl.getSuffix();
 
-        if (originalBase == null) {
-            originalBase = "";
-        }
-        if (suffix == null) {
-            suffix = "";
-        }
+		if (originalBase == null) {
+			originalBase = "";
+		}
+		if (suffix == null) {
+			suffix = "";
+		}
 
-        String base = originalBase;
-        int delimiterIdx;
+		String base = originalBase;
+		int delimiterIdx;
 
-        do {
-            String currentShortUrl = prefix + base + suffix;
-            String longUrl = getLongUrl(context, cachingOptions, currentShortUrl, false);
-            if (StringUtils.isNotEmpty(longUrl)) {
-                if (!originalBase.equals(base)) {
-                    // Put original base back in long URL.
-                    longUrl = longUrl.replace(base, originalBase);
-                }
+		do {
+			String currentShortUrl = prefix + base + suffix;
+			String longUrl = getLongUrl(context, cachingOptions, currentShortUrl, false);
+			if (StringUtils.isNotEmpty(longUrl)) {
+				if (!originalBase.equals(base)) {
+					// Put original base back in long URL.
+					longUrl = longUrl.replace(base, originalBase);
+				}
 
-                return longUrl;
-            }
+				return longUrl;
+			}
 
-            delimiterIdx = base.lastIndexOf(baseDelimiter);
-            if (delimiterIdx > 0) {
-                base = base.substring(0, delimiterIdx);
-            }
-        } while (delimiterIdx >= 0);
+			delimiterIdx = base.lastIndexOf(baseDelimiter);
+			if (delimiterIdx > 0) {
+				base = base.substring(0, delimiterIdx);
+			}
+		} while (delimiterIdx >= 0);
 
-        // come here if URL is not found in content store
-        throw new UrlTransformationException("Unable to map the short url '" + shortUrl + "' to a long url");
-    }
+		// come here if URL is not found in content store
+		throw new UrlTransformationException("Unable to map the short url '" + shortUrl + "' to a long url");
+	}
 
 }

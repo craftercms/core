@@ -22,32 +22,32 @@ import org.craftercms.core.util.url.ContentBundleUrl;
  */
 public class ContentBundleUrlImpl implements ContentBundleUrl {
 
-    private String prefix;
-    private String baseNameAndExtensionToken;
-    private String suffix;
+	private String prefix;
+	private String baseNameAndExtensionToken;
+	private String suffix;
 
-    public String getPrefix() {
-        return prefix;
-    }
+	public String getPrefix() {
+		return prefix;
+	}
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 
-    public String getBaseNameAndExtensionToken() {
-        return baseNameAndExtensionToken;
-    }
+	public String getBaseNameAndExtensionToken() {
+		return baseNameAndExtensionToken;
+	}
 
-    public void setBaseNameAndExtensionToken(String baseNameAndExtensionToken) {
-        this.baseNameAndExtensionToken = baseNameAndExtensionToken;
-    }
+	public void setBaseNameAndExtensionToken(String baseNameAndExtensionToken) {
+		this.baseNameAndExtensionToken = baseNameAndExtensionToken;
+	}
 
-    public String getSuffix() {
-        return suffix;
-    }
+	public String getSuffix() {
+		return suffix;
+	}
 
-    public void setSuffix(String suffix) {
-        this.suffix = suffix;
-    }
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
 
 }

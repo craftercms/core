@@ -23,46 +23,46 @@ import org.craftercms.core.cache.CacheStatistics;
  */
 public class GuavaCacheStatistics extends CacheStatistics {
 
-    protected final long hitCount;
-    protected final long missCount;
-    protected final long loadSuccessCount;
-    protected final long loadExceptionCount;
-    protected final long totalLoadTime;
-    protected final long evictionCount;
+	protected final long hitCount;
+	protected final long missCount;
+	protected final long loadSuccessCount;
+	protected final long loadExceptionCount;
+	protected final long totalLoadTime;
+	protected final long evictionCount;
 
-    public <K, V> GuavaCacheStatistics(Cache<K, V> cache) {
-        super(cache.size());
-        var stats = cache.stats();
-        hitCount = stats.hitCount();
-        missCount = stats.missCount();
-        loadSuccessCount = stats.loadSuccessCount();
-        loadExceptionCount = stats.loadExceptionCount();
-        totalLoadTime = stats.totalLoadTime();
-        evictionCount = stats.evictionCount();
-    }
+	public <K, V> GuavaCacheStatistics(Cache<K, V> cache) {
+		super(cache.size());
+		var stats = cache.stats();
+		hitCount = stats.hitCount();
+		missCount = stats.missCount();
+		loadSuccessCount = stats.loadSuccessCount();
+		loadExceptionCount = stats.loadExceptionCount();
+		totalLoadTime = stats.totalLoadTime();
+		evictionCount = stats.evictionCount();
+	}
 
-    public long getHitCount() {
-        return hitCount;
-    }
+	public long getHitCount() {
+		return hitCount;
+	}
 
-    public long getMissCount() {
-        return missCount;
-    }
+	public long getMissCount() {
+		return missCount;
+	}
 
-    public long getLoadSuccessCount() {
-        return loadSuccessCount;
-    }
+	public long getLoadSuccessCount() {
+		return loadSuccessCount;
+	}
 
-    public long getLoadExceptionCount() {
-        return loadExceptionCount;
-    }
+	public long getLoadExceptionCount() {
+		return loadExceptionCount;
+	}
 
-    public long getTotalLoadTime() {
-        return totalLoadTime;
-    }
+	public long getTotalLoadTime() {
+		return totalLoadTime;
+	}
 
-    public long getEvictionCount() {
-        return evictionCount;
-    }
+	public long getEvictionCount() {
+		return evictionCount;
+	}
 
 }

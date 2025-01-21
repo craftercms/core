@@ -34,48 +34,48 @@ import static org.mockito.Mockito.mock;
  */
 public class UrlPatternProcessorResolverTest {
 
-    private static final String PAGES_PROCESSOR_PATTERN = "/site/pages/.*";
-    private static final String STATIC_ASSETS_PROCESSOR_PATTERN = "/site/static-assets/.*";
+	private static final String PAGES_PROCESSOR_PATTERN = "/site/pages/.*";
+	private static final String STATIC_ASSETS_PROCESSOR_PATTERN = "/site/static-assets/.*";
 
-    private static final String DESCRIPTOR_URL = "/site/pages/descriptor.xml";
-    private static final String IMAGE_URL = "/site/static-assets/images/image.jpg";
+	private static final String DESCRIPTOR_URL = "/site/pages/descriptor.xml";
+	private static final String IMAGE_URL = "/site/static-assets/images/image.jpg";
 
-    private UrlPatternProcessorResolver resolver;
-    private ItemProcessor pagesProcessor;
-    private ItemProcessor staticAssetsProcessor;
+	private UrlPatternProcessorResolver resolver;
+	private ItemProcessor pagesProcessor;
+	private ItemProcessor staticAssetsProcessor;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestProcessors();
-        setUpTestResolver();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestProcessors();
+		setUpTestResolver();
+	}
 
-    @Test
-    public void testGetProcessor() throws Exception {
-        Item item = new Item();
-        item.setUrl(DESCRIPTOR_URL);
+	@Test
+	public void testGetProcessor() throws Exception {
+		Item item = new Item();
+		item.setUrl(DESCRIPTOR_URL);
 
-        ItemProcessor processor = resolver.getProcessor(item);
-        assertSame(processor, pagesProcessor);
+		ItemProcessor processor = resolver.getProcessor(item);
+		assertSame(processor, pagesProcessor);
 
-        item = new Item();
-        item.setUrl(IMAGE_URL);
+		item = new Item();
+		item.setUrl(IMAGE_URL);
 
-        processor = resolver.getProcessor(item);
-        assertSame(processor, staticAssetsProcessor);
-    }
+		processor = resolver.getProcessor(item);
+		assertSame(processor, staticAssetsProcessor);
+	}
 
-    private void setUpTestProcessors() {
-        pagesProcessor = mock(ItemProcessor.class);
-        staticAssetsProcessor = mock(ItemProcessor.class);
-    }
+	private void setUpTestProcessors() {
+		pagesProcessor = mock(ItemProcessor.class);
+		staticAssetsProcessor = mock(ItemProcessor.class);
+	}
 
-    private void setUpTestResolver() {
-        Map<String, ItemProcessor> processors = new HashMap<String, ItemProcessor>();
-        processors.put(PAGES_PROCESSOR_PATTERN, pagesProcessor);
-        processors.put(STATIC_ASSETS_PROCESSOR_PATTERN, staticAssetsProcessor);
+	private void setUpTestResolver() {
+		Map<String, ItemProcessor> processors = new HashMap<String, ItemProcessor>();
+		processors.put(PAGES_PROCESSOR_PATTERN, pagesProcessor);
+		processors.put(STATIC_ASSETS_PROCESSOR_PATTERN, staticAssetsProcessor);
 
-        resolver = new UrlPatternProcessorResolver(processors);
-    }
+		resolver = new UrlPatternProcessorResolver(processors);
+	}
 
 }

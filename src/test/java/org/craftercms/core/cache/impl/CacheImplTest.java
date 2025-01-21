@@ -34,65 +34,65 @@ import static org.junit.Assert.assertNull;
  */
 public class CacheImplTest {
 
-    private static final String SCOPE = "test";
-    private static final int MAX_ITEMS_IN_MEMORY = 10;
+	private static final String SCOPE = "test";
+	private static final int MAX_ITEMS_IN_MEMORY = 10;
 
-    private static final int ITEM_KEY1 =      1;
-    private static final String ITEM_VALUE1 = "Test value #1";
-    private static final int ITEM_KEY2 =      2;
-    private static final String ITEM_VALUE2 = "Test value #2";
-    private static final int ITEM_KEY3 =      3;
-    private static final String ITEM_VALUE3 = "Test value #3";
+	private static final int ITEM_KEY1 = 1;
+	private static final String ITEM_VALUE1 = "Test value #1";
+	private static final int ITEM_KEY2 = 2;
+	private static final String ITEM_VALUE2 = "Test value #2";
+	private static final int ITEM_KEY3 = 3;
+	private static final String ITEM_VALUE3 = "Test value #3";
 
-    private static final long EXPIRATION_VALUE1 = 2;
+	private static final long EXPIRATION_VALUE1 = 2;
 
-    private static final long REFRESH_FREQUENCY_VALUE1 = 1;
-    private static final long REFRESH_FREQUENCY_VALUE2 = 2;
+	private static final long REFRESH_FREQUENCY_VALUE1 = 1;
+	private static final long REFRESH_FREQUENCY_VALUE2 = 2;
 
-    private CacheStoreAdapter cacheStore;
-    private CacheImpl cache;
+	private CacheStoreAdapter cacheStore;
+	private CacheImpl cache;
 
-    @Before
-    public void setUp() throws InternalCacheEngineException {
-        cacheStore = new MapCacheStoreAdapter();
+	@Before
+	public void setUp() throws InternalCacheEngineException {
+		cacheStore = new MapCacheStoreAdapter();
 
-        cache = new CacheImpl(cacheStore);
-        cache.setCacheRefresher(new CacheRefresherImpl());
+		cache = new CacheImpl(cacheStore);
+		cache.setCacheRefresher(new CacheRefresherImpl());
 
-        cache.addScope(SCOPE, MAX_ITEMS_IN_MEMORY);
-    }
+		cache.addScope(SCOPE, MAX_ITEMS_IN_MEMORY);
+	}
 
-    @Test
-    public void testOnTick() throws InternalCacheEngineException, InvalidScopeException {
-        cache.put(SCOPE, ITEM_KEY1, ITEM_VALUE1, NEVER_EXPIRE, REFRESH_FREQUENCY_VALUE1, new DummyCacheLoader(),
-                  ITEM_VALUE1);
-        cache.put(SCOPE, ITEM_KEY2, ITEM_VALUE2, NEVER_EXPIRE, REFRESH_FREQUENCY_VALUE2, new DummyCacheLoader(),
-                  ITEM_VALUE2);
-        cache.put(SCOPE, ITEM_KEY3, ITEM_VALUE3, EXPIRATION_VALUE1, NEVER_REFRESH, null);
+	@Test
+	public void testOnTick() throws InternalCacheEngineException, InvalidScopeException {
+		cache.put(SCOPE, ITEM_KEY1, ITEM_VALUE1, NEVER_EXPIRE, REFRESH_FREQUENCY_VALUE1, new DummyCacheLoader(),
+			ITEM_VALUE1);
+		cache.put(SCOPE, ITEM_KEY2, ITEM_VALUE2, NEVER_EXPIRE, REFRESH_FREQUENCY_VALUE2, new DummyCacheLoader(),
+			ITEM_VALUE2);
+		cache.put(SCOPE, ITEM_KEY3, ITEM_VALUE3, EXPIRATION_VALUE1, NEVER_REFRESH, null);
 
-        // Ticks = 1. Item #1 should be refreshed.
-        cache.tick();
+		// Ticks = 1. Item #1 should be refreshed.
+		cache.tick();
 
-        CacheItem item = cache.get(SCOPE, ITEM_KEY1);
-        assertEquals(ITEM_VALUE1.toUpperCase(), item.getValue());
+		CacheItem item = cache.get(SCOPE, ITEM_KEY1);
+		assertEquals(ITEM_VALUE1.toUpperCase(), item.getValue());
 
-        item = cache.get(SCOPE, ITEM_KEY2);
-        assertEquals(ITEM_VALUE2, item.getValue());
+		item = cache.get(SCOPE, ITEM_KEY2);
+		assertEquals(ITEM_VALUE2, item.getValue());
 
-        item = cache.get(SCOPE, ITEM_KEY3);
-        assertEquals(ITEM_VALUE3, item.getValue());
+		item = cache.get(SCOPE, ITEM_KEY3);
+		assertEquals(ITEM_VALUE3, item.getValue());
 
-        // Ticks = 2. Items #1 and #2 should be refreshed and #3 removed from cache.
-        cache.tick();
+		// Ticks = 2. Items #1 and #2 should be refreshed and #3 removed from cache.
+		cache.tick();
 
-        item = cache.get(SCOPE, ITEM_KEY1);
-        assertEquals(ITEM_VALUE1.toUpperCase(), item.getValue());
+		item = cache.get(SCOPE, ITEM_KEY1);
+		assertEquals(ITEM_VALUE1.toUpperCase(), item.getValue());
 
-        item = cache.get(SCOPE, ITEM_KEY2);
-        assertEquals(ITEM_VALUE2.toUpperCase(), item.getValue());
+		item = cache.get(SCOPE, ITEM_KEY2);
+		assertEquals(ITEM_VALUE2.toUpperCase(), item.getValue());
 
-        item = cache.get(SCOPE, ITEM_KEY3);
-        assertNull(item);
-    }
+		item = cache.get(SCOPE, ITEM_KEY3);
+		assertNull(item);
+	}
 
 }

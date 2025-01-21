@@ -24,6 +24,6 @@ import org.dom4j.Element;
  */
 public interface ElementMergeMatcher {
 
-    boolean matchForMerge(Element parent, Element child);
+	boolean matchForMerge(Element parent, Element child);
 
 }

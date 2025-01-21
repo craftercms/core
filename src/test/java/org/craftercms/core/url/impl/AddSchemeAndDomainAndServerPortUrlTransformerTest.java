@@ -30,83 +30,83 @@ import static org.junit.Assert.assertEquals;
  */
 public class AddSchemeAndDomainAndServerPortUrlTransformerTest {
 
-    private AddSchemeAndDomainAndServerPortUrlTransformer transformer;
-    private MockHttpServletRequest request;
+	private AddSchemeAndDomainAndServerPortUrlTransformer transformer;
+	private MockHttpServletRequest request;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestTransformer();
-        setUpTestRequest();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestTransformer();
+		setUpTestRequest();
+	}
 
-    @After
-    public void tearDown() throws Exception {
-        removeCurrentRequest();
-    }
+	@After
+	public void tearDown() throws Exception {
+		removeCurrentRequest();
+	}
 
-    @Test
-    public void testTransformUrl() throws Exception {
-        request.setScheme("http");
-        request.setServerName("craftercms.org");
-        request.setServerPort(80);
+	@Test
+	public void testTransformUrl() throws Exception {
+		request.setScheme("http");
+		request.setServerName("craftercms.org");
+		request.setServerPort(80);
 
-        setCurrentRequest(request);
+		setCurrentRequest(request);
 
-        String url = transformer.transformUrl(null, null, "/test");
-        assertEquals("http://craftercms.org/test", url);
+		String url = transformer.transformUrl(null, null, "/test");
+		assertEquals("http://craftercms.org/test", url);
 
-        request.setServerPort(8080);
+		request.setServerPort(8080);
 
-        url = transformer.transformUrl(null, null, "/test");
-        assertEquals("http://craftercms.org:8080/test", url);
+		url = transformer.transformUrl(null, null, "/test");
+		assertEquals("http://craftercms.org:8080/test", url);
 
-        request.setScheme("https");
-        request.setServerPort(443);
+		request.setScheme("https");
+		request.setServerPort(443);
 
-        url = transformer.transformUrl(null, null, "/test");
-        assertEquals("https://craftercms.org/test", url);
+		url = transformer.transformUrl(null, null, "/test");
+		assertEquals("https://craftercms.org/test", url);
 
-        request.setServerPort(8443);
+		request.setServerPort(8443);
 
-        url = transformer.transformUrl(null, null, "/test");
-        assertEquals("https://craftercms.org:8443/test", url);
+		url = transformer.transformUrl(null, null, "/test");
+		assertEquals("https://craftercms.org:8443/test", url);
 
-        removeCurrentRequest();
-    }
+		removeCurrentRequest();
+	}
 
-    @Test
-    public void testTransformUrlForceHttps() throws Exception {
-        transformer.setForceHttps(true);
+	@Test
+	public void testTransformUrlForceHttps() throws Exception {
+		transformer.setForceHttps(true);
 
-        request.setScheme("http");
-        request.setServerName("craftercms.org");
-        request.setServerPort(80);
+		request.setScheme("http");
+		request.setServerName("craftercms.org");
+		request.setServerPort(80);
 
-        String url = transformer.transformUrl(null, null, "/test");
-        assertEquals("https://craftercms.org/test", url);
+		String url = transformer.transformUrl(null, null, "/test");
+		assertEquals("https://craftercms.org/test", url);
 
-        transformer.setHttpsPort(8443);
+		transformer.setHttpsPort(8443);
 
-        url = transformer.transformUrl(null, null, "/test");
-        assertEquals("https://craftercms.org:8443/test", url);
-    }
+		url = transformer.transformUrl(null, null, "/test");
+		assertEquals("https://craftercms.org:8443/test", url);
+	}
 
-    private void setUpTestTransformer() {
-        transformer = new AddSchemeAndDomainAndServerPortUrlTransformer();
-    }
+	private void setUpTestTransformer() {
+		transformer = new AddSchemeAndDomainAndServerPortUrlTransformer();
+	}
 
-    private void setUpTestRequest() {
-        request = new MockHttpServletRequest();
+	private void setUpTestRequest() {
+		request = new MockHttpServletRequest();
 
-        setCurrentRequest(request);
-    }
+		setCurrentRequest(request);
+	}
 
-    private void setCurrentRequest(HttpServletRequest request) {
-        RequestContext.setCurrent(new RequestContext(request, null, null));
-    }
+	private void setCurrentRequest(HttpServletRequest request) {
+		RequestContext.setCurrent(new RequestContext(request, null, null));
+	}
 
-    private void removeCurrentRequest() {
-        RequestContext.clear();
-    }
+	private void removeCurrentRequest() {
+		RequestContext.clear();
+	}
 
 }

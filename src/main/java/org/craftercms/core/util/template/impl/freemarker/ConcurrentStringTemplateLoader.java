@@ -29,86 +29,86 @@ import freemarker.cache.TemplateLoader;
  */
 public class ConcurrentStringTemplateLoader implements TemplateLoader {
 
-    private final Map<String, StringTemplateSource> templates;
+	private final Map<String, StringTemplateSource> templates;
 
-    public ConcurrentStringTemplateLoader() {
-        this.templates = new ConcurrentHashMap<String, StringTemplateSource>();
-    }
+	public ConcurrentStringTemplateLoader() {
+		this.templates = new ConcurrentHashMap<String, StringTemplateSource>();
+	}
 
-    public boolean hasTemplateSource(String name) {
-        return templates.containsKey(name);
-    }
+	public boolean hasTemplateSource(String name) {
+		return templates.containsKey(name);
+	}
 
-    public void putTemplateSource(String name, String templateSource) {
-        putTemplateSource(name, templateSource, System.currentTimeMillis());
-    }
+	public void putTemplateSource(String name, String templateSource) {
+		putTemplateSource(name, templateSource, System.currentTimeMillis());
+	}
 
-    public void putTemplateSource(String name, String templateSource, long lastModified) {
-        templates.put(name, new StringTemplateSource(name, templateSource, lastModified));
-    }
+	public void putTemplateSource(String name, String templateSource, long lastModified) {
+		templates.put(name, new StringTemplateSource(name, templateSource, lastModified));
+	}
 
-    public void removeTemplateSource(String name) {
-        templates.remove(name);
-    }
+	public void removeTemplateSource(String name) {
+		templates.remove(name);
+	}
 
-    public void closeTemplateSource(Object templateSource) {
-    }
+	public void closeTemplateSource(Object templateSource) {
+	}
 
-    public Object findTemplateSource(String name) {
-        return templates.get(name);
-    }
+	public Object findTemplateSource(String name) {
+		return templates.get(name);
+	}
 
-    public long getLastModified(Object templateSource) {
-        return ((StringTemplateSource)templateSource).lastModified;
-    }
+	public long getLastModified(Object templateSource) {
+		return ((StringTemplateSource) templateSource).lastModified;
+	}
 
-    public Reader getReader(Object templateSource, String encoding) {
-        return new StringReader(((StringTemplateSource)templateSource).source);
-    }
+	public Reader getReader(Object templateSource, String encoding) {
+		return new StringReader(((StringTemplateSource) templateSource).source);
+	}
 
-    public static class StringTemplateSource {
-        private final String name;
-        private final String source;
-        private final long lastModified;
+	public static class StringTemplateSource {
+		private final String name;
+		private final String source;
+		private final long lastModified;
 
-        public StringTemplateSource(String name, String source, long lastModified) {
-            if (name == null) {
-                throw new IllegalArgumentException("name == null");
-            }
-            if (source == null) {
-                throw new IllegalArgumentException("source == null");
-            }
-            if (lastModified < -1L) {
-                throw new IllegalArgumentException("lastModified < -1L");
-            }
-            this.name = name;
-            this.source = source;
-            this.lastModified = lastModified;
-        }
+		public StringTemplateSource(String name, String source, long lastModified) {
+			if (name == null) {
+				throw new IllegalArgumentException("name == null");
+			}
+			if (source == null) {
+				throw new IllegalArgumentException("source == null");
+			}
+			if (lastModified < -1L) {
+				throw new IllegalArgumentException("lastModified < -1L");
+			}
+			this.name = name;
+			this.source = source;
+			this.lastModified = lastModified;
+		}
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public String getSource() {
-            return source;
-        }
+		public String getSource() {
+			return source;
+		}
 
-        public long getLastModified() {
-            return lastModified;
-        }
+		public long getLastModified() {
+			return lastModified;
+		}
 
-        public boolean equals(Object obj) {
-            if (obj instanceof StringTemplateSource) {
-                return name.equals(((StringTemplateSource)obj).name);
-            }
-            return false;
-        }
+		public boolean equals(Object obj) {
+			if (obj instanceof StringTemplateSource) {
+				return name.equals(((StringTemplateSource) obj).name);
+			}
+			return false;
+		}
 
-        public int hashCode() {
-            return name.hashCode();
-        }
+		public int hashCode() {
+			return name.hashCode();
+		}
 
-    }
+	}
 
 }

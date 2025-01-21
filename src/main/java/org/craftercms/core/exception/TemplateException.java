@@ -24,21 +24,21 @@ package org.craftercms.core.exception;
  */
 public class TemplateException extends CrafterException {
 
-    private static final long serialVersionUID = -3571190479982716681L;
+	private static final long serialVersionUID = -3571190479982716681L;
 
-    public TemplateException() {
-    }
+	public TemplateException() {
+	}
 
-    public TemplateException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public TemplateException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public TemplateException(String message) {
-        super(message);
-    }
+	public TemplateException(String message) {
+		super(message);
+	}
 
-    public TemplateException(Throwable cause) {
-        super(cause);
-    }
+	public TemplateException(Throwable cause) {
+		super(cause);
+	}
 
 }

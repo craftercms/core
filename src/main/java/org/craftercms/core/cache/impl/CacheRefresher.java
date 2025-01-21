@@ -31,12 +31,12 @@ import org.craftercms.core.cache.CacheLoader;
  */
 public interface CacheRefresher {
 
-    /**
-     * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s.
-     *
-     * @param itemsToRefresh
-     * @param cache          the cache where the new item values should be put
-     */
-    void refreshItems(List<CacheItem> itemsToRefresh, Cache cache);
+	/**
+	 * Refreshes the specified list of {@link org.craftercms.core.cache.CacheItem}s.
+	 *
+	 * @param itemsToRefresh
+	 * @param cache          the cache where the new item values should be put
+	 */
+	void refreshItems(List<CacheItem> itemsToRefresh, Cache cache);
 
 }

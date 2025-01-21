@@ -33,51 +33,51 @@ import org.craftercms.core.cache.impl.CacheStoreAdapter;
  */
 public class NoopCacheStoreAdapter implements CacheStoreAdapter {
 
-    @Override
-    public boolean hasScope(String scope) throws Exception {
-        return false;
-    }
+	@Override
+	public boolean hasScope(String scope) throws Exception {
+		return false;
+	}
 
-    public Collection<String> getScopes() {
-        return Collections.emptyList();
-    }
+	public Collection<String> getScopes() {
+		return Collections.emptyList();
+	}
 
-    public void addScope(String scope, int maxItemsInMemory) {
-    }
+	public void addScope(String scope, int maxItemsInMemory) {
+	}
 
-    public void removeScope(String scope) {
-    }
+	public void removeScope(String scope) {
+	}
 
-    public int getSize(String scope) {
-        return 0;
-    }
+	public int getSize(String scope) {
+		return 0;
+	}
 
-    public Collection<Object> getKeys(String scope) {
-        return Collections.emptyList();
-    }
+	public Collection<Object> getKeys(String scope) {
+		return Collections.emptyList();
+	}
 
-    public boolean hasKey(String scope, Object key) {
-        return false;
-    }
+	public boolean hasKey(String scope, Object key) {
+		return false;
+	}
 
-    public CacheItem get(String scope, Object key) {
-        return null;
-    }
+	public CacheItem get(String scope, Object key) {
+		return null;
+	}
 
-    public void put(CacheItem item) {
-    }
+	public void put(CacheItem item) {
+	}
 
-    public boolean remove(String scope, Object key) {
-        return false;
-    }
+	public boolean remove(String scope, Object key) {
+		return false;
+	}
 
-    public void clearAll() {
-    }
+	public void clearAll() {
+	}
 
-    public void clearScope(String scope) {
-    }
+	public void clearScope(String scope) {
+	}
 
-    public CacheStatistics getStatistics(String scope) {
-        return CacheStatistics.EMPTY;
-    }
+	public CacheStatistics getStatistics(String scope) {
+		return CacheStatistics.EMPTY;
+	}
 }

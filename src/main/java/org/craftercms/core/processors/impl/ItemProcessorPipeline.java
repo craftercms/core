@@ -38,130 +38,130 @@ import org.craftercms.core.service.Item;
  */
 public class ItemProcessorPipeline implements ItemProcessor {
 
-    /**
-     * List of processors which conforms the pipeline
-     */
-    protected List<ItemProcessor> processors;
+	/**
+	 * List of processors which conforms the pipeline
+	 */
+	protected List<ItemProcessor> processors;
 
-    /**
-     * Default no-args constructor.
-     */
-    public ItemProcessorPipeline() {
-    }
+	/**
+	 * Default no-args constructor.
+	 */
+	public ItemProcessorPipeline() {
+	}
 
-    /**
-     * Constructor that receives the list of processors which conform the pipeline.
-     */
-    @ConstructorProperties({"processors"})
-    public ItemProcessorPipeline(List<ItemProcessor> processors) {
-        this.processors = processors;
-    }
+	/**
+	 * Constructor that receives the list of processors which conform the pipeline.
+	 */
+	@ConstructorProperties({"processors"})
+	public ItemProcessorPipeline(List<ItemProcessor> processors) {
+		this.processors = processors;
+	}
 
-    /**
-     * Constructor that receives the list of processors (as an array) which conform the pipeline.
-     */
-    @ConstructorProperties({"processors"})
-    public ItemProcessorPipeline(ItemProcessor... processors) {
-        this.processors = Arrays.asList(processors);
-    }
+	/**
+	 * Constructor that receives the list of processors (as an array) which conform the pipeline.
+	 */
+	@ConstructorProperties({"processors"})
+	public ItemProcessorPipeline(ItemProcessor... processors) {
+		this.processors = Arrays.asList(processors);
+	}
 
-    /**
-     * Sets the list of processors.
-     */
-    public void setProcessors(List<ItemProcessor> processors) {
-        this.processors = processors;
-    }
+	/**
+	 * Sets the list of processors.
+	 */
+	public void setProcessors(List<ItemProcessor> processors) {
+		this.processors = processors;
+	}
 
-    /**
-     * Adds a processor to the pipeline of processors.
-     */
-    public void addProcessor(ItemProcessor processor) {
-        if (processors == null) {
-            processors = new ArrayList<>();
-        }
+	/**
+	 * Adds a processor to the pipeline of processors.
+	 */
+	public void addProcessor(ItemProcessor processor) {
+		if (processors == null) {
+			processors = new ArrayList<>();
+		}
 
-        processors.add(processor);
-    }
+		processors.add(processor);
+	}
 
-    /**
-     * Adds several processors to the pipeline of processors.
-     */
-    public void addProcessors(Collection<ItemProcessor> processors) {
-        if (processors == null) {
-            processors = new ArrayList<>();
-        }
+	/**
+	 * Adds several processors to the pipeline of processors.
+	 */
+	public void addProcessors(Collection<ItemProcessor> processors) {
+		if (processors == null) {
+			processors = new ArrayList<>();
+		}
 
-        processors.addAll(processors);
-    }
+		processors.addAll(processors);
+	}
 
-    /**
-     * Removes a processor from the pipeline of processors.
-     *
-     * @return true if the processor was removed
-     */
-    public boolean removeProcessor(ItemProcessor processor) {
-        if (processors != null) {
-            return processors.remove(processor);
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * Removes a processor from the pipeline of processors.
+	 *
+	 * @return true if the processor was removed
+	 */
+	public boolean removeProcessor(ItemProcessor processor) {
+		if (processors != null) {
+			return processors.remove(processor);
+		} else {
+			return false;
+		}
+	}
 
-    /**
-     * Processes the given {@link Item}, by calling a pipeline of processors. The output of each processor's
-     * {@link ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions,
-     * Item)} call is passed as input to the next processor.
-     *
-     * @return the result of the final processor in the pipeline.
-     * @throws ItemProcessingException if one of the processors in the pipeline couldn't process the item
-     */
-    @Override
-    public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
-        if (CollectionUtils.isNotEmpty(processors)) {
-            for (ItemProcessor processor : processors) {
-                item = processor.process(context, cachingOptions, item);
-            }
-        }
+	/**
+	 * Processes the given {@link Item}, by calling a pipeline of processors. The output of each processor's
+	 * {@link ItemProcessor#process(org.craftercms.core.service.Context, org.craftercms.core.service.CachingOptions,
+	 * Item)} call is passed as input to the next processor.
+	 *
+	 * @return the result of the final processor in the pipeline.
+	 * @throws ItemProcessingException if one of the processors in the pipeline couldn't process the item
+	 */
+	@Override
+	public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
+		if (CollectionUtils.isNotEmpty(processors)) {
+			for (ItemProcessor processor : processors) {
+				item = processor.process(context, cachingOptions, item);
+			}
+		}
 
-        return item;
-    }
+		return item;
+	}
 
-    /**
-     * Returns true if the specified {@code ItemProcessorPipeline}'s and this instance's list of processors are equal.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	/**
+	 * Returns true if the specified {@code ItemProcessorPipeline}'s and this instance's list of processors are equal.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        ItemProcessorPipeline that = (ItemProcessorPipeline)o;
+		ItemProcessorPipeline that = (ItemProcessorPipeline) o;
 
-        if (processors != null? !processors.equals(that.processors): that.processors != null) {
-            return false;
-        }
+		if (processors != null ? !processors.equals(that.processors) : that.processors != null) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    /**
-     * Returns the hash code for this instance, which is basically the hash code of the list of processors. As with any
-     * other {@link ItemProcessor}, this method is defined because any processor which is passed in the method call of
-     * a {@link org.craftercms.core.service.ContentStoreService} can be used as part of a key for caching.
-     */
-    @Override
-    public int hashCode() {
-        return processors != null? processors.hashCode(): 0;
-    }
+	/**
+	 * Returns the hash code for this instance, which is basically the hash code of the list of processors. As with any
+	 * other {@link ItemProcessor}, this method is defined because any processor which is passed in the method call of
+	 * a {@link org.craftercms.core.service.ContentStoreService} can be used as part of a key for caching.
+	 */
+	@Override
+	public int hashCode() {
+		return processors != null ? processors.hashCode() : 0;
+	}
 
-    @Override
-    public String toString() {
-        return "ItemProcessorPipeline[" +
-            "processors=" + processors +
-            ']';
-    }
+	@Override
+	public String toString() {
+		return "ItemProcessorPipeline[" +
+			"processors=" + processors +
+			']';
+	}
 
 }

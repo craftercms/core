@@ -23,21 +23,21 @@ package org.craftercms.core.exception;
  */
 public class AuthenticationException extends CrafterException {
 
-    private static final long serialVersionUID = -727036952817103512L;
+	private static final long serialVersionUID = -727036952817103512L;
 
-    public AuthenticationException() {
-    }
+	public AuthenticationException() {
+	}
 
-    public AuthenticationException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public AuthenticationException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public AuthenticationException(String message) {
-        super(message);
-    }
+	public AuthenticationException(String message) {
+		super(message);
+	}
 
-    public AuthenticationException(Throwable cause) {
-        super(cause);
-    }
+	public AuthenticationException(Throwable cause) {
+		super(cause);
+	}
 
 }

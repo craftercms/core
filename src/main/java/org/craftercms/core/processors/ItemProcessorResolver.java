@@ -26,12 +26,11 @@ import org.craftercms.core.service.Item;
  */
 public interface ItemProcessorResolver {
 
-    /**
-     * Returns a {@link ItemProcessor} for a given {@link org.craftercms.core.service.Item}.
-     *
-     * @throws org.craftercms.core.exception.CrafterException
-     *          if an error occurs while resolving the processor
-     */
-    ItemProcessor getProcessor(Item item) throws CrafterException;
+	/**
+	 * Returns a {@link ItemProcessor} for a given {@link org.craftercms.core.service.Item}.
+	 *
+	 * @throws org.craftercms.core.exception.CrafterException if an error occurs while resolving the processor
+	 */
+	ItemProcessor getProcessor(Item item) throws CrafterException;
 
 }

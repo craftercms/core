@@ -33,9 +33,10 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
+
 /**
  * Custom Jackson serializer for {@link org.dom4j.Document}.
- *
+ * <p>
  * The following are the conversion patterns used between XML and JSON:
  * <table>
  *     <caption>XML to JSON conversion patterns</caption>
@@ -60,152 +61,152 @@ import org.dom4j.Node;
  */
 public class Dom4jDocumentJsonSerializer extends JsonSerializer<Document> {
 
-    public static final String ITEM_LIST_ATTRIBUTE_NAME = "item-list";
-    public static final String NO_DEFAULT_ATTRIBUTE_NAME = "no-default";
-    public static final String[] IGNORABLE_ATTRIBUTES = { ITEM_LIST_ATTRIBUTE_NAME, NO_DEFAULT_ATTRIBUTE_NAME };
+	public static final String ITEM_LIST_ATTRIBUTE_NAME = "item-list";
+	public static final String NO_DEFAULT_ATTRIBUTE_NAME = "no-default";
+	public static final String[] IGNORABLE_ATTRIBUTES = {ITEM_LIST_ATTRIBUTE_NAME, NO_DEFAULT_ATTRIBUTE_NAME};
 
-    public static final String TEXT_JSON_KEY = "text";
+	public static final String TEXT_JSON_KEY = "text";
 
-    private final boolean renderAttributes;
+	private final boolean renderAttributes;
 
-    public Dom4jDocumentJsonSerializer(final boolean renderAttributes) {
-        this.renderAttributes = renderAttributes;
-    }
+	public Dom4jDocumentJsonSerializer(final boolean renderAttributes) {
+		this.renderAttributes = renderAttributes;
+	}
 
-    @Override
-    public void serialize(Document doc, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException {
-        jsonGenerator.writeStartObject();
-        jsonGenerator.writeFieldName(doc.getRootElement().getName());
+	@Override
+	public void serialize(Document doc, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException {
+		jsonGenerator.writeStartObject();
+		jsonGenerator.writeFieldName(doc.getRootElement().getName());
 
-        elementToJson(doc.getRootElement(), jsonGenerator);
+		elementToJson(doc.getRootElement(), jsonGenerator);
 
-        jsonGenerator.writeEndObject();
-    }
+		jsonGenerator.writeEndObject();
+	}
 
-    @Override
-    public Class<Document> handledType() {
-        return Document.class;
-    }
+	@Override
+	public Class<Document> handledType() {
+		return Document.class;
+	}
 
-    @SuppressWarnings("unchecked")
-    private void elementToJson(Element element, JsonGenerator jsonGenerator) throws IOException {
-        boolean objectStarted = false;
+	@SuppressWarnings("unchecked")
+	private void elementToJson(Element element, JsonGenerator jsonGenerator) throws IOException {
+		boolean objectStarted = false;
 
-        if (element.attributeCount() > 0 && renderAttributes) {
-            List<Attribute> attributes = element.attributes();
+		if (element.attributeCount() > 0 && renderAttributes) {
+			List<Attribute> attributes = element.attributes();
 
-            for (Attribute attribute : attributes) {
-                if (!ArrayUtils.contains(IGNORABLE_ATTRIBUTES, attribute.getName())) {
-                    if (!objectStarted) {
-                        jsonGenerator.writeStartObject();
-                        objectStarted = true;
-                    }
-                    jsonGenerator.writeStringField(attribute.getName(), attribute.getValue());
-                }
-            }
-        }
+			for (Attribute attribute : attributes) {
+				if (!ArrayUtils.contains(IGNORABLE_ATTRIBUTES, attribute.getName())) {
+					if (!objectStarted) {
+						jsonGenerator.writeStartObject();
+						objectStarted = true;
+					}
+					jsonGenerator.writeStringField(attribute.getName(), attribute.getValue());
+				}
+			}
+		}
 
-        if (!element.hasContent()) {
-            if (!objectStarted) {
-                if (isItemList(element)) {
-                    jsonGenerator.writeStartObject();
-                    objectStarted = true;
-                } else {
-                    jsonGenerator.writeNull();
-                }
-            }
-        } else if (element.isTextOnly()) {
-            if (!objectStarted) {
-                jsonGenerator.writeString(element.getText());
-            } else {
-                jsonGenerator.writeStringField(TEXT_JSON_KEY, element.getText());
-            }
-        } else {
-            if (!objectStarted) {
-                jsonGenerator.writeStartObject();
+		if (!element.hasContent()) {
+			if (!objectStarted) {
+				if (isItemList(element)) {
+					jsonGenerator.writeStartObject();
+					objectStarted = true;
+				} else {
+					jsonGenerator.writeNull();
+				}
+			}
+		} else if (element.isTextOnly()) {
+			if (!objectStarted) {
+				jsonGenerator.writeString(element.getText());
+			} else {
+				jsonGenerator.writeStringField(TEXT_JSON_KEY, element.getText());
+			}
+		} else {
+			if (!objectStarted) {
+				jsonGenerator.writeStartObject();
 
-                objectStarted = true;
-            }
+				objectStarted = true;
+			}
 
-            if (element.hasMixedContent()) {
-                List<String> textContent = getTextContentFromMixedContent(element);
+			if (element.hasMixedContent()) {
+				List<String> textContent = getTextContentFromMixedContent(element);
 
-                if (textContent.size() > 1) {
-                    jsonGenerator.writeArrayFieldStart(TEXT_JSON_KEY);
+				if (textContent.size() > 1) {
+					jsonGenerator.writeArrayFieldStart(TEXT_JSON_KEY);
 
-                    for (String text : textContent) {
-                        jsonGenerator.writeString(text);
-                    }
+					for (String text : textContent) {
+						jsonGenerator.writeString(text);
+					}
 
-                    jsonGenerator.writeEndArray();
-                } else if (textContent.size() == 1) {
-                    jsonGenerator.writeStringField(TEXT_JSON_KEY, textContent.get(0));
-                }
-            }
+					jsonGenerator.writeEndArray();
+				} else if (textContent.size() == 1) {
+					jsonGenerator.writeStringField(TEXT_JSON_KEY, textContent.get(0));
+				}
+			}
 
-            boolean itemList = isItemList(element);
-            Map<String, List<Element>> children = getChildren(element);
+			boolean itemList = isItemList(element);
+			Map<String, List<Element>> children = getChildren(element);
 
-            for (Map.Entry<String, List<Element>> entry : children.entrySet()) {
-                if (itemList || entry.getValue().size() > 1) {
-                    jsonGenerator.writeArrayFieldStart(entry.getKey());
+			for (Map.Entry<String, List<Element>> entry : children.entrySet()) {
+				if (itemList || entry.getValue().size() > 1) {
+					jsonGenerator.writeArrayFieldStart(entry.getKey());
 
-                    for (Element child : entry.getValue()) {
-                        elementToJson(child, jsonGenerator);
-                    }
+					for (Element child : entry.getValue()) {
+						elementToJson(child, jsonGenerator);
+					}
 
-                    jsonGenerator.writeEndArray();
-                } else {
-                    jsonGenerator.writeFieldName(entry.getKey());
+					jsonGenerator.writeEndArray();
+				} else {
+					jsonGenerator.writeFieldName(entry.getKey());
 
-                    elementToJson(entry.getValue().get(0), jsonGenerator);
-                }
-            }
-        }
+					elementToJson(entry.getValue().get(0), jsonGenerator);
+				}
+			}
+		}
 
-        if (objectStarted) {
-            jsonGenerator.writeEndObject();
-        }
-    }
+		if (objectStarted) {
+			jsonGenerator.writeEndObject();
+		}
+	}
 
-    @SuppressWarnings("unchecked")
-    private List<String> getTextContentFromMixedContent(Element element) {
-        List<Node> content = element.content();
-        List<String> textContent = new ArrayList<>();
+	@SuppressWarnings("unchecked")
+	private List<String> getTextContentFromMixedContent(Element element) {
+		List<Node> content = element.content();
+		List<String> textContent = new ArrayList<>();
 
-        for (Node node : content) {
-            if (node.getNodeType() == Node.TEXT_NODE) {
-                String text = node.getText();
-                if (StringUtils.isNotBlank(text)) {
-                    textContent.add(text);
-                }
-            }
-        }
+		for (Node node : content) {
+			if (node.getNodeType() == Node.TEXT_NODE) {
+				String text = node.getText();
+				if (StringUtils.isNotBlank(text)) {
+					textContent.add(text);
+				}
+			}
+		}
 
-        return textContent;
-    }
+		return textContent;
+	}
 
-    @SuppressWarnings("unchecked")
-    private Map<String, List<Element>> getChildren(Element element) {
-        Map<String, List<Element>> groupedChildren = new LinkedHashMap<>();
-        List<Element> children = element.elements();
+	@SuppressWarnings("unchecked")
+	private Map<String, List<Element>> getChildren(Element element) {
+		Map<String, List<Element>> groupedChildren = new LinkedHashMap<>();
+		List<Element> children = element.elements();
 
-        for (Element child : children) {
-            if (groupedChildren.containsKey(child.getName())) {
-                groupedChildren.get(child.getName()).add(child);
-            } else {
-                List<Element> elements = new ArrayList<>();
-                elements.add(child);
+		for (Element child : children) {
+			if (groupedChildren.containsKey(child.getName())) {
+				groupedChildren.get(child.getName()).add(child);
+			} else {
+				List<Element> elements = new ArrayList<>();
+				elements.add(child);
 
-                groupedChildren.put(child.getName(), elements);
-            }
-        }
+				groupedChildren.put(child.getName(), elements);
+			}
+		}
 
-        return groupedChildren;
-    }
+		return groupedChildren;
+	}
 
-    private boolean isItemList(Element element) {
-        return BooleanUtils.toBoolean(element.attributeValue(ITEM_LIST_ATTRIBUTE_NAME));
-    }
+	private boolean isItemList(Element element) {
+		return BooleanUtils.toBoolean(element.attributeValue(ITEM_LIST_ATTRIBUTE_NAME));
+	}
 
 }

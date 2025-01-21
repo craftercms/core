@@ -35,18 +35,18 @@ import org.dom4j.Document;
  */
 public class SingleFileMergeStrategy implements DescriptorMergeStrategy {
 
-    @Override
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String mainDescriptorUrl, Document mainDescriptorDom)
-        throws XmlMergeException {
-        return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
-    }
+	@Override
+	public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+							String mainDescriptorUrl, Document mainDescriptorDom)
+		throws XmlMergeException {
+		return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
+	}
 
-    @Override
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String mainDescriptorUrl, Document mainDescriptorDom,
-                                                    boolean mainDescriptorOptional) throws XmlMergeException {
-        return Arrays.asList(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
-    }
+	@Override
+	public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+							String mainDescriptorUrl, Document mainDescriptorDom,
+							boolean mainDescriptorOptional) throws XmlMergeException {
+		return Arrays.asList(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
+	}
 
 }

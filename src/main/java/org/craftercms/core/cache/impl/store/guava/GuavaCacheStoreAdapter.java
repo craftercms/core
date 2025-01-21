@@ -33,126 +33,126 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GuavaCacheStoreAdapter implements CacheStoreAdapter, DisposableBean {
 
-    protected final Map<String, Cache<Object, Object>> caches = new ConcurrentHashMap<>();
+	protected final Map<String, Cache<Object, Object>> caches = new ConcurrentHashMap<>();
 
-    /**
-     * Destroy method, called by the Spring container. Calls {@link Cache#cleanUp()} for all instances.
-     */
-    @Override
-    public void destroy() {
-        caches.forEach((scope, cache) -> {
-            cache.invalidateAll();
-            cache.cleanUp();
-        });
-    }
+	/**
+	 * Destroy method, called by the Spring container. Calls {@link Cache#cleanUp()} for all instances.
+	 */
+	@Override
+	public void destroy() {
+		caches.forEach((scope, cache) -> {
+			cache.invalidateAll();
+			cache.cleanUp();
+		});
+	}
 
-    @Override
-    public boolean hasScope(String scope) {
-        return caches.containsKey(scope);
-    }
+	@Override
+	public boolean hasScope(String scope) {
+		return caches.containsKey(scope);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Collection<String> getScopes() {
-        return caches.keySet();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Collection<String> getScopes() {
+		return caches.keySet();
+	}
 
-    /**
-     * Adds a new scope. The scope is an instance of Guava's {@link Cache}.
-     *
-     * @param scope            the name of the scope
-     * @param maxItemsInMemory the maximum number of items in memory, before they are evicted
-     */
-    @Override
-    public void addScope(String scope, int maxItemsInMemory) {
-        caches.put(scope, CacheBuilder.newBuilder().recordStats().maximumSize(maxItemsInMemory).build());
-    }
+	/**
+	 * Adds a new scope. The scope is an instance of Guava's {@link Cache}.
+	 *
+	 * @param scope            the name of the scope
+	 * @param maxItemsInMemory the maximum number of items in memory, before they are evicted
+	 */
+	@Override
+	public void addScope(String scope, int maxItemsInMemory) {
+		caches.put(scope, CacheBuilder.newBuilder().recordStats().maximumSize(maxItemsInMemory).build());
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void removeScope(String scope) {
-        caches.remove(scope);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void removeScope(String scope) {
+		caches.remove(scope);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getSize(String scope) {
-        return (int) caches.get(scope).size();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize(String scope) {
+		return (int) caches.get(scope).size();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Collection<Object> getKeys(String scope) {
-        return caches.get(scope).asMap().keySet();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Collection<Object> getKeys(String scope) {
+		return caches.get(scope).asMap().keySet();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasKey(String scope, Object key) {
-        return caches.get(scope).asMap().containsKey(key);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean hasKey(String scope, Object key) {
+		return caches.get(scope).asMap().containsKey(key);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public CacheItem get(String scope, Object key) {
-        var element = caches.get(scope).getIfPresent(key);
-        if (element != null) {
-            return (CacheItem) element;
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CacheItem get(String scope, Object key) {
+		var element = caches.get(scope).getIfPresent(key);
+		if (element != null) {
+			return (CacheItem) element;
+		} else {
+			return null;
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void put(CacheItem item) {
-        caches.get(item.getScope()).put(item.getKey(), item);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void put(CacheItem item) {
+		caches.get(item.getScope()).put(item.getKey(), item);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean remove(String scope, Object key) {
-        caches.get(scope).invalidate(key);
-        return true;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean remove(String scope, Object key) {
+		caches.get(scope).invalidate(key);
+		return true;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void clearAll() {
-        caches.values().forEach(Cache::invalidateAll);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearAll() {
+		caches.values().forEach(Cache::invalidateAll);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void clearScope(String scope) {
-        caches.get(scope).invalidateAll();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearScope(String scope) {
+		caches.get(scope).invalidateAll();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public CacheStatistics getStatistics(String scope) {
-        return new GuavaCacheStatistics(caches.get(scope));
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public CacheStatistics getStatistics(String scope) {
+		return new GuavaCacheStatistics(caches.get(scope));
+	}
 
 }

@@ -26,21 +26,21 @@ import org.craftercms.core.service.Item;
  */
 public class SingleProcessorResolver implements ItemProcessorResolver {
 
-    /**
-     * The processor to always return.
-     */
-    private ItemProcessor processor;
+	/**
+	 * The processor to always return.
+	 */
+	private ItemProcessor processor;
 
-    public SingleProcessorResolver(ItemProcessor processor) {
-        this.processor = processor;
-    }
+	public SingleProcessorResolver(ItemProcessor processor) {
+		this.processor = processor;
+	}
 
-    /**
-     * Returns the same processor for any item.
-     */
-    @Override
-    public ItemProcessor getProcessor(Item item) {
-        return processor;
-    }
+	/**
+	 * Returns the same processor for any item.
+	 */
+	@Override
+	public ItemProcessor getProcessor(Item item) {
+		return processor;
+	}
 
 }

@@ -33,31 +33,31 @@ import org.craftercms.core.url.UrlTransformer;
  */
 public class UrlTransformerPipeline implements UrlTransformer {
 
-    private List<UrlTransformer> transformers;
+	private List<UrlTransformer> transformers;
 
-    public UrlTransformerPipeline() {
-    }
+	public UrlTransformerPipeline() {
+	}
 
-    @ConstructorProperties({"transformers"})
-    public UrlTransformerPipeline(List<UrlTransformer> transformers) {
-        this.transformers = transformers;
-    }
+	@ConstructorProperties({"transformers"})
+	public UrlTransformerPipeline(List<UrlTransformer> transformers) {
+		this.transformers = transformers;
+	}
 
-    @ConstructorProperties({"transformers"})
-    public UrlTransformerPipeline(UrlTransformer... transformers) {
-        this.transformers = Arrays.asList(transformers);
-    }
+	@ConstructorProperties({"transformers"})
+	public UrlTransformerPipeline(UrlTransformer... transformers) {
+		this.transformers = Arrays.asList(transformers);
+	}
 
-    @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions,
-                               String url) throws UrlTransformationException {
-        if (CollectionUtils.isNotEmpty(transformers)) {
-            for (UrlTransformer transformer : transformers) {
-                url = transformer.transformUrl(context, cachingOptions, url);
-            }
-        }
+	@Override
+	public String transformUrl(Context context, CachingOptions cachingOptions,
+				   String url) throws UrlTransformationException {
+		if (CollectionUtils.isNotEmpty(transformers)) {
+			for (UrlTransformer transformer : transformers) {
+				url = transformer.transformUrl(context, cachingOptions, url);
+			}
+		}
 
-        return url;
-    }
+		return url;
+	}
 
 }

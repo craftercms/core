@@ -31,25 +31,25 @@ import static org.junit.Assert.assertFalse;
  */
 public class SingleFileMergeStrategyTest {
 
-    private static final String MAIN_DESCRIPTOR_URL = "/folder/sub-folder/descriptor.xml";
+	private static final String MAIN_DESCRIPTOR_URL = "/folder/sub-folder/descriptor.xml";
 
-    private SingleFileMergeStrategy strategy;
+	private SingleFileMergeStrategy strategy;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestStrategy();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestStrategy();
+	}
 
-    @Test
-    public void testGetDescriptors() throws Exception {
-        List<MergeableDescriptor> descriptors = strategy.getDescriptors(null, null, MAIN_DESCRIPTOR_URL, null);
-        assertEquals(1, descriptors.size());
-        assertEquals(MAIN_DESCRIPTOR_URL, descriptors.get(0).getUrl());
-        assertFalse(descriptors.get(0).isOptional());
-    }
+	@Test
+	public void testGetDescriptors() throws Exception {
+		List<MergeableDescriptor> descriptors = strategy.getDescriptors(null, null, MAIN_DESCRIPTOR_URL, null);
+		assertEquals(1, descriptors.size());
+		assertEquals(MAIN_DESCRIPTOR_URL, descriptors.get(0).getUrl());
+		assertFalse(descriptors.get(0).isOptional());
+	}
 
-    private void setUpTestStrategy() {
-        strategy = new SingleFileMergeStrategy();
-    }
+	private void setUpTestStrategy() {
+		strategy = new SingleFileMergeStrategy();
+	}
 
 }

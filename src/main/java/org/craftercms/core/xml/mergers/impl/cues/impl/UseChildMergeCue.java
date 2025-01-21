@@ -27,13 +27,13 @@ import org.dom4j.Element;
  */
 public class UseChildMergeCue extends AbstractMergeCue {
 
-    public UseChildMergeCue(int priority) {
-        super(priority);
-    }
+	public UseChildMergeCue(int priority) {
+		super(priority);
+	}
 
-    @Override
-    public Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException {
-        return child;
-    }
+	@Override
+	public Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException {
+		return child;
+	}
 
 }

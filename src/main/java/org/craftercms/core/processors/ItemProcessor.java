@@ -28,25 +28,25 @@ import org.craftercms.core.service.Item;
  */
 public interface ItemProcessor {
 
-    /**
-     * When explicitly passing the processor (not in a pipeline), this method indicates whether
-     * the processor should be executed exclusively and ignore any other processors.
-     *
-     * @return true if the processor should be executed exclusively, false otherwise.
-     */
-    default boolean isExclusive() {
-        return false;
-    }
+	/**
+	 * When explicitly passing the processor (not in a pipeline), this method indicates whether
+	 * the processor should be executed exclusively and ignore any other processors.
+	 *
+	 * @return true if the processor should be executed exclusively, false otherwise.
+	 */
+	default boolean isExclusive() {
+		return false;
+	}
 
-    /**
-     * Processes an {@link Item}.
-     *
-     * @param context        the current context
-     * @param cachingOptions caching options in case you need access to items
-     * @param item           the item to process
-     * @return the modified item or a new item.
-     * @throws ItemProcessingException if an error occurred while processing the item
-     */
-    Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException;
+	/**
+	 * Processes an {@link Item}.
+	 *
+	 * @param context        the current context
+	 * @param cachingOptions caching options in case you need access to items
+	 * @param item           the item to process
+	 * @return the modified item or a new item.
+	 * @throws ItemProcessingException if an error occurred while processing the item
+	 */
+	Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException;
 
 }

@@ -28,13 +28,12 @@ import org.dom4j.Node;
  */
 public interface NodeScanner {
 
-    /**
-     * Scans the specified document for nodes that fit a certain condition.
-     *
-     * @return the list of nodes that fit the condition
-     * @throws org.craftercms.core.exception.XmlException
-     *
-     */
-    List<Node> scan(Document document) throws XmlException;
+	/**
+	 * Scans the specified document for nodes that fit a certain condition.
+	 *
+	 * @return the list of nodes that fit the condition
+	 * @throws org.craftercms.core.exception.XmlException
+	 */
+	List<Node> scan(Document document) throws XmlException;
 
 }

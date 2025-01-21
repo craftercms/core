@@ -36,69 +36,69 @@ import org.dom4j.Document;
  */
 public abstract class AbstractInheritFromHierarchyMergeStrategy implements DescriptorMergeStrategy {
 
-    protected String[] baseFolders;
+	protected String[] baseFolders;
 
-    public void setBaseFolders(String[] baseFolders) {
-        for (int i = 0; i < baseFolders.length; i++) {
-            baseFolders[i] = ContentStoreUtils.normalizePath(baseFolders[i]);
-        }
+	public void setBaseFolders(String[] baseFolders) {
+		for (int i = 0; i < baseFolders.length; i++) {
+			baseFolders[i] = ContentStoreUtils.normalizePath(baseFolders[i]);
+		}
 
-        this.baseFolders = baseFolders;
-    }
+		this.baseFolders = baseFolders;
+	}
 
-    @Override
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String mainDescriptorUrl, Document mainDescriptorDom)
-        throws XmlMergeException {
-        return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
-    }
+	@Override
+	public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+							String mainDescriptorUrl, Document mainDescriptorDom)
+		throws XmlMergeException {
+		return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
+	}
 
-    @Override
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String mainDescriptorUrl, Document mainDescriptorDom,
-                                                    boolean mainDescriptorOptional) throws XmlMergeException {
-        List<MergeableDescriptor> descriptors = new ArrayList<>();
+	@Override
+	public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+							String mainDescriptorUrl, Document mainDescriptorDom,
+							boolean mainDescriptorOptional) throws XmlMergeException {
+		List<MergeableDescriptor> descriptors = new ArrayList<>();
 
-        int k;
+		int k;
 
-        if (ArrayUtils.isNotEmpty(baseFolders)) {
-            // If base folders are specified, start looking for descriptors after the base folders.
-            k = getIndexAfterBaseFolder(mainDescriptorUrl);
-        } else {
-            // If the url is absolute (starts with '/'), the descriptors included will start from root (i.e. if url is
-            // /folder/file.xml, first ones will start at '/'). If it's relative (doesn't start with '/), the descriptors
-            // included start from the first folder in the url (i.e., if url is folder/file.xml, first ones will start at
-            // folder/).
-            k = mainDescriptorUrl.indexOf('/');
-        }
+		if (ArrayUtils.isNotEmpty(baseFolders)) {
+			// If base folders are specified, start looking for descriptors after the base folders.
+			k = getIndexAfterBaseFolder(mainDescriptorUrl);
+		} else {
+			// If the url is absolute (starts with '/'), the descriptors included will start from root (i.e. if url is
+			// /folder/file.xml, first ones will start at '/'). If it's relative (doesn't start with '/), the descriptors
+			// included start from the first folder in the url (i.e., if url is folder/file.xml, first ones will start at
+			// folder/).
+			k = mainDescriptorUrl.indexOf('/');
+		}
 
-        while (k >= 0) {
-            String folder = mainDescriptorUrl.substring(0, k);
+		while (k >= 0) {
+			String folder = mainDescriptorUrl.substring(0, k);
 
-            addInheritedDescriptorsInFolder(context, cachingOptions, descriptors, folder, mainDescriptorUrl,
-                                            mainDescriptorDom);
+			addInheritedDescriptorsInFolder(context, cachingOptions, descriptors, folder, mainDescriptorUrl,
+				mainDescriptorDom);
 
-            k = mainDescriptorUrl.indexOf('/', ++k);
-        }
+			k = mainDescriptorUrl.indexOf('/', ++k);
+		}
 
-        descriptors.add(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
+		descriptors.add(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
 
-        return descriptors;
-    }
+		return descriptors;
+	}
 
-    protected int getIndexAfterBaseFolder(String url) {
-        for (String baseFolder : baseFolders) {
-            if (url.startsWith(baseFolder)) {
-                return baseFolder.length();
-            }
-        }
+	protected int getIndexAfterBaseFolder(String url) {
+		for (String baseFolder : baseFolders) {
+			if (url.startsWith(baseFolder)) {
+				return baseFolder.length();
+			}
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
-    protected abstract void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
-                                                            List<MergeableDescriptor> inheritedDescriptors,
-                                                            String folder, String mainDescriptorUrl,
-                                                            Document mainDescriptorDom);
+	protected abstract void addInheritedDescriptorsInFolder(Context context, CachingOptions cachingOptions,
+								List<MergeableDescriptor> inheritedDescriptors,
+								String folder, String mainDescriptorUrl,
+								Document mainDescriptorDom);
 
 }

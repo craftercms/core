@@ -32,6 +32,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.beans.factory.InitializingBean;
 
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,167 +50,167 @@ import org.slf4j.LoggerFactory;
 @RequestMapping(RestControllerBase.REST_BASE_URI + ContentStoreRestController.URL_ROOT)
 public class ContentStoreRestController extends RestControllerBase implements InitializingBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(ContentStoreRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ContentStoreRestController.class);
 
-    public static final String URL_ROOT = "/content_store";
-    public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
-    public static final String MUST_REVALIDATE_HEADER_VALUE = "must-revalidate";
-    public static final String REQUEST_PARAM_CONTEXT_ID = "contextId";
-    public static final String REQUEST_PARAM_URL = "url";
-    public static final String REQUEST_PARAM_TREE_DEPTH = "depth";
-    public static final String URL_DESCRIPTOR = "/descriptor";
-    public static final String URL_ITEM = "/item";
-    public static final String URL_CHILDREN = "/children";
-    public static final String URL_TREE = "/tree";
+	public static final String URL_ROOT = "/content_store";
+	public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
+	public static final String MUST_REVALIDATE_HEADER_VALUE = "must-revalidate";
+	public static final String REQUEST_PARAM_CONTEXT_ID = "contextId";
+	public static final String REQUEST_PARAM_URL = "url";
+	public static final String REQUEST_PARAM_TREE_DEPTH = "depth";
+	public static final String URL_DESCRIPTOR = "/descriptor";
+	public static final String URL_ITEM = "/item";
+	public static final String URL_CHILDREN = "/children";
+	public static final String URL_TREE = "/tree";
 
-    private ContentStoreService storeService;
-    private final int treeDepthLimit;
-    private String[] allowedUrlPatterns;
-    private String[] forbiddenUrlPatterns;
+	private ContentStoreService storeService;
+	private final int treeDepthLimit;
+	private String[] allowedUrlPatterns;
+	private String[] forbiddenUrlPatterns;
 
-    private ItemFilter itemFilter;
+	private ItemFilter itemFilter;
 
-    @ConstructorProperties({"storeService", "treeDepthLimit"})
-    public ContentStoreRestController(ContentStoreService storeService, int treeDepthLimit) {
-        this.storeService = storeService;
-        if (treeDepthLimit < 0 || treeDepthLimit > ContentStoreService.TREE_DEPTH_HARD_LIMIT) {
-            this.treeDepthLimit = ContentStoreService.TREE_DEPTH_HARD_LIMIT;
-        } else {
-            this.treeDepthLimit = treeDepthLimit;
-        }
-    }
+	@ConstructorProperties({"storeService", "treeDepthLimit"})
+	public ContentStoreRestController(ContentStoreService storeService, int treeDepthLimit) {
+		this.storeService = storeService;
+		if (treeDepthLimit < 0 || treeDepthLimit > ContentStoreService.TREE_DEPTH_HARD_LIMIT) {
+			this.treeDepthLimit = ContentStoreService.TREE_DEPTH_HARD_LIMIT;
+		} else {
+			this.treeDepthLimit = treeDepthLimit;
+		}
+	}
 
-    public void setAllowedUrlPatterns(String[] allowedUrlPatterns) {
-        this.allowedUrlPatterns = allowedUrlPatterns;
-    }
+	public void setAllowedUrlPatterns(String[] allowedUrlPatterns) {
+		this.allowedUrlPatterns = allowedUrlPatterns;
+	}
 
-    public void setForbiddenUrlPatterns(String[] forbiddenUrlPatterns) {
-        this.forbiddenUrlPatterns = forbiddenUrlPatterns;
-    }
+	public void setForbiddenUrlPatterns(String[] forbiddenUrlPatterns) {
+		this.forbiddenUrlPatterns = forbiddenUrlPatterns;
+	}
 
-    public void afterPropertiesSet() {
-        CompositeItemFilter compositeItemFilter = new CompositeItemFilter();
-        compositeItemFilter.setFilters(Arrays.asList(new IncludeByUrlItemFilter(allowedUrlPatterns),
-                                                     new ExcludeByUrlItemFilter(forbiddenUrlPatterns)));
+	public void afterPropertiesSet() {
+		CompositeItemFilter compositeItemFilter = new CompositeItemFilter();
+		compositeItemFilter.setFilters(Arrays.asList(new IncludeByUrlItemFilter(allowedUrlPatterns),
+			new ExcludeByUrlItemFilter(forbiddenUrlPatterns)));
 
-        itemFilter = compositeItemFilter;
-    }
+		itemFilter = compositeItemFilter;
+	}
 
-    /**
-     * @deprecated Will be removed in 4.1, use {@code getItem} instead
-     */
-    @RequestMapping(value = URL_DESCRIPTOR, method = RequestMethod.GET)
-    public Document getDescriptor(WebRequest request, HttpServletResponse response,
-                                  @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                                  @RequestParam(REQUEST_PARAM_URL) String url,
-                                  @RequestParam(required = false, defaultValue = "false") boolean flatten)
-            throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
-                   ItemProcessingException, XmlMergeException, XmlFileParseException {
-        Item item = getItem(request, response, contextId, url, flatten);
+	/**
+	 * @deprecated Will be removed in 4.1, use {@code getItem} instead
+	 */
+	@RequestMapping(value = URL_DESCRIPTOR, method = RequestMethod.GET)
+	public Document getDescriptor(WebRequest request, HttpServletResponse response,
+				      @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+				      @RequestParam(REQUEST_PARAM_URL) String url,
+				      @RequestParam(required = false, defaultValue = "false") boolean flatten)
+		throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
+		ItemProcessingException, XmlMergeException, XmlFileParseException {
+		Item item = getItem(request, response, contextId, url, flatten);
 
-        if (item != null) {
-            return item.getDescriptorDom();
-        }
+		if (item != null) {
+			return item.getDescriptorDom();
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @RequestMapping(value = URL_ITEM, method = RequestMethod.GET)
-    public Item getItem(WebRequest request, HttpServletResponse response,
-                                       @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                                       @RequestParam(REQUEST_PARAM_URL) String url,
-                                       @RequestParam(required = false, defaultValue = "false") boolean flatten)
-            throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
-                   ItemProcessingException, XmlMergeException, XmlFileParseException {
-        checkIfUrlAllowed(url);
+	@RequestMapping(value = URL_ITEM, method = RequestMethod.GET)
+	public Item getItem(WebRequest request, HttpServletResponse response,
+			    @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+			    @RequestParam(REQUEST_PARAM_URL) String url,
+			    @RequestParam(required = false, defaultValue = "false") boolean flatten)
+		throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
+		ItemProcessingException, XmlMergeException, XmlFileParseException {
+		checkIfUrlAllowed(url);
 
-        Context context = storeService.getContext(contextId);
-        if (context == null) {
-            throw new InvalidContextException("No context found for ID " + contextId);
-        }
+		Context context = storeService.getContext(contextId);
+		if (context == null) {
+			throw new InvalidContextException("No context found for ID " + contextId);
+		}
 
-        Item item = storeService.getItem(context, null, url, null, flatten);
+		Item item = storeService.getItem(context, null, url, null, flatten);
 
-        if (item.getCachingTime() != null && checkNotModified(item.getCachingTime(), request, response)) {
-            return null;
-        } else {
-            return item;
-        }
-    }
+		if (item.getCachingTime() != null && checkNotModified(item.getCachingTime(), request, response)) {
+			return null;
+		} else {
+			return item;
+		}
+	}
 
-    @RequestMapping(value = URL_CHILDREN, method = RequestMethod.GET)
-    public List<Item> getChildren(WebRequest request, HttpServletResponse response,
-                                  @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                                  @RequestParam(REQUEST_PARAM_URL) String url,
-                                  @RequestParam(required = false, defaultValue = "false") boolean flatten)
-            throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
-                   ItemProcessingException, XmlMergeException, XmlFileParseException {
-        checkIfUrlAllowed(url);
+	@RequestMapping(value = URL_CHILDREN, method = RequestMethod.GET)
+	public List<Item> getChildren(WebRequest request, HttpServletResponse response,
+				      @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+				      @RequestParam(REQUEST_PARAM_URL) String url,
+				      @RequestParam(required = false, defaultValue = "false") boolean flatten)
+		throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
+		ItemProcessingException, XmlMergeException, XmlFileParseException {
+		checkIfUrlAllowed(url);
 
-        Context context = storeService.getContext(contextId);
-        if (context == null) {
-            throw new InvalidContextException("No context found for ID " + contextId);
-        }
+		Context context = storeService.getContext(contextId);
+		if (context == null) {
+			throw new InvalidContextException("No context found for ID " + contextId);
+		}
 
-        CachingAwareList<Item> children =
-                (CachingAwareList<Item>) storeService.getChildren(context, null, url, itemFilter, null, flatten);
+		CachingAwareList<Item> children =
+			(CachingAwareList<Item>) storeService.getChildren(context, null, url, itemFilter, null, flatten);
 
-        if (children.getCachingTime() != null && checkNotModified(children.getCachingTime(), request, response)) {
-            return null;
-        } else {
-            return new ArrayList<>(children);
-        }
-    }
+		if (children.getCachingTime() != null && checkNotModified(children.getCachingTime(), request, response)) {
+			return null;
+		} else {
+			return new ArrayList<>(children);
+		}
+	}
 
-    @RequestMapping(value = URL_TREE, method = RequestMethod.GET)
-    public Tree getTree(WebRequest request, HttpServletResponse response,
-                                       @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-                                       @RequestParam(REQUEST_PARAM_URL) String url,
-                                       @RequestParam(value = REQUEST_PARAM_TREE_DEPTH, required = false) Integer depth,
-                                       @RequestParam(required = false, defaultValue = "false") boolean flatten)
-            throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
-                   ItemProcessingException, XmlMergeException, XmlFileParseException {
-        checkIfUrlAllowed(url);
+	@RequestMapping(value = URL_TREE, method = RequestMethod.GET)
+	public Tree getTree(WebRequest request, HttpServletResponse response,
+			    @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
+			    @RequestParam(REQUEST_PARAM_URL) String url,
+			    @RequestParam(value = REQUEST_PARAM_TREE_DEPTH, required = false) Integer depth,
+			    @RequestParam(required = false, defaultValue = "false") boolean flatten)
+		throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
+		ItemProcessingException, XmlMergeException, XmlFileParseException {
+		checkIfUrlAllowed(url);
 
-        Context context = storeService.getContext(contextId);
-        if (context == null) {
-            throw new IllegalArgumentException("No context found for ID " + contextId);
-        }
+		Context context = storeService.getContext(contextId);
+		if (context == null) {
+			throw new IllegalArgumentException("No context found for ID " + contextId);
+		}
 
-        // tree depth must not exceed the configured limit
-        if (depth == null || depth < 0 || depth > treeDepthLimit) {
-            depth = treeDepthLimit;
-        }
+		// tree depth must not exceed the configured limit
+		if (depth == null || depth < 0 || depth > treeDepthLimit) {
+			depth = treeDepthLimit;
+		}
 
-        try {
-            Tree tree = storeService.getTree(context, null, url, depth, itemFilter, null, false);
-            if (tree.getCachingTime() != null && checkNotModified(tree.getCachingTime(), request, response)) {
-                return null;
-            } else {
-                return tree;
-            }
-        } catch (OutOfMemoryError error) {
-            logger.error("Unable to fulfill the request. Out of memory exception occurred.", error);
-            logger.info("Maximum JVM memory is '{}' bytes", Runtime.getRuntime().maxMemory());
-            throw new StoreException("Unable to fulfill the request. Out of memory exception occurred.");
-        }
-    }
+		try {
+			Tree tree = storeService.getTree(context, null, url, depth, itemFilter, null, false);
+			if (tree.getCachingTime() != null && checkNotModified(tree.getCachingTime(), request, response)) {
+				return null;
+			} else {
+				return tree;
+			}
+		} catch (OutOfMemoryError error) {
+			logger.error("Unable to fulfill the request. Out of memory exception occurred.", error);
+			logger.info("Maximum JVM memory is '{}' bytes", Runtime.getRuntime().maxMemory());
+			throw new StoreException("Unable to fulfill the request. Out of memory exception occurred.");
+		}
+	}
 
-    private boolean checkNotModified(long lastModifiedTimestamp, WebRequest request, HttpServletResponse response) {
-        response.setHeader(CACHE_CONTROL_HEADER_NAME, MUST_REVALIDATE_HEADER_VALUE);
+	private boolean checkNotModified(long lastModifiedTimestamp, WebRequest request, HttpServletResponse response) {
+		response.setHeader(CACHE_CONTROL_HEADER_NAME, MUST_REVALIDATE_HEADER_VALUE);
 
-        return request.checkNotModified(lastModifiedTimestamp);
-    }
+		return request.checkNotModified(lastModifiedTimestamp);
+	}
 
-    private boolean isUrlAllowed(String url) {
-        return (ArrayUtils.isEmpty(allowedUrlPatterns) || RegexUtils.matchesAny(url, allowedUrlPatterns)) &&
-               (ArrayUtils.isEmpty(forbiddenUrlPatterns) || !RegexUtils.matchesAny(url, forbiddenUrlPatterns));
-    }
+	private boolean isUrlAllowed(String url) {
+		return (ArrayUtils.isEmpty(allowedUrlPatterns) || RegexUtils.matchesAny(url, allowedUrlPatterns)) &&
+			(ArrayUtils.isEmpty(forbiddenUrlPatterns) || !RegexUtils.matchesAny(url, forbiddenUrlPatterns));
+	}
 
-    private void checkIfUrlAllowed(String url) throws ForbiddenPathException {
-        if (!isUrlAllowed(url)) {
-            throw new ForbiddenPathException("Access denied to URL " + url);
-        }
-    }
+	private void checkIfUrlAllowed(String url) throws ForbiddenPathException {
+		if (!isUrlAllowed(url)) {
+			throw new ForbiddenPathException("Access denied to URL " + url);
+		}
+	}
 
 }

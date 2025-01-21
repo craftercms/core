@@ -23,19 +23,19 @@ package org.craftercms.core.exception;
  */
 public class InvalidContextException extends CrafterException {
 
-    public InvalidContextException() {
-    }
+	public InvalidContextException() {
+	}
 
-    public InvalidContextException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public InvalidContextException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public InvalidContextException(String message) {
-        super(message);
-    }
+	public InvalidContextException(String message) {
+		super(message);
+	}
 
-    public InvalidContextException(Throwable cause) {
-        super(cause);
-    }
+	public InvalidContextException(Throwable cause) {
+		super(cause);
+	}
 
 }

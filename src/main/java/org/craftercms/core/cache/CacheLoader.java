@@ -24,13 +24,13 @@ package org.craftercms.core.cache;
  */
 public interface CacheLoader {
 
-    /**
-     * Loads a new value for an item.
-     *
-     * @param parameters additional parameters the load method could need
-     * @return the item's new value
-     * @throws Exception if somehow the load method couldn't execute successfully
-     */
-    Object load(Object... parameters) throws Exception;
+	/**
+	 * Loads a new value for an item.
+	 *
+	 * @param parameters additional parameters the load method could need
+	 * @return the item's new value
+	 * @throws Exception if somehow the load method couldn't execute successfully
+	 */
+	Object load(Object... parameters) throws Exception;
 
 }

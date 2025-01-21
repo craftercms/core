@@ -37,66 +37,66 @@ import static org.mockito.Mockito.when;
  */
 public class MetaDataProcessorResolverTest {
 
-    public static final String PROCESSOR_ELEMENT_XPATH_QUERY = "//processor";
+	public static final String PROCESSOR_ELEMENT_XPATH_QUERY = "//processor";
 
-    private static final String PROCESSOR1_ELEMENT_VALUE = "processor1";
-    private static final String PROCESSOR2_ELEMENT_VALUE = "processor2";
+	private static final String PROCESSOR1_ELEMENT_VALUE = "processor1";
+	private static final String PROCESSOR2_ELEMENT_VALUE = "processor2";
 
-    private MetaDataProcessorResolver resolver;
-    private ItemProcessor processor1;
-    private ItemProcessor processor2;
-    private Document descriptorDomProcessor1;
-    private Document descriptorDomProcessor2;
+	private MetaDataProcessorResolver resolver;
+	private ItemProcessor processor1;
+	private ItemProcessor processor2;
+	private Document descriptorDomProcessor1;
+	private Document descriptorDomProcessor2;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestProcessors();
-        setUpTestResolver();
-        setUpTestDescriptorDoms();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestProcessors();
+		setUpTestResolver();
+		setUpTestDescriptorDoms();
+	}
 
-    @Test
-    public void testGetProcessor() throws Exception {
-        Item item = new Item();
-        item.setDescriptorDom(descriptorDomProcessor1);
+	@Test
+	public void testGetProcessor() throws Exception {
+		Item item = new Item();
+		item.setDescriptorDom(descriptorDomProcessor1);
 
-        ItemProcessor processor = resolver.getProcessor(item);
-        assertSame(processor1, processor);
+		ItemProcessor processor = resolver.getProcessor(item);
+		assertSame(processor1, processor);
 
-        item = new Item();
-        item.setDescriptorDom(descriptorDomProcessor2);
+		item = new Item();
+		item.setDescriptorDom(descriptorDomProcessor2);
 
-        processor = resolver.getProcessor(item);
-        assertSame(processor2, processor);
-    }
+		processor = resolver.getProcessor(item);
+		assertSame(processor2, processor);
+	}
 
-    private void setUpTestProcessors() {
-        processor1 = mock(ItemProcessor.class);
-        processor2 = mock(ItemProcessor.class);
-    }
+	private void setUpTestProcessors() {
+		processor1 = mock(ItemProcessor.class);
+		processor2 = mock(ItemProcessor.class);
+	}
 
-    private void setUpTestResolver() {
-        Map<String, ItemProcessor> processors = new HashMap<String, ItemProcessor>();
-        processors.put(PROCESSOR1_ELEMENT_VALUE, processor1);
-        processors.put(PROCESSOR2_ELEMENT_VALUE, processor2);
+	private void setUpTestResolver() {
+		Map<String, ItemProcessor> processors = new HashMap<String, ItemProcessor>();
+		processors.put(PROCESSOR1_ELEMENT_VALUE, processor1);
+		processors.put(PROCESSOR2_ELEMENT_VALUE, processor2);
 
-        resolver = new MetaDataProcessorResolver(PROCESSOR_ELEMENT_XPATH_QUERY, processors);
-    }
-    
-    private void setUpTestDescriptorDoms() {
-        Node processor1MergeProcessorElement = mock(Node.class);
-        when(processor1MergeProcessorElement.getText()).thenReturn(PROCESSOR1_ELEMENT_VALUE);
+		resolver = new MetaDataProcessorResolver(PROCESSOR_ELEMENT_XPATH_QUERY, processors);
+	}
 
-        descriptorDomProcessor1 = mock(Document.class);
-        when(descriptorDomProcessor1.selectSingleNode(PROCESSOR_ELEMENT_XPATH_QUERY)).thenReturn(
-                processor1MergeProcessorElement);
+	private void setUpTestDescriptorDoms() {
+		Node processor1MergeProcessorElement = mock(Node.class);
+		when(processor1MergeProcessorElement.getText()).thenReturn(PROCESSOR1_ELEMENT_VALUE);
 
-        Node processor2MergeProcessorElement = mock(Node.class);
-        when(processor2MergeProcessorElement.getText()).thenReturn(PROCESSOR2_ELEMENT_VALUE);
+		descriptorDomProcessor1 = mock(Document.class);
+		when(descriptorDomProcessor1.selectSingleNode(PROCESSOR_ELEMENT_XPATH_QUERY)).thenReturn(
+			processor1MergeProcessorElement);
 
-        descriptorDomProcessor2 = mock(Document.class);
-        when(descriptorDomProcessor2.selectSingleNode(PROCESSOR_ELEMENT_XPATH_QUERY)).thenReturn(
-                processor2MergeProcessorElement);
-    }    
+		Node processor2MergeProcessorElement = mock(Node.class);
+		when(processor2MergeProcessorElement.getText()).thenReturn(PROCESSOR2_ELEMENT_VALUE);
+
+		descriptorDomProcessor2 = mock(Document.class);
+		when(descriptorDomProcessor2.selectSingleNode(PROCESSOR_ELEMENT_XPATH_QUERY)).thenReturn(
+			processor2MergeProcessorElement);
+	}
 
 }

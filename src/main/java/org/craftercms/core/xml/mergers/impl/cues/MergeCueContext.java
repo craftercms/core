@@ -27,36 +27,36 @@ import org.dom4j.Element;
  */
 public class MergeCueContext {
 
-    private MergeCue mergeCue;
-    private Element parent;
-    private Element child;
-    private Map<String, String> mergeCueParams;
+	private MergeCue mergeCue;
+	private Element parent;
+	private Element child;
+	private Map<String, String> mergeCueParams;
 
-    public MergeCueContext(MergeCue mergeCue, Element parent, Element child, Map<String, String> mergeCueParams) {
-        this.mergeCue = mergeCue;
-        this.parent = parent;
-        this.child = child;
-        this.mergeCueParams = mergeCueParams;
-    }
+	public MergeCueContext(MergeCue mergeCue, Element parent, Element child, Map<String, String> mergeCueParams) {
+		this.mergeCue = mergeCue;
+		this.parent = parent;
+		this.child = child;
+		this.mergeCueParams = mergeCueParams;
+	}
 
-    public MergeCue getMergeCue() {
-        return mergeCue;
-    }
+	public MergeCue getMergeCue() {
+		return mergeCue;
+	}
 
-    public Element getParent() {
-        return parent;
-    }
+	public Element getParent() {
+		return parent;
+	}
 
-    public Element getChild() {
-        return child;
-    }
+	public Element getChild() {
+		return child;
+	}
 
-    public Map<String, String> getMergeCueParams() {
-        return mergeCueParams;
-    }
+	public Map<String, String> getMergeCueParams() {
+		return mergeCueParams;
+	}
 
-    public Element doMerge() throws XmlMergeException {
-        return mergeCue.merge(parent, child, mergeCueParams);
-    }
+	public Element doMerge() throws XmlMergeException {
+		return mergeCue.merge(parent, child, mergeCueParams);
+	}
 
 }

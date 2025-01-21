@@ -26,6 +26,6 @@ import org.craftercms.core.exception.TemplateException;
  */
 public interface CompiledTemplate {
 
-    void process(Object model, Writer output) throws TemplateException;
+	void process(Object model, Writer output) throws TemplateException;
 
 }

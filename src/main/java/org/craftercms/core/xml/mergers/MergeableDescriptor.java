@@ -22,59 +22,59 @@ package org.craftercms.core.xml.mergers;
  */
 public class MergeableDescriptor {
 
-    private String url;
-    private boolean optional;
+	private String url;
+	private boolean optional;
 
-    public MergeableDescriptor(String url, boolean optional) {
-        this.url = url;
-        this.optional = optional;
-    }
+	public MergeableDescriptor(String url, boolean optional) {
+		this.url = url;
+		this.optional = optional;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    public boolean isOptional() {
-        return optional;
-    }
+	public boolean isOptional() {
+		return optional;
+	}
 
-    public void setOptional(boolean optional) {
-        this.optional = optional;
-    }
+	public void setOptional(boolean optional) {
+		this.optional = optional;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        MergeableDescriptor that = (MergeableDescriptor)o;
+		MergeableDescriptor that = (MergeableDescriptor) o;
 
-        if (!url.equals(that.url)) {
-            return false;
-        }
+		if (!url.equals(that.url)) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-        return url.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return url.hashCode();
+	}
 
-    @Override
-    public String toString() {
-        return "MergeableDescriptor[" +
-            "url='" + url + '\'' +
-            ", optional=" + optional +
-            ']';
-    }
+	@Override
+	public String toString() {
+		return "MergeableDescriptor[" +
+			"url='" + url + '\'' +
+			", optional=" + optional +
+			']';
+	}
 
 }

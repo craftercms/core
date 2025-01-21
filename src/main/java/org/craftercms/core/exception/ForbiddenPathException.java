@@ -22,8 +22,8 @@ package org.craftercms.core.exception;
  */
 public class ForbiddenPathException extends CrafterException {
 
-    public ForbiddenPathException(String message) {
-        super(message);
-    }
+	public ForbiddenPathException(String message) {
+		super(message);
+	}
 
 }

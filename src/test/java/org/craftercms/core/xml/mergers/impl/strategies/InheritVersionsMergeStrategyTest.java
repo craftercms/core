@@ -32,31 +32,31 @@ import static org.junit.Assert.assertTrue;
  */
 public class InheritVersionsMergeStrategyTest {
 
-    private static final String ROOT_VERSION_DESCRIPTOR_URL = "/descriptor.xml";
-    private static final String FOLDER_VERSION_DESCRIPTOR_URL = "/folder/descriptor.xml";
-    private static final String MAIN_DESCRIPTOR_URL = "/folder/sub-folder/descriptor.xml";
+	private static final String ROOT_VERSION_DESCRIPTOR_URL = "/descriptor.xml";
+	private static final String FOLDER_VERSION_DESCRIPTOR_URL = "/folder/descriptor.xml";
+	private static final String MAIN_DESCRIPTOR_URL = "/folder/sub-folder/descriptor.xml";
 
-    private InheritVersionsMergeStrategy strategy;
+	private InheritVersionsMergeStrategy strategy;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestStrategy();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestStrategy();
+	}
 
-    @Test
-    public void testGetDescriptors() throws Exception {
-        List<MergeableDescriptor> descriptors = strategy.getDescriptors(null, null, MAIN_DESCRIPTOR_URL, null);
-        assertEquals(3, descriptors.size());
-        assertEquals(ROOT_VERSION_DESCRIPTOR_URL, descriptors.get(0).getUrl());
-        assertTrue(descriptors.get(0).isOptional());
-        assertEquals(FOLDER_VERSION_DESCRIPTOR_URL, descriptors.get(1).getUrl());
-        assertTrue(descriptors.get(1).isOptional());
-        assertEquals(MAIN_DESCRIPTOR_URL, descriptors.get(2).getUrl());
-        assertFalse(descriptors.get(2).isOptional());
-    }
+	@Test
+	public void testGetDescriptors() throws Exception {
+		List<MergeableDescriptor> descriptors = strategy.getDescriptors(null, null, MAIN_DESCRIPTOR_URL, null);
+		assertEquals(3, descriptors.size());
+		assertEquals(ROOT_VERSION_DESCRIPTOR_URL, descriptors.get(0).getUrl());
+		assertTrue(descriptors.get(0).isOptional());
+		assertEquals(FOLDER_VERSION_DESCRIPTOR_URL, descriptors.get(1).getUrl());
+		assertTrue(descriptors.get(1).isOptional());
+		assertEquals(MAIN_DESCRIPTOR_URL, descriptors.get(2).getUrl());
+		assertFalse(descriptors.get(2).isOptional());
+	}
 
-    private void setUpTestStrategy() {
-        strategy = new InheritVersionsMergeStrategy();
-    }
+	private void setUpTestStrategy() {
+		strategy = new InheritVersionsMergeStrategy();
+	}
 
 }

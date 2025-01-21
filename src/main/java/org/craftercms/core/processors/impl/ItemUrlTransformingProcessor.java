@@ -30,28 +30,28 @@ import org.craftercms.core.url.UrlTransformationEngine;
  */
 public class ItemUrlTransformingProcessor implements ItemProcessor {
 
-    protected String transformedUrlPropName;
-    protected String transformerName;
-    protected UrlTransformationEngine urlTransformationEngine;
+	protected String transformedUrlPropName;
+	protected String transformerName;
+	protected UrlTransformationEngine urlTransformationEngine;
 
-    public ItemUrlTransformingProcessor(String transformedUrlPropName, String transformerName, UrlTransformationEngine urlTransformationEngine) {
-        this.transformedUrlPropName = transformedUrlPropName;
-        this.transformerName = transformerName;
-        this.urlTransformationEngine = urlTransformationEngine;
-    }
+	public ItemUrlTransformingProcessor(String transformedUrlPropName, String transformerName, UrlTransformationEngine urlTransformationEngine) {
+		this.transformedUrlPropName = transformedUrlPropName;
+		this.transformerName = transformerName;
+		this.urlTransformationEngine = urlTransformationEngine;
+	}
 
-    @Override
-    public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
-        String transformedUrl = urlTransformationEngine.transformUrl(context, transformerName, item.getUrl());
-        item.setProperty(transformedUrlPropName, transformedUrl);
+	@Override
+	public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
+		String transformedUrl = urlTransformationEngine.transformUrl(context, transformerName, item.getUrl());
+		item.setProperty(transformedUrlPropName, transformedUrl);
 
-        return item;
-    }
+		return item;
+	}
 
-    @Override
-    public String toString() {
-        return "ItemUrlTransformingProcessor[" + "transformedUrlPropName='" + transformedUrlPropName + '\'' + ", " +
-            "transformerName='" + transformerName + '\'' + ", urlTransformationEngine=" + urlTransformationEngine + ']';
-    }
+	@Override
+	public String toString() {
+		return "ItemUrlTransformingProcessor[" + "transformedUrlPropName='" + transformedUrlPropName + '\'' + ", " +
+			"transformerName='" + transformerName + '\'' + ", urlTransformationEngine=" + urlTransformationEngine + ']';
+	}
 
 }

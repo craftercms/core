@@ -28,24 +28,24 @@ import static org.junit.Assert.assertEquals;
  */
 public class LongToShortUrlTransformerTest {
 
-    private static final String LONG_URL = "/001_folder/002_subfolder/003_index.html/";
-    private static final String SHORT_URL = "/folder/subfolder/index.html/";
+	private static final String LONG_URL = "/001_folder/002_subfolder/003_index.html/";
+	private static final String SHORT_URL = "/folder/subfolder/index.html/";
 
-    private LongToShortUrlTransformer transformer;
+	private LongToShortUrlTransformer transformer;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestTransformer();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestTransformer();
+	}
 
-    @Test
-    public void testTransformer() throws Exception {
-        String transformedUrl = transformer.transformUrl(null, null, LONG_URL);
-        assertEquals(SHORT_URL, transformedUrl);
-    }
+	@Test
+	public void testTransformer() throws Exception {
+		String transformedUrl = transformer.transformUrl(null, null, LONG_URL);
+		assertEquals(SHORT_URL, transformedUrl);
+	}
 
-    private void setUpTestTransformer() {
-        transformer = new LongToShortUrlTransformer();
-    }
+	private void setUpTestTransformer() {
+		transformer = new LongToShortUrlTransformer();
+	}
 
 }

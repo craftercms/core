@@ -27,18 +27,18 @@ import org.craftercms.core.util.generators.TimestampGenerator;
  */
 public class IncrementalTimestampGenerator implements TimestampGenerator {
 
-    private AtomicLong counter;
+	private AtomicLong counter;
 
-    public IncrementalTimestampGenerator() {
-        counter = new AtomicLong(0);
-    }
+	public IncrementalTimestampGenerator() {
+		counter = new AtomicLong(0);
+	}
 
-    /**
-     * Returns increments of a counter as timestamps.
-     *
-     * @return the timestamp
-     */
-    public long generate() {
-        return counter.getAndIncrement();
-    }
+	/**
+	 * Returns increments of a counter as timestamps.
+	 *
+	 * @return the timestamp
+	 */
+	public long generate() {
+		return counter.getAndIncrement();
+	}
 }

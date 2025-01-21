@@ -34,33 +34,33 @@ import org.craftercms.core.util.cache.CacheTemplate;
  */
 public class UrlTransformationEngineImpl extends AbstractCachedUrlTransformationEngine {
 
-    private static final Log logger = LogFactory.getLog(UrlTransformationEngineImpl.class);
+	private static final Log logger = LogFactory.getLog(UrlTransformationEngineImpl.class);
 
-    private Map<String, UrlTransformer> transformers;
+	private Map<String, UrlTransformer> transformers;
 
-    public UrlTransformationEngineImpl(Map<String, UrlTransformer> transformers, CacheTemplate cacheTemplate) {
-        super(cacheTemplate);
-        this.transformers = transformers;
-    }
+	public UrlTransformationEngineImpl(Map<String, UrlTransformer> transformers, CacheTemplate cacheTemplate) {
+		super(cacheTemplate);
+		this.transformers = transformers;
+	}
 
-    @Override
-    protected String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName,
-                                    String url) throws UrlTransformationException {
-        UrlTransformer transformer = transformers.get(transformerName);
-        if (transformer == null) {
-            throw new UrlTransformationException("Url transformer " + transformerName + " not found");
-        }
+	@Override
+	protected String doTransformUrl(Context context, CachingOptions cachingOptions, String transformerName,
+					String url) throws UrlTransformationException {
+		UrlTransformer transformer = transformers.get(transformerName);
+		if (transformer == null) {
+			throw new UrlTransformationException("Url transformer " + transformerName + " not found");
+		}
 
-        String result = transformer.transformUrl(context, cachingOptions, url);
-        if (StringUtils.isEmpty(result)) {
-            result = "/";
-        }
+		String result = transformer.transformUrl(context, cachingOptions, url);
+		if (StringUtils.isEmpty(result)) {
+			result = "/";
+		}
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Transformation in: " + url + ", Transformation out: " + result);
-        }
+		if (logger.isDebugEnabled()) {
+			logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 }

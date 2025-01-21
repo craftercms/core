@@ -31,48 +31,48 @@ import java.io.StringWriter;
  */
 public class FreemarkerStringTemplateCompilerTest {
 
-    private static final Person model = new Person("John", "Doe");
+	private static final Person model = new Person("John", "Doe");
 
-    private static final String TEMPLATE = "Hello ${firstName} ${lastName}!";
-    private static final String PROCESSED_TEMPLATE = "Hello " + model.getFirstName() + " " + model.getLastName() + "!";
+	private static final String TEMPLATE = "Hello ${firstName} ${lastName}!";
+	private static final String PROCESSED_TEMPLATE = "Hello " + model.getFirstName() + " " + model.getLastName() + "!";
 
-    private FreeMarkerStringTemplateCompiler compiler;
+	private FreeMarkerStringTemplateCompiler compiler;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestCompiler();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestCompiler();
+	}
 
-    @Test
-    public void testCompiler() throws Exception {
-        StringWriter output = new StringWriter();
+	@Test
+	public void testCompiler() throws Exception {
+		StringWriter output = new StringWriter();
 
-        compiler.compile(new IdentifiableStringTemplateSource("template", TEMPLATE)).process(model, output);
-        assertEquals(PROCESSED_TEMPLATE, output.toString());
-    }
+		compiler.compile(new IdentifiableStringTemplateSource("template", TEMPLATE)).process(model, output);
+		assertEquals(PROCESSED_TEMPLATE, output.toString());
+	}
 
-    private void setUpTestCompiler() {
-        compiler = new FreeMarkerStringTemplateCompiler();
-    }
+	private void setUpTestCompiler() {
+		compiler = new FreeMarkerStringTemplateCompiler();
+	}
 
-    public static class Person {
+	public static class Person {
 
-        private String firstName;
-        private String lastName;
+		private String firstName;
+		private String lastName;
 
-        private Person(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
+		private Person(String firstName, String lastName) {
+			this.firstName = firstName;
+			this.lastName = lastName;
+		}
 
-        public String getFirstName() {
-            return firstName;
-        }
+		public String getFirstName() {
+			return firstName;
+		}
 
-        public String getLastName() {
-            return lastName;
-        }
+		public String getLastName() {
+			return lastName;
+		}
 
-    }
+	}
 
 }

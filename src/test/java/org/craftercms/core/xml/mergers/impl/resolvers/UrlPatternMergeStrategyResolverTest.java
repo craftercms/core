@@ -33,42 +33,42 @@ import java.util.Map;
  */
 public class UrlPatternMergeStrategyResolverTest {
 
-    private static final String DESCRIPTOR_URL_PATTERN1 = ".*\\.strategy1\\.xml";
-    private static final String DESCRIPTOR_URL_PATTERN2 = ".*\\.strategy2\\.xml";
+	private static final String DESCRIPTOR_URL_PATTERN1 = ".*\\.strategy1\\.xml";
+	private static final String DESCRIPTOR_URL_PATTERN2 = ".*\\.strategy2\\.xml";
 
-    private static final String DESCRIPTOR_URL1 = "/descriptor.strategy1.xml";
-    private static final String DESCRIPTOR_URL2 = "/descriptor.strategy2.xml";
+	private static final String DESCRIPTOR_URL1 = "/descriptor.strategy1.xml";
+	private static final String DESCRIPTOR_URL2 = "/descriptor.strategy2.xml";
 
-    private UrlPatternMergeStrategyResolver resolver;
-    private DescriptorMergeStrategy strategy1;
-    private DescriptorMergeStrategy strategy2;
+	private UrlPatternMergeStrategyResolver resolver;
+	private DescriptorMergeStrategy strategy1;
+	private DescriptorMergeStrategy strategy2;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestStrategies();
-        setUpTestResolver();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestStrategies();
+		setUpTestResolver();
+	}
 
-    @Test
-    public void testGetStrategy() throws Exception {
-        DescriptorMergeStrategy strategy = resolver.getStrategy(DESCRIPTOR_URL1, null);
-        assertSame(strategy1, strategy);
+	@Test
+	public void testGetStrategy() throws Exception {
+		DescriptorMergeStrategy strategy = resolver.getStrategy(DESCRIPTOR_URL1, null);
+		assertSame(strategy1, strategy);
 
-        strategy = resolver.getStrategy(DESCRIPTOR_URL2, null);
-        assertSame(strategy2, strategy);
-    }
+		strategy = resolver.getStrategy(DESCRIPTOR_URL2, null);
+		assertSame(strategy2, strategy);
+	}
 
-    private void setUpTestStrategies() {
-        strategy1 = mock(DescriptorMergeStrategy.class);
-        strategy2 = mock(DescriptorMergeStrategy.class);
-    }
+	private void setUpTestStrategies() {
+		strategy1 = mock(DescriptorMergeStrategy.class);
+		strategy2 = mock(DescriptorMergeStrategy.class);
+	}
 
-    private void setUpTestResolver() {
-        Map<String, DescriptorMergeStrategy> strategies = new HashMap<String, DescriptorMergeStrategy>();
-        strategies.put(DESCRIPTOR_URL_PATTERN1, strategy1);
-        strategies.put(DESCRIPTOR_URL_PATTERN2, strategy2);
+	private void setUpTestResolver() {
+		Map<String, DescriptorMergeStrategy> strategies = new HashMap<String, DescriptorMergeStrategy>();
+		strategies.put(DESCRIPTOR_URL_PATTERN1, strategy1);
+		strategies.put(DESCRIPTOR_URL_PATTERN2, strategy2);
 
-        resolver = new UrlPatternMergeStrategyResolver(strategies);
-    }
+		resolver = new UrlPatternMergeStrategyResolver(strategies);
+	}
 
 }

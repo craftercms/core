@@ -31,52 +31,52 @@ import org.dom4j.Node;
  */
 public class XPathNodeScanner implements NodeScanner {
 
-    protected String[] xpathQueries;
+	protected String[] xpathQueries;
 
-    public XPathNodeScanner(String... xpathQueries) {
-        this.xpathQueries = xpathQueries;
-    }
+	public XPathNodeScanner(String... xpathQueries) {
+		this.xpathQueries = xpathQueries;
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Node> scan(Document document) throws XmlException {
-        try {
-            List<Node> nodes = new ArrayList<Node>();
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Node> scan(Document document) throws XmlException {
+		try {
+			List<Node> nodes = new ArrayList<Node>();
 
-            for (String xpathQuery : xpathQueries) {
-                List<Node> queryResult = document.selectNodes(xpathQuery);
-                if (CollectionUtils.isNotEmpty(queryResult)) {
-                    nodes.addAll(queryResult);
-                }
-            }
+			for (String xpathQuery : xpathQueries) {
+				List<Node> queryResult = document.selectNodes(xpathQuery);
+				if (CollectionUtils.isNotEmpty(queryResult)) {
+					nodes.addAll(queryResult);
+				}
+			}
 
-            return nodes;
-        } catch (Exception e) {
-            throw new XmlException(xpathQueries + " query failed", e);
-        }
-    }
+			return nodes;
+		} catch (Exception e) {
+			throw new XmlException(xpathQueries + " query failed", e);
+		}
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        XPathNodeScanner that = (XPathNodeScanner)o;
+		XPathNodeScanner that = (XPathNodeScanner) o;
 
-        if (!xpathQueries.equals(that.xpathQueries)) {
-            return false;
-        }
+		if (!xpathQueries.equals(that.xpathQueries)) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-        return xpathQueries.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return xpathQueries.hashCode();
+	}
 
 }

@@ -16,357 +16,357 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-    <context:annotation-config/>
+		<context:annotation-config/>
 
-    <!-- ////////////////////////////////////////////////// -->
-    <!-- //////////////////// CACHE /////////////////////// -->
-    <!-- ////////////////////////////////////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
+		<!-- //////////////////// CACHE /////////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
 
-    <bean id="cacheService" class="org.craftercms.core.service.impl.CacheServiceImpl">
-        <constructor-arg name="cache">
-            <bean class="org.craftercms.core.cache.impl.CacheImpl">
-                <constructor-arg name="cacheStoreAdapter">
-                    <bean class="org.craftercms.core.cache.impl.store.MapCacheStoreAdapter"/>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-    </bean>
+		<bean id="cacheService" class="org.craftercms.core.service.impl.CacheServiceImpl">
+				<constructor-arg name="cache">
+						<bean class="org.craftercms.core.cache.impl.CacheImpl">
+								<constructor-arg name="cacheStoreAdapter">
+										<bean class="org.craftercms.core.cache.impl.store.MapCacheStoreAdapter"/>
+								</constructor-arg>
+						</bean>
+				</constructor-arg>
+		</bean>
 
-    <bean id="cacheTemplate" class="org.craftercms.core.util.cache.impl.DefaultCacheTemplate">
-        <constructor-arg name="cacheService" ref="cacheService"/>
-    </bean>
+		<bean id="cacheTemplate" class="org.craftercms.core.util.cache.impl.DefaultCacheTemplate">
+				<constructor-arg name="cacheService" ref="cacheService"/>
+		</bean>
 
-    <!-- ////////////////////////////////////////////////// -->
-    <!-- ////////////// CONTENT STORE ADAPTER ///////////// -->
-    <!-- ////////////////////////////////////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
+		<!-- ////////////// CONTENT STORE ADAPTER ///////////// -->
+		<!-- ////////////////////////////////////////////////// -->
 
-    <bean id="crafter.contentStoreAdapter.filesystem"
-          class="org.craftercms.core.store.impl.filesystem.FileSystemContentStoreAdapter">
-        <constructor-arg name="pathValidator">
-            <bean class="org.craftercms.commons.validation.validators.impl.SecurePathValidator">
-            </bean>
-        </constructor-arg>
-        <constructor-arg name="descriptorFileExtension" value=".xml"/>
-        <constructor-arg name="metadataFileExtension" value=".meta.xml"/>
-        <constructor-arg name="cacheTemplate" ref="cacheTemplate"/>
-    </bean>
+		<bean id="crafter.contentStoreAdapter.filesystem"
+			  class="org.craftercms.core.store.impl.filesystem.FileSystemContentStoreAdapter">
+				<constructor-arg name="pathValidator">
+						<bean class="org.craftercms.commons.validation.validators.impl.SecurePathValidator">
+						</bean>
+				</constructor-arg>
+				<constructor-arg name="descriptorFileExtension" value=".xml"/>
+				<constructor-arg name="metadataFileExtension" value=".meta.xml"/>
+				<constructor-arg name="cacheTemplate" ref="cacheTemplate"/>
+		</bean>
 
-    <bean id="contentStoreAdapterRegistry" class="org.craftercms.core.store.impl.ContentStoreAdapterRegistryImpl" >
-        <constructor-arg name="adapters">
-            <map>
-                <entry key="filesystem" value-ref="crafter.contentStoreAdapter.filesystem"/>
-            </map>
-        </constructor-arg>
-    </bean>
+		<bean id="contentStoreAdapterRegistry" class="org.craftercms.core.store.impl.ContentStoreAdapterRegistryImpl">
+				<constructor-arg name="adapters">
+						<map>
+								<entry key="filesystem" value-ref="crafter.contentStoreAdapter.filesystem"/>
+						</map>
+				</constructor-arg>
+		</bean>
 
-    <!-- ////////////////////////////////////////////////// -->
-    <!-- ///////////////////// MERGER ///////////////////// -->
-    <!-- ////////////////////////////////////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
+		<!-- ///////////////////// MERGER ///////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
 
-    <!-- Strategies -->
+		<!-- Strategies -->
 
-    <bean id="singleFileMergeStrategy" class="org.craftercms.core.xml.mergers.impl.strategies.SingleFileMergeStrategy"/>
+		<bean id="singleFileMergeStrategy" class="org.craftercms.core.xml.mergers.impl.strategies.SingleFileMergeStrategy"/>
 
-    <bean id="inheritLevelsMergeStrategy" class="org.craftercms.core.xml.mergers.impl.strategies.InheritLevelsMergeStrategy">
-        <constructor-arg name="levelDescriptorFileName" value="crafter-level-descriptor.level.xml"/>
-    </bean>
+		<bean id="inheritLevelsMergeStrategy" class="org.craftercms.core.xml.mergers.impl.strategies.InheritLevelsMergeStrategy">
+				<constructor-arg name="levelDescriptorFileName" value="crafter-level-descriptor.level.xml"/>
+		</bean>
 
-    <bean id="contentBundleMergeStrategy"
-          class="org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategy">
-        <constructor-arg name="urlParser">
-            <bean class="org.craftercms.core.util.url.impl.RegexBasedContentBundleUrlParser">
-                <constructor-arg name="prefixGroup" value="1"/>
-                <constructor-arg name="baseNameAndExtensionTokenGroup" value="2"/>
-                <constructor-arg name="suffixGroup" value="3"/>
-                <constructor-arg name="pattern" value="^(.*/)(content[^/]*)(/.*)$"/>
-            </bean>
-        </constructor-arg>
-        <constructor-arg name="baseDelimiter">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategyTest.BASE_DELIMITER"/>
-        </constructor-arg>
-        <constructor-arg name="regularMergeStrategy" ref="inheritLevelsMergeStrategy"/>
-        <property name="baseMergeStrategyResolver" ref="metaDataMergeStrategyResolver"/>
-    </bean>
+		<bean id="contentBundleMergeStrategy"
+			  class="org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategy">
+				<constructor-arg name="urlParser">
+						<bean class="org.craftercms.core.util.url.impl.RegexBasedContentBundleUrlParser">
+								<constructor-arg name="prefixGroup" value="1"/>
+								<constructor-arg name="baseNameAndExtensionTokenGroup" value="2"/>
+								<constructor-arg name="suffixGroup" value="3"/>
+								<constructor-arg name="pattern" value="^(.*/)(content[^/]*)(/.*)$"/>
+						</bean>
+				</constructor-arg>
+				<constructor-arg name="baseDelimiter">
+						<util:constant static-field="org.craftercms.core.xml.mergers.impl.strategies.ContentBundleMergeStrategyTest.BASE_DELIMITER"/>
+				</constructor-arg>
+				<constructor-arg name="regularMergeStrategy" ref="inheritLevelsMergeStrategy"/>
+				<property name="baseMergeStrategyResolver" ref="metaDataMergeStrategyResolver"/>
+		</bean>
 
-    <!-- Strategy Resolvers -->
+		<!-- Strategy Resolvers -->
 
-    <bean id="metaDataMergeStrategyResolver"
-          class="org.craftercms.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolver">
-        <constructor-arg name="mergeStrategyElementXPathQuery">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolverTest.MERGE_STRATEGY_ELEMENT_XPATH_QUERY"/>
-        </constructor-arg>
-        <property name="elementValueToStrategyMappings">
-            <map>
-                <entry key="single-file" value-ref="singleFileMergeStrategy"/>
-                <entry key="inherit-levels" value-ref="inheritLevelsMergeStrategy"/>
-                <entry key="content-bundle" value-ref="contentBundleMergeStrategy"/>
-            </map>
-        </property>
-    </bean>
+		<bean id="metaDataMergeStrategyResolver"
+			  class="org.craftercms.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolver">
+				<constructor-arg name="mergeStrategyElementXPathQuery">
+						<util:constant static-field="org.craftercms.core.xml.mergers.impl.resolvers.MetaDataMergeStrategyResolverTest.MERGE_STRATEGY_ELEMENT_XPATH_QUERY"/>
+				</constructor-arg>
+				<property name="elementValueToStrategyMappings">
+						<map>
+								<entry key="single-file" value-ref="singleFileMergeStrategy"/>
+								<entry key="inherit-levels" value-ref="inheritLevelsMergeStrategy"/>
+								<entry key="content-bundle" value-ref="contentBundleMergeStrategy"/>
+						</map>
+				</property>
+		</bean>
 
-    <bean id="mergeStrategyResolverChain"
-          class="org.craftercms.core.xml.mergers.impl.resolvers.DescriptorMergeStrategyResolverChain">
-        <constructor-arg name="defaultStrategy" ref="singleFileMergeStrategy"/>
-        <property name="resolvers">
-            <list>
-                <ref bean="metaDataMergeStrategyResolver"/>
-            </list>
-        </property>
-    </bean>
+		<bean id="mergeStrategyResolverChain"
+			  class="org.craftercms.core.xml.mergers.impl.resolvers.DescriptorMergeStrategyResolverChain">
+				<constructor-arg name="defaultStrategy" ref="singleFileMergeStrategy"/>
+				<property name="resolvers">
+						<list>
+								<ref bean="metaDataMergeStrategyResolver"/>
+						</list>
+				</property>
+		</bean>
 
-    <!-- Merger -->
+		<!-- Merger -->
 
-    <bean id="abstractMergeParentAndChildMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCue"
-          abstract="true">
-        <constructor-arg name="elementMergeMatcher">
-            <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.ElementMergeMatcherImpl">
-                <constructor-arg name="idAttributeName">
-                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.ID_ATTR_NAME"/>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-        <constructor-arg name="mergeOrderParamName">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME"/>
-        </constructor-arg>
-        <constructor-arg name="defaultMergeOrder">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER"/>
-        </constructor-arg>
-        <constructor-arg name="priority">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.DEFAULT_MERGE_PRIORITY"/>
-        </constructor-arg>
-        <property name="mergeCueResolver" ref="mergeCueResolver"/>
-    </bean>
+		<bean id="abstractMergeParentAndChildMergeCue"
+			  class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCue"
+			  abstract="true">
+				<constructor-arg name="elementMergeMatcher">
+						<bean class="org.craftercms.core.xml.mergers.impl.cues.impl.ElementMergeMatcherImpl">
+								<constructor-arg name="idAttributeName">
+										<util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.ID_ATTR_NAME"/>
+								</constructor-arg>
+						</bean>
+				</constructor-arg>
+				<constructor-arg name="mergeOrderParamName">
+						<util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.MERGE_ORDER_PARAM_NAME"/>
+				</constructor-arg>
+				<constructor-arg name="defaultMergeOrder">
+						<util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.DEFAULT_MERGE_ORDER"/>
+				</constructor-arg>
+				<constructor-arg name="priority">
+						<util:constant static-field="org.craftercms.core.xml.mergers.impl.cues.impl.MergeParentAndChildMergeCueTest.DEFAULT_MERGE_PRIORITY"/>
+				</constructor-arg>
+				<property name="mergeCueResolver" ref="mergeCueResolver"/>
+		</bean>
 
-    <bean id="overrideParentMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
-        <constructor-arg name="priority">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.OVERRIDE_PARENT_MERGE_CUE_PRIORITY"/>
-        </constructor-arg>
-    </bean>
+		<bean id="overrideParentMergeCue"
+			  class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildMergeCue">
+				<constructor-arg name="priority">
+						<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.OVERRIDE_PARENT_MERGE_CUE_PRIORITY"/>
+				</constructor-arg>
+		</bean>
 
-    <bean id="disallowOverrideMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
-        <constructor-arg name="priority">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY"/>
-        </constructor-arg>
-    </bean>
+		<bean id="disallowOverrideMergeCue"
+			  class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
+				<constructor-arg name="priority">
+						<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DISALLOW_OVERRIDE_MERGE_CUE_PRIORITY"/>
+				</constructor-arg>
+		</bean>
 
-    <bean id="useParentMergeCue"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
-        <constructor-arg name="priority">
-            <util:constant
-                    static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_MERGE_CUE_PRIORITY"/>
-        </constructor-arg>
-    </bean>
+		<bean id="useParentMergeCue"
+			  class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentMergeCue">
+				<constructor-arg name="priority">
+						<util:constant
+								static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_MERGE_CUE_PRIORITY"/>
+				</constructor-arg>
+		</bean>
 
-    <bean id="mergeWithParentMergeCue" parent="abstractMergeParentAndChildMergeCue">
-        <property name="priority">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_PARENT_MERGE_CUE_PRIORITY"/>
-        </property>
-    </bean>
+		<bean id="mergeWithParentMergeCue" parent="abstractMergeParentAndChildMergeCue">
+				<property name="priority">
+						<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_PARENT_MERGE_CUE_PRIORITY"/>
+				</property>
+		</bean>
 
-    <bean id="mergeWithChildMergeCue" parent="abstractMergeParentAndChildMergeCue">
-        <property name="priority">
-            <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_CHILD_MERGE_CUE_PRIORITY"/>
-        </property>
-    </bean>
+		<bean id="mergeWithChildMergeCue" parent="abstractMergeParentAndChildMergeCue">
+				<property name="priority">
+						<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_CHILD_MERGE_CUE_PRIORITY"/>
+				</property>
+		</bean>
 
-    <bean id="mergeCueResolver"
-          class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeCueResolverImpl">
-        <property name="parentMergeCues">
-            <map>
-                <entry>
-                    <key>
-                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME"/>
-                    </key>
-                    <ref bean="disallowOverrideMergeCue"/>
-                </entry>
-                <entry>
-                    <key>
-                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME"/>
-                    </key>
-                    <ref bean="mergeWithChildMergeCue"/>
-                </entry>
-            </map>
-        </property>
-        <property name="childMergeCues">
-            <map>
-                <entry>
-                    <key>
-                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME"/>
-                    </key>
-                    <ref bean="overrideParentMergeCue"/>
-                </entry>
-                <entry>
-                    <key>
-                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_MERGE_CUE_ATTR_NAME"/>
-                    </key>
-                    <ref bean="useParentMergeCue"/>
-                </entry>
-                <entry>
-                    <key>
-                        <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME"/>
-                    </key>
-                    <ref bean="mergeWithParentMergeCue"/>
-                </entry>
-            </map>
-        </property>
-        <property name="defaultParentMergeCue">
-            <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentIfNotEmptyMergeCue">
-                <constructor-arg name="priority">
-                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_PARENT_MERGE_CUE_PRIORITY"/>
-                </constructor-arg>
-            </bean>
-        </property>
-        <property name="defaultChildMergeCue">
-            <bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildIfNotEmptyMergeCue">
-                <constructor-arg name="priority">
-                    <util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_CHILD_MERGE_CUE_PRIORITY"/>
-                </constructor-arg>
-            </bean>
-        </property>
-    </bean>
+		<bean id="mergeCueResolver"
+			  class="org.craftercms.core.xml.mergers.impl.cues.impl.MergeCueResolverImpl">
+				<property name="parentMergeCues">
+						<map>
+								<entry>
+										<key>
+												<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DISALLOW_OVERRIDE_MERGE_CUE_ATTR_NAME"/>
+										</key>
+										<ref bean="disallowOverrideMergeCue"/>
+								</entry>
+								<entry>
+										<key>
+												<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_CHILD_MERGE_CUE_ATTR_NAME"/>
+										</key>
+										<ref bean="mergeWithChildMergeCue"/>
+								</entry>
+						</map>
+				</property>
+				<property name="childMergeCues">
+						<map>
+								<entry>
+										<key>
+												<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.OVERRIDE_PARENT_MERGE_CUE_ATTR_NAME"/>
+										</key>
+										<ref bean="overrideParentMergeCue"/>
+								</entry>
+								<entry>
+										<key>
+												<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.USE_PARENT_MERGE_CUE_ATTR_NAME"/>
+										</key>
+										<ref bean="useParentMergeCue"/>
+								</entry>
+								<entry>
+										<key>
+												<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.MERGE_WITH_PARENT_MERGE_CUE_ATTR_NAME"/>
+										</key>
+										<ref bean="mergeWithParentMergeCue"/>
+								</entry>
+						</map>
+				</property>
+				<property name="defaultParentMergeCue">
+						<bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseParentIfNotEmptyMergeCue">
+								<constructor-arg name="priority">
+										<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_PARENT_MERGE_CUE_PRIORITY"/>
+								</constructor-arg>
+						</bean>
+				</property>
+				<property name="defaultChildMergeCue">
+						<bean class="org.craftercms.core.xml.mergers.impl.cues.impl.UseChildIfNotEmptyMergeCue">
+								<constructor-arg name="priority">
+										<util:constant static-field="org.craftercms.core.xml.mergers.impl.DescriptorMergerImplTest.DEFAULT_CHILD_MERGE_CUE_PRIORITY"/>
+								</constructor-arg>
+						</bean>
+				</property>
+		</bean>
 
-    <bean id="merger" class="org.craftercms.core.xml.mergers.impl.DescriptorMergerImpl">
-        <constructor-arg name="initialMergeCue" ref="mergeWithChildMergeCue"/>
-    </bean>
+		<bean id="merger" class="org.craftercms.core.xml.mergers.impl.DescriptorMergerImpl">
+				<constructor-arg name="initialMergeCue" ref="mergeWithChildMergeCue"/>
+		</bean>
 
-    <!-- ////////////////////////////////////////////////// -->
-    <!-- /////////////////// PROCESSORS /////////////////// -->
-    <!-- ////////////////////////////////////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
+		<!-- /////////////////// PROCESSORS /////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
 
-    <bean id="includeDescriptorsProcessor" class="org.craftercms.core.processors.impl.IncludeDescriptorsProcessor">
-        <constructor-arg name="includeElementXPathQuery">
-            <util:constant static-field="org.craftercms.core.processors.impl.IncludeDescriptorsProcessorTest.INCLUDE_ELEM_XPATH_QUERY"/>
-        </constructor-arg>
-        <constructor-arg name="disabledIncludeNodeXPathQuery">
-            <util:constant static-field="org.craftercms.core.processors.impl.IncludeDescriptorsProcessorTest.DISABLED_INCLUDE_NODE_XPATH_QUERY"/>
-        </constructor-arg>
-        <property name="contentStoreService" ref="contentStoreService"/>
-    </bean>
+		<bean id="includeDescriptorsProcessor" class="org.craftercms.core.processors.impl.IncludeDescriptorsProcessor">
+				<constructor-arg name="includeElementXPathQuery">
+						<util:constant static-field="org.craftercms.core.processors.impl.IncludeDescriptorsProcessorTest.INCLUDE_ELEM_XPATH_QUERY"/>
+				</constructor-arg>
+				<constructor-arg name="disabledIncludeNodeXPathQuery">
+						<util:constant static-field="org.craftercms.core.processors.impl.IncludeDescriptorsProcessorTest.DISABLED_INCLUDE_NODE_XPATH_QUERY"/>
+				</constructor-arg>
+				<property name="contentStoreService" ref="contentStoreService"/>
+		</bean>
 
-    <bean id="templateNodeScanner" class="org.craftercms.core.util.xml.impl.RegexNodeScanner">
-        <constructor-arg name="patterns" value="\#\{"/>
-        <property name="matchEntireNodeText" value="false"/>
-    </bean>
+		<bean id="templateNodeScanner" class="org.craftercms.core.util.xml.impl.RegexNodeScanner">
+				<constructor-arg name="patterns" value="\#\{"/>
+				<property name="matchEntireNodeText" value="false"/>
+		</bean>
 
-    <bean id="templateCompiler" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler"/>
+		<bean id="templateCompiler" class="org.craftercms.core.util.template.impl.spel.SpELStringTemplateCompiler"/>
 
-    <bean id="modelFactory" class="org.craftercms.core.processors.impl.template.BeanFactoryModelFactory"/>
+		<bean id="modelFactory" class="org.craftercms.core.processors.impl.template.BeanFactoryModelFactory"/>
 
-    <bean id="templateProcessor" class="org.craftercms.core.processors.impl.template.TemplateProcessor">
-        <constructor-arg name="templateNodeScanner" ref="templateNodeScanner"/>
-        <constructor-arg name="templateCompiler" ref="templateCompiler"/>
-        <constructor-arg name="modelFactory" ref="modelFactory"/>
-    </bean>
+		<bean id="templateProcessor" class="org.craftercms.core.processors.impl.template.TemplateProcessor">
+				<constructor-arg name="templateNodeScanner" ref="templateNodeScanner"/>
+				<constructor-arg name="templateCompiler" ref="templateCompiler"/>
+				<constructor-arg name="modelFactory" ref="modelFactory"/>
+		</bean>
 
-    <bean id="systemInfoMetaDataExtractingProcessor"
-          class="org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor">
-        <constructor-arg name="metaDataNodesXPathQueries">
-            <list>
-                <value>//system-info/java-version</value>
-                <value>//system-info/os-name</value>
-                <value>//system-info/os-version</value>
-            </list>
-        </constructor-arg>
-    </bean>
+		<bean id="systemInfoMetaDataExtractingProcessor"
+			  class="org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor">
+				<constructor-arg name="metaDataNodesXPathQueries">
+						<list>
+								<value>//system-info/java-version</value>
+								<value>//system-info/os-name</value>
+								<value>//system-info/os-version</value>
+						</list>
+				</constructor-arg>
+		</bean>
 
-    <bean id="imageResolutionMetaDataExtractingProcessor"
-          class="org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor">
-        <constructor-arg name="metaDataNodesXPathQueries">
-            <list>
-                <value>//system-info/java-version</value>
-                <value>//system-info/os-name</value>
-                <value>//system-info/os-version</value>
-                <value>//resolution/width</value>
-                <value>//resolution/height</value>
-            </list>
-        </constructor-arg>
-    </bean>
+		<bean id="imageResolutionMetaDataExtractingProcessor"
+			  class="org.craftercms.core.processors.impl.TextMetaDataExtractingProcessor">
+				<constructor-arg name="metaDataNodesXPathQueries">
+						<list>
+								<value>//system-info/java-version</value>
+								<value>//system-info/os-name</value>
+								<value>//system-info/os-version</value>
+								<value>//resolution/width</value>
+								<value>//resolution/height</value>
+						</list>
+				</constructor-arg>
+		</bean>
 
-    <bean id="defaultProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
-        <constructor-arg name="processors">
-            <list>
-                <ref bean="includeDescriptorsProcessor"/>
-                <ref bean="templateProcessor"/>
-                <ref bean="systemInfoMetaDataExtractingProcessor"/>
-            </list>
-        </constructor-arg>
-    </bean>
+		<bean id="defaultProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
+				<constructor-arg name="processors">
+						<list>
+								<ref bean="includeDescriptorsProcessor"/>
+								<ref bean="templateProcessor"/>
+								<ref bean="systemInfoMetaDataExtractingProcessor"/>
+						</list>
+				</constructor-arg>
+		</bean>
 
-    <bean id="imageProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
-        <constructor-arg name="processors">
-            <list>
-                <ref bean="includeDescriptorsProcessor"/>
-                <ref bean="templateProcessor"/>
-                <ref bean="imageResolutionMetaDataExtractingProcessor"/>
-            </list>
-        </constructor-arg>
-    </bean>
+		<bean id="imageProcessorPipeline" class="org.craftercms.core.processors.impl.ItemProcessorPipeline">
+				<constructor-arg name="processors">
+						<list>
+								<ref bean="includeDescriptorsProcessor"/>
+								<ref bean="templateProcessor"/>
+								<ref bean="imageResolutionMetaDataExtractingProcessor"/>
+						</list>
+				</constructor-arg>
+		</bean>
 
-    <bean id="procesorResolver" class="org.craftercms.core.processors.impl.resolvers.MetaDataProcessorResolver">
-        <constructor-arg name="processorElementXPathQuery">
-            <util:constant static-field="org.craftercms.core.processors.impl.resolvers.MetaDataProcessorResolverTest.PROCESSOR_ELEMENT_XPATH_QUERY"/>
-        </constructor-arg>
-        <constructor-arg name="elementValueToProcessorMappings">
-            <map>
-                <entry key="default" value-ref="defaultProcessorPipeline"/>
-                <entry key="image" value-ref="imageProcessorPipeline" />
-            </map>
-        </constructor-arg>
-    </bean>
+		<bean id="procesorResolver" class="org.craftercms.core.processors.impl.resolvers.MetaDataProcessorResolver">
+				<constructor-arg name="processorElementXPathQuery">
+						<util:constant static-field="org.craftercms.core.processors.impl.resolvers.MetaDataProcessorResolverTest.PROCESSOR_ELEMENT_XPATH_QUERY"/>
+				</constructor-arg>
+				<constructor-arg name="elementValueToProcessorMappings">
+						<map>
+								<entry key="default" value-ref="defaultProcessorPipeline"/>
+								<entry key="image" value-ref="imageProcessorPipeline"/>
+						</map>
+				</constructor-arg>
+		</bean>
 
-    <bean id="procesorResolverChain" class="org.mockito.Mockito" factory-method="spy">
-        <constructor-arg>
-            <bean class="org.craftercms.core.processors.impl.resolvers.ItemProcessorResolverChain">
-                <constructor-arg name="defaultProcessor" ref="defaultProcessorPipeline"/>
-                <constructor-arg name="resolvers">
-                    <list>
-                        <ref bean="procesorResolver"/>
-                    </list>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-    </bean>
+		<bean id="procesorResolverChain" class="org.mockito.Mockito" factory-method="spy">
+				<constructor-arg>
+						<bean class="org.craftercms.core.processors.impl.resolvers.ItemProcessorResolverChain">
+								<constructor-arg name="defaultProcessor" ref="defaultProcessorPipeline"/>
+								<constructor-arg name="resolvers">
+										<list>
+												<ref bean="procesorResolver"/>
+										</list>
+								</constructor-arg>
+						</bean>
+				</constructor-arg>
+		</bean>
 
-    <!-- ////////////////////////////////////////////////// -->
-    <!-- //////////////////// BLOB STORE ////////////////// -->
-    <!-- ////////////////////////////////////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
+		<!-- //////////////////// BLOB STORE ////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
 
-    <bean id="blobUrlResolver" class="org.craftercms.commons.file.blob.impl.BlobUrlResolverImpl">
-        <constructor-arg name="fileExtension" value="blob"/>
-    </bean>
+		<bean id="blobUrlResolver" class="org.craftercms.commons.file.blob.impl.BlobUrlResolverImpl">
+				<constructor-arg name="fileExtension" value="blob"/>
+		</bean>
 
-    <bean id="blobStoreResolver" class="org.craftercms.commons.file.blob.impl.BlobStoreResolverImpl"/>
+		<bean id="blobStoreResolver" class="org.craftercms.commons.file.blob.impl.BlobStoreResolverImpl"/>
 
-    <!-- ////////////////////////////////////////////////// -->
-    <!-- ////////////// CONTENT STORE SERVICE ///////////// -->
-    <!-- ////////////////////////////////////////////////// -->
+		<!-- ////////////////////////////////////////////////// -->
+		<!-- ////////////// CONTENT STORE SERVICE ///////////// -->
+		<!-- ////////////////////////////////////////////////// -->
 
-    <bean id="contentStoreService" class="org.craftercms.core.service.impl.ContentStoreServiceImpl">
-        <constructor-arg name="cacheTemplate" ref="cacheTemplate"/>
-        <constructor-arg name="storeAdapterRegistry" ref="contentStoreAdapterRegistry"/>
-        <constructor-arg name="merger" ref="merger"/>
-        <constructor-arg name="processorResolver" ref="procesorResolverChain"/>
-        <constructor-arg name="mergeStrategyResolver" ref="mergeStrategyResolverChain"/>
+		<bean id="contentStoreService" class="org.craftercms.core.service.impl.ContentStoreServiceImpl">
+				<constructor-arg name="cacheTemplate" ref="cacheTemplate"/>
+				<constructor-arg name="storeAdapterRegistry" ref="contentStoreAdapterRegistry"/>
+				<constructor-arg name="merger" ref="merger"/>
+				<constructor-arg name="processorResolver" ref="procesorResolverChain"/>
+				<constructor-arg name="mergeStrategyResolver" ref="mergeStrategyResolverChain"/>
 
-        <constructor-arg name="blobUrlResolver" ref="blobUrlResolver"/>
-        <constructor-arg name="blobStoreResolver" ref="blobStoreResolver"/>
+				<constructor-arg name="blobUrlResolver" ref="blobUrlResolver"/>
+				<constructor-arg name="blobStoreResolver" ref="blobStoreResolver"/>
 
-        <constructor-arg name="sourceAttributeName" value="${crafter.core.store.source.attribute.name}"/>
-        <constructor-arg name="sourceTypeAttributeName" value="${crafter.core.store.source.type.attribute.name}"/>
-        <constructor-arg name="sourceTypeXPath" value="${crafter.core.store.source.type.xpath}"/>
+				<constructor-arg name="sourceAttributeName" value="${crafter.core.store.source.attribute.name}"/>
+				<constructor-arg name="sourceTypeAttributeName" value="${crafter.core.store.source.type.attribute.name}"/>
+				<constructor-arg name="sourceTypeXPath" value="${crafter.core.store.source.type.xpath}"/>
 
-        <constructor-arg name="sourceAttributeName" value="crafter-source"/>
-    </bean>
+				<constructor-arg name="sourceAttributeName" value="crafter-source"/>
+		</bean>
 
 </beans>

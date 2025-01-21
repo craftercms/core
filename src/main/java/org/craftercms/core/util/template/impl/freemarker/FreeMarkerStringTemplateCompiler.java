@@ -29,42 +29,42 @@ import org.craftercms.core.util.template.impl.freemarker.ConcurrentStringTemplat
  */
 public class FreeMarkerStringTemplateCompiler implements TemplateCompiler<IdentifiableStringTemplateSource> {
 
-    private Configuration templateConfiguration;
-    private ConcurrentStringTemplateLoader templateLoader;
+	private Configuration templateConfiguration;
+	private ConcurrentStringTemplateLoader templateLoader;
 
-    public FreeMarkerStringTemplateCompiler() {
-        templateLoader = new ConcurrentStringTemplateLoader();
+	public FreeMarkerStringTemplateCompiler() {
+		templateLoader = new ConcurrentStringTemplateLoader();
 
-        templateConfiguration = new Configuration(Configuration.VERSION_2_3_23);
-        templateConfiguration.setTemplateLoader(templateLoader);
-        // Don't wait to check whether a template was updated
-        templateConfiguration.setTemplateUpdateDelayMilliseconds(0);
-    }
+		templateConfiguration = new Configuration(Configuration.VERSION_2_3_23);
+		templateConfiguration.setTemplateLoader(templateLoader);
+		// Don't wait to check whether a template was updated
+		templateConfiguration.setTemplateUpdateDelayMilliseconds(0);
+	}
 
-    public void setTemplateConfiguration(Configuration templateConfiguration) {
-        this.templateConfiguration = templateConfiguration;
-    }
+	public void setTemplateConfiguration(Configuration templateConfiguration) {
+		this.templateConfiguration = templateConfiguration;
+	}
 
-    public void setTemplateLoader(ConcurrentStringTemplateLoader templateLoader) {
-        this.templateLoader = templateLoader;
-    }
+	public void setTemplateLoader(ConcurrentStringTemplateLoader templateLoader) {
+		this.templateLoader = templateLoader;
+	}
 
-    public CompiledTemplate compile(IdentifiableStringTemplateSource templateSource) throws TemplateException {
-        // Replace '/' with any other char because Freemarker messes up IDs with '/' because it thinks they're paths.
-        String id = templateSource.getId().replace('/', ';');
-        String source = templateSource.getSource();
+	public CompiledTemplate compile(IdentifiableStringTemplateSource templateSource) throws TemplateException {
+		// Replace '/' with any other char because Freemarker messes up IDs with '/' because it thinks they're paths.
+		String id = templateSource.getId().replace('/', ';');
+		String source = templateSource.getSource();
 
-        StringTemplateSource currentTemplateSource = (StringTemplateSource)templateLoader.findTemplateSource(id);
+		StringTemplateSource currentTemplateSource = (StringTemplateSource) templateLoader.findTemplateSource(id);
 
-        if (currentTemplateSource == null || !currentTemplateSource.getSource().equals(source)) {
-            templateLoader.putTemplateSource(id, source);
-        }
+		if (currentTemplateSource == null || !currentTemplateSource.getSource().equals(source)) {
+			templateLoader.putTemplateSource(id, source);
+		}
 
-        try {
-            return new FreeMarkerCompiledTemplate(templateConfiguration.getTemplate(id));
-        } catch (Exception e) {
-            throw new TemplateException("Unable to compile Freemarker template:\n" + source, e);
-        }
-    }
+		try {
+			return new FreeMarkerCompiledTemplate(templateConfiguration.getTemplate(id));
+		} catch (Exception e) {
+			throw new TemplateException("Unable to compile Freemarker template:\n" + source, e);
+		}
+	}
 
 }

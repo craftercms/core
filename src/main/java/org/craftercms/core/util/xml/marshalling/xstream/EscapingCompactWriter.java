@@ -27,44 +27,44 @@ import com.thoughtworks.xstream.io.naming.NameCoder;
  */
 public class EscapingCompactWriter extends com.thoughtworks.xstream.io.xml.CompactWriter {
 
-    protected boolean escapeXml;
+	protected boolean escapeXml;
 
-    public EscapingCompactWriter(Writer writer) {
-        super(writer);
-    }
+	public EscapingCompactWriter(Writer writer) {
+		super(writer);
+	}
 
-    public EscapingCompactWriter(Writer writer, int mode) {
-        super(writer, mode);
-    }
+	public EscapingCompactWriter(Writer writer, int mode) {
+		super(writer, mode);
+	}
 
-    public EscapingCompactWriter(Writer writer, NameCoder nameCoder) {
-        super(writer, nameCoder);
-    }
+	public EscapingCompactWriter(Writer writer, NameCoder nameCoder) {
+		super(writer, nameCoder);
+	}
 
-    public EscapingCompactWriter(Writer writer, int mode, NameCoder nameCoder) {
-        super(writer, mode, nameCoder);
-    }
+	public EscapingCompactWriter(Writer writer, int mode, NameCoder nameCoder) {
+		super(writer, mode, nameCoder);
+	}
 
-    public void setEscapeXml(boolean escapeXml) {
-        this.escapeXml = escapeXml;
-    }
+	public void setEscapeXml(boolean escapeXml) {
+		this.escapeXml = escapeXml;
+	}
 
-    @Override
-    protected void writeText(QuickWriter writer, String text) {
-        if (escapeXml) {
-            super.writeText(writer, text);
-        } else {
-            writer.write(text);
-        }
-    }
+	@Override
+	protected void writeText(QuickWriter writer, String text) {
+		if (escapeXml) {
+			super.writeText(writer, text);
+		} else {
+			writer.write(text);
+		}
+	}
 
-    @Override
-    protected void writeAttributeValue(QuickWriter writer, String text) {
-        if (escapeXml) {
-            super.writeAttributeValue(writer, text);
-        } else {
-            writer.write(text);
-        }
-    }
+	@Override
+	protected void writeAttributeValue(QuickWriter writer, String text) {
+		if (escapeXml) {
+			super.writeAttributeValue(writer, text);
+		} else {
+			writer.write(text);
+		}
+	}
 
 }

@@ -23,21 +23,21 @@ package org.craftercms.core.exception;
  */
 public class PathNotFoundException extends CrafterException {
 
-    private static final long serialVersionUID = 7672434363103060508L;
+	private static final long serialVersionUID = 7672434363103060508L;
 
-    public PathNotFoundException() {
-    }
+	public PathNotFoundException() {
+	}
 
-    public PathNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public PathNotFoundException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public PathNotFoundException(String message) {
-        super(message);
-    }
+	public PathNotFoundException(String message) {
+		super(message);
+	}
 
-    public PathNotFoundException(Throwable cause) {
-        super(cause);
-    }
+	public PathNotFoundException(Throwable cause) {
+		super(cause);
+	}
 
 }

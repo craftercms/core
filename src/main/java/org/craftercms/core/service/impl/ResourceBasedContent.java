@@ -29,36 +29,36 @@ import java.io.InputStream;
  */
 public class ResourceBasedContent implements Content {
 
-    /**
-     * The resource
-     */
-    protected Resource resource;
+	/**
+	 * The resource
+	 */
+	protected Resource resource;
 
-    public ResourceBasedContent(Resource resource) {
-        this.resource = resource;
-    }
+	public ResourceBasedContent(Resource resource) {
+		this.resource = resource;
+	}
 
-    @Override
-    public long getLastModified() {
-        try {
-            return resource.lastModified();
-        } catch (IOException e) {
-            return -1;
-        }
-    }
+	@Override
+	public long getLastModified() {
+		try {
+			return resource.lastModified();
+		} catch (IOException e) {
+			return -1;
+		}
+	}
 
-    @Override
-    public long getLength() {
-        try {
-            return resource.contentLength();
-        } catch (IOException e) {
-            return 0;
-        }
-    }
+	@Override
+	public long getLength() {
+		try {
+			return resource.contentLength();
+		} catch (IOException e) {
+			return 0;
+		}
+	}
 
-    @Override
-    public InputStream getInputStream() throws IOException {
-        return resource.getInputStream();
-    }
+	@Override
+	public InputStream getInputStream() throws IOException {
+		return resource.getInputStream();
+	}
 
 }

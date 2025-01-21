@@ -30,33 +30,33 @@ import java.util.List;
  */
 public class ExcludeByUrlItemFilter implements ItemFilter {
 
-    private String[] excludeRegexes;
+	private String[] excludeRegexes;
 
-    public ExcludeByUrlItemFilter(String[] excludeRegexes) {
-        this.excludeRegexes = excludeRegexes;
-    }
+	public ExcludeByUrlItemFilter(String[] excludeRegexes) {
+		this.excludeRegexes = excludeRegexes;
+	}
 
-    @Override
-    public boolean runBeforeProcessing() {
-        return true;
-    }
+	@Override
+	public boolean runBeforeProcessing() {
+		return true;
+	}
 
-    @Override
-    public boolean runAfterProcessing() {
-        return false;
-    }
+	@Override
+	public boolean runAfterProcessing() {
+		return false;
+	}
 
-    @Override
-    public boolean accepts(Item item, List<Item> acceptedItems, List<Item> rejectedItems,
-                           boolean runningBeforeProcessing) {
-        return ArrayUtils.isEmpty(excludeRegexes) || !RegexUtils.matchesAny(item.getUrl(), excludeRegexes);
-    }
+	@Override
+	public boolean accepts(Item item, List<Item> acceptedItems, List<Item> rejectedItems,
+			       boolean runningBeforeProcessing) {
+		return ArrayUtils.isEmpty(excludeRegexes) || !RegexUtils.matchesAny(item.getUrl(), excludeRegexes);
+	}
 
-    @Override
-    public String toString() {
-        return "ExcludeByUrlItemFilter{" +
-               "excludeRegexes=" + Arrays.toString(excludeRegexes) +
-               '}';
-    }
+	@Override
+	public String toString() {
+		return "ExcludeByUrlItemFilter{" +
+			"excludeRegexes=" + Arrays.toString(excludeRegexes) +
+			'}';
+	}
 
 }

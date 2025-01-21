@@ -24,12 +24,12 @@ import org.craftercms.core.service.Content;
  */
 public interface File {
 
-    String getName();
+	String getName();
 
-    String getPath();
+	String getPath();
 
-    boolean isFile();
+	boolean isFile();
 
-    boolean isDirectory();
+	boolean isDirectory();
 
 }

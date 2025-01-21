@@ -24,6 +24,6 @@ import org.craftercms.core.service.Context;
  */
 public interface UrlTransformer {
 
-    String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException;
+	String transformUrl(Context context, CachingOptions cachingOptions, String url) throws UrlTransformationException;
 
 }

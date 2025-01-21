@@ -30,27 +30,27 @@ import org.springframework.web.context.ServletContextAware;
  */
 public class AddContextPathUrlTransformer implements UrlTransformer, ServletContextAware {
 
-    private ServletContext servletContext;
+	private ServletContext servletContext;
 
-    @Override
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
+	}
 
-    @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions,
-                               String url) throws UrlTransformationException {
-        if (servletContext == null) {
-            throw new IllegalStateException("No ServletContext was set. Are you sure you're running in a servlet " +
-                "environment?");
-        }
+	@Override
+	public String transformUrl(Context context, CachingOptions cachingOptions,
+				   String url) throws UrlTransformationException {
+		if (servletContext == null) {
+			throw new IllegalStateException("No ServletContext was set. Are you sure you're running in a servlet " +
+				"environment?");
+		}
 
-        String contextPath = servletContext.getContextPath();
-        if (contextPath.equals("/") && url.startsWith("/")) {
-            return url;
-        } else {
-            return contextPath + url;
-        }
-    }
+		String contextPath = servletContext.getContextPath();
+		if (contextPath.equals("/") && url.startsWith("/")) {
+			return url;
+		} else {
+			return contextPath + url;
+		}
+	}
 
 }

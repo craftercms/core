@@ -44,264 +44,264 @@ import java.util.*;
  */
 public class Item extends AbstractCachingAwareObject {
 
-    /**
-     * The name of the item (basically the file name).
-     */
-    protected String name;
-    /**
-     * The url or path of the item in the content store.
-     */
-    protected String url;
-    /**
-     * The url or path of the item's descriptor in the content store. If the item is a standalone descriptor, the
-     * {@code descriptorUrl} will be the same as the {@code url}.
-     */
-    protected String descriptorUrl;
-    /**
-     * The DOM (Document Object Model) of the item's descriptor.
-     */
-    protected Document descriptorDom;
-    /**
-     * The properties of the item, which most of the time are metadata information on the item.
-     */
-    protected Map<String, Object> properties;
-    /**
-     * Flag that indicates if the item is a folder or not.
-     */
-    protected boolean isFolder;
+	/**
+	 * The name of the item (basically the file name).
+	 */
+	protected String name;
+	/**
+	 * The url or path of the item in the content store.
+	 */
+	protected String url;
+	/**
+	 * The url or path of the item's descriptor in the content store. If the item is a standalone descriptor, the
+	 * {@code descriptorUrl} will be the same as the {@code url}.
+	 */
+	protected String descriptorUrl;
+	/**
+	 * The DOM (Document Object Model) of the item's descriptor.
+	 */
+	protected Document descriptorDom;
+	/**
+	 * The properties of the item, which most of the time are metadata information on the item.
+	 */
+	protected Map<String, Object> properties;
+	/**
+	 * Flag that indicates if the item is a folder or not.
+	 */
+	protected boolean isFolder;
 
-    /**
-     * Default no-arg constructor.
-     */
-    public Item() {
-    }
+	/**
+	 * Default no-arg constructor.
+	 */
+	public Item() {
+	}
 
-    /**
-     * Copy constructor. Performs a deep copy (calls {@link #Item(Item, boolean)} with true).
-     */
-    public Item(Item item) {
-        this(item, true);
-    }
+	/**
+	 * Copy constructor. Performs a deep copy (calls {@link #Item(Item, boolean)} with true).
+	 */
+	public Item(Item item) {
+		this(item, true);
+	}
 
-    /**
-     * Copy constructor. Performs a deep copy depending on the value of the {@code deepCopy} flag. In a deep copy, the
-     * {@code descriptorDom} and {@code properties} are cloned.
-     */
-    public Item(Item item, boolean deepCopy) {
-        super(item);
+	/**
+	 * Copy constructor. Performs a deep copy depending on the value of the {@code deepCopy} flag. In a deep copy, the
+	 * {@code descriptorDom} and {@code properties} are cloned.
+	 */
+	public Item(Item item, boolean deepCopy) {
+		super(item);
 
-        name = item.name;
-        url = item.url;
-        descriptorUrl = item.descriptorUrl;
-        isFolder = item.isFolder;
+		name = item.name;
+		url = item.url;
+		descriptorUrl = item.descriptorUrl;
+		isFolder = item.isFolder;
 
-        if (deepCopy) {
-            descriptorDom = item.descriptorDom != null? (Document)item.descriptorDom.clone(): null;
-            properties = item.properties != null? new HashMap<>(item.properties): null;
-        } else {
-            descriptorDom = item.descriptorDom;
-            properties = item.properties;
-        }
-    }
+		if (deepCopy) {
+			descriptorDom = item.descriptorDom != null ? (Document) item.descriptorDom.clone() : null;
+			properties = item.properties != null ? new HashMap<>(item.properties) : null;
+		} else {
+			descriptorDom = item.descriptorDom;
+			properties = item.properties;
+		}
+	}
 
-    /**
-     * Returns name of the item (basically the file name).
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Returns name of the item (basically the file name).
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the name of the item (basically the file name).
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**
+	 * Sets the name of the item (basically the file name).
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * Returns the url or path of the item in the content store.
-     */
-    public String getUrl() {
-        return url;
-    }
+	/**
+	 * Returns the url or path of the item in the content store.
+	 */
+	public String getUrl() {
+		return url;
+	}
 
-    /**
-     * Sets the url or path of the item in the content store.
-     */
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	/**
+	 * Sets the url or path of the item in the content store.
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    /**
-     * Returns the url or path of the item's descriptor in the content store. If the item is a standalone descriptor,
-     * the {@code descriptorUrl} will be the same as the {@code url}.
-     */
-    public String getDescriptorUrl() {
-        return descriptorUrl;
-    }
+	/**
+	 * Returns the url or path of the item's descriptor in the content store. If the item is a standalone descriptor,
+	 * the {@code descriptorUrl} will be the same as the {@code url}.
+	 */
+	public String getDescriptorUrl() {
+		return descriptorUrl;
+	}
 
-    /**
-     * Sets the url or path of the item's descriptor in the content store. If the item is a standalone descriptor,
-     * the {@code descriptorUrl} should be set to the same value as the {@code url}.
-     */
-    public void setDescriptorUrl(String descriptorUrl) {
-        this.descriptorUrl = descriptorUrl;
-    }
+	/**
+	 * Sets the url or path of the item's descriptor in the content store. If the item is a standalone descriptor,
+	 * the {@code descriptorUrl} should be set to the same value as the {@code url}.
+	 */
+	public void setDescriptorUrl(String descriptorUrl) {
+		this.descriptorUrl = descriptorUrl;
+	}
 
-    /**
-     * Returns the DOM (Document Object Model) of the item's descriptor.
-     */
-    public Document getDescriptorDom() {
-        return descriptorDom;
-    }
+	/**
+	 * Returns the DOM (Document Object Model) of the item's descriptor.
+	 */
+	public Document getDescriptorDom() {
+		return descriptorDom;
+	}
 
-    /**
-     * Sets the DOM (Document Object Model) of the item's descriptor.
-     */
-    public void setDescriptorDom(Document descriptorDom) {
-        this.descriptorDom = descriptorDom;
-    }
+	/**
+	 * Sets the DOM (Document Object Model) of the item's descriptor.
+	 */
+	public void setDescriptorDom(Document descriptorDom) {
+		this.descriptorDom = descriptorDom;
+	}
 
-    /**
-     * Returns the properties of the item, which most of the time are metadata information on the item.
-     */
-    public Map<String, Object> getProperties() {
-        return properties;
-    }
+	/**
+	 * Returns the properties of the item, which most of the time are metadata information on the item.
+	 */
+	public Map<String, Object> getProperties() {
+		return properties;
+	}
 
-    /**
-     * Sets properties of the item, which most of the time are metadata information on the item.
-     */
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
-    }
+	/**
+	 * Sets properties of the item, which most of the time are metadata information on the item.
+	 */
+	public void setProperties(Map<String, Object> properties) {
+		this.properties = properties;
+	}
 
-    /**
-     * Returns the property value for the specified key.
-     */
-    public Object getProperty(String key) {
-        if (properties == null) {
-            return null;
-        }
+	/**
+	 * Returns the property value for the specified key.
+	 */
+	public Object getProperty(String key) {
+		if (properties == null) {
+			return null;
+		}
 
-        return properties.get(key);
-    }
+		return properties.get(key);
+	}
 
-    /**
-     * Adds the specified property value, associated to the specified key.
-     */
-    public void setProperty(String key, Object value) {
-        if (properties == null) {
-            properties = new HashMap<>();
-        }
+	/**
+	 * Adds the specified property value, associated to the specified key.
+	 */
+	public void setProperty(String key, Object value) {
+		if (properties == null) {
+			properties = new HashMap<>();
+		}
 
-        properties.put(key, value);
-    }
+		properties.put(key, value);
+	}
 
-    /**
-     * Queries a single descriptor node text value. First looks in the properties, if not found it executes the XPath
-     * query.
-     */
-    public String queryDescriptorValue(String xpathQuery) {
-        if (descriptorDom != null) {
-            String value = (String)getProperty(xpathQuery);
-            if (value == null) {
-                value = XmlUtils.selectSingleNodeValue(descriptorDom, xpathQuery);
-            }
+	/**
+	 * Queries a single descriptor node text value. First looks in the properties, if not found it executes the XPath
+	 * query.
+	 */
+	public String queryDescriptorValue(String xpathQuery) {
+		if (descriptorDom != null) {
+			String value = (String) getProperty(xpathQuery);
+			if (value == null) {
+				value = XmlUtils.selectSingleNodeValue(descriptorDom, xpathQuery);
+			}
 
-            return value;
-        } else {
-            return null;
-        }
-    }
+			return value;
+		} else {
+			return null;
+		}
+	}
 
-    /**
-     * Queries multiple descriptor node text values. First looks in the properties, if not found it executes the XPath
-     * query.
-     */
-    @SuppressWarnings("unchecked")
-    public List<String> queryDescriptorValues(String xpathQuery) {
-        if (descriptorDom != null) {
-            List<String> value = (List<String>)getProperty(xpathQuery);
-            if (CollectionUtils.isEmpty(value)) {
-                value = XmlUtils.selectNodeValues(descriptorDom, xpathQuery);
-            }
+	/**
+	 * Queries multiple descriptor node text values. First looks in the properties, if not found it executes the XPath
+	 * query.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<String> queryDescriptorValues(String xpathQuery) {
+		if (descriptorDom != null) {
+			List<String> value = (List<String>) getProperty(xpathQuery);
+			if (CollectionUtils.isEmpty(value)) {
+				value = XmlUtils.selectNodeValues(descriptorDom, xpathQuery);
+			}
 
-            return value;
-        } else {
-            return Collections.emptyList();
-        }
-    }
+			return value;
+		} else {
+			return Collections.emptyList();
+		}
+	}
 
-    /**
-     * Returns true if the item is a folder.
-     */
-    public boolean isFolder() {
-        return this.isFolder;
-    }
+	/**
+	 * Returns true if the item is a folder.
+	 */
+	public boolean isFolder() {
+		return this.isFolder;
+	}
 
-    /**
-     * Sets whether the item is a folder or not.
-     */
-    public void setFolder(boolean folder) {
-        this.isFolder = folder;
-    }
+	/**
+	 * Sets whether the item is a folder or not.
+	 */
+	public void setFolder(boolean folder) {
+		this.isFolder = folder;
+	}
 
-    /**
-     * Returns true if the specified {@code Item}'s and this instance's {@code name}, {@code url},
-     * {@code descriptorUrl} and
-     * {@code isFolder} are equal.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	/**
+	 * Returns true if the specified {@code Item}'s and this instance's {@code name}, {@code url},
+	 * {@code descriptorUrl} and
+	 * {@code isFolder} are equal.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        Item item = (Item)o;
+		Item item = (Item) o;
 
-        if (!Objects.equals(name, item.name)) {
-            return false;
-        }
-        if (!Objects.equals(url, item.url)) {
-            return false;
-        }
-        if (!Objects.equals(descriptorUrl, item.descriptorUrl)) {
-            return false;
-        }
-        if (isFolder != item.isFolder) {
-            return false;
-        }
+		if (!Objects.equals(name, item.name)) {
+			return false;
+		}
+		if (!Objects.equals(url, item.url)) {
+			return false;
+		}
+		if (!Objects.equals(descriptorUrl, item.descriptorUrl)) {
+			return false;
+		}
+		if (isFolder != item.isFolder) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    /**
-     * Returns the hash code, which is the combination of the hash code of {@code name}, {@code url},
-     * {@code descriptorUrl} and
-     * {@code folder}.
-     */
-    @Override
-    public int hashCode() {
-        int result = name != null? name.hashCode(): 0;
-        result = 31 * result + (url != null? url.hashCode(): 0);
-        result = 31 * result + (descriptorUrl != null? descriptorUrl.hashCode(): 0);
-        result = 31 * result + (isFolder? 1: 0);
-        return result;
-    }
+	/**
+	 * Returns the hash code, which is the combination of the hash code of {@code name}, {@code url},
+	 * {@code descriptorUrl} and
+	 * {@code folder}.
+	 */
+	@Override
+	public int hashCode() {
+		int result = name != null ? name.hashCode() : 0;
+		result = 31 * result + (url != null ? url.hashCode() : 0);
+		result = 31 * result + (descriptorUrl != null ? descriptorUrl.hashCode() : 0);
+		result = 31 * result + (isFolder ? 1 : 0);
+		return result;
+	}
 
-    @Override
-    public String toString() {
-        return "Item[" +
-            "name='" + name + '\'' +
-            ", url='" + url + '\'' +
-            ", descriptorUrl='" + descriptorUrl + '\'' +
-            ", properties=" + properties +
-            ", folder=" + isFolder +
-            ']';
-    }
+	@Override
+	public String toString() {
+		return "Item[" +
+			"name='" + name + '\'' +
+			", url='" + url + '\'' +
+			", descriptorUrl='" + descriptorUrl + '\'' +
+			", properties=" + properties +
+			", folder=" + isFolder +
+			']';
+	}
 
 }

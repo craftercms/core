@@ -30,25 +30,25 @@ import org.springframework.beans.factory.BeanFactoryAware;
  */
 public class BeanFactoryModelFactory implements NodeTemplateModelFactory, BeanFactoryAware {
 
-    /**
-     * The {@code BeanFactory} of the current Spring application context.
-     */
-    private BeanFactory beanFactory;
+	/**
+	 * The {@code BeanFactory} of the current Spring application context.
+	 */
+	private BeanFactory beanFactory;
 
-    /**
-     * Sets the {@code BeanFactory} of the current Spring application context.
-     */
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
-    }
+	/**
+	 * Sets the {@code BeanFactory} of the current Spring application context.
+	 */
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory) {
+		this.beanFactory = beanFactory;
+	}
 
-    /**
-     * Returns always the {@link BeanFactory} of the current Spring application context as the model.
-     */
-    @Override
-    public Object getModel(Item item, Node node, String template) {
-        return beanFactory;
-    }
+	/**
+	 * Returns always the {@link BeanFactory} of the current Spring application context as the model.
+	 */
+	@Override
+	public Object getModel(Item item, Node node, String template) {
+		return beanFactory;
+	}
 
 }

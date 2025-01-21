@@ -36,61 +36,61 @@ import java.util.Map;
  */
 public class MetaDataMergeStrategyResolverTest {
 
-    public static final String MERGE_STRATEGY_ELEMENT_XPATH_QUERY = "//merge-strategy";
+	public static final String MERGE_STRATEGY_ELEMENT_XPATH_QUERY = "//merge-strategy";
 
-    private static final String STRATEGY1_ELEMENT_VALUE = "strategy1";
-    private static final String STRATEGY2_ELEMENT_VALUE = "strategy2";
+	private static final String STRATEGY1_ELEMENT_VALUE = "strategy1";
+	private static final String STRATEGY2_ELEMENT_VALUE = "strategy2";
 
-    private MetaDataMergeStrategyResolver resolver;
-    private DescriptorMergeStrategy strategy1;
-    private DescriptorMergeStrategy strategy2;
-    private Document descriptorDomStrategy1;
-    private Document descriptorDomStrategy2;
+	private MetaDataMergeStrategyResolver resolver;
+	private DescriptorMergeStrategy strategy1;
+	private DescriptorMergeStrategy strategy2;
+	private Document descriptorDomStrategy1;
+	private Document descriptorDomStrategy2;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestStrategies();
-        setUpTestResolver();
-        setUpTestDescriptorDoms();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestStrategies();
+		setUpTestResolver();
+		setUpTestDescriptorDoms();
+	}
 
-    @Test
-    public void testGetStrategy() throws Exception {
-        DescriptorMergeStrategy strategy = resolver.getStrategy(null, descriptorDomStrategy1);
-        assertSame(strategy1, strategy);
+	@Test
+	public void testGetStrategy() throws Exception {
+		DescriptorMergeStrategy strategy = resolver.getStrategy(null, descriptorDomStrategy1);
+		assertSame(strategy1, strategy);
 
-        strategy = resolver.getStrategy(null, descriptorDomStrategy2);
-        assertSame(strategy2, strategy);
-    }
+		strategy = resolver.getStrategy(null, descriptorDomStrategy2);
+		assertSame(strategy2, strategy);
+	}
 
-    private void setUpTestStrategies() {
-        strategy1 = mock(DescriptorMergeStrategy.class);
-        strategy2 = mock(DescriptorMergeStrategy.class);
-    }
+	private void setUpTestStrategies() {
+		strategy1 = mock(DescriptorMergeStrategy.class);
+		strategy2 = mock(DescriptorMergeStrategy.class);
+	}
 
-    private void setUpTestResolver() {
-        Map<String, DescriptorMergeStrategy> strategies = new HashMap<String, DescriptorMergeStrategy>();
-        strategies.put(STRATEGY1_ELEMENT_VALUE, strategy1);
-        strategies.put(STRATEGY2_ELEMENT_VALUE, strategy2);
+	private void setUpTestResolver() {
+		Map<String, DescriptorMergeStrategy> strategies = new HashMap<String, DescriptorMergeStrategy>();
+		strategies.put(STRATEGY1_ELEMENT_VALUE, strategy1);
+		strategies.put(STRATEGY2_ELEMENT_VALUE, strategy2);
 
-        resolver = new MetaDataMergeStrategyResolver(MERGE_STRATEGY_ELEMENT_XPATH_QUERY);
-        resolver.setElementValueToStrategyMappings(strategies);
-    }
+		resolver = new MetaDataMergeStrategyResolver(MERGE_STRATEGY_ELEMENT_XPATH_QUERY);
+		resolver.setElementValueToStrategyMappings(strategies);
+	}
 
-    private void setUpTestDescriptorDoms() {
-        Node strategy1MergeStrategyElement = mock(Node.class);
-        when(strategy1MergeStrategyElement.getText()).thenReturn(STRATEGY1_ELEMENT_VALUE);
+	private void setUpTestDescriptorDoms() {
+		Node strategy1MergeStrategyElement = mock(Node.class);
+		when(strategy1MergeStrategyElement.getText()).thenReturn(STRATEGY1_ELEMENT_VALUE);
 
-        descriptorDomStrategy1 = mock(Document.class);
-        when(descriptorDomStrategy1.selectSingleNode(MERGE_STRATEGY_ELEMENT_XPATH_QUERY)).thenReturn(
-                strategy1MergeStrategyElement);
+		descriptorDomStrategy1 = mock(Document.class);
+		when(descriptorDomStrategy1.selectSingleNode(MERGE_STRATEGY_ELEMENT_XPATH_QUERY)).thenReturn(
+			strategy1MergeStrategyElement);
 
-        Node strategy2MergeStrategyElement = mock(Node.class);
-        when(strategy2MergeStrategyElement.getText()).thenReturn(STRATEGY2_ELEMENT_VALUE);
+		Node strategy2MergeStrategyElement = mock(Node.class);
+		when(strategy2MergeStrategyElement.getText()).thenReturn(STRATEGY2_ELEMENT_VALUE);
 
-        descriptorDomStrategy2 = mock(Document.class);
-        when(descriptorDomStrategy2.selectSingleNode(MERGE_STRATEGY_ELEMENT_XPATH_QUERY)).thenReturn(
-                strategy2MergeStrategyElement);
-    }
+		descriptorDomStrategy2 = mock(Document.class);
+		when(descriptorDomStrategy2.selectSingleNode(MERGE_STRATEGY_ELEMENT_XPATH_QUERY)).thenReturn(
+			strategy2MergeStrategyElement);
+	}
 
 }

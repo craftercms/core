@@ -45,114 +45,114 @@ import org.springframework.context.annotation.Lazy;
  */
 public class ContentBundleMergeStrategy implements DescriptorMergeStrategy {
 
-    private static final Log logger = LogFactory.getLog(DescriptorMergeStrategy.class);
+	private static final Log logger = LogFactory.getLog(DescriptorMergeStrategy.class);
 
-    private ContentBundleUrlParser urlParser;
-    private String baseDelimiter;
-    private DescriptorMergeStrategyResolver baseMergeStrategyResolver;
-    private DescriptorMergeStrategy regularMergeStrategy;
+	private ContentBundleUrlParser urlParser;
+	private String baseDelimiter;
+	private DescriptorMergeStrategyResolver baseMergeStrategyResolver;
+	private DescriptorMergeStrategy regularMergeStrategy;
 
-    public ContentBundleMergeStrategy(ContentBundleUrlParser urlParser, String baseDelimiter, DescriptorMergeStrategy regularMergeStrategy) {
-        this.urlParser = urlParser;
-        this.baseDelimiter = baseDelimiter;
-        this.regularMergeStrategy = regularMergeStrategy;
-    }
+	public ContentBundleMergeStrategy(ContentBundleUrlParser urlParser, String baseDelimiter, DescriptorMergeStrategy regularMergeStrategy) {
+		this.urlParser = urlParser;
+		this.baseDelimiter = baseDelimiter;
+		this.regularMergeStrategy = regularMergeStrategy;
+	}
 
-    @Autowired
-    public void setBaseMergeStrategyResolver(@Lazy DescriptorMergeStrategyResolver baseMergeStrategyResolver) {
-        this.baseMergeStrategyResolver = baseMergeStrategyResolver;
-    }
+	@Autowired
+	public void setBaseMergeStrategyResolver(@Lazy DescriptorMergeStrategyResolver baseMergeStrategyResolver) {
+		this.baseMergeStrategyResolver = baseMergeStrategyResolver;
+	}
 
-    @Override
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String mainDescriptorUrl, Document mainDescriptorDom)
-        throws XmlMergeException {
-        return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
-    }
+	@Override
+	public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+							String mainDescriptorUrl, Document mainDescriptorDom)
+		throws XmlMergeException {
+		return getDescriptors(context, cachingOptions, mainDescriptorUrl, mainDescriptorDom, false);
+	}
 
-    @Override
-    public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                                    String mainDescriptorUrl, Document mainDescriptorDom,
-                                                    boolean mainDescriptorOptional) throws XmlMergeException {
-        List<MergeableDescriptor> descriptors = new ArrayList<>();
-        List<MergeableDescriptor> tmp;
+	@Override
+	public List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+							String mainDescriptorUrl, Document mainDescriptorDom,
+							boolean mainDescriptorOptional) throws XmlMergeException {
+		List<MergeableDescriptor> descriptors = new ArrayList<>();
+		List<MergeableDescriptor> tmp;
 
-        ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(mainDescriptorUrl);
-        String prefix = parsedUrl.getPrefix(); // prefix = folder1/
-        String baseNameAndExtensionToken = parsedUrl.getBaseNameAndExtensionToken(); // baseNameAndExtensionToken =
-        // folder2_es
-        String suffix = parsedUrl.getSuffix(); // suffix = /file.xml
+		ContentBundleUrl parsedUrl = urlParser.getContentBundleUrl(mainDescriptorUrl);
+		String prefix = parsedUrl.getPrefix(); // prefix = folder1/
+		String baseNameAndExtensionToken = parsedUrl.getBaseNameAndExtensionToken(); // baseNameAndExtensionToken =
+		// folder2_es
+		String suffix = parsedUrl.getSuffix(); // suffix = /file.xml
 
-        // If the prefix is the same length as the initial URI, ignore, otherwise process
-        if (prefix.length() < mainDescriptorUrl.length()) {
-            // Get the index of the delimiter that separates the base name from the extension token (the _ in
-            // folder2_es).
-            String baseName = baseNameAndExtensionToken;
-            int delimiterIdx = baseName.lastIndexOf(baseDelimiter);
-            boolean baseFound = false;
+		// If the prefix is the same length as the initial URI, ignore, otherwise process
+		if (prefix.length() < mainDescriptorUrl.length()) {
+			// Get the index of the delimiter that separates the base name from the extension token (the _ in
+			// folder2_es).
+			String baseName = baseNameAndExtensionToken;
+			int delimiterIdx = baseName.lastIndexOf(baseDelimiter);
+			boolean baseFound = false;
 
-            while (delimiterIdx > 0 && !baseFound) {
-                baseName = baseName.substring(0, delimiterIdx); // baseName = folder2
-                String baseDescriptor = prefix + baseName + suffix; // baseDescriptor = folder1/folder2/file.xml
-                Document baseDescriptorDom;
+			while (delimiterIdx > 0 && !baseFound) {
+				baseName = baseName.substring(0, delimiterIdx); // baseName = folder2
+				String baseDescriptor = prefix + baseName + suffix; // baseDescriptor = folder1/folder2/file.xml
+				Document baseDescriptorDom;
 
-                baseDescriptorDom = getDescriptorDom(context, cachingOptions, baseDescriptor);
-                if (baseDescriptorDom != null) {
-                    baseFound = true;
-                } else if (logger.isDebugEnabled()) {
-                    logger.debug("No base descriptor " + baseDescriptor + " was found");
-                }
+				baseDescriptorDom = getDescriptorDom(context, cachingOptions, baseDescriptor);
+				if (baseDescriptorDom != null) {
+					baseFound = true;
+				} else if (logger.isDebugEnabled()) {
+					logger.debug("No base descriptor " + baseDescriptor + " was found");
+				}
 
-                if (baseFound) {
-                    // This can recurse if the selected strategy is also an ContentBundleMergeStrategy and the base
-                    // descriptor path has more families.
-                    DescriptorMergeStrategy baseMergeStrategy = baseMergeStrategyResolver.getStrategy(baseDescriptor,
-                                                                                                      baseDescriptorDom);
-                    if (baseMergeStrategy == null) {
-                        throw new XmlMergeException("No merge strategy for descriptor " + baseDescriptor);
-                    }
+				if (baseFound) {
+					// This can recurse if the selected strategy is also an ContentBundleMergeStrategy and the base
+					// descriptor path has more families.
+					DescriptorMergeStrategy baseMergeStrategy = baseMergeStrategyResolver.getStrategy(baseDescriptor,
+						baseDescriptorDom);
+					if (baseMergeStrategy == null) {
+						throw new XmlMergeException("No merge strategy for descriptor " + baseDescriptor);
+					}
 
-                    tmp = baseMergeStrategy.getDescriptors(context, cachingOptions, baseDescriptor,
-                                                           baseDescriptorDom, true);
+					tmp = baseMergeStrategy.getDescriptors(context, cachingOptions, baseDescriptor,
+						baseDescriptorDom, true);
 
-                    descriptors.addAll(tmp);
-                } else {
-                    delimiterIdx = baseName.lastIndexOf(baseDelimiter);
-                }
-            }
+					descriptors.addAll(tmp);
+				} else {
+					delimiterIdx = baseName.lastIndexOf(baseDelimiter);
+				}
+			}
 
-            // Keep only after the prefix (folder2_es/file.xml)
-            String noPrefix = mainDescriptorUrl.substring(prefix.length(), mainDescriptorUrl.length());
-            // Add all level descriptors after the prefix using the regular strategy (this is up to us/part of our spec)
-            tmp = regularMergeStrategy.getDescriptors(context, cachingOptions, noPrefix, mainDescriptorDom,
-                                                      mainDescriptorOptional);
+			// Keep only after the prefix (folder2_es/file.xml)
+			String noPrefix = mainDescriptorUrl.substring(prefix.length(), mainDescriptorUrl.length());
+			// Add all level descriptors after the prefix using the regular strategy (this is up to us/part of our spec)
+			tmp = regularMergeStrategy.getDescriptors(context, cachingOptions, noPrefix, mainDescriptorDom,
+				mainDescriptorOptional);
 
-            // Add the stem back since the above won't include it and add the descriptor file to the results only
-            // if it's not already in the results.
-            for (MergeableDescriptor descriptor : tmp) {
-                descriptor.setUrl(prefix + descriptor.getUrl());
-                if (!descriptors.contains(descriptor)) {
-                    descriptors.add(descriptor);
-                }
-            }
-        } else {
-            descriptors.add(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
-        }
+			// Add the stem back since the above won't include it and add the descriptor file to the results only
+			// if it's not already in the results.
+			for (MergeableDescriptor descriptor : tmp) {
+				descriptor.setUrl(prefix + descriptor.getUrl());
+				if (!descriptors.contains(descriptor)) {
+					descriptors.add(descriptor);
+				}
+			}
+		} else {
+			descriptors.add(new MergeableDescriptor(mainDescriptorUrl, mainDescriptorOptional));
+		}
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Final merge list for " + mainDescriptorUrl + ": " + descriptors);
-        }
+		if (logger.isDebugEnabled()) {
+			logger.debug("Final merge list for " + mainDescriptorUrl + ": " + descriptors);
+		}
 
-        return descriptors;
-    }
+		return descriptors;
+	}
 
-    protected Document getDescriptorDom(Context context, CachingOptions cachingOptions, String url) {
-        Item item = context.getStoreAdapter().findItem(context, cachingOptions, url, true);
-        if (item != null) {
-            return item.getDescriptorDom();
-        } else {
-            return null;
-        }
-    }
+	protected Document getDescriptorDom(Context context, CachingOptions cachingOptions, String url) {
+		Item item = context.getStoreAdapter().findItem(context, cachingOptions, url, true);
+		if (item != null) {
+			return item.getDescriptorDom();
+		} else {
+			return null;
+		}
+	}
 
 }

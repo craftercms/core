@@ -30,13 +30,13 @@ import org.craftercms.core.service.Item;
  * @since 4.1.2
  */
 public class SkipAllItemProcessor implements ItemProcessor {
-    @Override
-    public boolean isExclusive() {
-        return true;
-    }
+	@Override
+	public boolean isExclusive() {
+		return true;
+	}
 
-    @Override
-    public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
-        return item;
-    }
+	@Override
+	public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
+		return item;
+	}
 }

@@ -34,72 +34,72 @@ import org.craftercms.core.service.Item;
  */
 public class TextMetaDataExtractingProcessor implements ItemProcessor {
 
-    /**
-     * Array of XPath queries for the nodes whose values should be extracted.
-     */
-    protected String[] metaDataNodesXPathQueries;
+	/**
+	 * Array of XPath queries for the nodes whose values should be extracted.
+	 */
+	protected String[] metaDataNodesXPathQueries;
 
-    /**
-     * Default constructor. Sets the {@code metaDataNodesXPathQueries} to the provided argument.
-     */
-    @ConstructorProperties({"metaDataNodesXPathQueries"})
-    public TextMetaDataExtractingProcessor(String... metaDataNodesXPathQueries) {
-        this.metaDataNodesXPathQueries = metaDataNodesXPathQueries;
-    }
+	/**
+	 * Default constructor. Sets the {@code metaDataNodesXPathQueries} to the provided argument.
+	 */
+	@ConstructorProperties({"metaDataNodesXPathQueries"})
+	public TextMetaDataExtractingProcessor(String... metaDataNodesXPathQueries) {
+		this.metaDataNodesXPathQueries = metaDataNodesXPathQueries;
+	}
 
-    /**
-     * For every XPath query provided in {@code metaDataNodesXPathQueries}, a single node is selected and its text
-     * value is extracted and put in the item's properties.
-     */
-    @Override
-    public Item process(Context context, CachingOptions cachingOptions, Item item) {
-        for (String xpathQuery : metaDataNodesXPathQueries) {
-            String metaDataValue = item.queryDescriptorValue(xpathQuery);
-            if (StringUtils.isNotEmpty(metaDataValue)) {
-                item.setProperty(xpathQuery, metaDataValue);
-            }
-        }
+	/**
+	 * For every XPath query provided in {@code metaDataNodesXPathQueries}, a single node is selected and its text
+	 * value is extracted and put in the item's properties.
+	 */
+	@Override
+	public Item process(Context context, CachingOptions cachingOptions, Item item) {
+		for (String xpathQuery : metaDataNodesXPathQueries) {
+			String metaDataValue = item.queryDescriptorValue(xpathQuery);
+			if (StringUtils.isNotEmpty(metaDataValue)) {
+				item.setProperty(xpathQuery, metaDataValue);
+			}
+		}
 
-        return item;
-    }
+		return item;
+	}
 
-    /**
-     * Returns true if the specified {@code TextMetaDataExtractingProcessor}'s and this instance's
-     * {@code metaDataNodesXPathQueries} are equal.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	/**
+	 * Returns true if the specified {@code TextMetaDataExtractingProcessor}'s and this instance's
+	 * {@code metaDataNodesXPathQueries} are equal.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        TextMetaDataExtractingProcessor that = (TextMetaDataExtractingProcessor)o;
+		TextMetaDataExtractingProcessor that = (TextMetaDataExtractingProcessor) o;
 
-        if (!metaDataNodesXPathQueries.equals(that.metaDataNodesXPathQueries)) {
-            return false;
-        }
+		if (!metaDataNodesXPathQueries.equals(that.metaDataNodesXPathQueries)) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    /**
-     * Returns the hash code for this instance, which is basically hash code of the list of XPath queries. As with any
-     * other {@link ItemProcessor}, this method is defined because any processor which is passed in the method call of
-     * a {@link org.craftercms.core.service.ContentStoreService} can be used as part of a key for caching.
-     */
-    @Override
-    public int hashCode() {
-        return metaDataNodesXPathQueries.hashCode();
-    }
+	/**
+	 * Returns the hash code for this instance, which is basically hash code of the list of XPath queries. As with any
+	 * other {@link ItemProcessor}, this method is defined because any processor which is passed in the method call of
+	 * a {@link org.craftercms.core.service.ContentStoreService} can be used as part of a key for caching.
+	 */
+	@Override
+	public int hashCode() {
+		return metaDataNodesXPathQueries.hashCode();
+	}
 
-    @Override
-    public String toString() {
-        return "TextMetaDataExtractingProcessor[" +
-            "metaDataNodesXPathQueries=" + Arrays.toString(metaDataNodesXPathQueries) +
-            ']';
-    }
+	@Override
+	public String toString() {
+		return "TextMetaDataExtractingProcessor[" +
+			"metaDataNodesXPathQueries=" + Arrays.toString(metaDataNodesXPathQueries) +
+			']';
+	}
 
 }

@@ -28,13 +28,13 @@ import org.craftercms.core.service.Context;
  */
 public class NoopCacheTemplate extends DefaultCacheTemplate {
 
-    public NoopCacheTemplate(CacheService cacheService) {
-        super(cacheService);
-    }
+	public NoopCacheTemplate(CacheService cacheService) {
+		super(cacheService);
+	}
 
-    @Override
-    public <T> T getObject(Context context, CachingOptions options, Callback<T> callback, Object... keyElements) {
-        return callback.execute();
-    }
+	@Override
+	public <T> T getObject(Context context, CachingOptions options, Callback<T> callback, Object... keyElements) {
+		return callback.execute();
+	}
 
 }

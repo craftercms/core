@@ -29,26 +29,26 @@ import org.craftercms.core.url.UrlTransformer;
  */
 public class ReplaceSubstringUrlTransformer implements UrlTransformer {
 
-    private static final Log logger = LogFactory.getLog(ReplacePatternAllUrlTransformer.class);
+	private static final Log logger = LogFactory.getLog(ReplacePatternAllUrlTransformer.class);
 
-    protected String substringToReplace;
-    protected String replacement;
+	protected String substringToReplace;
+	protected String replacement;
 
-    public ReplaceSubstringUrlTransformer(String substringToReplace, String replacement) {
-        this.substringToReplace = substringToReplace;
-        this.replacement = replacement;
-    }
+	public ReplaceSubstringUrlTransformer(String substringToReplace, String replacement) {
+		this.substringToReplace = substringToReplace;
+		this.replacement = replacement;
+	}
 
-    @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions,
-                               String url) throws UrlTransformationException {
-        String result = url.replace(substringToReplace, replacement);
+	@Override
+	public String transformUrl(Context context, CachingOptions cachingOptions,
+				   String url) throws UrlTransformationException {
+		String result = url.replace(substringToReplace, replacement);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Transformation in: " + url + ", Transformation out: " + result);
-        }
+		if (logger.isDebugEnabled()) {
+			logger.debug("Transformation in: " + url + ", Transformation out: " + result);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 }

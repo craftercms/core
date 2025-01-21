@@ -27,25 +27,25 @@ import java.io.*;
  */
 public class FileSystemContent implements Content {
 
-    private java.io.File file;
+	private java.io.File file;
 
-    public FileSystemContent(File file) {
-        this.file = file;
-    }
+	public FileSystemContent(File file) {
+		this.file = file;
+	}
 
-    @Override
-    public long getLastModified() {
-        return file.lastModified();
-    }
+	@Override
+	public long getLastModified() {
+		return file.lastModified();
+	}
 
-    @Override
-    public long getLength() {
-        return file.length();
-    }
+	@Override
+	public long getLength() {
+		return file.length();
+	}
 
-    @Override
-    public InputStream getInputStream() throws FileNotFoundException {
-        return new BufferedInputStream(new FileInputStream(file));
-    }
+	@Override
+	public InputStream getInputStream() throws FileNotFoundException {
+		return new BufferedInputStream(new FileInputStream(file));
+	}
 
 }

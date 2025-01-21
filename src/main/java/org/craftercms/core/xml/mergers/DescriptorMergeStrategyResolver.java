@@ -26,16 +26,14 @@ import org.dom4j.Document;
  */
 public interface DescriptorMergeStrategyResolver {
 
-    /**
-     * Returns a {@link DescriptorMergeStrategy} for a given descriptor.
-     *
-     * @param descriptorUrl the URL that identifies the descriptor
-     * @param descriptorDom the XML DOM of the descriptor
-     *
-     * @return the {@link DescriptorMergeStrategy} for the descriptor.
-     *
-     * @throws CrafterException if an error occurs while resolving the strategy
-     */
-    DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) throws CrafterException;
+	/**
+	 * Returns a {@link DescriptorMergeStrategy} for a given descriptor.
+	 *
+	 * @param descriptorUrl the URL that identifies the descriptor
+	 * @param descriptorDom the XML DOM of the descriptor
+	 * @return the {@link DescriptorMergeStrategy} for the descriptor.
+	 * @throws CrafterException if an error occurs while resolving the strategy
+	 */
+	DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) throws CrafterException;
 
 }

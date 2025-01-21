@@ -42,75 +42,75 @@ import static org.junit.Assert.assertNotNull;
  */
 public class TemplateProcessorTest {
 
-    private static final String DESCRIPTOR_URL = "/folder/descriptor.xml";
+	private static final String DESCRIPTOR_URL = "/folder/descriptor.xml";
 
-    private static final String DESCRIPTOR_XML =
-            "<root>" +
-                    "<body>${body}</body>" +
-            "</root>";
+	private static final String DESCRIPTOR_XML =
+		"<root>" +
+			"<body>${body}</body>" +
+			"</root>";
 
-    private static final String BODY_MODEL_VALUE = "CrafterCMS";
+	private static final String BODY_MODEL_VALUE = "CrafterCMS";
 
-    private TemplateProcessor processor;
-    private XPathNodeScanner nodeScanner;
-    private FreeMarkerStringTemplateCompiler templateCompiler;
-    private NodeTemplateModelFactory modelFactory;
-    private Item item;
-    private Context context;
+	private TemplateProcessor processor;
+	private XPathNodeScanner nodeScanner;
+	private FreeMarkerStringTemplateCompiler templateCompiler;
+	private NodeTemplateModelFactory modelFactory;
+	private Item item;
+	private Context context;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestItem();
-        setUpTestTemplateCompiler();
-        setUpTestNodeScanner();
-        setUpTestModelFactory();
-        setUpTestProcessor();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestItem();
+		setUpTestTemplateCompiler();
+		setUpTestNodeScanner();
+		setUpTestModelFactory();
+		setUpTestProcessor();
+	}
 
-    @Test
-    public void testProcess() throws Exception {
-        item = processor.process(null, null, item);
-        assertNotNull(item.getDescriptorDom());
+	@Test
+	public void testProcess() throws Exception {
+		item = processor.process(null, null, item);
+		assertNotNull(item.getDescriptorDom());
 
-        Node body = item.getDescriptorDom().selectSingleNode("/root/body");
-        assertNotNull(body);
-        assertEquals(BODY_MODEL_VALUE, body.getText());
-    }
+		Node body = item.getDescriptorDom().selectSingleNode("/root/body");
+		assertNotNull(body);
+		assertEquals(BODY_MODEL_VALUE, body.getText());
+	}
 
-    private void setUpTestItem() throws DocumentException, SAXException {
-        SAXReader reader = new SAXReader();
+	private void setUpTestItem() throws DocumentException, SAXException {
+		SAXReader reader = new SAXReader();
 
-        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
-        item = new Item();
-        item.setDescriptorUrl(DESCRIPTOR_URL);
-        item.setDescriptorDom(reader.read(new StringReader(DESCRIPTOR_XML)));
-    }
+		item = new Item();
+		item.setDescriptorUrl(DESCRIPTOR_URL);
+		item.setDescriptorDom(reader.read(new StringReader(DESCRIPTOR_XML)));
+	}
 
-    private void setUpTestTemplateCompiler() {
-        templateCompiler = new FreeMarkerStringTemplateCompiler();
-    }
+	private void setUpTestTemplateCompiler() {
+		templateCompiler = new FreeMarkerStringTemplateCompiler();
+	}
 
-    private void setUpTestNodeScanner() {
-        nodeScanner = new XPathNodeScanner("//body");
-    }
+	private void setUpTestNodeScanner() {
+		nodeScanner = new XPathNodeScanner("//body");
+	}
 
-    private void setUpTestModelFactory() {
-        modelFactory = new NodeTemplateModelFactory() {
-            @Override
-            public Object getModel(Item item, Node node, String template) {
-                Map<String, String> model = new HashMap<String, String>();
-                model.put("body", BODY_MODEL_VALUE);
+	private void setUpTestModelFactory() {
+		modelFactory = new NodeTemplateModelFactory() {
+			@Override
+			public Object getModel(Item item, Node node, String template) {
+				Map<String, String> model = new HashMap<String, String>();
+				model.put("body", BODY_MODEL_VALUE);
 
-                return model;
-            }
-        };
-    }
+				return model;
+			}
+		};
+	}
 
-    private void setUpTestProcessor() {
-        processor = new TemplateProcessor(nodeScanner, templateCompiler, modelFactory);
-    }
+	private void setUpTestProcessor() {
+		processor = new TemplateProcessor(nodeScanner, templateCompiler, modelFactory);
+	}
 
 }

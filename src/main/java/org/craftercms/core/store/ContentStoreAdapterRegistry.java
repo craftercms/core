@@ -22,6 +22,6 @@ package org.craftercms.core.store;
  */
 public interface ContentStoreAdapterRegistry {
 
-    ContentStoreAdapter get(String storeType);
+	ContentStoreAdapter get(String storeType);
 
 }

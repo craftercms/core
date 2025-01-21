@@ -38,112 +38,112 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class DefaultCacheTemplate implements CacheTemplate {
 
-    private static final Log logger = LogFactory.getLog(DefaultCacheTemplate.class);
+	private static final Log logger = LogFactory.getLog(DefaultCacheTemplate.class);
 
-    private CacheService cacheService;
-    private KeyBasedLockFactory<ReentrantLock> lockFactory;
+	private CacheService cacheService;
+	private KeyBasedLockFactory<ReentrantLock> lockFactory;
 
-    public DefaultCacheTemplate(CacheService cacheService) {
-        this.cacheService = cacheService;
-        lockFactory = new WeakKeyBasedReentrantLockFactory();
-    }
+	public DefaultCacheTemplate(CacheService cacheService) {
+		this.cacheService = cacheService;
+		lockFactory = new WeakKeyBasedReentrantLockFactory();
+	}
 
-    @Override
-    public CacheService getCacheService() {
-        return cacheService;
-    }
+	@Override
+	public CacheService getCacheService() {
+		return cacheService;
+	}
 
-    @Override
-    public Object getKey(Object... keyElements) {
-        return CacheUtils.generateKey(keyElements);
-    }
+	@Override
+	public Object getKey(Object... keyElements) {
+		return CacheUtils.generateKey(keyElements);
+	}
 
-    @Override
-    public boolean hasObject(Context context, Object... keyElements) {
-        return cacheService.hasKey(context, getKey(keyElements));
-    }
+	@Override
+	public boolean hasObject(Context context, Object... keyElements) {
+		return cacheService.hasKey(context, getKey(keyElements));
+	}
 
-    @Override
-    public <T> T getObject(Context context, Callback<T> callback, Object... keyElements) {
-        return getObject(context, null, callback, keyElements);
-    }
+	@Override
+	public <T> T getObject(Context context, Callback<T> callback, Object... keyElements) {
+		return getObject(context, null, callback, keyElements);
+	}
 
-    @Override
-    public <T> T getObject(Context context, CachingOptions cachingOptions, Callback<T> callback,
-                           Object... keyElements) {
-        Object key = getKey(keyElements);
+	@Override
+	public <T> T getObject(Context context, CachingOptions cachingOptions, Callback<T> callback,
+			       Object... keyElements) {
+		Object key = getKey(keyElements);
 
-        T obj = doGet(context, callback, key);
-        if (obj == null) {
-            obj = loadAndPutInCache(context, cachingOptions, callback, key);
-        }
+		T obj = doGet(context, callback, key);
+		if (obj == null) {
+			obj = loadAndPutInCache(context, cachingOptions, callback, key);
+		}
 
-        return obj;
-    }
+		return obj;
+	}
 
-    @SuppressWarnings("unchecked")
-    protected <T> T doGet(Context context, Callback<T> callback, Object key) {
-        T obj = null;
-        try {
-            obj = (T)cacheService.get(context, key);
-        } catch (Exception e) {
-            logGetFailure(context, callback, key, e);
-        }
+	@SuppressWarnings("unchecked")
+	protected <T> T doGet(Context context, Callback<T> callback, Object key) {
+		T obj = null;
+		try {
+			obj = (T) cacheService.get(context, key);
+		} catch (Exception e) {
+			logGetFailure(context, callback, key, e);
+		}
 
-        return obj;
-    }
+		return obj;
+	}
 
-    protected <T> T loadAndPutInCache(Context context, CachingOptions cachingOptions, Callback<T> callback, Object key) {
-        // Use the context's cache scope + the cache key as the lock key
-        Lock lock = lockFactory.getLock(context.getCacheScope() + ":" + key);
-        lock.lock();
-        try {
-            // Check if another thread already has put the item in cache
-            T obj = doGet(context, callback, key);
-            if (obj == null) {
-                obj = callback.execute();
-                if (obj != null) {
-                    if (cachingOptions == null) {
-                        cachingOptions = CachingOptions.DEFAULT_CACHING_OPTIONS;
-                    }
+	protected <T> T loadAndPutInCache(Context context, CachingOptions cachingOptions, Callback<T> callback, Object key) {
+		// Use the context's cache scope + the cache key as the lock key
+		Lock lock = lockFactory.getLock(context.getCacheScope() + ":" + key);
+		lock.lock();
+		try {
+			// Check if another thread already has put the item in cache
+			T obj = doGet(context, callback, key);
+			if (obj == null) {
+				obj = callback.execute();
+				if (obj != null) {
+					if (cachingOptions == null) {
+						cachingOptions = CachingOptions.DEFAULT_CACHING_OPTIONS;
+					}
 
-                    obj = doPut(context, cachingOptions, callback, key, obj);
-                }
-            }
+					obj = doPut(context, cachingOptions, callback, key, obj);
+				}
+			}
 
-            return obj;
-        } finally {
-            lock.unlock();
-        }
-    }
+			return obj;
+		} finally {
+			lock.unlock();
+		}
+	}
 
-    protected <T> T doPut(Context context, CachingOptions cachingOptions, Callback<T> callback, Object key, T obj) {
-        try {
-            CacheLoader loader = getCacheLoader(callback, cachingOptions.getRefreshFrequency());
-            cacheService.put(context, key, obj, cachingOptions, loader);
-        } catch (Exception e) {
-            logPutFailure(context, callback, key, obj, e);
-        }
+	protected <T> T doPut(Context context, CachingOptions cachingOptions, Callback<T> callback, Object key, T obj) {
+		try {
+			CacheLoader loader = getCacheLoader(callback, cachingOptions.getRefreshFrequency());
+			cacheService.put(context, key, obj, cachingOptions, loader);
+		} catch (Exception e) {
+			logPutFailure(context, callback, key, obj, e);
+		}
 
-        return obj;
-    }
+		return obj;
+	}
 
-    protected <T> CacheLoader getCacheLoader(final Callback<T> callback, long refreshFrequency) {
-        if (refreshFrequency != CacheItem.NEVER_REFRESH) {
-            return parameters -> callback.execute();
-        } else {
-            return null;
-        }
-    }
+	protected <T> CacheLoader getCacheLoader(final Callback<T> callback, long refreshFrequency) {
+		if (refreshFrequency != CacheItem.NEVER_REFRESH) {
+			return parameters -> callback.execute();
+		} else {
+			return null;
+		}
+	}
 
-    protected void logGetFailure(Context context, Callback<?> callback, Object key, Exception e) {
-        logger.error("Unable to retrieve cached object: key='" + key + "', context=" + context + ", " +
-                     "callback=" + callback, e);
-    }
+	protected void logGetFailure(Context context, Callback<?> callback, Object key, Exception e) {
+		logger.error("Unable to retrieve cached object: key='" + key + "', context=" + context + ", " +
+			"callback=" + callback, e);
+	}
 
-    protected void logPutFailure(Context context, Callback<?> callback, Object key, Object obj, Exception e) {
-        logger.error("Unable to put cache object: key='" + key + "', context=" + context + ", obj=" + obj +
-                     ", callback=" + callback, e);
-    }
+	protected void logPutFailure(Context context, Callback<?> callback, Object key, Object obj, Exception e) {
+		logger.error("Unable to put cache object: key='" + key + "', context=" + context + ", obj=" + obj +
+			", callback=" + callback, e);
+	}
 
 }

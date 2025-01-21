@@ -27,22 +27,22 @@ import org.dom4j.Document;
  */
 public class SingleMergeStrategyResolver implements DescriptorMergeStrategyResolver {
 
-    private DescriptorMergeStrategy strategy;
+	private DescriptorMergeStrategy strategy;
 
-    public SingleMergeStrategyResolver(DescriptorMergeStrategy strategy) {
-        this.strategy = strategy;
-    }
+	public SingleMergeStrategyResolver(DescriptorMergeStrategy strategy) {
+		this.strategy = strategy;
+	}
 
-    /**
-     * Returns always the same {@link DescriptorMergeStrategy}, defined in the <code>strategy</code> property.
-     *
-     * @param descriptorUrl the URL that identifies the descriptor
-     * @param descriptorDom the XML DOM of the descriptor (optional)
-     * @return the value of the <code>strategy</code> property
-     */
-    @Override
-    public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) {
-        return strategy;
-    }
+	/**
+	 * Returns always the same {@link DescriptorMergeStrategy}, defined in the <code>strategy</code> property.
+	 *
+	 * @param descriptorUrl the URL that identifies the descriptor
+	 * @param descriptorDom the XML DOM of the descriptor (optional)
+	 * @return the value of the <code>strategy</code> property
+	 */
+	@Override
+	public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) {
+		return strategy;
+	}
 
 }

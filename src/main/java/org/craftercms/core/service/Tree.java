@@ -28,170 +28,170 @@ import org.apache.commons.collections4.CollectionUtils;
  */
 public class Tree extends Item {
 
-    /**
-     * The folder's children. Children can be both {@link Item}s or other {@link Tree}s.
-     */
-    protected List<Item> children;
+	/**
+	 * The folder's children. Children can be both {@link Item}s or other {@link Tree}s.
+	 */
+	protected List<Item> children;
 
-    /**
-     * Default no-arg constructor. Sets {@code folder} to true, since a tree is always a folder.
-     */
-    public Tree() {
-        isFolder = true;
-    }
+	/**
+	 * Default no-arg constructor. Sets {@code folder} to true, since a tree is always a folder.
+	 */
+	public Tree() {
+		isFolder = true;
+	}
 
-    /**
-     * Copy constructor that takes an item and calls the {@link Item#Item(Item)}. Sets {@code folder} to true,
-     * since a tree is always a folder.
-     */
-    public Tree(Item item) {
-        super(item);
+	/**
+	 * Copy constructor that takes an item and calls the {@link Item#Item(Item)}. Sets {@code folder} to true,
+	 * since a tree is always a folder.
+	 */
+	public Tree(Item item) {
+		super(item);
 
-        isFolder = true;
-    }
+		isFolder = true;
+	}
 
-    /**
-     * Copy constructor that takes an item and calls the {@link Item#Item(Item, boolean)}. Sets {@code folder} to true,
-     * since a tree is always a folder.
-     */
-    public Tree(Item item, boolean deepCopy) {
-        super(item, deepCopy);
+	/**
+	 * Copy constructor that takes an item and calls the {@link Item#Item(Item, boolean)}. Sets {@code folder} to true,
+	 * since a tree is always a folder.
+	 */
+	public Tree(Item item, boolean deepCopy) {
+		super(item, deepCopy);
 
-        isFolder = true;
-    }
+		isFolder = true;
+	}
 
-    /**
-     * Copy constructor that takes another tree. Performs a deep copy (calls {@link Item#Item(Item, boolean)} with
-     * true).
-     */
-    public Tree(Tree tree) {
-        this(tree, true);
-    }
+	/**
+	 * Copy constructor that takes another tree. Performs a deep copy (calls {@link Item#Item(Item, boolean)} with
+	 * true).
+	 */
+	public Tree(Tree tree) {
+		this(tree, true);
+	}
 
-    /**
-     * Copy constructor that takes another tree. Performs a deep copy depending on the value of the {@code deepCopy}
-     * flag. In a deep copy, a deep copy of each child is done (by calling {@link Item#Item(Item, boolean)} and
-     * {@link #Tree(Tree, boolean)}).
-     */
-    public Tree(Tree tree, boolean deepCopy) {
-        super(tree, deepCopy);
+	/**
+	 * Copy constructor that takes another tree. Performs a deep copy depending on the value of the {@code deepCopy}
+	 * flag. In a deep copy, a deep copy of each child is done (by calling {@link Item#Item(Item, boolean)} and
+	 * {@link #Tree(Tree, boolean)}).
+	 */
+	public Tree(Tree tree, boolean deepCopy) {
+		super(tree, deepCopy);
 
-        if (deepCopy) {
-            if (CollectionUtils.isNotEmpty(tree.children)) {
-                children = new ArrayList<Item>(tree.children.size());
-                for (Item child : tree.children) {
-                    if (child instanceof Tree) {
-                        children.add(new Tree((Tree)child, deepCopy));
-                    } else {
-                        children.add(new Item(child, deepCopy));
-                    }
-                }
-            } else {
-                children = new ArrayList<Item>();
-            }
-        } else {
-            children = tree.children;
-        }
-    }
+		if (deepCopy) {
+			if (CollectionUtils.isNotEmpty(tree.children)) {
+				children = new ArrayList<Item>(tree.children.size());
+				for (Item child : tree.children) {
+					if (child instanceof Tree) {
+						children.add(new Tree((Tree) child, deepCopy));
+					} else {
+						children.add(new Item(child, deepCopy));
+					}
+				}
+			} else {
+				children = new ArrayList<Item>();
+			}
+		} else {
+			children = tree.children;
+		}
+	}
 
-    /**
-     * Overrides {@link Item#setFolder(boolean)}, by checking that the flag is never set to false, since a tree
-     * is always a folder.
-     *
-     * @throws IllegalArgumentException if the method was called with false (the folder flag should never being set
-     *                                  to false).
-     */
-    @Override
-    public void setFolder(boolean folder) {
-        if (!folder) {
-            throw new IllegalArgumentException("A tree must always be a folder");
-        }
+	/**
+	 * Overrides {@link Item#setFolder(boolean)}, by checking that the flag is never set to false, since a tree
+	 * is always a folder.
+	 *
+	 * @throws IllegalArgumentException if the method was called with false (the folder flag should never being set
+	 *                                  to false).
+	 */
+	@Override
+	public void setFolder(boolean folder) {
+		if (!folder) {
+			throw new IllegalArgumentException("A tree must always be a folder");
+		}
 
-        super.setFolder(folder);
-    }
+		super.setFolder(folder);
+	}
 
-    /**
-     * Returns the tree's children. Children can be both {@link Item}s or other {@link Tree}s.
-     */
-    public List<Item> getChildren() {
-        return children;
-    }
+	/**
+	 * Returns the tree's children. Children can be both {@link Item}s or other {@link Tree}s.
+	 */
+	public List<Item> getChildren() {
+		return children;
+	}
 
-    /**
-     * Sets the tree's children. Children can be both {@link Item}s or other {@link Tree}s.
-     *
-     * @param children
-     */
-    public void setChildren(List<Item> children) {
-        this.children = children;
-    }
+	/**
+	 * Sets the tree's children. Children can be both {@link Item}s or other {@link Tree}s.
+	 *
+	 * @param children
+	 */
+	public void setChildren(List<Item> children) {
+		this.children = children;
+	}
 
-    /**
-     * Adds a child. The child can be both {@link Item}s or another {@link Tree}s.
-     */
-    public void addChild(Item child) {
-        if (children == null) {
-            children = new ArrayList<>();
-        }
+	/**
+	 * Adds a child. The child can be both {@link Item}s or another {@link Tree}s.
+	 */
+	public void addChild(Item child) {
+		if (children == null) {
+			children = new ArrayList<>();
+		}
 
-        children.add(child);
-    }
+		children.add(child);
+	}
 
-    /**
-     * Removes a child.
-     */
-    public boolean removeChild(Item child) {
-        if (children != null) {
-            return children.remove(child);
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * Removes a child.
+	 */
+	public boolean removeChild(Item child) {
+		if (children != null) {
+			return children.remove(child);
+		} else {
+			return false;
+		}
+	}
 
-    /**
-     * Returns true if {@link Item#equals(Object)} returns true and if the specified {@code Tree}'s and this instance's
-     * {@code children} are equal.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
+	/**
+	 * Returns true if {@link Item#equals(Object)} returns true and if the specified {@code Tree}'s and this instance's
+	 * {@code children} are equal.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		if (!super.equals(o)) {
+			return false;
+		}
 
-        Tree tree = (Tree)o;
+		Tree tree = (Tree) o;
 
-        if (children != null? !children.equals(tree.children): tree.children != null) {
-            return false;
-        }
+		if (children != null ? !children.equals(tree.children) : tree.children != null) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    /**
-     * Returns the hash code, which is a combination of {@link Item#hashCode()} and the list of children's hash code.
-     */
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (children != null? children.hashCode(): 0);
-        return result;
-    }
+	/**
+	 * Returns the hash code, which is a combination of {@link Item#hashCode()} and the list of children's hash code.
+	 */
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + (children != null ? children.hashCode() : 0);
+		return result;
+	}
 
-    @Override
-    public String toString() {
-        return "Tree[" +
-            "name='" + name + '\'' +
-            ", url='" + url + '\'' +
-            ", descriptorUrl='" + descriptorUrl + '\'' +
-            ", properties=" + properties +
-            ", children=" + children +
-            ']';
-    }
+	@Override
+	public String toString() {
+		return "Tree[" +
+			"name='" + name + '\'' +
+			", url='" + url + '\'' +
+			", descriptorUrl='" + descriptorUrl + '\'' +
+			", properties=" + properties +
+			", children=" + children +
+			']';
+	}
 
 }

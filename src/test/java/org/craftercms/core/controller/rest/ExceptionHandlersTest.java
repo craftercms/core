@@ -37,61 +37,61 @@ import static org.junit.Assert.assertEquals;
  */
 public class ExceptionHandlersTest {
 
-    private ExceptionHandlers exceptionHandler;
+	private ExceptionHandlers exceptionHandler;
 
-    private MockHttpServletRequest request;
+	private MockHttpServletRequest request;
 
-    private MockHttpServletResponse response;
+	private MockHttpServletResponse response;
 
-    private ServletWebRequest webRequest;
+	private ServletWebRequest webRequest;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestExceptionHandler();
-        setUpTestRequest();
-        setUpTestResponse();
-        setUpTestWebRequest();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestExceptionHandler();
+		setUpTestRequest();
+		setUpTestResponse();
+		setUpTestWebRequest();
+	}
 
-    private void setUpTestExceptionHandler() {
-        exceptionHandler = new ExceptionHandlers();
-    }
+	private void setUpTestExceptionHandler() {
+		exceptionHandler = new ExceptionHandlers();
+	}
 
-    private void setUpTestRequest() {
-        request = new MockHttpServletRequest();
-        request.setMethod("GET");
-    }
+	private void setUpTestRequest() {
+		request = new MockHttpServletRequest();
+		request.setMethod("GET");
+	}
 
-    private void setUpTestResponse() {
-        response = new MockHttpServletResponse();
-    }
+	private void setUpTestResponse() {
+		response = new MockHttpServletResponse();
+	}
 
-    private void setUpTestWebRequest() {
-        webRequest = new ServletWebRequest(request, response);
-    }
+	private void setUpTestWebRequest() {
+		webRequest = new ServletWebRequest(request, response);
+	}
 
-    @Test
-    public void testHandleAuthenticationException() {
-        AuthenticationException ex = new AuthenticationException("This is a test");
+	@Test
+	public void testHandleAuthenticationException() {
+		AuthenticationException ex = new AuthenticationException("This is a test");
 
-        Map<String, Object> model = exceptionHandler.handleAuthenticationException(request, ex);
-        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
-    }
+		Map<String, Object> model = exceptionHandler.handleAuthenticationException(request, ex);
+		assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
+	}
 
-    @Test
-    public void testHandlePathNotFoundException()  {
-        PathNotFoundException ex = new PathNotFoundException("This is a test");
+	@Test
+	public void testHandlePathNotFoundException() {
+		PathNotFoundException ex = new PathNotFoundException("This is a test");
 
-        Map<String, Object> model = exceptionHandler.handlePathNotFoundException(request, ex);
-        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
-    }
+		Map<String, Object> model = exceptionHandler.handlePathNotFoundException(request, ex);
+		assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
+	}
 
-    @Test
-    public void testHandleException() {
-        Exception ex = new Exception("This is a test");
+	@Test
+	public void testHandleException() {
+		Exception ex = new Exception("This is a test");
 
-        Map<String, Object> model = exceptionHandler.handleException(request, ex);
-        assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
-    }
+		Map<String, Object> model = exceptionHandler.handleException(request, ex);
+		assertEquals(ex.getMessage(), model.get(MESSAGE_MODEL_ATTRIBUTE_NAME));
+	}
 
 }

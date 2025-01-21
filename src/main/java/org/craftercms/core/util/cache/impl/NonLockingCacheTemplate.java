@@ -28,25 +28,25 @@ import org.craftercms.core.service.Context;
  */
 public class NonLockingCacheTemplate extends DefaultCacheTemplate {
 
-    public NonLockingCacheTemplate(CacheService cacheService) {
-        super(cacheService);
-    }
+	public NonLockingCacheTemplate(CacheService cacheService) {
+		super(cacheService);
+	}
 
-    @Override
-    protected <T> T loadAndPutInCache(Context context, CachingOptions options, Callback<T> callback, Object key) {
-        T obj = doGet(context, callback, key);
-        if (obj == null) {
-            obj = callback.execute();
-            if (obj != null) {
-                if (options == null) {
-                    options = CachingOptions.DEFAULT_CACHING_OPTIONS;
-                }
+	@Override
+	protected <T> T loadAndPutInCache(Context context, CachingOptions options, Callback<T> callback, Object key) {
+		T obj = doGet(context, callback, key);
+		if (obj == null) {
+			obj = callback.execute();
+			if (obj != null) {
+				if (options == null) {
+					options = CachingOptions.DEFAULT_CACHING_OPTIONS;
+				}
 
-                obj = doPut(context, options, callback, key, obj);
-            }
-        }
+				obj = doPut(context, options, callback, key, obj);
+			}
+		}
 
-        return obj;
-    }
+		return obj;
+	}
 
 }

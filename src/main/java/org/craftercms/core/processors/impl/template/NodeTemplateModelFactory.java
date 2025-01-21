@@ -25,14 +25,14 @@ import org.dom4j.Node;
  */
 public interface NodeTemplateModelFactory {
 
-    /**
-     * Returns the model for a given template of a given node.
-     *
-     * @param item     the {@link Item} whose descriptor contains the specified node
-     * @param node     the DOM node whose content is the specified template
-     * @param template the actual template
-     * @return the model to be used for processing the specified template
-     */
-    Object getModel(Item item, Node node, String template);
+	/**
+	 * Returns the model for a given template of a given node.
+	 *
+	 * @param item     the {@link Item} whose descriptor contains the specified node
+	 * @param node     the DOM node whose content is the specified template
+	 * @param template the actual template
+	 * @return the model to be used for processing the specified template
+	 */
+	Object getModel(Item item, Node node, String template);
 
 }

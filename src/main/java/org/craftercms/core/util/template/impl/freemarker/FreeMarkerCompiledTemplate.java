@@ -29,20 +29,20 @@ import org.craftercms.core.util.template.CompiledTemplate;
  */
 public class FreeMarkerCompiledTemplate implements CompiledTemplate {
 
-    private Template template;
+	private Template template;
 
-    public FreeMarkerCompiledTemplate(Template template) {
-        this.template = template;
-    }
+	public FreeMarkerCompiledTemplate(Template template) {
+		this.template = template;
+	}
 
-    public void process(Object model, Writer output) throws TemplateException {
-        try {
-            template.process(model, output);
-        } catch (IOException e) {
-            throw new TemplateException("An I/O error occurred while writing to output", e);
-        } catch (Exception e) {
-            throw new TemplateException("Unable to process Freemarker template:\n" + template, e);
-        }
-    }
+	public void process(Object model, Writer output) throws TemplateException {
+		try {
+			template.process(model, output);
+		} catch (IOException e) {
+			throw new TemplateException("An I/O error occurred while writing to output", e);
+		} catch (Exception e) {
+			throw new TemplateException("Unable to process Freemarker template:\n" + template, e);
+		}
+	}
 
 }

@@ -16,12 +16,12 @@
   -->
 
 <image-metadata>
-    <!-- CrafterCMS Logo Folder Metadata File -->
-    <merge-strategy>inherit-levels</merge-strategy>
-    <processor>image</processor>
-    <size>6.63kb</size>
-    <resolution>
-        <width>346</width>
-        <height>96</height>
-    </resolution>
+		<!-- CrafterCMS Logo Folder Metadata File -->
+		<merge-strategy>inherit-levels</merge-strategy>
+		<processor>image</processor>
+		<size>6.63kb</size>
+		<resolution>
+				<width>346</width>
+				<height>96</height>
+		</resolution>
 </image-metadata>

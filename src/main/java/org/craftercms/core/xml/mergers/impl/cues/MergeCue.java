@@ -27,8 +27,8 @@ import org.dom4j.Element;
  */
 public interface MergeCue {
 
-    int getPriority();
+	int getPriority();
 
-    Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException;
+	Element merge(Element parent, Element child, Map<String, String> params) throws XmlMergeException;
 
 }

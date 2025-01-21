@@ -22,8 +22,8 @@ package org.craftercms.core.exception;
  */
 public class RootFolderNotFoundException extends CrafterException {
 
-    public RootFolderNotFoundException(String message) {
-        super(message);
-    }
+	public RootFolderNotFoundException(String message) {
+		super(message);
+	}
 
 }

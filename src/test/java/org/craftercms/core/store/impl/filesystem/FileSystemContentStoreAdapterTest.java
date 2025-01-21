@@ -43,171 +43,171 @@ import static org.mockito.Mockito.*;
  */
 public class FileSystemContentStoreAdapterTest {
 
-    private static final String DESCRIPTOR_FILE_EXTENSION = ".xml";
-    private static final String METADATA_FILE_EXTENSION = ".meta.xml";
+	private static final String DESCRIPTOR_FILE_EXTENSION = ".xml";
+	private static final String METADATA_FILE_EXTENSION = ".meta.xml";
 
-    private static final String CLASSPATH_STORE_ROOT_FOLDER_PATH = "stores/" + FileSystemContentStoreAdapterTest
-        .class.getSimpleName();
+	private static final String CLASSPATH_STORE_ROOT_FOLDER_PATH = "stores/" + FileSystemContentStoreAdapterTest
+		.class.getSimpleName();
 
-    private static final String FOLDER_NAME = "folder";
-    private static final String FOLDER_PATH = "/" + FOLDER_NAME;
-    private static final String FOLDER_METADATA_FILE_PATH = FOLDER_PATH + METADATA_FILE_EXTENSION;
+	private static final String FOLDER_NAME = "folder";
+	private static final String FOLDER_PATH = "/" + FOLDER_NAME;
+	private static final String FOLDER_METADATA_FILE_PATH = FOLDER_PATH + METADATA_FILE_EXTENSION;
 
-    private static final String DESCRIPTOR_NAME = "descriptor.xml";
-    private static final String DESCRIPTOR_PATH = FOLDER_PATH + "/" + DESCRIPTOR_NAME;
+	private static final String DESCRIPTOR_NAME = "descriptor.xml";
+	private static final String DESCRIPTOR_PATH = FOLDER_PATH + "/" + DESCRIPTOR_NAME;
 
-    private static final String CRAFTER_CMS_LOGO_NAME = "craftercms_logo.png";
-    private static final String CRAFTER_CMS_LOGO_PATH = FOLDER_PATH + "/" + CRAFTER_CMS_LOGO_NAME;
-    private static final String CRAFTER_CMS_LOGO_METADATA_FILE_PATH = FOLDER_PATH + "/craftercms_logo" +
-                                                                      METADATA_FILE_EXTENSION;
-    private static final String INVALID_PATH = "/an/invalid/../path";
+	private static final String CRAFTER_CMS_LOGO_NAME = "craftercms_logo.png";
+	private static final String CRAFTER_CMS_LOGO_PATH = FOLDER_PATH + "/" + CRAFTER_CMS_LOGO_NAME;
+	private static final String CRAFTER_CMS_LOGO_METADATA_FILE_PATH = FOLDER_PATH + "/craftercms_logo" +
+		METADATA_FILE_EXTENSION;
+	private static final String INVALID_PATH = "/an/invalid/../path";
 
-    private static final String HIDDEN_FILE_NAME = ".hidden";
+	private static final String HIDDEN_FILE_NAME = ".hidden";
 
-    private FileSystemContentStoreAdapter storeAdapter;
-    private CacheTemplate cacheTemplate;
+	private FileSystemContentStoreAdapter storeAdapter;
+	private CacheTemplate cacheTemplate;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestCacheTemplate();
-        setUpTestStoreAdapter();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestCacheTemplate();
+		setUpTestStoreAdapter();
+	}
 
-    @Test
-    public void testGetInvalidPath() {
-        Context context = createTestContext(true);
-        assertThrows(StoreException.class, () -> storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, true));
-    }
+	@Test
+	public void testGetInvalidPath() {
+		Context context = createTestContext(true);
+		assertThrows(StoreException.class, () -> storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, INVALID_PATH, true));
+	}
 
-    @Test
-    public void testGetFolderItem() throws Exception {
-        Context context = createTestContext(true);
+	@Test
+	public void testGetFolderItem() throws Exception {
+		Context context = createTestContext(true);
 
-        Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
-        assertNotNull(item);
-        assertEquals(FOLDER_NAME, item.getName());
-        assertEquals(FOLDER_PATH, item.getUrl());
-        assertTrue(item.isFolder());
-        assertEquals(FOLDER_METADATA_FILE_PATH, item.getDescriptorUrl());
-        assertNotNull(item.getDescriptorDom());
+		Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH, true);
+		assertNotNull(item);
+		assertEquals(FOLDER_NAME, item.getName());
+		assertEquals(FOLDER_PATH, item.getUrl());
+		assertTrue(item.isFolder());
+		assertEquals(FOLDER_METADATA_FILE_PATH, item.getDescriptorUrl());
+		assertNotNull(item.getDescriptorDom());
 
-        Element permission = (Element) item.getDescriptorDom().selectSingleNode("/folder-metadata/permissions" +
-                                                                                "/permission");
-        assertNotNull(permission);
+		Element permission = (Element) item.getDescriptorDom().selectSingleNode("/folder-metadata/permissions" +
+			"/permission");
+		assertNotNull(permission);
 
-        Element user = permission.element("user");
-        assertNotNull(user);
-        assertEquals("admin", user.getText());
+		Element user = permission.element("user");
+		assertNotNull(user);
+		assertEquals("admin", user.getText());
 
-        Element allowedActions = permission.element("allowed-actions");
-        assertNotNull(allowedActions);
-        assertEquals("read-only", allowedActions.getText());
-    }
+		Element allowedActions = permission.element("allowed-actions");
+		assertNotNull(allowedActions);
+		assertEquals("read-only", allowedActions.getText());
+	}
 
-    @Test
-    public void testGetDescriptorItem() throws Exception {
-        Context context = createTestContext(true);
+	@Test
+	public void testGetDescriptorItem() throws Exception {
+		Context context = createTestContext(true);
 
-        Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR_PATH, true);
-        assertDescriptorItem(item);
-    }
+		Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR_PATH, true);
+		assertDescriptorItem(item);
+	}
 
-    @Test
-    public void testGetStaticAssetItem() throws Exception {
-        Context context = createTestContext(true);
+	@Test
+	public void testGetStaticAssetItem() throws Exception {
+		Context context = createTestContext(true);
 
-        Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, CRAFTER_CMS_LOGO_PATH, true);
-        assertCrafterCMSLogoItem(item);
-    }
+		Item item = storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, CRAFTER_CMS_LOGO_PATH, true);
+		assertCrafterCMSLogoItem(item);
+	}
 
-    @Test
-    public void testGetItems() throws Exception {
-        Context context = createTestContext(true);
+	@Test
+	public void testGetItems() throws Exception {
+		Context context = createTestContext(true);
 
-        List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH);
-        assertNotNull(items);
+		List<Item> items = storeAdapter.findItems(context, DEFAULT_CACHING_OPTIONS, FOLDER_PATH);
+		assertNotNull(items);
 
-        Collections.sort(items, ItemComparator.INSTANCE);
+		Collections.sort(items, ItemComparator.INSTANCE);
 
-        assertEquals(2, items.size());
+		assertEquals(2, items.size());
 
-        assertNotNull(items.get(0));
+		assertNotNull(items.get(0));
 
-        assertEquals(CRAFTER_CMS_LOGO_NAME, items.get(0).getName());
-        assertEquals(CRAFTER_CMS_LOGO_PATH, items.get(0).getUrl());
-        assertFalse(items.get(0).isFolder());
-        assertNull(items.get(0).getDescriptorUrl());
-        assertNull(items.get(0).getDescriptorDom());
+		assertEquals(CRAFTER_CMS_LOGO_NAME, items.get(0).getName());
+		assertEquals(CRAFTER_CMS_LOGO_PATH, items.get(0).getUrl());
+		assertFalse(items.get(0).isFolder());
+		assertNull(items.get(0).getDescriptorUrl());
+		assertNull(items.get(0).getDescriptorDom());
 
-        assertEquals(DESCRIPTOR_NAME, items.get(1).getName());
-        assertEquals(DESCRIPTOR_PATH, items.get(1).getUrl());
-        assertFalse(items.get(1).isFolder());
-        assertNull(items.get(1).getDescriptorUrl());
-        assertNull(items.get(1).getDescriptorDom());
-    }
+		assertEquals(DESCRIPTOR_NAME, items.get(1).getName());
+		assertEquals(DESCRIPTOR_PATH, items.get(1).getUrl());
+		assertFalse(items.get(1).isFolder());
+		assertNull(items.get(1).getDescriptorUrl());
+		assertNull(items.get(1).getDescriptorDom());
+	}
 
-    private Context createTestContext(boolean ignoreHiddenFiles) {
-        return storeAdapter.createContext("0", CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
-                DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, ignoreHiddenFiles, null);
-    }
+	private Context createTestContext(boolean ignoreHiddenFiles) {
+		return storeAdapter.createContext("0", CLASSPATH_STORE_ROOT_FOLDER_PATH, DEFAULT_MERGING_ON, DEFAULT_CACHE_ON,
+			DEFAULT_MAX_ALLOWED_ITEMS_IN_CACHE, ignoreHiddenFiles, null);
+	}
 
-    private void setUpTestCacheTemplate() {
-        cacheTemplate = mock(CacheTemplate.class);
-        when(cacheTemplate.getObject(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), any(Callback.class), any(Object[].class)))
-                .thenAnswer(invocation -> ((Callback<?>) invocation.getArguments()[2]).execute());
-    }
+	private void setUpTestCacheTemplate() {
+		cacheTemplate = mock(CacheTemplate.class);
+		when(cacheTemplate.getObject(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), any(Callback.class), any(Object[].class)))
+			.thenAnswer(invocation -> ((Callback<?>) invocation.getArguments()[2]).execute());
+	}
 
-    private void setUpTestStoreAdapter() throws IOException {
-        ResourceLoader resourceLoader = mock(ResourceLoader.class);
-        when(resourceLoader.getResource(CLASSPATH_STORE_ROOT_FOLDER_PATH)).thenReturn(new ClassPathResource(
-                CLASSPATH_STORE_ROOT_FOLDER_PATH));
+	private void setUpTestStoreAdapter() throws IOException {
+		ResourceLoader resourceLoader = mock(ResourceLoader.class);
+		when(resourceLoader.getResource(CLASSPATH_STORE_ROOT_FOLDER_PATH)).thenReturn(new ClassPathResource(
+			CLASSPATH_STORE_ROOT_FOLDER_PATH));
 
-        storeAdapter = new FileSystemContentStoreAdapter(new SecurePathValidator(), DESCRIPTOR_FILE_EXTENSION, METADATA_FILE_EXTENSION, cacheTemplate);
-        storeAdapter.setResourceLoader(resourceLoader);
-    }
+		storeAdapter = new FileSystemContentStoreAdapter(new SecurePathValidator(), DESCRIPTOR_FILE_EXTENSION, METADATA_FILE_EXTENSION, cacheTemplate);
+		storeAdapter.setResourceLoader(resourceLoader);
+	}
 
-    private void assertCrafterCMSLogoItem(Item item) {
-        assertNotNull(item);
-        assertEquals(CRAFTER_CMS_LOGO_NAME, item.getName());
-        assertEquals(CRAFTER_CMS_LOGO_PATH, item.getUrl());
-        assertFalse(item.isFolder());
-        assertEquals(CRAFTER_CMS_LOGO_METADATA_FILE_PATH, item.getDescriptorUrl());
-        assertNotNull(item.getDescriptorDom());
+	private void assertCrafterCMSLogoItem(Item item) {
+		assertNotNull(item);
+		assertEquals(CRAFTER_CMS_LOGO_NAME, item.getName());
+		assertEquals(CRAFTER_CMS_LOGO_PATH, item.getUrl());
+		assertFalse(item.isFolder());
+		assertEquals(CRAFTER_CMS_LOGO_METADATA_FILE_PATH, item.getDescriptorUrl());
+		assertNotNull(item.getDescriptorDom());
 
-        Element resolution = (Element) item.getDescriptorDom().selectSingleNode("/image-metadata/resolution");
-        assertNotNull(resolution);
+		Element resolution = (Element) item.getDescriptorDom().selectSingleNode("/image-metadata/resolution");
+		assertNotNull(resolution);
 
-        Element width = resolution.element("width");
-        assertNotNull(width);
-        assertEquals(346, Integer.parseInt(width.getText()));
+		Element width = resolution.element("width");
+		assertNotNull(width);
+		assertEquals(346, Integer.parseInt(width.getText()));
 
-        Element height = resolution.element("height");
-        assertNotNull(height);
-        assertEquals(96, Integer.parseInt(height.getText()));
-    }
+		Element height = resolution.element("height");
+		assertNotNull(height);
+		assertEquals(96, Integer.parseInt(height.getText()));
+	}
 
-    private void assertDescriptorItem(Item item) {
-        assertNotNull(item);
-        assertEquals(DESCRIPTOR_NAME, item.getName());
-        assertEquals(DESCRIPTOR_PATH, item.getUrl());
-        assertFalse(item.isFolder());
-        assertEquals(DESCRIPTOR_PATH, item.getDescriptorUrl());
-        assertNotNull(item.getDescriptorDom());
+	private void assertDescriptorItem(Item item) {
+		assertNotNull(item);
+		assertEquals(DESCRIPTOR_NAME, item.getName());
+		assertEquals(DESCRIPTOR_PATH, item.getUrl());
+		assertFalse(item.isFolder());
+		assertEquals(DESCRIPTOR_PATH, item.getDescriptorUrl());
+		assertNotNull(item.getDescriptorDom());
 
-        Node body = item.getDescriptorDom().selectSingleNode("/descriptor/body");
-        assertNotNull(body);
-        assertEquals("CrafterCMS", body.getText());
-    }
+		Node body = item.getDescriptorDom().selectSingleNode("/descriptor/body");
+		assertNotNull(body);
+		assertEquals("CrafterCMS", body.getText());
+	}
 
-    private static class ItemComparator implements Comparator<Item> {
+	private static class ItemComparator implements Comparator<Item> {
 
-        public static final ItemComparator INSTANCE = new ItemComparator();
+		public static final ItemComparator INSTANCE = new ItemComparator();
 
-        @Override
-        public int compare(Item item1, Item item2) {
-            return item1.getName().compareTo(item2.getName());
-        }
+		@Override
+		public int compare(Item item1, Item item2) {
+			return item1.getName().compareTo(item2.getName());
+		}
 
-    }
+	}
 
 }

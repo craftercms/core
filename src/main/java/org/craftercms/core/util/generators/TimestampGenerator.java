@@ -24,12 +24,12 @@ package org.craftercms.core.util.generators;
  */
 public interface TimestampGenerator {
 
-    /**
-     * Generates a new timestamp. The implementations should return an identifier
-     * that's unique across repeated calls in a considerable amount of time.
-     *
-     * @return the new timestamp
-     */
-    public long generate();
+	/**
+	 * Generates a new timestamp. The implementations should return an identifier
+	 * that's unique across repeated calls in a considerable amount of time.
+	 *
+	 * @return the new timestamp
+	 */
+	public long generate();
 
 }

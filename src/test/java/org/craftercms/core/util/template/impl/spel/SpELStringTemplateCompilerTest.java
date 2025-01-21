@@ -41,48 +41,48 @@ import java.io.StringWriter;
 public class SpELStringTemplateCompilerTest {
 
 
-    private static final String TEMPLATE = "Hello #{person.firstName} #{person.lastName}! Current OS name is " +
-            "#{systemProperties['os.name']}. Current PATH env variable is #{systemEnvironment['PATH']}.";
-    private static final String PROCESSED_TEMPLATE = "Hello %s %s! Current OS name is %s. Current PATH env variable " +
-            "is %s.";
+	private static final String TEMPLATE = "Hello #{person.firstName} #{person.lastName}! Current OS name is " +
+		"#{systemProperties['os.name']}. Current PATH env variable is #{systemEnvironment['PATH']}.";
+	private static final String PROCESSED_TEMPLATE = "Hello %s %s! Current OS name is %s. Current PATH env variable " +
+		"is %s.";
 
-    @Autowired
-    private SpELStringTemplateCompiler compiler;
-    @Autowired
-    private Person person;
-    @Autowired
-    private BeanFactory beanFactory;
+	@Autowired
+	private SpELStringTemplateCompiler compiler;
+	@Autowired
+	private Person person;
+	@Autowired
+	private BeanFactory beanFactory;
 
-    @Test
-    public void testCompiler() throws Exception {
-        StringWriter output = new StringWriter();
+	@Test
+	public void testCompiler() throws Exception {
+		StringWriter output = new StringWriter();
 
-        compiler.compile(new IdentifiableStringTemplateSource("template", TEMPLATE)).process(beanFactory, output);
+		compiler.compile(new IdentifiableStringTemplateSource("template", TEMPLATE)).process(beanFactory, output);
 
-        String expected = String.format(PROCESSED_TEMPLATE, person.getFirstName(), person.getLastName(), System
-                .getProperty("os.name"), System.getenv("PATH"));
-        assertEquals(expected, output.toString());
-    }
+		String expected = String.format(PROCESSED_TEMPLATE, person.getFirstName(), person.getLastName(), System
+			.getProperty("os.name"), System.getenv("PATH"));
+		assertEquals(expected, output.toString());
+	}
 
-    public static class Person {
+	public static class Person {
 
-        private String firstName;
-        private String lastName;
+		private String firstName;
+		private String lastName;
 
-        @ConstructorProperties({"firstName", "lastName"})
-        private Person(String firstName, String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
+		@ConstructorProperties({"firstName", "lastName"})
+		private Person(String firstName, String lastName) {
+			this.firstName = firstName;
+			this.lastName = lastName;
+		}
 
-        public String getFirstName() {
-            return firstName;
-        }
+		public String getFirstName() {
+			return firstName;
+		}
 
-        public String getLastName() {
-            return lastName;
-        }
+		public String getLastName() {
+			return lastName;
+		}
 
-    }
+	}
 
 }

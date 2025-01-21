@@ -36,35 +36,35 @@ import org.dom4j.Element;
  */
 public class DescriptorMergerImpl implements DescriptorMerger {
 
-    private MergeCue initialMergeCue;
-    private Map<String, String> initialMergeCueParams;
+	private MergeCue initialMergeCue;
+	private Map<String, String> initialMergeCueParams;
 
-    public DescriptorMergerImpl(MergeCue initialMergeCue) {
-        this.initialMergeCue = initialMergeCue;
-        initialMergeCueParams = Collections.emptyMap();
-    }
+	public DescriptorMergerImpl(MergeCue initialMergeCue) {
+		this.initialMergeCue = initialMergeCue;
+		initialMergeCueParams = Collections.emptyMap();
+	}
 
-    public void setInitialMergeCueParams(Map<String, String> initialMergeCueParams) {
-        this.initialMergeCueParams = initialMergeCueParams;
-    }
+	public void setInitialMergeCueParams(Map<String, String> initialMergeCueParams) {
+		this.initialMergeCueParams = initialMergeCueParams;
+	}
 
-    @Override
-    public Document merge(List<Document> descriptorsToMerge) throws XmlMergeException {
-        Document merged = DocumentHelper.createDocument();
+	@Override
+	public Document merge(List<Document> descriptorsToMerge) throws XmlMergeException {
+		Document merged = DocumentHelper.createDocument();
 
-        if (CollectionUtils.isNotEmpty(descriptorsToMerge)) {
-            Element mergedRoot = descriptorsToMerge.get(0).getRootElement().createCopy();
+		if (CollectionUtils.isNotEmpty(descriptorsToMerge)) {
+			Element mergedRoot = descriptorsToMerge.get(0).getRootElement().createCopy();
 
-            for (Iterator<Document> i = descriptorsToMerge.listIterator(1); i.hasNext(); ) {
-                Element descriptorRoot = i.next().getRootElement().createCopy();
+			for (Iterator<Document> i = descriptorsToMerge.listIterator(1); i.hasNext(); ) {
+				Element descriptorRoot = i.next().getRootElement().createCopy();
 
-                mergedRoot = initialMergeCue.merge(mergedRoot, descriptorRoot, initialMergeCueParams);
-            }
+				mergedRoot = initialMergeCue.merge(mergedRoot, descriptorRoot, initialMergeCueParams);
+			}
 
-            merged.add(mergedRoot);
-        }
+			merged.add(mergedRoot);
+		}
 
-        return merged;
-    }
+		return merged;
+	}
 
 }

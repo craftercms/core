@@ -37,177 +37,177 @@ import org.craftercms.core.service.Context;
  */
 public class CacheServiceImpl implements CacheService {
 
-    protected Cache cache;
+	protected Cache cache;
 
-    public CacheServiceImpl(Cache cache) {
-        this.cache = cache;
-    }
+	public CacheServiceImpl(Cache cache) {
+		this.cache = cache;
+	}
 
-    public Collection<String> getScopes() throws InternalCacheEngineException {
-        return cache.getScopes();
-    }
+	public Collection<String> getScopes() throws InternalCacheEngineException {
+		return cache.getScopes();
+	}
 
-    public void clearAll() throws InternalCacheEngineException {
-        cache.clearAll();
-    }
+	public void clearAll() throws InternalCacheEngineException {
+		cache.clearAll();
+	}
 
-    @Override
-    public void addScope(Context context) throws InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            cache.addScope(context.getCacheScope(), context.getMaxAllowedItemsInCache());
-        }
-    }
+	@Override
+	public void addScope(Context context) throws InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			cache.addScope(context.getCacheScope(), context.getMaxAllowedItemsInCache());
+		}
+	}
 
-    @Override
-    public void removeScope(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                cache.removeScope(context.getCacheScope());
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        }
-    }
+	@Override
+	public void removeScope(Context context) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				cache.removeScope(context.getCacheScope());
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		}
+	}
 
-    @Override
-    public boolean hasScope(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                return cache.hasScope(context.getCacheScope());
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean hasScope(Context context) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				return cache.hasScope(context.getCacheScope());
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public int getSize(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                return cache.getSize(context.getCacheScope());
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        } else {
-            return 0;
-        }
-    }
+	@Override
+	public int getSize(Context context) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				return cache.getSize(context.getCacheScope());
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		} else {
+			return 0;
+		}
+	}
 
-    @Override
-    public Collection<?> getKeys(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                return cache.getKeys(context.getCacheScope());
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        } else {
-            return Collections.emptyList();
-        }
-    }
+	@Override
+	public Collection<?> getKeys(Context context) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				return cache.getKeys(context.getCacheScope());
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		} else {
+			return Collections.emptyList();
+		}
+	}
 
-    @Override
-    public boolean hasKey(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                return cache.hasKey(context.getCacheScope(), key);
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean hasKey(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				return cache.hasKey(context.getCacheScope(), key);
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public CacheItem getItem(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                return cache.get(context.getCacheScope(), key);
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        } else {
-            return null;
-        }
-    }
+	@Override
+	public CacheItem getItem(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				return cache.get(context.getCacheScope(), key);
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-    public Object get(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                CacheItem item = cache.get(context.getCacheScope(), key);
-                if (item != null) {
-                    return item.getValue();
-                } else {
-                    return null;
-                }
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        } else {
-            return null;
-        }
-    }
+	@Override
+	public Object get(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				CacheItem item = cache.get(context.getCacheScope(), key);
+				if (item != null) {
+					return item.getValue();
+				} else {
+					return null;
+				}
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-    public void put(Context context, Object key, Object value) throws InvalidContextException,
-        InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                cache.put(context.getCacheScope(), key, value);
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        }
-    }
+	@Override
+	public void put(Context context, Object key, Object value) throws InvalidContextException,
+		InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				cache.put(context.getCacheScope(), key, value);
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		}
+	}
 
-    @Override
-    public void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
-                    Object... loaderParams) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn() && cachingOptions.doCaching()) {
-            try {
-                cache.put(context.getCacheScope(), key, value, cachingOptions.getExpireAfter(),
-                          cachingOptions.getRefreshFrequency(), loader, loaderParams);
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        }
-    }
+	@Override
+	public void put(Context context, Object key, Object value, CachingOptions cachingOptions, CacheLoader loader,
+			Object... loaderParams) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn() && cachingOptions.doCaching()) {
+			try {
+				cache.put(context.getCacheScope(), key, value, cachingOptions.getExpireAfter(),
+					cachingOptions.getRefreshFrequency(), loader, loaderParams);
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		}
+	}
 
-    @Override
-    public boolean remove(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                return cache.remove(context.getCacheScope(), key);
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean remove(Context context, Object key) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				return cache.remove(context.getCacheScope(), key);
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public void clearScope(Context context) throws InvalidContextException, InternalCacheEngineException {
-        if (context.isCacheOn()) {
-            try {
-                cache.clearScope(context.getCacheScope());
-            } catch (InvalidScopeException e) {
-                throw new InvalidContextException("No scope associated to context " + context);
-            }
-        }
-    }
+	@Override
+	public void clearScope(Context context) throws InvalidContextException, InternalCacheEngineException {
+		if (context.isCacheOn()) {
+			try {
+				cache.clearScope(context.getCacheScope());
+			} catch (InvalidScopeException e) {
+				throw new InvalidContextException("No scope associated to context " + context);
+			}
+		}
+	}
 
-    @Override
-    public CacheStatistics getStatistics(final Context context) {
-        if(context.isCacheOn()) {
-            return cache.getStatistics(context.getCacheScope());
-        } else {
-            return CacheStatistics.EMPTY;
-        }
-    }
+	@Override
+	public CacheStatistics getStatistics(final Context context) {
+		if (context.isCacheOn()) {
+			return cache.getStatistics(context.getCacheScope());
+		} else {
+			return CacheStatistics.EMPTY;
+		}
+	}
 
 }

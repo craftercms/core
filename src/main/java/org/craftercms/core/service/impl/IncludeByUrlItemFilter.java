@@ -30,33 +30,33 @@ import java.util.List;
  */
 public class IncludeByUrlItemFilter implements ItemFilter {
 
-    private String[] includeRegexes;
+	private String[] includeRegexes;
 
-    public IncludeByUrlItemFilter(String[] includeRegexes) {
-        this.includeRegexes = includeRegexes;
-    }
+	public IncludeByUrlItemFilter(String[] includeRegexes) {
+		this.includeRegexes = includeRegexes;
+	}
 
-    @Override
-    public boolean runBeforeProcessing() {
-        return true;
-    }
+	@Override
+	public boolean runBeforeProcessing() {
+		return true;
+	}
 
-    @Override
-    public boolean runAfterProcessing() {
-        return false;
-    }
+	@Override
+	public boolean runAfterProcessing() {
+		return false;
+	}
 
-    @Override
-    public boolean accepts(Item item, List<Item> acceptedItems, List<Item> rejectedItems,
-                           boolean runningBeforeProcessing) {
-        return ArrayUtils.isEmpty(includeRegexes) || RegexUtils.matchesAny(item.getUrl(), includeRegexes);
-    }
+	@Override
+	public boolean accepts(Item item, List<Item> acceptedItems, List<Item> rejectedItems,
+			       boolean runningBeforeProcessing) {
+		return ArrayUtils.isEmpty(includeRegexes) || RegexUtils.matchesAny(item.getUrl(), includeRegexes);
+	}
 
-    @Override
-    public String toString() {
-        return "IncludeByUrlItemFilter{" +
-               "includeRegexes=" + Arrays.toString(includeRegexes) +
-               '}';
-    }
+	@Override
+	public String toString() {
+		return "IncludeByUrlItemFilter{" +
+			"includeRegexes=" + Arrays.toString(includeRegexes) +
+			'}';
+	}
 
 }

@@ -30,27 +30,27 @@ import static org.mockito.Mockito.mock;
  */
 public class SingleProcessorResolverTest {
 
-    private SingleProcessorResolver resolver;
-    private ItemProcessor processor;
+	private SingleProcessorResolver resolver;
+	private ItemProcessor processor;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestProcessor();
-        setUpTestResolver();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestProcessor();
+		setUpTestResolver();
+	}
 
-    @Test
-    public void testResolver() throws Exception {
-        ItemProcessor processor = resolver.getProcessor(null);
-        assertSame(this.processor, processor);
-    }
+	@Test
+	public void testResolver() throws Exception {
+		ItemProcessor processor = resolver.getProcessor(null);
+		assertSame(this.processor, processor);
+	}
 
-    private void setUpTestProcessor() {
-        processor = mock(ItemProcessor.class);
-    }
+	private void setUpTestProcessor() {
+		processor = mock(ItemProcessor.class);
+	}
 
-    private void setUpTestResolver() {
-        resolver = new SingleProcessorResolver(processor);
-    }
+	private void setUpTestResolver() {
+		resolver = new SingleProcessorResolver(processor);
+	}
 
 }

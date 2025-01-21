@@ -31,39 +31,39 @@ import org.craftercms.core.service.Item;
  */
 public class ItemProcessorResolverChain implements ItemProcessorResolver {
 
-    /**
-     * The default processor to use if no resolver returns a processor.
-     */
-    protected ItemProcessor defaultProcessor;
-    /**
-     * The chain of resolvers.
-     */
-    protected List<ItemProcessorResolver> resolvers;
+	/**
+	 * The default processor to use if no resolver returns a processor.
+	 */
+	protected ItemProcessor defaultProcessor;
+	/**
+	 * The chain of resolvers.
+	 */
+	protected List<ItemProcessorResolver> resolvers;
 
-    public ItemProcessorResolverChain(ItemProcessor defaultProcessor, List<ItemProcessorResolver> resolvers) {
-        this.defaultProcessor = defaultProcessor;
-        this.resolvers = resolvers;
-    }
+	public ItemProcessorResolverChain(ItemProcessor defaultProcessor, List<ItemProcessorResolver> resolvers) {
+		this.defaultProcessor = defaultProcessor;
+		this.resolvers = resolvers;
+	}
 
-    /**
-     * Returns the {@link ItemProcessor} to use for the given item. Iterates through the chain of resolvers until one
-     * of them returns a non-null processor. If non of them returns a processor, the {@code defaultProcessor} will be
-     * returned.
-     */
-    @Override
-    public ItemProcessor getProcessor(Item item) {
-        ItemProcessor processor;
+	/**
+	 * Returns the {@link ItemProcessor} to use for the given item. Iterates through the chain of resolvers until one
+	 * of them returns a non-null processor. If non of them returns a processor, the {@code defaultProcessor} will be
+	 * returned.
+	 */
+	@Override
+	public ItemProcessor getProcessor(Item item) {
+		ItemProcessor processor;
 
-        if (CollectionUtils.isNotEmpty(resolvers)) {
-            for (ItemProcessorResolver resolver : resolvers) {
-                processor = resolver.getProcessor(item);
-                if (processor != null) {
-                    return processor;
-                }
-            }
-        }
+		if (CollectionUtils.isNotEmpty(resolvers)) {
+			for (ItemProcessorResolver resolver : resolvers) {
+				processor = resolver.getProcessor(item);
+				if (processor != null) {
+					return processor;
+				}
+			}
+		}
 
-        return defaultProcessor;
-    }
+		return defaultProcessor;
+	}
 
 }

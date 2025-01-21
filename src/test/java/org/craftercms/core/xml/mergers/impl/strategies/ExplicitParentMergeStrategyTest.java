@@ -46,68 +46,68 @@ import static org.mockito.Mockito.when;
  */
 public class ExplicitParentMergeStrategyTest {
 
-    private static final String LEVEL_DESCRIPTOR_URL = "/crafter-level-descriptor.level.xml";
-    private static final String PARENT_DESCRIPTOR_URL = "/parent.xml";
-    private static final String MAIN_DESCRIPTOR_URL = "/main.xml";
+	private static final String LEVEL_DESCRIPTOR_URL = "/crafter-level-descriptor.level.xml";
+	private static final String PARENT_DESCRIPTOR_URL = "/parent.xml";
+	private static final String MAIN_DESCRIPTOR_URL = "/main.xml";
 
-    private static final String PARENT_DESCRIPTOR_ELEM_XPATH_QUERY = "*/parent-descriptor";
+	private static final String PARENT_DESCRIPTOR_ELEM_XPATH_QUERY = "*/parent-descriptor";
 
-    private Context context;
-    private Document descriptorDom;
-    private ExplicitParentMergeStrategy strategy;
+	private Context context;
+	private Document descriptorDom;
+	private ExplicitParentMergeStrategy strategy;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestContext();
-        setUpTestDescriptorDom();
-        setUpTestStrategy();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestContext();
+		setUpTestDescriptorDom();
+		setUpTestStrategy();
+	}
 
-    @Test
-    public void testGetDescriptors() throws Exception {
-        List<MergeableDescriptor> descriptors = strategy.getDescriptors(context, DEFAULT_CACHING_OPTIONS,
-                                                                        MAIN_DESCRIPTOR_URL, descriptorDom);
-        assertEquals(3, descriptors.size());
-        assertEquals(LEVEL_DESCRIPTOR_URL, descriptors.get(0).getUrl());
-        assertTrue(descriptors.get(0).isOptional());
-        assertEquals(PARENT_DESCRIPTOR_URL, descriptors.get(1).getUrl());
-        assertTrue(descriptors.get(1).isOptional());
-        assertEquals(MAIN_DESCRIPTOR_URL, descriptors.get(2).getUrl());
-        assertFalse(descriptors.get(2).isOptional());
-    }
+	@Test
+	public void testGetDescriptors() throws Exception {
+		List<MergeableDescriptor> descriptors = strategy.getDescriptors(context, DEFAULT_CACHING_OPTIONS,
+			MAIN_DESCRIPTOR_URL, descriptorDom);
+		assertEquals(3, descriptors.size());
+		assertEquals(LEVEL_DESCRIPTOR_URL, descriptors.get(0).getUrl());
+		assertTrue(descriptors.get(0).isOptional());
+		assertEquals(PARENT_DESCRIPTOR_URL, descriptors.get(1).getUrl());
+		assertTrue(descriptors.get(1).isOptional());
+		assertEquals(MAIN_DESCRIPTOR_URL, descriptors.get(2).getUrl());
+		assertFalse(descriptors.get(2).isOptional());
+	}
 
-    private void setUpTestContext() {
-        context = mock(Context.class);
+	private void setUpTestContext() {
+		context = mock(Context.class);
 
-        Item item = new Item();
-        item.setDescriptorDom(mock(Document.class));
+		Item item = new Item();
+		item.setDescriptorDom(mock(Document.class));
 
-        ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
-        when(storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, PARENT_DESCRIPTOR_URL, true)).thenReturn(item);
+		ContentStoreAdapter storeAdapter = mock(ContentStoreAdapter.class);
+		when(storeAdapter.findItem(context, DEFAULT_CACHING_OPTIONS, PARENT_DESCRIPTOR_URL, true)).thenReturn(item);
 
-        when(context.getStoreAdapter()).thenReturn(storeAdapter);
-    }
+		when(context.getStoreAdapter()).thenReturn(storeAdapter);
+	}
 
-    private void setUpTestDescriptorDom() {
-        Node parentDescriptorElem = mock(Node.class);
-        when(parentDescriptorElem.getText()).thenReturn(PARENT_DESCRIPTOR_URL);
+	private void setUpTestDescriptorDom() {
+		Node parentDescriptorElem = mock(Node.class);
+		when(parentDescriptorElem.getText()).thenReturn(PARENT_DESCRIPTOR_URL);
 
-        descriptorDom = mock(Document.class);
-        when(descriptorDom.selectSingleNode(PARENT_DESCRIPTOR_ELEM_XPATH_QUERY)).thenReturn(parentDescriptorElem);
-    }
+		descriptorDom = mock(Document.class);
+		when(descriptorDom.selectSingleNode(PARENT_DESCRIPTOR_ELEM_XPATH_QUERY)).thenReturn(parentDescriptorElem);
+	}
 
-    private void setUpTestStrategy() {
-        DescriptorMergeStrategy parentStrategy = mock(DescriptorMergeStrategy.class);
-        when(parentStrategy.getDescriptors(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), eq(PARENT_DESCRIPTOR_URL),
-                                          any(Document.class), eq(true)))
-            .thenReturn(Arrays.asList(new MergeableDescriptor(LEVEL_DESCRIPTOR_URL, true),
-                                      new MergeableDescriptor(PARENT_DESCRIPTOR_URL, true)));
+	private void setUpTestStrategy() {
+		DescriptorMergeStrategy parentStrategy = mock(DescriptorMergeStrategy.class);
+		when(parentStrategy.getDescriptors(any(Context.class), eq(DEFAULT_CACHING_OPTIONS), eq(PARENT_DESCRIPTOR_URL),
+			any(Document.class), eq(true)))
+			.thenReturn(Arrays.asList(new MergeableDescriptor(LEVEL_DESCRIPTOR_URL, true),
+				new MergeableDescriptor(PARENT_DESCRIPTOR_URL, true)));
 
-        DescriptorMergeStrategyResolver mergeStrategyResolver = mock(DescriptorMergeStrategyResolver.class);
-        when(mergeStrategyResolver.getStrategy(eq(PARENT_DESCRIPTOR_URL), any(Document.class)))
-            .thenReturn(parentStrategy);
+		DescriptorMergeStrategyResolver mergeStrategyResolver = mock(DescriptorMergeStrategyResolver.class);
+		when(mergeStrategyResolver.getStrategy(eq(PARENT_DESCRIPTOR_URL), any(Document.class)))
+			.thenReturn(parentStrategy);
 
-        strategy = new ExplicitParentMergeStrategy(mergeStrategyResolver, PARENT_DESCRIPTOR_ELEM_XPATH_QUERY);
-    }
+		strategy = new ExplicitParentMergeStrategy(mergeStrategyResolver, PARENT_DESCRIPTOR_ELEM_XPATH_QUERY);
+	}
 
 }

@@ -25,69 +25,69 @@ import java.util.List;
  */
 public interface CacheItem {
 
-    /**
-     * Indicates that an item should never expire.
-     */
-    long NEVER_EXPIRE = 0;
-    /**
-     * Indicates that an item should never refresh.
-     */
-    long NEVER_REFRESH = 0;
+	/**
+	 * Indicates that an item should never expire.
+	 */
+	long NEVER_EXPIRE = 0;
+	/**
+	 * Indicates that an item should never refresh.
+	 */
+	long NEVER_REFRESH = 0;
 
-    /**
-     * Returns the item's scope.
-     */
-    String getScope();
+	/**
+	 * Returns the item's scope.
+	 */
+	String getScope();
 
-    /**
-     * Returns the item's key, used to identify the item within the cache.
-     */
-    Object getKey();
+	/**
+	 * Returns the item's key, used to identify the item within the cache.
+	 */
+	Object getKey();
 
-    /**
-     * Returns the item's value.
-     */
-    Object getValue();
+	/**
+	 * Returns the item's value.
+	 */
+	Object getValue();
 
-    /**
-     * Returns the number of ticks that had passed at the moment the item was created.
-     */
-    long getTicksAtCreation();
+	/**
+	 * Returns the number of ticks that had passed at the moment the item was created.
+	 */
+	long getTicksAtCreation();
 
-    /**
-     * Returns the number of ticks that are required for the item to expire.
-     */
-    long getTicksToExpire();
+	/**
+	 * Returns the number of ticks that are required for the item to expire.
+	 */
+	long getTicksToExpire();
 
-    /**
-     * Returns the number of ticks the are required for the item to be refreshed.
-     */
-    long getTicksToRefresh();
+	/**
+	 * Returns the number of ticks the are required for the item to be refreshed.
+	 */
+	long getTicksToRefresh();
 
-    /**
-     * Returns the {@link CacheLoader} used to refresh this item.
-     */
-    CacheLoader getLoader();
+	/**
+	 * Returns the {@link CacheLoader} used to refresh this item.
+	 */
+	CacheLoader getLoader();
 
-    /**
-     * Returns the additional parameters required by the {@link CacheLoader#load(Object...)} method.
-     */
-    Object[] getLoaderParams();
+	/**
+	 * Returns the additional parameters required by the {@link CacheLoader#load(Object...)} method.
+	 */
+	Object[] getLoaderParams();
 
-    /**
-     * Returns true if the item has expired according to the number of ticks specified.
-     *
-     * @param currentTicks the current number of ticks
-     * @return true if the item has expired according to the number of ticks specified, false otherwise
-     */
-    boolean isExpired(long currentTicks);
+	/**
+	 * Returns true if the item has expired according to the number of ticks specified.
+	 *
+	 * @param currentTicks the current number of ticks
+	 * @return true if the item has expired according to the number of ticks specified, false otherwise
+	 */
+	boolean isExpired(long currentTicks);
 
-    /**
-     * Returns true if the item needs to be refreshed according to the number of ticks specified.
-     *
-     * @param currentTicks the current number of ticks
-     * @return true if the item needs to be refreshed according to the number of ticks specified, false otherwise
-     */
-    boolean needsRefresh(long currentTicks);
+	/**
+	 * Returns true if the item needs to be refreshed according to the number of ticks specified.
+	 *
+	 * @param currentTicks the current number of ticks
+	 * @return true if the item needs to be refreshed according to the number of ticks specified, false otherwise
+	 */
+	boolean needsRefresh(long currentTicks);
 
 }

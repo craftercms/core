@@ -38,118 +38,118 @@ import org.dom4j.io.XMLWriter;
  */
 public class XmlUtils {
 
-    /**
-     * Executes an XPath query to retrieve an object. Normally, if the XPath result doesn't have a result, an
-     * empty collection is returned. This object checks that case and returns null accordingly.
-     */
-    public static Object selectObject(Node node, String xpathQuery) {
-        Object result = node.selectObject(xpathQuery);
-        if (result != null && result instanceof Collection && ((Collection) result).isEmpty()) {
-            return null;
-        } else {
-            return result;
-        }
-    }
+	/**
+	 * Executes an XPath query to retrieve an object. Normally, if the XPath result doesn't have a result, an
+	 * empty collection is returned. This object checks that case and returns null accordingly.
+	 */
+	public static Object selectObject(Node node, String xpathQuery) {
+		Object result = node.selectObject(xpathQuery);
+		if (result != null && result instanceof Collection && ((Collection) result).isEmpty()) {
+			return null;
+		} else {
+			return result;
+		}
+	}
 
-    /**
-     * Executes the specified XPath query as a single node query, returning the text value of the resulting single node.
-     */
-    public static String selectSingleNodeValue(Node node, String xpathQuery) {
-        Node resultNode = node.selectSingleNode(xpathQuery);
-        if (resultNode != null) {
-            return resultNode.getText();
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * Executes the specified XPath query as a single node query, returning the text value of the resulting single node.
+	 */
+	public static String selectSingleNodeValue(Node node, String xpathQuery) {
+		Node resultNode = node.selectSingleNode(xpathQuery);
+		if (resultNode != null) {
+			return resultNode.getText();
+		} else {
+			return null;
+		}
+	}
 
-    /**
-     * Executes the specified namespace aware XPath query as a single node query,
-     * returning the text value of the resulting single node.
-     */
-    public static String selectSingleNodeValue(Node node, String xpathQuery, Map<String, String> namespaceUris) {
-        Node resultNode = selectSingleNode(node, xpathQuery, namespaceUris);
-        if (resultNode != null) {
-            return resultNode.getText();
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * Executes the specified namespace aware XPath query as a single node query,
+	 * returning the text value of the resulting single node.
+	 */
+	public static String selectSingleNodeValue(Node node, String xpathQuery, Map<String, String> namespaceUris) {
+		Node resultNode = selectSingleNode(node, xpathQuery, namespaceUris);
+		if (resultNode != null) {
+			return resultNode.getText();
+		} else {
+			return null;
+		}
+	}
 
-    /**
-     * Executes the specified XPath query as a multiple node query, returning the text values of the resulting list of
-     * nodes.
-     */
-    @SuppressWarnings("unchecked")
-    public static List<String> selectNodeValues(Node node, String xpathQuery) {
-        List<Node> resultNodes = node.selectNodes(xpathQuery);
+	/**
+	 * Executes the specified XPath query as a multiple node query, returning the text values of the resulting list of
+	 * nodes.
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<String> selectNodeValues(Node node, String xpathQuery) {
+		List<Node> resultNodes = node.selectNodes(xpathQuery);
 
-        return extractNodeValues(resultNodes);
-    }
+		return extractNodeValues(resultNodes);
+	}
 
-    /**
-     * Executes the specified namespace aware XPath query as a multiple node query,
-     * returning the text values of the resulting list of
-     * nodes.
-     */
-    public static List<String> selectNodeValues(Node node, String xpathQuery, Map<String, String> namespaceUris) {
-        List<Node> resultNodes = selectNodes(node, xpathQuery, namespaceUris);
+	/**
+	 * Executes the specified namespace aware XPath query as a multiple node query,
+	 * returning the text values of the resulting list of
+	 * nodes.
+	 */
+	public static List<String> selectNodeValues(Node node, String xpathQuery, Map<String, String> namespaceUris) {
+		List<Node> resultNodes = selectNodes(node, xpathQuery, namespaceUris);
 
-        return extractNodeValues(resultNodes);
-    }
+		return extractNodeValues(resultNodes);
+	}
 
-    /**
-     * Executes the specified namespace aware XPath query as a single node query, returning the resulting single node.
-     */
-    public static Node selectSingleNode(Node node, String xpathQuery, Map<String, String> namespaceUris) {
-        XPath xpath = DocumentHelper.createXPath(xpathQuery);
-        xpath.setNamespaceURIs(namespaceUris);
+	/**
+	 * Executes the specified namespace aware XPath query as a single node query, returning the resulting single node.
+	 */
+	public static Node selectSingleNode(Node node, String xpathQuery, Map<String, String> namespaceUris) {
+		XPath xpath = DocumentHelper.createXPath(xpathQuery);
+		xpath.setNamespaceURIs(namespaceUris);
 
-        return xpath.selectSingleNode(node);
-    }
+		return xpath.selectSingleNode(node);
+	}
 
-    /**
-     * Executes the specified namespace aware XPath query as a multiple node query, returning the resulting list of nodes.
-     */
-    @SuppressWarnings("unchecked")
-    public static List<Node> selectNodes(Node node, String xpathQuery, Map<String, String> namespaceUris) {
-        XPath xpath = DocumentHelper.createXPath(xpathQuery);
-        xpath.setNamespaceURIs(namespaceUris);
+	/**
+	 * Executes the specified namespace aware XPath query as a multiple node query, returning the resulting list of nodes.
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Node> selectNodes(Node node, String xpathQuery, Map<String, String> namespaceUris) {
+		XPath xpath = DocumentHelper.createXPath(xpathQuery);
+		xpath.setNamespaceURIs(namespaceUris);
 
-        return xpath.selectNodes(node);
-    }
+		return xpath.selectNodes(node);
+	}
 
-    /**
-     * Returns the given document as a XML string in a "pretty" format.
-     *
-     * @param document
-     * @return the document as an XML string
-     */
-    public static String documentToPrettyString(Document document) {
-        StringWriter stringWriter = new StringWriter();
-        OutputFormat prettyPrintFormat = OutputFormat.createPrettyPrint();
-        XMLWriter xmlWriter = new XMLWriter(stringWriter, prettyPrintFormat);
+	/**
+	 * Returns the given document as a XML string in a "pretty" format.
+	 *
+	 * @param document
+	 * @return the document as an XML string
+	 */
+	public static String documentToPrettyString(Document document) {
+		StringWriter stringWriter = new StringWriter();
+		OutputFormat prettyPrintFormat = OutputFormat.createPrettyPrint();
+		XMLWriter xmlWriter = new XMLWriter(stringWriter, prettyPrintFormat);
 
-        try {
-            xmlWriter.write(document);
-        } catch (IOException e) {
-            // Ignore, shouldn't happen.
-        }
+		try {
+			xmlWriter.write(document);
+		} catch (IOException e) {
+			// Ignore, shouldn't happen.
+		}
 
-        return stringWriter.toString();
-    }
+		return stringWriter.toString();
+	}
 
-    private static List<String> extractNodeValues(List<Node> nodes) {
-        if (CollectionUtils.isNotEmpty(nodes)) {
-            List<String> nodeValues = new ArrayList<String>(nodes.size());
-            for (Node resultNode : nodes) {
-                nodeValues.add(resultNode.getText());
-            }
+	private static List<String> extractNodeValues(List<Node> nodes) {
+		if (CollectionUtils.isNotEmpty(nodes)) {
+			List<String> nodeValues = new ArrayList<String>(nodes.size());
+			for (Node resultNode : nodes) {
+				nodeValues.add(resultNode.getText());
+			}
 
-            return nodeValues;
-        } else {
-            return Collections.emptyList();
-        }
-    }
+			return nodeValues;
+		} else {
+			return Collections.emptyList();
+		}
+	}
 
 }

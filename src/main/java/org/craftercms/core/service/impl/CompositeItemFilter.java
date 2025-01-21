@@ -34,126 +34,126 @@ import org.craftercms.core.service.ItemFilter;
  */
 public class CompositeItemFilter implements ItemFilter {
 
-    /**
-     * List of {@link ItemFilter}s that are executed sequentially.
-     */
-    private List<ItemFilter> filters;
+	/**
+	 * List of {@link ItemFilter}s that are executed sequentially.
+	 */
+	private List<ItemFilter> filters;
 
-    /**
-     * Creates a composite filter with a <code>null</code> list of {@link ItemFilter}s.
-     */
-    public CompositeItemFilter() {
-    }
+	/**
+	 * Creates a composite filter with a <code>null</code> list of {@link ItemFilter}s.
+	 */
+	public CompositeItemFilter() {
+	}
 
-    /**
-     * Creates a composite filter with the specified list of {@link ItemFilter}s.
-     */
-    public CompositeItemFilter(final List<ItemFilter> filters) {
-        this.filters = filters;
-    }
+	/**
+	 * Creates a composite filter with the specified list of {@link ItemFilter}s.
+	 */
+	public CompositeItemFilter(final List<ItemFilter> filters) {
+		this.filters = filters;
+	}
 
-    /**
-     * Creates a composite filter with the specified array of {@link ItemFilter}s.
-     */
-    public CompositeItemFilter(final ItemFilter... filters) {
-        this.filters = Arrays.asList(filters);
-    }
+	/**
+	 * Creates a composite filter with the specified array of {@link ItemFilter}s.
+	 */
+	public CompositeItemFilter(final ItemFilter... filters) {
+		this.filters = Arrays.asList(filters);
+	}
 
-    /**
-     * Sets the list of filters.
-     */
-    public void setFilters(List<ItemFilter> filters) {
-        this.filters = filters;
-    }
+	/**
+	 * Sets the list of filters.
+	 */
+	public void setFilters(List<ItemFilter> filters) {
+		this.filters = filters;
+	}
 
-    /**
-     * Adds the specified {@link ItemFilter} to the filter list, creating the list if necessary.
-     */
-    public void addFilter(final ItemFilter filter) {
-        if (filters == null) {
-            filters = new ArrayList<ItemFilter>();
-        }
+	/**
+	 * Adds the specified {@link ItemFilter} to the filter list, creating the list if necessary.
+	 */
+	public void addFilter(final ItemFilter filter) {
+		if (filters == null) {
+			filters = new ArrayList<ItemFilter>();
+		}
 
-        filters.add(filter);
-    }
+		filters.add(filter);
+	}
 
-    /**
-     * Removes the specified {@link ItemFilter} from the filter list, only if the list is not <code>null</code>.
-     */
-    public boolean removeFilter(final ItemFilter filter) {
-        if (filters != null) {
-            return filters.remove(filter);
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * Removes the specified {@link ItemFilter} from the filter list, only if the list is not <code>null</code>.
+	 */
+	public boolean removeFilter(final ItemFilter filter) {
+		if (filters != null) {
+			return filters.remove(filter);
+		} else {
+			return false;
+		}
+	}
 
-    /**
-     * Always returns true so that filters that need to run before processing are called.
-     */
-    @Override
-    public boolean runBeforeProcessing() {
-        return true;
-    }
+	/**
+	 * Always returns true so that filters that need to run before processing are called.
+	 */
+	@Override
+	public boolean runBeforeProcessing() {
+		return true;
+	}
 
-    /**
-     * Always returns true so that filters that need to run after processing are called.
-     */
-    @Override
-    public boolean runAfterProcessing() {
-        return true;
-    }
+	/**
+	 * Always returns true so that filters that need to run after processing are called.
+	 */
+	@Override
+	public boolean runAfterProcessing() {
+		return true;
+	}
 
-    /**
-     * If {@code runningBeforeProcessing} is true, calls all filters that need to be run before processing. If
-     * it is false, calls all filters that need to be run after processing. Filters in the chain are called until
-     * one of them rejects the item.
-     */
-    @Override
-    public boolean accepts(Item item, List<Item> acceptedItems, List<Item> rejectedItems,
-                           boolean runningBeforeProcessing) {
-        boolean accepted = true;
+	/**
+	 * If {@code runningBeforeProcessing} is true, calls all filters that need to be run before processing. If
+	 * it is false, calls all filters that need to be run after processing. Filters in the chain are called until
+	 * one of them rejects the item.
+	 */
+	@Override
+	public boolean accepts(Item item, List<Item> acceptedItems, List<Item> rejectedItems,
+			       boolean runningBeforeProcessing) {
+		boolean accepted = true;
 
-        if (CollectionUtils.isNotEmpty(filters)) {
-            for (Iterator<ItemFilter> filterIter = filters.iterator(); accepted && filterIter.hasNext();) {
-                ItemFilter filter = filterIter.next();
-                if (runningBeforeProcessing && filter.runBeforeProcessing()) {
-                    accepted = filter.accepts(item, acceptedItems, rejectedItems, runningBeforeProcessing);
-                } else if (!runningBeforeProcessing && filter.runAfterProcessing()) {
-                    accepted = filter.accepts(item, acceptedItems, rejectedItems, runningBeforeProcessing);
-                }
-            }
-        }
+		if (CollectionUtils.isNotEmpty(filters)) {
+			for (Iterator<ItemFilter> filterIter = filters.iterator(); accepted && filterIter.hasNext(); ) {
+				ItemFilter filter = filterIter.next();
+				if (runningBeforeProcessing && filter.runBeforeProcessing()) {
+					accepted = filter.accepts(item, acceptedItems, rejectedItems, runningBeforeProcessing);
+				} else if (!runningBeforeProcessing && filter.runAfterProcessing()) {
+					accepted = filter.accepts(item, acceptedItems, rejectedItems, runningBeforeProcessing);
+				}
+			}
+		}
 
-        return accepted;
-    }
+		return accepted;
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        CompositeItemFilter that = (CompositeItemFilter)o;
+		CompositeItemFilter that = (CompositeItemFilter) o;
 
-        if (filters != null? !filters.equals(that.filters): that.filters != null) {
-            return false;
-        }
+		if (filters != null ? !filters.equals(that.filters) : that.filters != null) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-        return filters != null? filters.hashCode(): 0;
-    }
+	@Override
+	public int hashCode() {
+		return filters != null ? filters.hashCode() : 0;
+	}
 
-    @Override
-    public String toString() {
-        return "CompositeItemFilter[filters=" + filters + ']';
-    }
+	@Override
+	public String toString() {
+		return "CompositeItemFilter[filters=" + filters + ']';
+	}
 
 }

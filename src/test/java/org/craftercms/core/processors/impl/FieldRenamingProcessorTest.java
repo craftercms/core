@@ -39,49 +39,49 @@ import static org.mockito.Mockito.mock;
  */
 public class FieldRenamingProcessorTest {
 
-    private static final String INPUT_XML =     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                                                "<page>" +
-                                                    "<name>test.xml</name>" +
-                                                    "<title>Test</title>" +
-                                                    "<date>11/10/2015 00:00:00</date>" +
-                                                "</page>";
-    private static final String EXPECTED_XML =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                                                "<page>" +
-                                                    "<fileName>test.xml</fileName>" +
-                                                    "<title>Test</title>" +
-                                                    "<date>11/10/2015 00:00:00</date>" +
-                                                "</page>";
+	private static final String INPUT_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+		"<page>" +
+		"<name>test.xml</name>" +
+		"<title>Test</title>" +
+		"<date>11/10/2015 00:00:00</date>" +
+		"</page>";
+	private static final String EXPECTED_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+		"<page>" +
+		"<fileName>test.xml</fileName>" +
+		"<title>Test</title>" +
+		"<date>11/10/2015 00:00:00</date>" +
+		"</page>";
 
-    private FieldRenamingProcessor processor;
+	private FieldRenamingProcessor processor;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpProcessor();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpProcessor();
+	}
 
-    @Test
-    public void testProcess() throws Exception {
-        Item item = new Item();
-        item.setDescriptorDom(readInputXml());
+	@Test
+	public void testProcess() throws Exception {
+		Item item = new Item();
+		item.setDescriptorDom(readInputXml());
 
-        item = processor.process(mock(Context.class), CachingOptions.DEFAULT_CACHING_OPTIONS, item);
-        assertNotNull(item.getDescriptorDom());
-        assertEquals(EXPECTED_XML, item.getDescriptorDom().asXML().replace("\n", ""));
-    }
+		item = processor.process(mock(Context.class), CachingOptions.DEFAULT_CACHING_OPTIONS, item);
+		assertNotNull(item.getDescriptorDom());
+		assertEquals(EXPECTED_XML, item.getDescriptorDom().asXML().replace("\n", ""));
+	}
 
-    private void setUpProcessor() {
-        processor = new FieldRenamingProcessor();
-        processor.setFieldMappings(Collections.singletonMap("//name", "fileName"));
-    }
+	private void setUpProcessor() {
+		processor = new FieldRenamingProcessor();
+		processor.setFieldMappings(Collections.singletonMap("//name", "fileName"));
+	}
 
-    private Document readInputXml() throws DocumentException, SAXException {
-        SAXReader reader = new SAXReader();
+	private Document readInputXml() throws DocumentException, SAXException {
+		SAXReader reader = new SAXReader();
 
-        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
-        return reader.read(new StringReader(INPUT_XML));
-    }
+		return reader.read(new StringReader(INPUT_XML));
+	}
 
 }

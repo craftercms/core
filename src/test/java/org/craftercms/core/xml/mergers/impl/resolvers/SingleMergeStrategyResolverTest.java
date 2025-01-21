@@ -30,27 +30,27 @@ import org.craftercms.core.xml.mergers.DescriptorMergeStrategy;
  */
 public class SingleMergeStrategyResolverTest {
 
-    private SingleMergeStrategyResolver resolver;
-    private DescriptorMergeStrategy strategy;
+	private SingleMergeStrategyResolver resolver;
+	private DescriptorMergeStrategy strategy;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestStrategy();
-        setUpTestResolver();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestStrategy();
+		setUpTestResolver();
+	}
 
-    @Test
-    public void testResolver() throws Exception {
-        DescriptorMergeStrategy strategy = resolver.getStrategy(null, null);
-        assertSame(this.strategy, strategy);
-    }
+	@Test
+	public void testResolver() throws Exception {
+		DescriptorMergeStrategy strategy = resolver.getStrategy(null, null);
+		assertSame(this.strategy, strategy);
+	}
 
-    private void setUpTestStrategy() {
-        strategy = mock(DescriptorMergeStrategy.class);
-    }
+	private void setUpTestStrategy() {
+		strategy = mock(DescriptorMergeStrategy.class);
+	}
 
-    private void setUpTestResolver() {
-        resolver = new SingleMergeStrategyResolver(strategy);
-    }
+	private void setUpTestResolver() {
+		resolver = new SingleMergeStrategyResolver(strategy);
+	}
 
 }

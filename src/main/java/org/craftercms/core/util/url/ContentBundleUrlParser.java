@@ -20,6 +20,6 @@ package org.craftercms.core.util.url;
  */
 public interface ContentBundleUrlParser {
 
-    ContentBundleUrl getContentBundleUrl(String rawUrl);
+	ContentBundleUrl getContentBundleUrl(String rawUrl);
 
 }

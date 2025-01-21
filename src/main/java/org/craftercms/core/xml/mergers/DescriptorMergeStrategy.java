@@ -30,33 +30,31 @@ import org.dom4j.Document;
  */
 public interface DescriptorMergeStrategy {
 
-    /**
-     * Returns the list of descriptors in the order they should be merged, given the URI of the primary descriptor.
-     *
-     * @param context           the current context
-     * @param cachingOptions    caching options in case you need access to items
-     * @param mainDescriptorUrl the URL of the main descriptor
-     * @param mainDescriptorDom the DOM of the main descriptor
-     *
-     * @return a list of {@link MergeableDescriptor}s representing the descriptors to merge
-     */
-    List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                             String mainDescriptorUrl, Document mainDescriptorDom)
-        throws XmlMergeException;
+	/**
+	 * Returns the list of descriptors in the order they should be merged, given the URI of the primary descriptor.
+	 *
+	 * @param context           the current context
+	 * @param cachingOptions    caching options in case you need access to items
+	 * @param mainDescriptorUrl the URL of the main descriptor
+	 * @param mainDescriptorDom the DOM of the main descriptor
+	 * @return a list of {@link MergeableDescriptor}s representing the descriptors to merge
+	 */
+	List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+						 String mainDescriptorUrl, Document mainDescriptorDom)
+		throws XmlMergeException;
 
-    /**
-     * Returns the list of descriptors in the order they should be merged, given the URI of the primary descriptor.
-     *
-     * @param context                   the current context
-     * @param cachingOptions            caching options in case you need access to items
-     * @param mainDescriptorUrl         the URL of the primary descriptor
-     * @param mainDescriptorDom         the DOM of the main descriptor
-     * @param mainDescriptorOptional    if the primary descriptor should be marked as optional
-     *
-     * @return a list of {@link MergeableDescriptor}s representing the descriptors to merge
-     */
-    List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
-                                             String mainDescriptorUrl, Document mainDescriptorDom,
-                                             boolean mainDescriptorOptional) throws XmlMergeException;
+	/**
+	 * Returns the list of descriptors in the order they should be merged, given the URI of the primary descriptor.
+	 *
+	 * @param context                the current context
+	 * @param cachingOptions         caching options in case you need access to items
+	 * @param mainDescriptorUrl      the URL of the primary descriptor
+	 * @param mainDescriptorDom      the DOM of the main descriptor
+	 * @param mainDescriptorOptional if the primary descriptor should be marked as optional
+	 * @return a list of {@link MergeableDescriptor}s representing the descriptors to merge
+	 */
+	List<MergeableDescriptor> getDescriptors(Context context, CachingOptions cachingOptions,
+						 String mainDescriptorUrl, Document mainDescriptorDom,
+						 boolean mainDescriptorOptional) throws XmlMergeException;
 
 }

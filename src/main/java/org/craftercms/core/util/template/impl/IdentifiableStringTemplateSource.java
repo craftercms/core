@@ -22,28 +22,28 @@ package org.craftercms.core.util.template.impl;
  */
 public class IdentifiableStringTemplateSource {
 
-    private String id;
-    private String source;
+	private String id;
+	private String source;
 
-    public IdentifiableStringTemplateSource(String id, String template) {
-        this.id = id;
-        this.source = template;
-    }
+	public IdentifiableStringTemplateSource(String id, String template) {
+		this.id = id;
+		this.source = template;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public String getSource() {
+		return source;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
 }

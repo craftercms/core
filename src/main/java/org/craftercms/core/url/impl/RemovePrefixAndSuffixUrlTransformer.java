@@ -28,28 +28,28 @@ import org.craftercms.core.url.UrlTransformer;
  */
 public class RemovePrefixAndSuffixUrlTransformer implements UrlTransformer {
 
-    private String prefix;
-    private String suffix;
+	private String prefix;
+	private String suffix;
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 
-    public void setSuffix(String suffix) {
-        this.suffix = suffix;
-    }
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
 
-    @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions,
-                               String url) throws UrlTransformationException {
-        if (StringUtils.isNotEmpty(prefix)) {
-            url = StringUtils.removeStart(url, prefix);
-        }
-        if (StringUtils.isNotEmpty(suffix)) {
-            url = StringUtils.removeEnd(url, suffix);
-        }
+	@Override
+	public String transformUrl(Context context, CachingOptions cachingOptions,
+				   String url) throws UrlTransformationException {
+		if (StringUtils.isNotEmpty(prefix)) {
+			url = StringUtils.removeStart(url, prefix);
+		}
+		if (StringUtils.isNotEmpty(suffix)) {
+			url = StringUtils.removeEnd(url, suffix);
+		}
 
-        return url;
-    }
+		return url;
+	}
 
 }

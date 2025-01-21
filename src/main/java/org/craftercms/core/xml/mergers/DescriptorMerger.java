@@ -27,13 +27,13 @@ import org.dom4j.Document;
  */
 public interface DescriptorMerger {
 
-    /**
-     * Merges a set of XML DOM descriptors into a new DOM.
-     *
-     * @param descriptorsToMerge the XML DOMs of the descriptors to merge
-     * @return the result of the merging
-     * @throws XmlMergeException
-     */
-    Document merge(List<Document> descriptorsToMerge) throws XmlMergeException;
+	/**
+	 * Merges a set of XML DOM descriptors into a new DOM.
+	 *
+	 * @param descriptorsToMerge the XML DOMs of the descriptors to merge
+	 * @return the result of the merging
+	 * @throws XmlMergeException
+	 */
+	Document merge(List<Document> descriptorsToMerge) throws XmlMergeException;
 
 }

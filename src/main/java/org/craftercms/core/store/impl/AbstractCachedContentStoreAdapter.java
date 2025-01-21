@@ -40,127 +40,127 @@ import org.craftercms.core.util.cache.impl.CachingAwareList;
  */
 public abstract class AbstractCachedContentStoreAdapter implements ContentStoreAdapter {
 
-    public static final String CONST_KEY_ELEM_CONTENT = "contentStoreAdapter.content";
-    public static final String CONST_KEY_ELEM_ITEM = "contentStoreAdapter.item";
-    public static final String CONST_KEY_ELEM_ITEMS = "contentStoreAdapter.items";
-    public static final String CONST_KEY_ELEM_EXISTS = "contentStoreAdapter.exists";
+	public static final String CONST_KEY_ELEM_CONTENT = "contentStoreAdapter.content";
+	public static final String CONST_KEY_ELEM_ITEM = "contentStoreAdapter.item";
+	public static final String CONST_KEY_ELEM_ITEMS = "contentStoreAdapter.items";
+	public static final String CONST_KEY_ELEM_EXISTS = "contentStoreAdapter.exists";
 
-    protected CacheTemplate cacheTemplate;
-    protected CachingOptions defaultCachingOptions;
+	protected CacheTemplate cacheTemplate;
+	protected CachingOptions defaultCachingOptions;
 
-    public AbstractCachedContentStoreAdapter(CacheTemplate cacheTemplate) {
-        this.cacheTemplate = cacheTemplate;
-    }
+	public AbstractCachedContentStoreAdapter(CacheTemplate cacheTemplate) {
+		this.cacheTemplate = cacheTemplate;
+	}
 
-    public void setDefaultCachingOptions(CachingOptions defaultCachingOptions) {
-        this.defaultCachingOptions = defaultCachingOptions;
-    }
+	public void setDefaultCachingOptions(CachingOptions defaultCachingOptions) {
+		this.defaultCachingOptions = defaultCachingOptions;
+	}
 
-    @Override
-    public boolean exists(final Context context, final CachingOptions cachingOptions, final String path)
-        throws InvalidContextException, StoreException {
-        final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+	@Override
+	public boolean exists(final Context context, final CachingOptions cachingOptions, final String path)
+		throws InvalidContextException, StoreException {
+		final CachingOptions actualCachingOptions = cachingOptions != null ? cachingOptions : defaultCachingOptions;
 
-        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Boolean>() {
+		return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Boolean>() {
 
-            @Override
-            public Boolean execute() {
-                return doExists(context, actualCachingOptions, path);
-            }
+			@Override
+			public Boolean execute() {
+				return doExists(context, actualCachingOptions, path);
+			}
 
-            @Override
-            public String toString() {
-                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() + ".exists(%s, %s)",
-                    context, path);
-            }
+			@Override
+			public String toString() {
+				return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() + ".exists(%s, %s)",
+					context, path);
+			}
 
-        }, path, CONST_KEY_ELEM_EXISTS);
-    }
+		}, path, CONST_KEY_ELEM_EXISTS);
+	}
 
-    @Override
-    public Content findContent(final Context context, final CachingOptions cachingOptions,
-                               final String path) throws InvalidContextException, StoreException {
-        final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+	@Override
+	public Content findContent(final Context context, final CachingOptions cachingOptions,
+				   final String path) throws InvalidContextException, StoreException {
+		final CachingOptions actualCachingOptions = cachingOptions != null ? cachingOptions : defaultCachingOptions;
 
-        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Content>() {
+		return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Content>() {
 
-            @Override
-            public Content execute() {
-                return doFindContent(context, actualCachingOptions, path);
-            }
+			@Override
+			public Content execute() {
+				return doFindContent(context, actualCachingOptions, path);
+			}
 
-            @Override
-            public String toString() {
-                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
-                                     ".findContent(%s, %s)", context, path);
-            }
+			@Override
+			public String toString() {
+				return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
+					".findContent(%s, %s)", context, path);
+			}
 
-        }, path, CONST_KEY_ELEM_CONTENT);
-    }
+		}, path, CONST_KEY_ELEM_CONTENT);
+	}
 
-    @Override
-    public Item findItem(final Context context, final CachingOptions cachingOptions, final String path,
-                         final boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
-                                                              StoreException {
-        final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+	@Override
+	public Item findItem(final Context context, final CachingOptions cachingOptions, final String path,
+			     final boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
+		StoreException {
+		final CachingOptions actualCachingOptions = cachingOptions != null ? cachingOptions : defaultCachingOptions;
 
-        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Item>() {
+		return cacheTemplate.getObject(context, actualCachingOptions, new Callback<Item>() {
 
-            @Override
-            public Item execute() {
-                return doFindItem(context, actualCachingOptions, path, withDescriptor);
-            }
+			@Override
+			public Item execute() {
+				return doFindItem(context, actualCachingOptions, path, withDescriptor);
+			}
 
-            @Override
-            public String toString() {
-                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
-                                     ".findItem(%s, %s, %s)", context, path, withDescriptor);
-            }
+			@Override
+			public String toString() {
+				return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
+					".findItem(%s, %s, %s)", context, path, withDescriptor);
+			}
 
-        }, path, withDescriptor, CONST_KEY_ELEM_ITEM);
-    }
+		}, path, withDescriptor, CONST_KEY_ELEM_ITEM);
+	}
 
-    @Override
-    public List<Item> findItems(final Context context, final CachingOptions cachingOptions, final String path)
-            throws InvalidContextException, XmlFileParseException, StoreException {
-        final CachingOptions actualCachingOptions = cachingOptions != null? cachingOptions: defaultCachingOptions;
+	@Override
+	public List<Item> findItems(final Context context, final CachingOptions cachingOptions, final String path)
+		throws InvalidContextException, XmlFileParseException, StoreException {
+		final CachingOptions actualCachingOptions = cachingOptions != null ? cachingOptions : defaultCachingOptions;
 
-        return cacheTemplate.getObject(context, actualCachingOptions, new Callback<List<Item>>() {
+		return cacheTemplate.getObject(context, actualCachingOptions, new Callback<List<Item>>() {
 
-            @Override
-            public List<Item> execute() {
-                List<Item> items = doFindItems(context, actualCachingOptions, path);
-                if (items != null) {
-                    if (items instanceof CachingAwareList) {
-                        return items;
-                    } else {
-                        return new CachingAwareList<>(items);
-                    }
-                } else {
-                    return null;
-                }
-            }
+			@Override
+			public List<Item> execute() {
+				List<Item> items = doFindItems(context, actualCachingOptions, path);
+				if (items != null) {
+					if (items instanceof CachingAwareList) {
+						return items;
+					} else {
+						return new CachingAwareList<>(items);
+					}
+				} else {
+					return null;
+				}
+			}
 
-            @Override
-            public String toString() {
-                return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
-                                     ".findItems(%s, %s)", context, path);
-            }
+			@Override
+			public String toString() {
+				return String.format(AbstractCachedContentStoreAdapter.this.getClass().getName() +
+					".findItems(%s, %s)", context, path);
+			}
 
-        }, path, CONST_KEY_ELEM_ITEMS);
-    }
+		}, path, CONST_KEY_ELEM_ITEMS);
+	}
 
-    protected abstract boolean doExists(Context context, CachingOptions cachingOptions, String path)
-        throws InvalidContextException, StoreException;
+	protected abstract boolean doExists(Context context, CachingOptions cachingOptions, String path)
+		throws InvalidContextException, StoreException;
 
-    protected abstract Content doFindContent(Context context, CachingOptions cachingOptions,
-                                             String path) throws InvalidContextException, StoreException;
+	protected abstract Content doFindContent(Context context, CachingOptions cachingOptions,
+						 String path) throws InvalidContextException, StoreException;
 
-    protected abstract Item doFindItem(Context context, CachingOptions cachingOptions, String path,
-                                       boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
-        StoreException;
+	protected abstract Item doFindItem(Context context, CachingOptions cachingOptions, String path,
+					   boolean withDescriptor) throws InvalidContextException, XmlFileParseException,
+		StoreException;
 
-    protected abstract List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path)
-            throws InvalidContextException, XmlFileParseException, StoreException;
+	protected abstract List<Item> doFindItems(Context context, CachingOptions cachingOptions, String path)
+		throws InvalidContextException, XmlFileParseException, StoreException;
 
 }

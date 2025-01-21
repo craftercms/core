@@ -26,41 +26,41 @@ import org.craftercms.core.util.url.ContentBundleUrlParser;
  */
 public class RegexBasedContentBundleUrlParser implements ContentBundleUrlParser {
 
-    private int prefixGroup;
-    private int baseNameAndExtensionTokenGroup;
-    private int suffixGroup;
+	private int prefixGroup;
+	private int baseNameAndExtensionTokenGroup;
+	private int suffixGroup;
 
-    private Pattern pattern;
+	private Pattern pattern;
 
-    public RegexBasedContentBundleUrlParser(int prefixGroup, int baseNameAndExtensionTokenGroup,
-                                            int suffixGroup, Pattern pattern) {
-        this.prefixGroup = prefixGroup;
-        this.baseNameAndExtensionTokenGroup = baseNameAndExtensionTokenGroup;
-        this.suffixGroup = suffixGroup;
-        this.pattern = pattern;
-    }
+	public RegexBasedContentBundleUrlParser(int prefixGroup, int baseNameAndExtensionTokenGroup,
+						int suffixGroup, Pattern pattern) {
+		this.prefixGroup = prefixGroup;
+		this.baseNameAndExtensionTokenGroup = baseNameAndExtensionTokenGroup;
+		this.suffixGroup = suffixGroup;
+		this.pattern = pattern;
+	}
 
-    @Override
-    public ContentBundleUrl getContentBundleUrl(String rawUrl) {
-        ContentBundleUrlImpl parsedUrl = new ContentBundleUrlImpl();
-        Matcher matcher = pattern.matcher(rawUrl);
+	@Override
+	public ContentBundleUrl getContentBundleUrl(String rawUrl) {
+		ContentBundleUrlImpl parsedUrl = new ContentBundleUrlImpl();
+		Matcher matcher = pattern.matcher(rawUrl);
 
-        if (matcher.matches()) {
-            try {
-                parsedUrl.setPrefix(matcher.group(prefixGroup));
-            } catch (IndexOutOfBoundsException e) {
-            }
-            try {
-                parsedUrl.setBaseNameAndExtensionToken(matcher.group(baseNameAndExtensionTokenGroup));
-            } catch (IndexOutOfBoundsException e) {
-            }
-            try {
-                parsedUrl.setSuffix(matcher.group(suffixGroup));
-            } catch (IndexOutOfBoundsException e) {
-            }
-        }
+		if (matcher.matches()) {
+			try {
+				parsedUrl.setPrefix(matcher.group(prefixGroup));
+			} catch (IndexOutOfBoundsException e) {
+			}
+			try {
+				parsedUrl.setBaseNameAndExtensionToken(matcher.group(baseNameAndExtensionTokenGroup));
+			} catch (IndexOutOfBoundsException e) {
+			}
+			try {
+				parsedUrl.setSuffix(matcher.group(suffixGroup));
+			} catch (IndexOutOfBoundsException e) {
+			}
+		}
 
-        return parsedUrl;
-    }
+		return parsedUrl;
+	}
 
 }

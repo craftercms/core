@@ -30,40 +30,40 @@ import org.dom4j.Document;
  */
 public class DescriptorMergeStrategyResolverChain implements DescriptorMergeStrategyResolver {
 
-    private DescriptorMergeStrategy defaultStrategy;
-    private List<DescriptorMergeStrategyResolver> resolvers;
+	private DescriptorMergeStrategy defaultStrategy;
+	private List<DescriptorMergeStrategyResolver> resolvers;
 
-    public DescriptorMergeStrategyResolverChain(DescriptorMergeStrategy defaultStrategy) {
-        this.defaultStrategy = defaultStrategy;
-    }
+	public DescriptorMergeStrategyResolverChain(DescriptorMergeStrategy defaultStrategy) {
+		this.defaultStrategy = defaultStrategy;
+	}
 
-    public void setResolvers(List<DescriptorMergeStrategyResolver> resolvers) {
-        this.resolvers = resolvers;
-    }
+	public void setResolvers(List<DescriptorMergeStrategyResolver> resolvers) {
+		this.resolvers = resolvers;
+	}
 
-    /**
-     * Returns the first non-null strategy returned by a {@link DescriptorMergeStrategyResolver} of the chain.
-     * If there a no resolvers in the chain, or non of resolvers returns a {@link DescriptorMergeStrategy}, a
-     * default strategy is returned.
-     *
-     * @param descriptorUrl the URL that identifies the descriptor
-     * @param descriptorDom the XML DOM of the descriptor
-     * @return the first non-null strategy returned by a {@link DescriptorMergeStrategyResolver} of the chain,
-     *         or a default one if all the resolvers returned null.
-     */
-    public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) {
-        DescriptorMergeStrategy strategy;
+	/**
+	 * Returns the first non-null strategy returned by a {@link DescriptorMergeStrategyResolver} of the chain.
+	 * If there a no resolvers in the chain, or non of resolvers returns a {@link DescriptorMergeStrategy}, a
+	 * default strategy is returned.
+	 *
+	 * @param descriptorUrl the URL that identifies the descriptor
+	 * @param descriptorDom the XML DOM of the descriptor
+	 * @return the first non-null strategy returned by a {@link DescriptorMergeStrategyResolver} of the chain,
+	 * or a default one if all the resolvers returned null.
+	 */
+	public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) {
+		DescriptorMergeStrategy strategy;
 
-        if (CollectionUtils.isNotEmpty(resolvers)) {
-            for (DescriptorMergeStrategyResolver resolver : resolvers) {
-                strategy = resolver.getStrategy(descriptorUrl, descriptorDom);
-                if (strategy != null) {
-                    return strategy;
-                }
-            }
-        }
+		if (CollectionUtils.isNotEmpty(resolvers)) {
+			for (DescriptorMergeStrategyResolver resolver : resolvers) {
+				strategy = resolver.getStrategy(descriptorUrl, descriptorDom);
+				if (strategy != null) {
+					return strategy;
+				}
+			}
+		}
 
-        return defaultStrategy;
-    }
+		return defaultStrategy;
+	}
 
 }

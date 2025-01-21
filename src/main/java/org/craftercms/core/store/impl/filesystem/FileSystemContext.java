@@ -26,19 +26,19 @@ import java.util.Map;
  */
 public class FileSystemContext extends ContextImpl {
 
-    private final FileSystemFile rootFolder;
+	private final FileSystemFile rootFolder;
 
-    public FileSystemContext(String id, FileSystemContentStoreAdapter storeAdapter, String rootFolderPath,
-                             FileSystemFile rootFolder, boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
-                             boolean ignoreHiddenFiles, Map<String, String> configurationVariables) {
-        super(id, storeAdapter, rootFolderPath, mergingOn, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles, configurationVariables);
+	public FileSystemContext(String id, FileSystemContentStoreAdapter storeAdapter, String rootFolderPath,
+				 FileSystemFile rootFolder, boolean mergingOn, boolean cacheOn, int maxAllowedItemsInCache,
+				 boolean ignoreHiddenFiles, Map<String, String> configurationVariables) {
+		super(id, storeAdapter, rootFolderPath, mergingOn, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles, configurationVariables);
 
-        this.rootFolder = rootFolder;
-    }
+		this.rootFolder = rootFolder;
+	}
 
-    public FileSystemFile getRootFolder() {
-        return rootFolder;
-    }
+	public FileSystemFile getRootFolder() {
+		return rootFolder;
+	}
 
 
 }

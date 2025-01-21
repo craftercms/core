@@ -22,19 +22,19 @@ package org.craftercms.core.exception;
  */
 public class XmlException extends CrafterException {
 
-    public XmlException() {
-    }
+	public XmlException() {
+	}
 
-    public XmlException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public XmlException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public XmlException(String message) {
-        super(message);
-    }
+	public XmlException(String message) {
+		super(message);
+	}
 
-    public XmlException(Throwable cause) {
-        super(cause);
-    }
+	public XmlException(Throwable cause) {
+		super(cause);
+	}
 
 }

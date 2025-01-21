@@ -20,10 +20,10 @@ package org.craftercms.core.util.url;
  */
 public interface ContentBundleUrl {
 
-    String getPrefix();
+	String getPrefix();
 
-    String getBaseNameAndExtensionToken();
+	String getBaseNameAndExtensionToken();
 
-    String getSuffix();
+	String getSuffix();
 
 }

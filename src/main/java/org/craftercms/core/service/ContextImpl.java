@@ -27,118 +27,118 @@ import java.util.Map;
  */
 public class ContextImpl implements Context {
 
-    protected static final String CACHE_SCOPE_FORMAT = "%s-v%s";
+	protected static final String CACHE_SCOPE_FORMAT = "%s-v%s";
 
-    protected String id;
-    protected ContentStoreAdapter storeAdapter;
-    protected String rootFolderPath;
-    protected boolean mergingOn;
-    protected boolean cacheOn;
-    protected volatile long cacheVersion;
-    protected int maxAllowedItemsInCache;
-    protected boolean ignoreHiddenFiles;
-    protected Map<String, String> configurationVariables;
+	protected String id;
+	protected ContentStoreAdapter storeAdapter;
+	protected String rootFolderPath;
+	protected boolean mergingOn;
+	protected boolean cacheOn;
+	protected volatile long cacheVersion;
+	protected int maxAllowedItemsInCache;
+	protected boolean ignoreHiddenFiles;
+	protected Map<String, String> configurationVariables;
 
-    public ContextImpl(String id, ContentStoreAdapter storeAdapter, String rootFolderPath, boolean mergingOn,
-                       boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables) {
-        this.id = id;
-        this.storeAdapter = storeAdapter;
-        this.rootFolderPath = rootFolderPath;
-        this.mergingOn = mergingOn;
-        this.cacheOn = cacheOn;
-        this.cacheVersion = System.nanoTime();
-        this.maxAllowedItemsInCache = maxAllowedItemsInCache;
-        this.ignoreHiddenFiles = ignoreHiddenFiles;
-        this.configurationVariables = configurationVariables;
-    }
+	public ContextImpl(String id, ContentStoreAdapter storeAdapter, String rootFolderPath, boolean mergingOn,
+			   boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables) {
+		this.id = id;
+		this.storeAdapter = storeAdapter;
+		this.rootFolderPath = rootFolderPath;
+		this.mergingOn = mergingOn;
+		this.cacheOn = cacheOn;
+		this.cacheVersion = System.nanoTime();
+		this.maxAllowedItemsInCache = maxAllowedItemsInCache;
+		this.ignoreHiddenFiles = ignoreHiddenFiles;
+		this.configurationVariables = configurationVariables;
+	}
 
-    @Override
-    public String getId() {
-        return id;
-    }
+	@Override
+	public String getId() {
+		return id;
+	}
 
-    @Override
-    public long getCacheVersion() {
-        return cacheVersion;
-    }
+	@Override
+	public long getCacheVersion() {
+		return cacheVersion;
+	}
 
-    @Override
-    public void setCacheVersion(long cacheVersion) {
-        this.cacheVersion = cacheVersion;
-    }
+	@Override
+	public void setCacheVersion(long cacheVersion) {
+		this.cacheVersion = cacheVersion;
+	}
 
-    @Override
-    public String getCacheScope() {
-        return String.format(CACHE_SCOPE_FORMAT, id, cacheVersion);
-    }
+	@Override
+	public String getCacheScope() {
+		return String.format(CACHE_SCOPE_FORMAT, id, cacheVersion);
+	}
 
-    @Override
-    public ContentStoreAdapter getStoreAdapter() {
-        return storeAdapter;
-    }
+	@Override
+	public ContentStoreAdapter getStoreAdapter() {
+		return storeAdapter;
+	}
 
-    @Override
-    public boolean isMergingOn() {
-        return mergingOn;
-    }
+	@Override
+	public boolean isMergingOn() {
+		return mergingOn;
+	}
 
-    @Override
-    public boolean isCacheOn() {
-        return cacheOn;
-    }
+	@Override
+	public boolean isCacheOn() {
+		return cacheOn;
+	}
 
-    @Override
-    public int getMaxAllowedItemsInCache() {
-        return maxAllowedItemsInCache;
-    }
+	@Override
+	public int getMaxAllowedItemsInCache() {
+		return maxAllowedItemsInCache;
+	}
 
-    @Override
-    public boolean ignoreHiddenFiles() {
-        return ignoreHiddenFiles;
-    }
+	@Override
+	public boolean ignoreHiddenFiles() {
+		return ignoreHiddenFiles;
+	}
 
-    @Override
-    public Map<String, String> getConfigLookupVariables() {
-        return configurationVariables;
-    }
+	@Override
+	public Map<String, String> getConfigLookupVariables() {
+		return configurationVariables;
+	}
 
-    @Override
-    public Context clone() {
-        try {
-            return (Context) super.clone();
-        } catch (CloneNotSupportedException e) {
-            // Shouldn't happen
-            throw new RuntimeException(e);
-        }
-    }
+	@Override
+	public Context clone() {
+		try {
+			return (Context) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// Shouldn't happen
+			throw new RuntimeException(e);
+		}
+	}
 
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        Context context = (Context)o;
+		Context context = (Context) o;
 
-        if (!getId().equals(context.getId())) {
-            return false;
-        }
+		if (!getId().equals(context.getId())) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    public int hashCode() {
-        return getId().hashCode();
-    }
+	public int hashCode() {
+		return getId().hashCode();
+	}
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "{" +
-               "id='" + id + '\'' +
-               ", rootFolderPath='" + rootFolderPath + '\'' +
-               '}';
-    }
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{" +
+			"id='" + id + '\'' +
+			", rootFolderPath='" + rootFolderPath + '\'' +
+			'}';
+	}
 
 }

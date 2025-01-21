@@ -38,82 +38,82 @@ import static org.mockito.Mockito.*;
  */
 public class DefaultCacheTemplateTest {
 
-    private static final String RANDOM_KEY_ELEM = "random";
+	private static final String RANDOM_KEY_ELEM = "random";
 
-    private DefaultCacheTemplate cacheTemplate;
-    private CacheService cache;
-    private Callback<Long> cacheTemplateCallback;
-    private Context context;
+	private DefaultCacheTemplate cacheTemplate;
+	private CacheService cache;
+	private Callback<Long> cacheTemplateCallback;
+	private Context context;
 
-    @Before
-    public void setUp() throws Exception {
-        setUpTestContext();
-        setUpTestCache();
-        setUpTestCacheCallback();
-        setUpTestCacheTemplate();
-    }
+	@Before
+	public void setUp() throws Exception {
+		setUpTestContext();
+		setUpTestCache();
+		setUpTestCacheCallback();
+		setUpTestCacheTemplate();
+	}
 
-    @Test
-    public void testTemplate() throws Exception {
-        Long time1  = cacheTemplate.getObject(context, DEFAULT_CACHING_OPTIONS, cacheTemplateCallback, RANDOM_KEY_ELEM);
+	@Test
+	public void testTemplate() throws Exception {
+		Long time1 = cacheTemplate.getObject(context, DEFAULT_CACHING_OPTIONS, cacheTemplateCallback, RANDOM_KEY_ELEM);
 
-        Thread.sleep(100);
+		Thread.sleep(100);
 
-        Long time2 = cacheTemplate.getObject(context, DEFAULT_CACHING_OPTIONS, cacheTemplateCallback, RANDOM_KEY_ELEM);
+		Long time2 = cacheTemplate.getObject(context, DEFAULT_CACHING_OPTIONS, cacheTemplateCallback, RANDOM_KEY_ELEM);
 
-        assertEquals(time1, time2);
+		assertEquals(time1, time2);
 
-        Object key = generateKey(RANDOM_KEY_ELEM);
+		Object key = generateKey(RANDOM_KEY_ELEM);
 
-        verify(cache, atLeast(2)).get(context, key);
-        verify(cache).put(eq(context), eq(key), eq(time1), eq(DEFAULT_CACHING_OPTIONS), any());
-    }
+		verify(cache, atLeast(2)).get(context, key);
+		verify(cache).put(eq(context), eq(key), eq(time1), eq(DEFAULT_CACHING_OPTIONS), any());
+	}
 
-    private void setUpTestContext() {
-        context = mock(Context.class);
-    }
+	private void setUpTestContext() {
+		context = mock(Context.class);
+	}
 
-    private void setUpTestCache() {
-        cache = mock(CacheService.class);
+	private void setUpTestCache() {
+		cache = mock(CacheService.class);
 
-        final Map<Object, Object> cache = new HashMap<Object, Object>();
+		final Map<Object, Object> cache = new HashMap<Object, Object>();
 
-        Answer<Object> getFromCacheAnswer = new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                return cache.get(invocation.getArguments()[1]);
-            }
-        };
+		Answer<Object> getFromCacheAnswer = new Answer<Object>() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				return cache.get(invocation.getArguments()[1]);
+			}
+		};
 
-        Answer<Void> putInCacheAnswer = new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                cache.put(invocation.getArguments()[1], invocation.getArguments()[2]);
+		Answer<Void> putInCacheAnswer = new Answer<Void>() {
+			@Override
+			public Void answer(InvocationOnMock invocation) throws Throwable {
+				cache.put(invocation.getArguments()[1], invocation.getArguments()[2]);
 
-                return null;
-            }
-        };
+				return null;
+			}
+		};
 
-        Object key = generateKey(RANDOM_KEY_ELEM);
+		Object key = generateKey(RANDOM_KEY_ELEM);
 
-        when(this.cache.get(context, key)).thenAnswer(getFromCacheAnswer);
-        doAnswer(putInCacheAnswer).when(this.cache).put(eq(context), eq(key), any(), eq(DEFAULT_CACHING_OPTIONS),
-                                                        any());
-    }
+		when(this.cache.get(context, key)).thenAnswer(getFromCacheAnswer);
+		doAnswer(putInCacheAnswer).when(this.cache).put(eq(context), eq(key), any(), eq(DEFAULT_CACHING_OPTIONS),
+			any());
+	}
 
-    private void setUpTestCacheCallback() {
-        cacheTemplateCallback = new Callback<Long>() {
+	private void setUpTestCacheCallback() {
+		cacheTemplateCallback = new Callback<Long>() {
 
-            @Override
-            public Long execute() {
-                return System.currentTimeMillis();
-            }
+			@Override
+			public Long execute() {
+				return System.currentTimeMillis();
+			}
 
-        };
-    }
+		};
+	}
 
-    private void setUpTestCacheTemplate() {
-        cacheTemplate = new DefaultCacheTemplate(cache);
-    }
+	private void setUpTestCacheTemplate() {
+		cacheTemplate = new DefaultCacheTemplate(cache);
+	}
 
 }

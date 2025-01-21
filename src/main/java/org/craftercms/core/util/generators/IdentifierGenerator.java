@@ -22,11 +22,11 @@ package org.craftercms.core.util.generators;
  */
 public interface IdentifierGenerator {
 
-    /**
-     * Generates a unique string identifier. Uniqueness should only be forced between repeated calls to an instance.
-     *
-     * @return a unique string identifier
-     */
-    String generate();
+	/**
+	 * Generates a unique string identifier. Uniqueness should only be forced between repeated calls to an instance.
+	 *
+	 * @return a unique string identifier
+	 */
+	String generate();
 
 }

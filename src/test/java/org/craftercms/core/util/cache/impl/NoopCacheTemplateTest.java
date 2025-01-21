@@ -37,28 +37,28 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class NoopCacheTemplateTest {
 
-    public static final String CACHE_KEY = "test";
+	public static final String CACHE_KEY = "test";
 
-    public static final String CACHE_VALUE = "Hello";
+	public static final String CACHE_VALUE = "Hello";
 
-    @Mock
-    private Context context;
+	@Mock
+	private Context context;
 
-    @Mock
-    private CacheService cacheService;
+	@Mock
+	private CacheService cacheService;
 
-    @Mock
-    private KeyBasedLockFactory<ReentrantLock> lockFactory;
+	@Mock
+	private KeyBasedLockFactory<ReentrantLock> lockFactory;
 
-    @InjectMocks
-    private NoopCacheTemplate cacheTemplate;
+	@InjectMocks
+	private NoopCacheTemplate cacheTemplate;
 
-    @Test
-    public void testCacheIsNotUsed() {
-        cacheTemplate.getObject(context, () -> CACHE_VALUE, CACHE_KEY);
+	@Test
+	public void testCacheIsNotUsed() {
+		cacheTemplate.getObject(context, () -> CACHE_VALUE, CACHE_KEY);
 
-        verify(cacheService, never()).get(eq(context), any());
-        verify(lockFactory, never()).getLock(any());
-    }
+		verify(cacheService, never()).get(eq(context), any());
+		verify(lockFactory, never()).getLock(any());
+	}
 
 }

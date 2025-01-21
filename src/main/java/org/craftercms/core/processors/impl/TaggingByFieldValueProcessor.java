@@ -26,76 +26,77 @@ import java.util.Map;
 
 /**
  * {@link ItemProcessor} that adds a new tag or field to items that have a certain tag/field and value.
+ *
  * @author joseross
  */
 public class TaggingByFieldValueProcessor extends AbstractTaggingProcessor {
 
-    /**
-     * The name of the existing field to query.
-     */
-    protected String sourceField;
+	/**
+	 * The name of the existing field to query.
+	 */
+	protected String sourceField;
 
-    /**
-     * Map of values, the keys can be regular expressions.
-     */
-    protected Map<String, String> valueMapping;
+	/**
+	 * Map of values, the keys can be regular expressions.
+	 */
+	protected Map<String, String> valueMapping;
 
-    public TaggingByFieldValueProcessor(String sourceField, String defaultValue, Map<String, String> valueMapping, String newField) {
-        super(newField);
-        this.sourceField = sourceField;
-        this.defaultValue = defaultValue;
-        this.valueMapping = valueMapping;
-    }
+	public TaggingByFieldValueProcessor(String sourceField, String defaultValue, Map<String, String> valueMapping, String newField) {
+		super(newField);
+		this.sourceField = sourceField;
+		this.defaultValue = defaultValue;
+		this.valueMapping = valueMapping;
+	}
 
-    @Override
-    protected String getTagValues(Item item) {
-        String value = defaultValue;
-        Document document = item.getDescriptorDom();
-        if (document != null) {
-            String sourceValue = XmlUtils.selectSingleNodeValue(document.getRootElement(), sourceField);
-            if (StringUtils.isNotEmpty(sourceValue)) {
-                for (Map.Entry<String, String> entry : valueMapping.entrySet()) {
-                    if (sourceValue.matches(entry.getKey())) {
-                        value = entry.getValue();
-                        break;
-                    }
-                }
-            }
-        }
-        return value;
-    }
+	@Override
+	protected String getTagValues(Item item) {
+		String value = defaultValue;
+		Document document = item.getDescriptorDom();
+		if (document != null) {
+			String sourceValue = XmlUtils.selectSingleNodeValue(document.getRootElement(), sourceField);
+			if (StringUtils.isNotEmpty(sourceValue)) {
+				for (Map.Entry<String, String> entry : valueMapping.entrySet()) {
+					if (sourceValue.matches(entry.getKey())) {
+						value = entry.getValue();
+						break;
+					}
+				}
+			}
+		}
+		return value;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-        TaggingByFieldValueProcessor that = (TaggingByFieldValueProcessor) o;
+		TaggingByFieldValueProcessor that = (TaggingByFieldValueProcessor) o;
 
-        if (sourceField != null ? !sourceField.equals(that.sourceField) : that.sourceField != null) return false;
-        if (newField != null ? !newField.equals(that.newField) : that.newField != null) return false;
-        if (defaultValue != null ? !defaultValue.equals(that.defaultValue) : that.defaultValue != null) return false;
-        return valueMapping != null ? valueMapping.equals(that.valueMapping) : that.valueMapping == null;
+		if (sourceField != null ? !sourceField.equals(that.sourceField) : that.sourceField != null) return false;
+		if (newField != null ? !newField.equals(that.newField) : that.newField != null) return false;
+		if (defaultValue != null ? !defaultValue.equals(that.defaultValue) : that.defaultValue != null) return false;
+		return valueMapping != null ? valueMapping.equals(that.valueMapping) : that.valueMapping == null;
 
-    }
+	}
 
-    @Override
-    public int hashCode() {
-        int result = sourceField != null ? sourceField.hashCode() : 0;
-        result = 31 * result + (newField != null ? newField.hashCode() : 0);
-        result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
-        result = 31 * result + (valueMapping != null ? valueMapping.hashCode() : 0);
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		int result = sourceField != null ? sourceField.hashCode() : 0;
+		result = 31 * result + (newField != null ? newField.hashCode() : 0);
+		result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
+		result = 31 * result + (valueMapping != null ? valueMapping.hashCode() : 0);
+		return result;
+	}
 
-    @Override
-    public String toString() {
-        return "TaggingByFieldValueProcessor{" +
-            "sourceField='" + sourceField + '\'' +
-            ", newField='" + newField + '\'' +
-            ", defaultValue='" + defaultValue + '\'' +
-            ", valueMapping=" + valueMapping +
-            '}';
-    }
+	@Override
+	public String toString() {
+		return "TaggingByFieldValueProcessor{" +
+			"sourceField='" + sourceField + '\'' +
+			", newField='" + newField + '\'' +
+			", defaultValue='" + defaultValue + '\'' +
+			", valueMapping=" + valueMapping +
+			'}';
+	}
 
 }

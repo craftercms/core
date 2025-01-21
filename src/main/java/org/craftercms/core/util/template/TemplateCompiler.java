@@ -24,6 +24,6 @@ import org.craftercms.core.exception.TemplateException;
  */
 public interface TemplateCompiler<T> {
 
-    CompiledTemplate compile(T templateSource) throws TemplateException;
+	CompiledTemplate compile(T templateSource) throws TemplateException;
 
 }

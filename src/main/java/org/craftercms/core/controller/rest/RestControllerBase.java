@@ -25,18 +25,18 @@ import java.util.Map;
  */
 public class RestControllerBase {
 
-    public static final String REST_BASE_URI = "${crafter.core.rest.base.uri}";
-    public static final String MESSAGE_MODEL_ATTRIBUTE_NAME = "message";
+	public static final String REST_BASE_URI = "${crafter.core.rest.base.uri}";
+	public static final String MESSAGE_MODEL_ATTRIBUTE_NAME = "message";
 
-    public static Map<String, Object> createResponseMessage(String message) {
-        return createSingletonModifiableMap(MESSAGE_MODEL_ATTRIBUTE_NAME, message);
-    }
+	public static Map<String, Object> createResponseMessage(String message) {
+		return createSingletonModifiableMap(MESSAGE_MODEL_ATTRIBUTE_NAME, message);
+	}
 
-    public static Map<String, Object> createSingletonModifiableMap(String attributeName, Object attributeValue) {
-        Map<String, Object> model = new HashMap<>(1);
-        model.put(attributeName, attributeValue);
+	public static Map<String, Object> createSingletonModifiableMap(String attributeName, Object attributeValue) {
+		Map<String, Object> model = new HashMap<>(1);
+		model.put(attributeName, attributeValue);
 
-        return model;
-    }
+		return model;
+	}
 
 }

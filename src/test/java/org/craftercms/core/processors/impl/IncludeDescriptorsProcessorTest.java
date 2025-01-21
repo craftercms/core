@@ -40,116 +40,116 @@ import static org.mockito.Mockito.when;
  */
 public class IncludeDescriptorsProcessorTest {
 
-    public static final String INCLUDE_ELEM_XPATH_QUERY = "//include";
-    public static final String DISABLED_INCLUDE_NODE_XPATH_QUERY = "@disabled";
+	public static final String INCLUDE_ELEM_XPATH_QUERY = "//include";
+	public static final String DISABLED_INCLUDE_NODE_XPATH_QUERY = "@disabled";
 
-    private static final String DESCRIPTOR1_URL = "/folder/sub-folder/descriptor1.xml";
-    private static final String DESCRIPTOR2_URL = "/folder/descriptor2.xml";
-    private static final String DESCRIPTOR3_URL = "/folder/descriptor3.xml";
-    private static final String DESCRIPTOR4_URL = "/folder/descriptor4.xml";
+	private static final String DESCRIPTOR1_URL = "/folder/sub-folder/descriptor1.xml";
+	private static final String DESCRIPTOR2_URL = "/folder/descriptor2.xml";
+	private static final String DESCRIPTOR3_URL = "/folder/descriptor3.xml";
+	private static final String DESCRIPTOR4_URL = "/folder/descriptor4.xml";
 
-    private static final String DESCRIPTOR1_XML =   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                                                    "<page>" +
-                                                        "<include>" + DESCRIPTOR2_URL + "</include>" +
-                                                    "</page>";
+	private static final String DESCRIPTOR1_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+		"<page>" +
+		"<include>" + DESCRIPTOR2_URL + "</include>" +
+		"</page>";
 
-    private static final String DESCRIPTOR2_XML =   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                                                    "<component>" +
-                                                        "<element>a</element>" +
-                                                        "<include>" + DESCRIPTOR3_URL + "</include>" +
-                                                        "<include disabled='true'>" + DESCRIPTOR4_URL + "</include>" +
-                                                    "</component>";
+	private static final String DESCRIPTOR2_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+		"<component>" +
+		"<element>a</element>" +
+		"<include>" + DESCRIPTOR3_URL + "</include>" +
+		"<include disabled='true'>" + DESCRIPTOR4_URL + "</include>" +
+		"</component>";
 
-    private static final String DESCRIPTOR3_XML =   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                                                    "<component>" +
-                                                        "<element>b</element>" +
-                                                        "<include>" + DESCRIPTOR1_URL + "</include>" +
-                                                    "</component>";
+	private static final String DESCRIPTOR3_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+		"<component>" +
+		"<element>b</element>" +
+		"<include>" + DESCRIPTOR1_URL + "</include>" +
+		"</component>";
 
-    private static final String EXPECTED_XML =      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                                                    "<page>" +
-                                                        "<include>" + DESCRIPTOR2_URL + "</include>" +
-                                                        "<component>" +
-                                                            "<element>a</element>" +
-                                                            "<include>" + DESCRIPTOR3_URL + "</include>" +
-                                                            "<component>" +
-                                                                "<element>b</element>" +
-                                                                "<include>" + DESCRIPTOR1_URL + "</include>" +
-                                                            "</component>" +
-                                                            "<include disabled=\"true\">" + DESCRIPTOR4_URL + "</include>" +
-                                                        "</component>" +
-                                                    "</page>";
+	private static final String EXPECTED_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+		"<page>" +
+		"<include>" + DESCRIPTOR2_URL + "</include>" +
+		"<component>" +
+		"<element>a</element>" +
+		"<include>" + DESCRIPTOR3_URL + "</include>" +
+		"<component>" +
+		"<element>b</element>" +
+		"<include>" + DESCRIPTOR1_URL + "</include>" +
+		"</component>" +
+		"<include disabled=\"true\">" + DESCRIPTOR4_URL + "</include>" +
+		"</component>" +
+		"</page>";
 
-    private IncludeDescriptorsProcessor processor;
-    private ContentStoreService storeService;
-    private Document descriptorDom1;
-    private Document descriptorDom2;
-    private Document descriptorDom3;
-    private Context context;
+	private IncludeDescriptorsProcessor processor;
+	private ContentStoreService storeService;
+	private Document descriptorDom1;
+	private Document descriptorDom2;
+	private Document descriptorDom3;
+	private Context context;
 
-    @Before
-    public void setUp() throws Exception {
-        storeService = mock(ContentStoreService.class);
-        // Create first to avoid circular dependency problems
-        processor = new IncludeDescriptorsProcessor(INCLUDE_ELEM_XPATH_QUERY, DISABLED_INCLUDE_NODE_XPATH_QUERY);
-        processor.setContentStoreService(storeService);
+	@Before
+	public void setUp() throws Exception {
+		storeService = mock(ContentStoreService.class);
+		// Create first to avoid circular dependency problems
+		processor = new IncludeDescriptorsProcessor(INCLUDE_ELEM_XPATH_QUERY, DISABLED_INCLUDE_NODE_XPATH_QUERY);
+		processor.setContentStoreService(storeService);
 
-        setUpTestContext();
-        setUpTestDescriptorDoms();
-        setUpTestStoreService();
-        setUpTestProcessor();
-    }
+		setUpTestContext();
+		setUpTestDescriptorDoms();
+		setUpTestStoreService();
+		setUpTestProcessor();
+	}
 
-    @Test
-    public void testProcess() throws Exception {
-        Item item = new Item();
-        item.setDescriptorUrl(DESCRIPTOR1_URL);
-        item.setDescriptorDom(descriptorDom1);
+	@Test
+	public void testProcess() throws Exception {
+		Item item = new Item();
+		item.setDescriptorUrl(DESCRIPTOR1_URL);
+		item.setDescriptorDom(descriptorDom1);
 
-        item = processor.process(context, DEFAULT_CACHING_OPTIONS, item);
-        assertNotNull(item.getDescriptorDom());
-        assertEquals(EXPECTED_XML, item.getDescriptorDom().asXML().replace("\n", ""));
-    }
+		item = processor.process(context, DEFAULT_CACHING_OPTIONS, item);
+		assertNotNull(item.getDescriptorDom());
+		assertEquals(EXPECTED_XML, item.getDescriptorDom().asXML().replace("\n", ""));
+	}
 
-    private void setUpTestContext() {
-        context = mock(Context.class);
-    }
+	private void setUpTestContext() {
+		context = mock(Context.class);
+	}
 
-    private void setUpTestDescriptorDoms() throws DocumentException, SAXException {
-        SAXReader reader = new SAXReader();
+	private void setUpTestDescriptorDoms() throws DocumentException, SAXException {
+		SAXReader reader = new SAXReader();
 
-        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
-        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
-        descriptorDom1 = reader.read(new StringReader(DESCRIPTOR1_XML));
-        descriptorDom2 = reader.read(new StringReader(DESCRIPTOR2_XML));
-        descriptorDom3 = reader.read(new StringReader(DESCRIPTOR3_XML));
-    }
+		descriptorDom1 = reader.read(new StringReader(DESCRIPTOR1_XML));
+		descriptorDom2 = reader.read(new StringReader(DESCRIPTOR2_XML));
+		descriptorDom3 = reader.read(new StringReader(DESCRIPTOR3_XML));
+	}
 
-    private void setUpTestStoreService() {
-        when(storeService.findItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR2_URL, processor)).thenAnswer(
-            invocationOnMock -> {
-                Item item2 = new Item();
-                item2.setDescriptorUrl(DESCRIPTOR2_URL);
-                item2.setDescriptorDom(descriptorDom2);
+	private void setUpTestStoreService() {
+		when(storeService.findItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR2_URL, processor)).thenAnswer(
+			invocationOnMock -> {
+				Item item2 = new Item();
+				item2.setDescriptorUrl(DESCRIPTOR2_URL);
+				item2.setDescriptorDom(descriptorDom2);
 
-                return processor.process(context, DEFAULT_CACHING_OPTIONS, item2);
-            }
-        );
-        when(storeService.findItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR3_URL, processor)).thenAnswer(
-            invocationOnMock -> {
-                Item item3 = new Item();
-                item3.setDescriptorUrl(DESCRIPTOR3_URL);
-                item3.setDescriptorDom(descriptorDom3);
+				return processor.process(context, DEFAULT_CACHING_OPTIONS, item2);
+			}
+		);
+		when(storeService.findItem(context, DEFAULT_CACHING_OPTIONS, DESCRIPTOR3_URL, processor)).thenAnswer(
+			invocationOnMock -> {
+				Item item3 = new Item();
+				item3.setDescriptorUrl(DESCRIPTOR3_URL);
+				item3.setDescriptorDom(descriptorDom3);
 
-                return processor.process(context, DEFAULT_CACHING_OPTIONS, item3);
-            }
-        );
-    }
+				return processor.process(context, DEFAULT_CACHING_OPTIONS, item3);
+			}
+		);
+	}
 
-    private void setUpTestProcessor() {
-        processor.setIncludedItemsProcessor(processor);
-    }
+	private void setUpTestProcessor() {
+		processor.setIncludedItemsProcessor(processor);
+	}
 
 }

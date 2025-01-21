@@ -34,45 +34,45 @@ import org.springframework.context.annotation.Lazy;
  */
 public class MetaDataMergeStrategyResolver implements DescriptorMergeStrategyResolver {
 
-    private String mergeStrategyElementXPathQuery;
-    private Map<String, DescriptorMergeStrategy> elementValueToStrategyMappings;
+	private String mergeStrategyElementXPathQuery;
+	private Map<String, DescriptorMergeStrategy> elementValueToStrategyMappings;
 
-    public MetaDataMergeStrategyResolver(String mergeStrategyElementXPathQuery) {
-        this.mergeStrategyElementXPathQuery = mergeStrategyElementXPathQuery;
-    }
+	public MetaDataMergeStrategyResolver(String mergeStrategyElementXPathQuery) {
+		this.mergeStrategyElementXPathQuery = mergeStrategyElementXPathQuery;
+	}
 
-    @Autowired
-    public void setElementValueToStrategyMappings(@Lazy Map<String, DescriptorMergeStrategy> elementValueToStrategyMappings) {
-        this.elementValueToStrategyMappings = elementValueToStrategyMappings;
-    }
+	@Autowired
+	public void setElementValueToStrategyMappings(@Lazy Map<String, DescriptorMergeStrategy> elementValueToStrategyMappings) {
+		this.elementValueToStrategyMappings = elementValueToStrategyMappings;
+	}
 
-    /**
-     * Returns a {@link DescriptorMergeStrategy} for a given descriptor. The strategy chosen is the one defined
-     * in the descriptor document.
-     *
-     * @param descriptorUrl the URL that identifies the descriptor
-     * @param descriptorDom the XML DOM of the descriptor
-     * @return the {@link DescriptorMergeStrategy} for the descriptor, or null if the DOM is null or if there's no
-     *         element in the DOM that defines the merge strategy to use.
-     * @throws XmlException if the element value doesn't refer to an existing strategy
-     */
-    public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) throws XmlException {
-        if (descriptorDom != null) {
-            Node element = descriptorDom.selectSingleNode(mergeStrategyElementXPathQuery);
-            if (element != null) {
-                DescriptorMergeStrategy strategy = elementValueToStrategyMappings.get(element.getText());
-                if (strategy != null) {
-                    return strategy;
-                } else {
-                    throw new XmlException("Element value \"" + element.getText() + "\" doesn't refer to an " +
-                                           "registered strategy");
-                }
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
+	/**
+	 * Returns a {@link DescriptorMergeStrategy} for a given descriptor. The strategy chosen is the one defined
+	 * in the descriptor document.
+	 *
+	 * @param descriptorUrl the URL that identifies the descriptor
+	 * @param descriptorDom the XML DOM of the descriptor
+	 * @return the {@link DescriptorMergeStrategy} for the descriptor, or null if the DOM is null or if there's no
+	 * element in the DOM that defines the merge strategy to use.
+	 * @throws XmlException if the element value doesn't refer to an existing strategy
+	 */
+	public DescriptorMergeStrategy getStrategy(String descriptorUrl, Document descriptorDom) throws XmlException {
+		if (descriptorDom != null) {
+			Node element = descriptorDom.selectSingleNode(mergeStrategyElementXPathQuery);
+			if (element != null) {
+				DescriptorMergeStrategy strategy = elementValueToStrategyMappings.get(element.getText());
+				if (strategy != null) {
+					return strategy;
+				} else {
+					throw new XmlException("Element value \"" + element.getText() + "\" doesn't refer to an " +
+						"registered strategy");
+				}
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
 
 }

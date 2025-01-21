@@ -32,55 +32,55 @@ import org.craftercms.core.url.UrlTransformer;
  */
 public class AddSchemeAndDomainAndServerPortUrlTransformer implements UrlTransformer {
 
-    public static final String HTTP_SCHEME =        "http";
-    public static final String HTTPS_SCHEME =       "https";
-    public static final int DEFAULT_HTTP_PORT =     80;
-    public static final int DEFAULT_HTTPS_PORT =    443;
+	public static final String HTTP_SCHEME = "http";
+	public static final String HTTPS_SCHEME = "https";
+	public static final int DEFAULT_HTTP_PORT = 80;
+	public static final int DEFAULT_HTTPS_PORT = 443;
 
-    protected boolean forceHttps;
-    protected int httpsPort;
+	protected boolean forceHttps;
+	protected int httpsPort;
 
-    public AddSchemeAndDomainAndServerPortUrlTransformer() {
-        forceHttps = false;
-        httpsPort = DEFAULT_HTTPS_PORT;
-    }
+	public AddSchemeAndDomainAndServerPortUrlTransformer() {
+		forceHttps = false;
+		httpsPort = DEFAULT_HTTPS_PORT;
+	}
 
-    public void setForceHttps(boolean forceHttps) {
-        this.forceHttps = forceHttps;
-    }
+	public void setForceHttps(boolean forceHttps) {
+		this.forceHttps = forceHttps;
+	}
 
-    public void setHttpsPort(int httpsPort) {
-        this.httpsPort = httpsPort;
-    }
+	public void setHttpsPort(int httpsPort) {
+		this.httpsPort = httpsPort;
+	}
 
-    @Override
-    public String transformUrl(Context context, CachingOptions cachingOptions,
-                               String url) throws UrlTransformationException {
-        HttpServletRequest currentRequest = RequestContext.getCurrent().getRequest();
-        String scheme = currentRequest.getScheme();
-        String domain = currentRequest.getServerName();
-        int serverPort = currentRequest.getServerPort();
+	@Override
+	public String transformUrl(Context context, CachingOptions cachingOptions,
+				   String url) throws UrlTransformationException {
+		HttpServletRequest currentRequest = RequestContext.getCurrent().getRequest();
+		String scheme = currentRequest.getScheme();
+		String domain = currentRequest.getServerName();
+		int serverPort = currentRequest.getServerPort();
 
-        if (forceHttps) {
-            scheme = HTTPS_SCHEME;
-            serverPort = httpsPort;
-        }
+		if (forceHttps) {
+			scheme = HTTPS_SCHEME;
+			serverPort = httpsPort;
+		}
 
-        StringBuilder fullUrl = new StringBuilder();
-        fullUrl.append(scheme).append("://").append(domain);
+		StringBuilder fullUrl = new StringBuilder();
+		fullUrl.append(scheme).append("://").append(domain);
 
-        if (!(scheme.equals(HTTP_SCHEME) && serverPort == DEFAULT_HTTP_PORT) &&
-            !(scheme.equals(HTTPS_SCHEME) && serverPort == DEFAULT_HTTPS_PORT)) {
-            fullUrl.append(":").append(serverPort);
-        }
+		if (!(scheme.equals(HTTP_SCHEME) && serverPort == DEFAULT_HTTP_PORT) &&
+			!(scheme.equals(HTTPS_SCHEME) && serverPort == DEFAULT_HTTPS_PORT)) {
+			fullUrl.append(":").append(serverPort);
+		}
 
-        if (!url.startsWith("/")) {
-            fullUrl.append("/");
-        }
+		if (!url.startsWith("/")) {
+			fullUrl.append("/");
+		}
 
-        fullUrl.append(url);
+		fullUrl.append(url);
 
-        return fullUrl.toString();
-    }
+		return fullUrl.toString();
+	}
 
 }

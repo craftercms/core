@@ -50,122 +50,122 @@ import org.dom4j.Node;
  */
 public class TemplateProcessor implements ItemProcessor {
 
-    private static final Log logger = LogFactory.getLog(TemplateProcessor.class);
+	private static final Log logger = LogFactory.getLog(TemplateProcessor.class);
 
-    /**
-     * {@code NodeScanner} for template nodes.
-     */
-    protected NodeScanner templateNodeScanner;
-    /**
-     * Template compiler. It basically compiles the template provided in an element and then processes it by using
-     * a model obtained through the {@code modelFactory}.
-     */
-    protected TemplateCompiler<IdentifiableStringTemplateSource> templateCompiler;
-    /**
-     * Factory that provides the models for the templates.
-     */
-    protected NodeTemplateModelFactory modelFactory;
+	/**
+	 * {@code NodeScanner} for template nodes.
+	 */
+	protected NodeScanner templateNodeScanner;
+	/**
+	 * Template compiler. It basically compiles the template provided in an element and then processes it by using
+	 * a model obtained through the {@code modelFactory}.
+	 */
+	protected TemplateCompiler<IdentifiableStringTemplateSource> templateCompiler;
+	/**
+	 * Factory that provides the models for the templates.
+	 */
+	protected NodeTemplateModelFactory modelFactory;
 
-    public TemplateProcessor(NodeScanner templateNodeScanner,
-                             TemplateCompiler<IdentifiableStringTemplateSource> templateCompiler,
-                             NodeTemplateModelFactory modelFactory) {
-        this.templateNodeScanner = templateNodeScanner;
-        this.templateCompiler = templateCompiler;
-        this.modelFactory = modelFactory;
-    }
+	public TemplateProcessor(NodeScanner templateNodeScanner,
+				 TemplateCompiler<IdentifiableStringTemplateSource> templateCompiler,
+				 NodeTemplateModelFactory modelFactory) {
+		this.templateNodeScanner = templateNodeScanner;
+		this.templateCompiler = templateCompiler;
+		this.modelFactory = modelFactory;
+	}
 
-    /**
-     * Processes the content of certain nodes (found by the {@code NodeScanner} in the item's descriptor as templates,
-     * by compiling the node text templates through the {@code templateCompiler} and then processing the compiled
-     * template with a model returned by {@code modelFactory}.
-     *
-     * @throws ItemProcessingException if an error occurred while processing a template
-     */
-    public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
-        String descriptorUrl = item.getDescriptorUrl();
-        Document descriptorDom = item.getDescriptorDom();
+	/**
+	 * Processes the content of certain nodes (found by the {@code NodeScanner} in the item's descriptor as templates,
+	 * by compiling the node text templates through the {@code templateCompiler} and then processing the compiled
+	 * template with a model returned by {@code modelFactory}.
+	 *
+	 * @throws ItemProcessingException if an error occurred while processing a template
+	 */
+	public Item process(Context context, CachingOptions cachingOptions, Item item) throws ItemProcessingException {
+		String descriptorUrl = item.getDescriptorUrl();
+		Document descriptorDom = item.getDescriptorDom();
 
-        if (descriptorDom != null) {
-            List<Node> templateNodes = templateNodeScanner.scan(descriptorDom);
-            if (CollectionUtils.isNotEmpty(templateNodes)) {
-                for (Node templateNode : templateNodes) {
-                    String templateNodePath = templateNode.getUniquePath();
+		if (descriptorDom != null) {
+			List<Node> templateNodes = templateNodeScanner.scan(descriptorDom);
+			if (CollectionUtils.isNotEmpty(templateNodes)) {
+				for (Node templateNode : templateNodes) {
+					String templateNodePath = templateNode.getUniquePath();
 
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Template found in " + descriptorUrl + " at " + templateNodePath);
-                    }
+					if (logger.isDebugEnabled()) {
+						logger.debug("Template found in " + descriptorUrl + " at " + templateNodePath);
+					}
 
-                    String templateId = templateNodePath + "@" + descriptorUrl;
-                    String template = templateNode.getText();
-                    IdentifiableStringTemplateSource templateSource = new IdentifiableStringTemplateSource(templateId,
-                                                                                                           template);
+					String templateId = templateNodePath + "@" + descriptorUrl;
+					String template = templateNode.getText();
+					IdentifiableStringTemplateSource templateSource = new IdentifiableStringTemplateSource(templateId,
+						template);
 
-                    Object model = modelFactory.getModel(item, templateNode, template);
-                    StringWriter output = new StringWriter();
+					Object model = modelFactory.getModel(item, templateNode, template);
+					StringWriter output = new StringWriter();
 
-                    try {
-                        CompiledTemplate compiledTemplate = templateCompiler.compile(templateSource);
-                        compiledTemplate.process(model, output);
-                    } catch (TemplateException e) {
-                        throw new ItemProcessingException("Unable to process the template " + templateId, e);
-                    }
+					try {
+						CompiledTemplate compiledTemplate = templateCompiler.compile(templateSource);
+						compiledTemplate.process(model, output);
+					} catch (TemplateException e) {
+						throw new ItemProcessingException("Unable to process the template " + templateId, e);
+					}
 
-                    templateNode.setText(output.toString());
-                }
-            }
-        }
+					templateNode.setText(output.toString());
+				}
+			}
+		}
 
-        return item;
-    }
+		return item;
+	}
 
-    /**
-     * Returns true if the specified {@code TemplateProcessor}'s and this instance's fields are equal.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	/**
+	 * Returns true if the specified {@code TemplateProcessor}'s and this instance's fields are equal.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        TemplateProcessor that = (TemplateProcessor)o;
+		TemplateProcessor that = (TemplateProcessor) o;
 
-        if (!modelFactory.equals(that.modelFactory)) {
-            return false;
-        }
-        if (!templateCompiler.equals(that.templateCompiler)) {
-            return false;
-        }
-        if (!templateNodeScanner.equals(that.templateNodeScanner)) {
-            return false;
-        }
+		if (!modelFactory.equals(that.modelFactory)) {
+			return false;
+		}
+		if (!templateCompiler.equals(that.templateCompiler)) {
+			return false;
+		}
+		if (!templateNodeScanner.equals(that.templateNodeScanner)) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    /**
-     * Returns the hash code for this instance, which is basically the combination of the hash code of each field.
-     * As with any other {@link ItemProcessor}, this method is defined because any processor which is passed in the
-     * method call of a {@link org.craftercms.core.service.ContentStoreService} can be used as part of a
-     * key for caching.
-     */
-    @Override
-    public int hashCode() {
-        int result = templateNodeScanner.hashCode();
-        result = 31 * result + templateCompiler.hashCode();
-        result = 31 * result + modelFactory.hashCode();
-        return result;
-    }
+	/**
+	 * Returns the hash code for this instance, which is basically the combination of the hash code of each field.
+	 * As with any other {@link ItemProcessor}, this method is defined because any processor which is passed in the
+	 * method call of a {@link org.craftercms.core.service.ContentStoreService} can be used as part of a
+	 * key for caching.
+	 */
+	@Override
+	public int hashCode() {
+		int result = templateNodeScanner.hashCode();
+		result = 31 * result + templateCompiler.hashCode();
+		result = 31 * result + modelFactory.hashCode();
+		return result;
+	}
 
-    @Override
-    public String toString() {
-        return "TemplateProcessor[" +
-               "modelFactory=" + modelFactory +
-               ", templateNodeScanner=" + templateNodeScanner +
-               ", templateCompiler=" + templateCompiler +
-               ']';
-    }
+	@Override
+	public String toString() {
+		return "TemplateProcessor[" +
+			"modelFactory=" + modelFactory +
+			", templateNodeScanner=" + templateNodeScanner +
+			", templateCompiler=" + templateCompiler +
+			']';
+	}
 
 }
