@@ -1,7 +1,7 @@
 core
 ====
 
-Crafter Core content rendering library for CrafterCMS. For more information, please visit: http://craftercms.com/docs.
+Crafter Core content rendering library for CrafterCMS. For more information, please visit: https://craftercms.com/docs.
 
 # Community
 ## Contributors
