@@ -25,6 +25,8 @@ import org.craftercms.commons.file.blob.Blob;
 import org.craftercms.commons.file.blob.BlobStore;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
 import org.craftercms.commons.file.blob.BlobUrlResolver;
+import org.craftercms.core.events.ContextCreatedEvent;
+import org.craftercms.core.events.ContextDestroyedEvent;
 import org.craftercms.core.exception.*;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
@@ -42,6 +44,9 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.beans.ConstructorProperties;
 import java.io.IOException;
@@ -58,7 +63,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Alfonso Vásquez
  */
-public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
+public class ContentStoreServiceImpl extends AbstractCachedContentStoreService implements ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(ContentStoreServiceImpl.class);
     /**
@@ -87,6 +92,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
     protected BlobStoreResolver blobStoreResolver;
 
     protected ObjectMapper mapper = new XmlMapper();
+
+    protected ApplicationContext applicationContext;
 
     /**
      * Indicates if the source attribute should be added when merging XML documents
@@ -129,6 +136,11 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         contexts = new ConcurrentHashMap<>();
     }
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
     public void setSourceAttributeEnabled(boolean sourceAttributeEnabled) {
         this.sourceAttributeEnabled = sourceAttributeEnabled;
     }
@@ -146,7 +158,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      */
     @Override
     public Context getContext(String tag, String storeType, String rootFolderPath, boolean mergingOn,
-                              boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles, Map<String, String> configurationVariables)
+                              boolean cacheOn, int maxAllowedItemsInCache, boolean ignoreHiddenFiles,
+                              Map<String, String> configurationVariables)
         throws InvalidStoreTypeException, RootFolderNotFoundException, StoreException, AuthenticationException {
         String id = createContextId(tag, storeType, rootFolderPath, cacheOn, maxAllowedItemsInCache, ignoreHiddenFiles);
 
@@ -157,9 +170,12 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
             }
 
             Context context = storeAdapter.createContext(id, rootFolderPath, mergingOn, cacheOn,
-                                                         maxAllowedItemsInCache, ignoreHiddenFiles, configurationVariables);
+                                                         maxAllowedItemsInCache, ignoreHiddenFiles,
+                                                         configurationVariables);
 
             cacheTemplate.getCacheService().addScope(context);
+
+            applicationContext.publishEvent(new ContextCreatedEvent(context));
 
             contexts.put(id, context);
 
@@ -178,9 +194,12 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * {@inheritDoc}
      */
     @Override
-    public boolean destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
+    public boolean destroyContext(Context context) throws InvalidContextException, StoreException,
+                                                          AuthenticationException {
         if (contexts.containsKey(context.getId())) {
             context.getStoreAdapter().destroyContext(context);
+
+            applicationContext.publishEvent(new ContextDestroyedEvent(context));
 
             cacheTemplate.getCacheService().removeScope(context);
 
@@ -340,8 +359,9 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * </ol>
      */
     protected List<Item> doFindChildren(Context context, CachingOptions cachingOptions, String url, Integer depth,
-                                        ItemFilter filter, ItemProcessor processor, boolean flatten) throws InvalidContextException,
-        XmlFileParseException, XmlMergeException, ItemProcessingException, StoreException {
+                                        ItemFilter filter, ItemProcessor processor, boolean flatten)
+            throws InvalidContextException, XmlFileParseException, XmlMergeException, ItemProcessingException,
+                   StoreException {
         List<Item> children = getChildrenInternal(context, cachingOptions, url, processor, flatten);
         if (children != null) {
             if (filter != null && filter.runBeforeProcessing()) {
@@ -358,7 +378,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                 try {
                     Item processedChild;
                     if (depth != null && child.isFolder()) {
-                        processedChild = getTree(context, cachingOptions, child.getUrl(), depth, filter, processor, flatten);
+                        processedChild = getTree(context, cachingOptions, child.getUrl(), depth, filter, processor,
+                                                 flatten);
                     } else {
                         processedChild = getItem(context, cachingOptions, child.getUrl(), processor, flatten);
                     }
@@ -395,7 +416,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
      * @param flatten        whether to flatten the children
      * @return the children
      */
-    protected List<Item> getChildrenInternal(Context context, CachingOptions cachingOptions, String url, ItemProcessor processor, boolean flatten) {
+    protected List<Item> getChildrenInternal(Context context, CachingOptions cachingOptions, String url,
+                                             ItemProcessor processor, boolean flatten) {
         return context.getStoreAdapter().findItems(context, cachingOptions, url);
     }
 
@@ -430,8 +452,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                 logger.debug("Merge strategy for " + mainDescriptorUrl + ": " + strategy);
             }
 
-            List<MergeableDescriptor> descriptorsToMerge = strategy.getDescriptors(context, cachingOptions, mainDescriptorUrl,
-                                                                                   mainDescriptorDom);
+            List<MergeableDescriptor> descriptorsToMerge = strategy.getDescriptors(context, cachingOptions,
+                                                                                   mainDescriptorUrl, mainDescriptorDom);
 
             if (descriptorsToMerge == null) {
                 throw new XmlMergeException("There aren't any descriptors to merge for " + mainDescriptorUrl);
@@ -464,7 +486,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
                     }
                     documentsToMerge.add(descriptorDom);
                 } else if (!descriptorToMerge.isOptional()) {
-                    throw new XmlMergeException("Descriptor file " + descriptorUrl + " not found and is marked as required for merging");
+                    throw new XmlMergeException("Descriptor file " + descriptorUrl +
+                                                " not found and is marked as required for merging");
                 }
             }
 
@@ -522,7 +545,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
         if (logger.isDebugEnabled()) {
             logger.debug("Processed item: " + item);
             if (item.getDescriptorDom() != null) {
-                logger.debug("Processed descriptor DOM for " + item + ":\n" + XmlUtils.documentToPrettyString(item.getDescriptorDom()));
+                logger.debug("Processed descriptor DOM for " + item + ":\n" +
+                             XmlUtils.documentToPrettyString(item.getDescriptorDom()));
             }
         }
 
