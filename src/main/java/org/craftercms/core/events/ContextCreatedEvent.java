@@ -17,6 +17,12 @@ package org.craftercms.core.events;
 
 import org.craftercms.core.service.Context;
 
+/**
+ * Event triggered when a new {@link Context} is created.
+ *
+ * @author avasquez
+ * @since 4.3.1
+ */
 public class ContextCreatedEvent extends ContextEvent {
 
     public ContextCreatedEvent(Context context) {

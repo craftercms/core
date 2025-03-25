@@ -18,6 +18,12 @@ package org.craftercms.core.events;
 import org.craftercms.core.service.Context;
 import org.springframework.context.ApplicationEvent;
 
+/**
+ * Base class for events related to {@link Context}
+ *
+ * @author avasquez
+ * @since 4.3.1
+ */
 public class ContextEvent extends ApplicationEvent {
 
     public ContextEvent(Context context) {

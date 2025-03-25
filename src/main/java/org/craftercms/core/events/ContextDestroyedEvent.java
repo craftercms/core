@@ -17,6 +17,12 @@ package org.craftercms.core.events;
 
 import org.craftercms.core.service.Context;
 
+/**
+ * Event triggered when a {@link Context} is destroyed.
+ *
+ * @author avasquez
+ * @since 4.3.1
+ */
 public class ContextDestroyedEvent extends ContextEvent {
 
     public ContextDestroyedEvent(Context context) {

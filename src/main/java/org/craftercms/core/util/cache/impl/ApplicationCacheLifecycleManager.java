@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 
 /**
- * Event listener that adds an application cache scope whenever a context is created and removes it when the site
- * context is destroyed.
+ * Event listener that adds an application cache scope whenever a context is created and removes it when the context
+ * is destroyed.
  *
  * @author avasquez
  * @since 4.3.1
