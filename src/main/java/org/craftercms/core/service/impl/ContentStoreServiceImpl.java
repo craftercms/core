@@ -25,6 +25,8 @@ import org.craftercms.commons.file.blob.Blob;
 import org.craftercms.commons.file.blob.BlobStore;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
 import org.craftercms.commons.file.blob.BlobUrlResolver;
+import org.craftercms.core.events.ContextCreatedEvent;
+import org.craftercms.core.events.ContextDestroyedEvent;
 import org.craftercms.core.exception.*;
 import org.craftercms.core.processors.ItemProcessor;
 import org.craftercms.core.processors.ItemProcessorResolver;
@@ -42,6 +44,9 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.beans.ConstructorProperties;
 import java.io.IOException;
@@ -58,7 +63,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Alfonso Vásquez
  */
-public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
+public class ContentStoreServiceImpl extends AbstractCachedContentStoreService implements ApplicationContextAware {
 
 	private static final Logger logger = LoggerFactory.getLogger(ContentStoreServiceImpl.class);
 	/**
@@ -87,6 +92,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 	protected BlobStoreResolver blobStoreResolver;
 
 	protected ObjectMapper mapper = new XmlMapper();
+
+	protected ApplicationContext applicationContext;
 
 	/**
 	 * Indicates if the source attribute should be added when merging XML documents
@@ -129,6 +136,11 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 		contexts = new ConcurrentHashMap<>();
 	}
 
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
+
 	public void setSourceAttributeEnabled(boolean sourceAttributeEnabled) {
 		this.sourceAttributeEnabled = sourceAttributeEnabled;
 	}
@@ -161,6 +173,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 
 			cacheTemplate.getCacheService().addScope(context);
 
+			applicationContext.publishEvent(new ContextCreatedEvent(context));
+
 			contexts.put(id, context);
 
 			return context;
@@ -181,6 +195,8 @@ public class ContentStoreServiceImpl extends AbstractCachedContentStoreService {
 	public boolean destroyContext(Context context) throws InvalidContextException, StoreException, AuthenticationException {
 		if (contexts.containsKey(context.getId())) {
 			context.getStoreAdapter().destroyContext(context);
+
+			applicationContext.publishEvent(new ContextDestroyedEvent(context));
 
 			cacheTemplate.getCacheService().removeScope(context);
 
