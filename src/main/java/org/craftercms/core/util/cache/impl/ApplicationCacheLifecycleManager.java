@@ -32,32 +32,32 @@ import org.springframework.context.ApplicationListener;
  */
 public class ApplicationCacheLifecycleManager implements ApplicationListener<ContextEvent> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationCacheLifecycleManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(ApplicationCacheLifecycleManager.class);
 
-    protected CacheService appCacheService;
+	protected CacheService appCacheService;
 
-    public ApplicationCacheLifecycleManager(CacheService appCacheService) {
-        this.appCacheService = appCacheService;
-    }
+	public ApplicationCacheLifecycleManager(CacheService appCacheService) {
+		this.appCacheService = appCacheService;
+	}
 
-    @Override
-    public synchronized void onApplicationEvent(ContextEvent event) {
-        var context = event.getContext();
+	@Override
+	public synchronized void onApplicationEvent(ContextEvent event) {
+		var context = event.getContext();
 
-        if (event instanceof ContextCreatedEvent) {
-            if (!appCacheService.hasScope(context)) {
-                logger.info("Adding application cache scope for context: {}", context);
-                appCacheService.addScope(context);
-            }
-        } else if (event instanceof ContextDestroyedEvent) {
-            logger.info("Removing application cache scope for context: {}", context);
-            appCacheService.removeScope(context);
-        }
-    }
+		if (event instanceof ContextCreatedEvent) {
+			if (!appCacheService.hasScope(context)) {
+				logger.info("Adding application cache scope for context: {}", context);
+				appCacheService.addScope(context);
+			}
+		} else if (event instanceof ContextDestroyedEvent) {
+			logger.info("Removing application cache scope for context: {}", context);
+			appCacheService.removeScope(context);
+		}
+	}
 
-    @Override
-    public boolean supportsAsyncExecution() {
-        return false;
-    }
+	@Override
+	public boolean supportsAsyncExecution() {
+		return false;
+	}
 
 }

@@ -25,8 +25,8 @@ import org.craftercms.core.service.Context;
  */
 public class ContextDestroyedEvent extends ContextEvent {
 
-    public ContextDestroyedEvent(Context context) {
-        super(context);
-    }
+	public ContextDestroyedEvent(Context context) {
+		super(context);
+	}
 
 }

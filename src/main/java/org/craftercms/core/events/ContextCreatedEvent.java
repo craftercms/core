@@ -25,8 +25,8 @@ import org.craftercms.core.service.Context;
  */
 public class ContextCreatedEvent extends ContextEvent {
 
-    public ContextCreatedEvent(Context context) {
-        super(context);
-    }
+	public ContextCreatedEvent(Context context) {
+		super(context);
+	}
 
 }
