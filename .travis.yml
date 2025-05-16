@@ -8,7 +8,7 @@ jdk:
 branches:
     only:
         - develop
-        - support/4.1
+        - support/4.x
 cache:
     directories:
         - "$HOME/.m2"
@@ -23,5 +23,5 @@ script:
     - if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then bash -c "mvn clean install"; fi
 env:
     global:
-        - secure: "IziXN/cad0p9TfwlqDTlVJJrOerm6ruEGhXp/RQFTTJjbEMV8EPLqwSG0pAwPIGlzjnGynpVb23dleaVJlKGBbBfcde4BJMp/04RXRLYOObNuWijf2W7zjUGtAt7XvC0gvntVVKnWI/DXqE9P2kQvuJUTkcw/o+n5O28J+GHXYI="
-        - secure: "cMDBkjmHiPk9O7r37anpkvsALaUxFq8GZGlltEQpmC9WbGtgQgMnrVf9qc1FF3WoNIWeKwoaT9wL0awh7L5jqAUqSg63gPaHEKW83HgqYJ49un6aHFhjUvo4HYvkeYnOrB6OXzNIzJITcdjDiw6nTWRGwfWqpn4p/7+/A9PxOZk="
+        - secure: "UN8a32ii6zzEYJUs91jlAKPu842wYrLsEDhWcrfs7zEcOAQEgMY5rYOmI1cwyZJ9M6QpPBX4rqzeZHLJxfhmSAsjtXVh/uU42N9aQZ28QDaryRpb63fStEI3Dknn1E/1ePLHVRgCJGLqPcnAlepzVBkLIlcPN0xzohGTuJHrr+4="
+        - secure: "80A5M5Q4D84CfsudHs4xCw1i1h4XJPpqUNk5qjUzpQK2f1YHTpCOemzji7e/6pEhxFHZiXuS1ebksH0K3pCPWmj9E/zOo0ViDc6voCzI/br8pIETExaXV8hbbbW3Lq4suuvEtnrGZbME1vNLUeil4DqDHVTGfv8X8+5r2vrzWAs="
