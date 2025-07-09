@@ -44,7 +44,7 @@
     <!-- Cache Ticker -->
 
     <!-- Deprecated profile, will be removed in a future version -->
-    <beans profile="crafter.core.activeCache">
+    <beans profile="crafter_core_activeCache">
         <bean id="crafter.cacheTickerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
             <property name="targetObject" ref="crafter.cache"/>
             <property name="targetMethod" value="tick"/>
