@@ -72,7 +72,7 @@
         </bean>
     </beans>
 
-    <beans profile="crafter.core.applicationCache">
+    <beans profile="crafter_core_applicationCache">
         <bean id="crafter.appCacheStoreAdapter" class="org.craftercms.core.cache.impl.store.guava.GuavaCacheStoreAdapter"/>
 
         <bean id="crafter.appCache" class="org.craftercms.core.cache.impl.CacheImpl">
