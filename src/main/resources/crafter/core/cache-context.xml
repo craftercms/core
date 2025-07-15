@@ -43,7 +43,8 @@
 
 	<!-- Cache Ticker -->
 
-	<beans profile="crafter.core.activeCache">
+	<!-- Deprecated profile, will be removed in a future version -->
+	<beans profile="crafter_core_activeCache">
 		<bean id="crafter.cacheTickerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 			<property name="targetObject" ref="crafter.cache"/>
 			<property name="targetMethod" value="tick"/>
@@ -71,8 +72,7 @@
 		</bean>
 	</beans>
 
-	<!-- Deprecated profile, will be removed in a future version -->
-	<beans profile="crafter.core.applicationCache">
+	<beans profile="crafter_core_applicationCache">
 		<bean id="crafter.appCacheStoreAdapter" class="org.craftercms.core.cache.impl.store.guava.GuavaCacheStoreAdapter"/>
 
 		<bean id="crafter.appCache" class="org.craftercms.core.cache.impl.CacheImpl">
@@ -96,12 +96,12 @@
 
 		<bean id="crafter.cacheTickerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 			<property name="jobDetail" ref="crafter.cacheTickerJob"/>
-			<property name="startDelay" value="${crafter.core.cache.tick.frequency}" />
-			<property name="repeatInterval" value="${crafter.core.cache.tick.frequency}" />
+			<property name="startDelay" value="${crafter.core.cache.tick.frequency}"/>
+			<property name="repeatInterval" value="${crafter.core.cache.tick.frequency}"/>
 		</bean>
 
 		<bean id="crafter.cacheTickerScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
-			  destroy-method="destroy">
+		      destroy-method="destroy">
 			<property name="triggers">
 				<list>
 					<ref bean="crafter.cacheTickerTrigger"/>
