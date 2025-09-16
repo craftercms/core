@@ -1,24 +1,8 @@
-/*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 as published by
- * the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.craftercms.core.util.cache.impl;
 
+import com.google.common.util.concurrent.Striped;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.craftercms.commons.concurrent.locks.KeyBasedLockFactory;
-import org.craftercms.commons.concurrent.locks.WeakKeyBasedReentrantLockFactory;
 import org.craftercms.commons.lang.Callback;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
@@ -29,10 +13,10 @@ import org.craftercms.core.util.CacheUtils;
 import org.craftercms.core.util.cache.CacheTemplate;
 
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Class description goes HERE
+ * Default implementation of CacheTemplate that ensures only one thread loads
+ * a given cache item at a time, using per-key striped locks.
  *
  * @author Alfonso Vásquez
  */
@@ -40,12 +24,18 @@ public class DefaultCacheTemplate implements CacheTemplate {
 
     private static final Log logger = LogFactory.getLog(DefaultCacheTemplate.class);
 
-    private CacheService cacheService;
-    private KeyBasedLockFactory<ReentrantLock> lockFactory;
+    private final CacheService cacheService;
+    private final Striped<Lock> stripedLocks;
 
-    public DefaultCacheTemplate(CacheService cacheService) {
+    /**
+     * Creates a DefaultCacheTemplate with a configurable number of stripes.
+     *
+     * @param cacheService the cache service
+     * @param stripeCount  number of stripes (recommend a power of two ≥ maxThreads of app server)
+     */
+    public DefaultCacheTemplate(CacheService cacheService, int stripeCount) {
         this.cacheService = cacheService;
-        lockFactory = new WeakKeyBasedReentrantLockFactory();
+        this.stripedLocks = Striped.lazyWeakLock(stripeCount);
     }
 
     @Override
@@ -83,19 +73,16 @@ public class DefaultCacheTemplate implements CacheTemplate {
 
     @SuppressWarnings("unchecked")
     protected <T> T doGet(Context context, Callback<T> callback, Object key) {
-        T obj = null;
         try {
-            obj = (T)cacheService.get(context, key);
+            return (T) cacheService.get(context, key);
         } catch (Exception e) {
             logGetFailure(context, callback, key, e);
+            return null;
         }
-
-        return obj;
     }
 
     protected <T> T loadAndPutInCache(Context context, CachingOptions cachingOptions, Callback<T> callback, Object key) {
-        // Use the context's cache scope + the cache key as the lock key
-        Lock lock = lockFactory.getLock(context.getCacheScope() + ":" + key);
+        Lock lock = stripedLocks.get(context.getCacheScope() + ":" + key);
         lock.lock();
         try {
             // Check if another thread already has put the item in cache
@@ -106,11 +93,9 @@ public class DefaultCacheTemplate implements CacheTemplate {
                     if (cachingOptions == null) {
                         cachingOptions = CachingOptions.DEFAULT_CACHING_OPTIONS;
                     }
-
                     obj = doPut(context, cachingOptions, callback, key, obj);
                 }
             }
-
             return obj;
         } finally {
             lock.unlock();
@@ -124,26 +109,21 @@ public class DefaultCacheTemplate implements CacheTemplate {
         } catch (Exception e) {
             logPutFailure(context, callback, key, obj, e);
         }
-
         return obj;
     }
 
     protected <T> CacheLoader getCacheLoader(final Callback<T> callback, long refreshFrequency) {
-        if (refreshFrequency != CacheItem.NEVER_REFRESH) {
-            return parameters -> callback.execute();
-        } else {
-            return null;
-        }
+        return (refreshFrequency != CacheItem.NEVER_REFRESH) ? parameters -> callback.execute() : null;
     }
 
     protected void logGetFailure(Context context, Callback<?> callback, Object key, Exception e) {
-        logger.error("Unable to retrieve cached object: key='" + key + "', context=" + context + ", " +
-                     "callback=" + callback, e);
+        logger.error("Unable to retrieve cached object: key='" + key + "', context=" + context +
+                     ", callback=" + callback, e);
     }
 
     protected void logPutFailure(Context context, Callback<?> callback, Object key, Object obj, Exception e) {
-        logger.error("Unable to put cache object: key='" + key + "', context=" + context + ", obj=" + obj +
-                     ", callback=" + callback, e);
+        logger.error("Unable to put cache object: key='" + key + "', context=" + context +
+                     ", obj=" + obj + ", callback=" + callback, e);
     }
 
 }
