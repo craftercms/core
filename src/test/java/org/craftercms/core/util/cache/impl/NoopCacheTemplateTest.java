@@ -15,7 +15,6 @@
  */
 package org.craftercms.core.util.cache.impl;
 
-import org.craftercms.commons.concurrent.locks.KeyBasedLockFactory;
 import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.Context;
 import org.junit.Test;
@@ -28,8 +27,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author joseross
@@ -47,18 +45,17 @@ public class NoopCacheTemplateTest {
     @Mock
     private CacheService cacheService;
 
-    @Mock
-    private KeyBasedLockFactory<ReentrantLock> lockFactory;
-
     @InjectMocks
     private NoopCacheTemplate cacheTemplate;
 
     @Test
     public void testCacheIsNotUsed() {
+        cacheTemplate.stripedLocks = spy(cacheTemplate.stripedLocks);
+
         cacheTemplate.getObject(context, () -> CACHE_VALUE, CACHE_KEY);
 
         verify(cacheService, never()).get(eq(context), any());
-        verify(lockFactory, never()).getLock(any());
+        verify(cacheTemplate.stripedLocks, never()).get(any());
     }
 
 }
