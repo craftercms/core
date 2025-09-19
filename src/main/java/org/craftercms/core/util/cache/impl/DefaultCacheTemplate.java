@@ -53,18 +53,18 @@ public class DefaultCacheTemplate implements CacheTemplate {
      * @param cacheService the cache service to use for cache operations
      */
     public DefaultCacheTemplate(CacheService cacheService) {
-        this(cacheService, DEFAULT_STRIPE_COUNT);
+        this(cacheService, Striped.lazyWeakLock(DEFAULT_STRIPE_COUNT));
     }
 
     /**
      * Creates a DefaultCacheTemplate with a configurable number of stripes.
      *
      * @param cacheService the cache service to use for cache operations
-     * @param stripeCount  number of stripes (recommend a power of two ≥ maxThreads of app server)
+     * @param stripedLocks striped locks for per-key locking
      */
-    public DefaultCacheTemplate(CacheService cacheService, int stripeCount) {
+    public DefaultCacheTemplate(CacheService cacheService, Striped<Lock> stripedLocks) {
         this.cacheService = cacheService;
-        this.stripedLocks = Striped.lazyWeakLock(stripeCount);
+        this.stripedLocks = stripedLocks;
     }
 
     /**

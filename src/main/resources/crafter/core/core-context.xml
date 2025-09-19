@@ -40,6 +40,13 @@
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 
+	<!-- Core beans used by other contexts -->
+	<bean id="crafter.stripedLocks" class="org.craftercms.commons.concurrency.locks.StripedLocksFactoryBean">
+		<constructor-arg name="stripes" value="${crafter.core.locks.stripes}"/>
+		<constructor-arg name="useLazyWeakLocks" value="true"/>
+		<constructor-arg name="singleton" value="false"/>
+	</bean>
+
 	<!-- Commons Validation context -->
 	<import resource="classpath:crafter/commons/validation/validation-context.xml"/>
 
