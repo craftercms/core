@@ -41,10 +41,11 @@
 	</bean>
 
 	<!-- Core beans used by other contexts -->
-	<bean id="crafter.stripedLocks" class="org.craftercms.commons.concurrency.locks.StripedLocksFactoryBean">
-		<constructor-arg name="stripes" value="${crafter.core.locks.stripes}"/>
-		<constructor-arg name="useLazyWeakLocks" value="true"/>
-		<constructor-arg name="singleton" value="false"/>
+
+	<!-- Prototype so services that use it get their own instance -->
+	<bean id="crafter.lockByKey" class="org.craftercms.commons.concurrency.locks.LockByKey" scope="prototype">
+		<constructor-arg name="cleanupIntervalSecs" value="${crafter.core.locks.byKey.cleanupIntervalSecs}"/>
+		<constructor-arg name="warnIdleMillis" value="${crafter.core.locks.byKey.warnIdleMillis}"/>
 	</bean>
 
 	<!-- Commons Validation context -->

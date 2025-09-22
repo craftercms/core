@@ -1,8 +1,8 @@
 package org.craftercms.core.util.cache.impl;
 
-import com.google.common.util.concurrent.Striped;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.concurrency.locks.LockByKey;
 import org.craftercms.commons.lang.Callback;
 import org.craftercms.core.cache.CacheItem;
 import org.craftercms.core.cache.CacheLoader;
@@ -12,11 +12,9 @@ import org.craftercms.core.service.Context;
 import org.craftercms.core.util.CacheUtils;
 import org.craftercms.core.util.cache.CacheTemplate;
 
-import java.util.concurrent.locks.Lock;
-
 /**
  * Default implementation of {@link CacheTemplate} that ensures only one thread loads
- * a given cache item at a time, using per-key striped locks.
+ * a given cache item at a time, using per-key locks.
  * <p>
  * This class provides thread-safe cache access and loading, preventing cache stampede
  * by synchronizing cache loads per key.
@@ -26,7 +24,7 @@ import java.util.concurrent.locks.Lock;
  * Usage:
  * <ul>
  *   <li>Use {@link #getObject(Context, Callback, Object...)} to retrieve or load a cache item.</li>
- *   <li>Locks are managed internally using Guava's {@link Striped} for efficiency.</li>
+ *   <li>Locks are managed internally using {@link LockByKey} for efficiency.</li>
  * </ul>
  * </p>
  *
@@ -36,35 +34,32 @@ public class DefaultCacheTemplate implements CacheTemplate {
 
     private static final Log logger = LogFactory.getLog(DefaultCacheTemplate.class);
 
-    private static final int DEFAULT_STRIPE_COUNT = 256;
-
     /** The cache service used for cache operations. */
     protected CacheService cacheService;
 
     /**
-     * Striped locks for per-key locking.
-     * The number of stripes should be at least the number of concurrent threads expected.
+     * Helper class that allows locking by a string key
      */
-    protected Striped<Lock> stripedLocks;
+    protected LockByKey<String> lockByKey;
 
     /**
-     * Creates a DefaultCacheTemplate with a default number of stripes.
+     * Creates a DefaultCacheTemplate with a configurable number of stripes.
      *
      * @param cacheService the cache service to use for cache operations
      */
     public DefaultCacheTemplate(CacheService cacheService) {
-        this(cacheService, Striped.lazyWeakLock(DEFAULT_STRIPE_COUNT));
+        this(cacheService, new LockByKey<>());
     }
 
     /**
      * Creates a DefaultCacheTemplate with a configurable number of stripes.
      *
      * @param cacheService the cache service to use for cache operations
-     * @param stripedLocks striped locks for per-key locking
+     * @param lockByKey    the LockByKey instance to use for per-key locking
      */
-    public DefaultCacheTemplate(CacheService cacheService, Striped<Lock> stripedLocks) {
+    public DefaultCacheTemplate(CacheService cacheService, LockByKey<String> lockByKey) {
         this.cacheService = cacheService;
-        this.stripedLocks = stripedLocks;
+        this.lockByKey = lockByKey;
     }
 
     /**
@@ -169,8 +164,8 @@ public class DefaultCacheTemplate implements CacheTemplate {
      * @return the loaded object, or null if loading failed
      */
     protected <T> T loadAndPutInCache(Context context, CachingOptions cachingOptions, Callback<T> callback, Object key) {
-        Lock lock = stripedLocks.get(context.getCacheScope() + ":" + key);
-        lock.lock();
+        String lockKey = context.getCacheScope() + ":" + key;
+        lockByKey.lock(lockKey);
         try {
             T obj = doGet(context, callback, key);
             if (obj == null) {
@@ -184,7 +179,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
             }
             return obj;
         } finally {
-            lock.unlock();
+            lockByKey.unlock(lockKey);
         }
     }
 

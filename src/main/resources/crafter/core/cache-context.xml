@@ -39,7 +39,7 @@
 
     <bean id="crafter.cacheTemplate" class="org.craftercms.core.util.cache.impl.DefaultCacheTemplate">
         <constructor-arg name="cacheService" ref="crafter.cacheService" />
-        <constructor-arg name="stripedLocks" ref="crafter.stripedLocks" />
+        <constructor-arg name="lockByKey" ref="crafter.lockByKey"/>
     </bean>
 
     <!-- Cache Ticker -->
@@ -87,7 +87,7 @@
 
         <bean id="crafter.appCacheTemplate" class="org.craftercms.core.util.cache.impl.DefaultCacheTemplate">
             <constructor-arg name="cacheService" ref="crafter.appCacheService"/>
-            <constructor-arg name="stripedLocks" ref="crafter.stripedLocks" />
+            <constructor-arg name="lockByKey" ref="crafter.lockByKey"/>
         </bean>
 
         <bean id="crafter.cacheTickerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">

@@ -50,12 +50,13 @@ public class NonLockingCacheTemplateTest {
 
     @Test
     public void testCacheIsNotUsed() {
-        cacheTemplate.stripedLocks = spy(cacheTemplate.stripedLocks);
+        cacheTemplate.lockByKey = spy(cacheTemplate.lockByKey);
 
         cacheTemplate.getObject(context, () -> CACHE_VALUE, CACHE_KEY);
 
         verify(cacheService, times(2)).get(eq(context), eq(List.of(CACHE_KEY).toString()));
-        verify(cacheTemplate.stripedLocks, never()).get(any());
+        verify(cacheTemplate.lockByKey, never()).lock(any());
+        verify(cacheTemplate.lockByKey, never()).unlock(any());
     }
 
 }
