@@ -50,12 +50,13 @@ public class NoopCacheTemplateTest {
 
     @Test
     public void testCacheIsNotUsed() {
-        cacheTemplate.stripedLocks = spy(cacheTemplate.stripedLocks);
+        cacheTemplate.lockByKey = spy(cacheTemplate.lockByKey);
 
         cacheTemplate.getObject(context, () -> CACHE_VALUE, CACHE_KEY);
 
         verify(cacheService, never()).get(eq(context), any());
-        verify(cacheTemplate.stripedLocks, never()).get(any());
+        verify(cacheTemplate.lockByKey, never()).lock(any());
+        verify(cacheTemplate.lockByKey, never()).unlock(any());
     }
 
 }
