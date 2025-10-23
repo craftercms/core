@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2025 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,6 +15,7 @@
  */
 package org.craftercms.core.controller.rest;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.ArrayUtils;
 import org.craftercms.commons.lang.RegexUtils;
 import org.craftercms.core.exception.*;
@@ -23,23 +24,19 @@ import org.craftercms.core.service.impl.CompositeItemFilter;
 import org.craftercms.core.service.impl.ExcludeByUrlItemFilter;
 import org.craftercms.core.service.impl.IncludeByUrlItemFilter;
 import org.craftercms.core.util.cache.impl.CachingAwareList;
-import org.dom4j.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.beans.factory.InitializingBean;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * REST service that provides several methods to access the Crafter content store.
@@ -58,12 +55,11 @@ public class ContentStoreRestController extends RestControllerBase implements In
 	public static final String REQUEST_PARAM_CONTEXT_ID = "contextId";
 	public static final String REQUEST_PARAM_URL = "url";
 	public static final String REQUEST_PARAM_TREE_DEPTH = "depth";
-	public static final String URL_DESCRIPTOR = "/descriptor";
 	public static final String URL_ITEM = "/item";
 	public static final String URL_CHILDREN = "/children";
 	public static final String URL_TREE = "/tree";
 
-	private ContentStoreService storeService;
+	private final ContentStoreService storeService;
 	private final int treeDepthLimit;
 	private String[] allowedUrlPatterns;
 	private String[] forbiddenUrlPatterns;
@@ -94,25 +90,6 @@ public class ContentStoreRestController extends RestControllerBase implements In
 			new ExcludeByUrlItemFilter(forbiddenUrlPatterns)));
 
 		itemFilter = compositeItemFilter;
-	}
-
-	/**
-	 * @deprecated Will be removed in 4.1, use {@code getItem} instead
-	 */
-	@RequestMapping(value = URL_DESCRIPTOR, method = RequestMethod.GET)
-	public Document getDescriptor(WebRequest request, HttpServletResponse response,
-				      @RequestParam(REQUEST_PARAM_CONTEXT_ID) String contextId,
-				      @RequestParam(REQUEST_PARAM_URL) String url,
-				      @RequestParam(required = false, defaultValue = "false") boolean flatten)
-		throws InvalidContextException, StoreException, PathNotFoundException, ForbiddenPathException,
-		ItemProcessingException, XmlMergeException, XmlFileParseException {
-		Item item = getItem(request, response, contextId, url, flatten);
-
-		if (item != null) {
-			return item.getDescriptorDom();
-		}
-
-		return null;
 	}
 
 	@RequestMapping(value = URL_ITEM, method = RequestMethod.GET)
