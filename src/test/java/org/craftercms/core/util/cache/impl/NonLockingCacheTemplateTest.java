@@ -15,7 +15,6 @@
  */
 package org.craftercms.core.util.cache.impl;
 
-import org.craftercms.commons.concurrent.locks.KeyBasedLockFactory;
 import org.craftercms.core.service.CacheService;
 import org.craftercms.core.service.Context;
 import org.junit.Test;
@@ -25,13 +24,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author joseross
@@ -49,18 +45,18 @@ public class NonLockingCacheTemplateTest {
 	@Mock
 	private CacheService cacheService;
 
-	@Mock
-	private KeyBasedLockFactory<ReentrantLock> lockFactory;
-
 	@InjectMocks
 	private NonLockingCacheTemplate cacheTemplate;
 
 	@Test
 	public void testCacheIsNotUsed() {
+		cacheTemplate.lockByKey = spy(cacheTemplate.lockByKey);
+
 		cacheTemplate.getObject(context, () -> CACHE_VALUE, CACHE_KEY);
 
 		verify(cacheService, times(2)).get(eq(context), eq(List.of(CACHE_KEY).toString()));
-		verify(lockFactory, never()).getLock(any());
+		verify(cacheTemplate.lockByKey, never()).lock(any());
+		verify(cacheTemplate.lockByKey, never()).unlock(any());
 	}
 
 }
