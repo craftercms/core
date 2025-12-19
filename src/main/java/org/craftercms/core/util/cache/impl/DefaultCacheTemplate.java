@@ -123,7 +123,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
 	 */
 	@Override
 	public <T> T getObject(Context context, CachingOptions cachingOptions, Callback<T> callback,
-	                       Object... keyElements) {
+						   Object... keyElements) {
 		Object key = getKey(keyElements);
 
 		T obj = doGet(context, callback, key);
@@ -226,7 +226,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
 	 */
 	protected void logGetFailure(Context context, Callback<?> callback, Object key, Exception e) {
 		logger.error("Unable to retrieve cached object: key='" + key + "', context=" + context +
-		             ", callback=" + callback, e);
+					 ", callback=" + callback, e);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
 	 */
 	protected void logPutFailure(Context context, Callback<?> callback, Object key, Object obj, Exception e) {
 		logger.error("Unable to put cache object: key='" + key + "', context=" + context +
-		             ", obj=" + obj + ", callback=" + callback, e);
+					 ", obj=" + obj + ", callback=" + callback, e);
 	}
 
 }
