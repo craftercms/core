@@ -43,7 +43,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
 	protected LockByKey<String> lockByKey;
 
 	/**
-	 * Creates a DefaultCacheTemplate with a configurable number of stripes.
+	 * Creates a DefaultCacheTemplate with default per-key locking.
 	 *
 	 * @param cacheService the cache service to use for cache operations
 	 */
@@ -52,7 +52,7 @@ public class DefaultCacheTemplate implements CacheTemplate {
 	}
 
 	/**
-	 * Creates a DefaultCacheTemplate with a configurable number of stripes.
+	 * Creates a DefaultCacheTemplate with a custom per-key locking implementation.
 	 *
 	 * @param cacheService the cache service to use for cache operations
 	 * @param lockByKey    the LockByKey instance to use for per-key locking
